@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Logs
+logs/
+*.log
+
+# Backups
+backups/
+*_backup*.py
+sprint2_screenshots/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project specific - archivos que NO queremos en GitHub Pages
+data/
+tests/
+test_*.py
+check_*.py
+quick_*.py
+verify_*.py
+setup.py
+requirements.txt
+*.url
+
+# Documentación de desarrollo (solo para GitHub Pages necesitamos el HTML)
+SPRINT_*.md
+README.md
+DASHBOARD_INTEGRATION_GUIDE.md*
+AUTOMATIZACION_DASHBOARD.md
+README_AUTOMATIZACION.md
+DIAGNOSTIC_*.js
+STROKES_GAINED_SUMMARY.md
+
+# Scripts de backend (no necesarios para GitHub Pages)
+generate_dashboard_data.py
+*_backup_*.py
+auto_update_watcher.py
+update_dashboard_html.py
+start_dashboard_server.py
+alvgolf.py
+test_*.py
+
+# Config y memoria
+config/
+memory/
+
+# Ejemplos y docs internos
+examples/
+docs/
+src/
+
+# Temporary files
+nul
+~$*
