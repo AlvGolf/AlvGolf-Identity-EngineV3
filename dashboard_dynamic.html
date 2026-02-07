@@ -15533,10 +15533,16 @@
         FIN COMENTADO playerProfileRadar */
         
         // 2. Current Form Chart (últimas 20 rondas) - DINÁMICO Sprint 9
+        document.addEventListener('dashboardDataReady', function() {
+        console.log('🔄 Inicializando Current Form Chart...');
+        if (!window.dashboardData || !window.dashboardData.current_form) {
+            console.warn('⚠️ current_form no disponible en dashboardData');
+            return;
+        }
         const currentFormCtx = document.getElementById('currentFormChart').getContext('2d');
 
         // Obtener datos dinámicos de current_form
-        const currentFormData = dashboardData.current_form || {};
+        const currentFormData = window.dashboardData.current_form || {};
         const formScores = currentFormData.scores || [];
         const formLabels = (currentFormData.labels || []).map(fecha => {
             // Convertir "YYYY-MM-DD" a "DD/MM"
@@ -15701,6 +15707,8 @@
             streakText.innerHTML = `${trendMessage} ${streakEmoji}<br>Últimas 5: ${last5Avg}`;
             streakText.style.color = trendColor;
         }
+        console.log('✅ Current Form Chart inicializado correctamente');
+        }); // FIN dashboardDataReady para Current Form Chart
 
         // 3-6. Percentile Gauges (4 doughnut charts)
         const percentileConfig = (canvasId, value, color) => {
