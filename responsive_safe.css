@@ -1,0 +1,209 @@
+/*
+================================================================
+RESPONSIVE SAFE OPTIMIZATIONS - Versión Conservadora
+================================================================
+Solo optimizaciones esenciales SIN modificar layouts existentes
+Compatible con dashboard_dynamic.html sin conflictos
+Fecha: 2026-02-07
+================================================================
+*/
+
+/* ============================================================
+   1. SAFE AREAS iOS (Notch/Dynamic Island)
+   ============================================================ */
+
+:root {
+    /* Safe areas para iPhone con notch */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+    /* Touch target mínimo (Apple HIG) */
+    --touch-target-min: 44px;
+}
+
+/* Header con safe areas */
+.header {
+    padding-top: max(var(--safe-area-inset-top), 20px) !important;
+}
+
+/* Main content con safe areas laterales */
+body {
+    padding-left: var(--safe-area-inset-left);
+    padding-right: var(--safe-area-inset-right);
+    padding-bottom: var(--safe-area-inset-bottom);
+}
+
+/* ============================================================
+   2. SMOOTH SCROLLING (iOS, Android, Windows)
+   ============================================================ */
+
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   3. TOUCH OPTIMIZATIONS
+   ============================================================ */
+
+/* Touch targets mínimos 44x44px */
+button,
+a.button,
+.tab-btn,
+.download-btn,
+.btn {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Touch feedback visual */
+button,
+a,
+.tab-btn {
+    -webkit-tap-highlight-color: rgba(74, 159, 216, 0.2);
+    touch-action: manipulation; /* Elimina delay 300ms */
+}
+
+/* ============================================================
+   4. FONT RENDERING
+   ============================================================ */
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   5. iOS FIXES ESPECÍFICOS
+   ============================================================ */
+
+/* iOS Safari 100vh bug fix */
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+/* iOS input zoom prevention (solo si font-size < 16px) */
+input,
+select,
+textarea {
+    font-size: max(16px, 1em);
+}
+
+/* ============================================================
+   6. SCROLLBARS SUAVES (Windows)
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(74, 159, 216, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(74, 159, 216, 0.8);
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(74, 159, 216, 0.5) rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================================
+   7. ACCESSIBILITY
+   ============================================================ */
+
+/* Reducir motion para usuarios sensibles */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Focus visible moderno */
+*:focus-visible {
+    outline: 3px solid #4A9FD8;
+    outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ============================================================
+   8. MEDIA QUERIES CONSERVADORAS
+   ============================================================ */
+
+/* Móviles muy pequeños (iPhone SE) */
+@media (max-width: 375px) {
+    body {
+        font-size: 14px;
+    }
+
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+}
+
+/* Tablets landscape - asegurar que tabs no se envuelvan */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .tab-navigation {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Desktop - centrar contenido si es muy ancho */
+@media (min-width: 1920px) {
+    .main-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+}
+
+/* ============================================================
+   9. PRINT OPTIMIZATION
+   ============================================================ */
+
+@media print {
+    .header,
+    .tab-navigation,
+    .download-menu,
+    button {
+        display: none !important;
+    }
+
+    .tab-content {
+        display: block !important;
+    }
+}
+
+/* ============================================================
+   10. HIGH DPI / RETINA
+   ============================================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+}
+
+/* ============================================================
+   FIN - SOLO OPTIMIZACIONES SEGURAS
+   ============================================================ */
