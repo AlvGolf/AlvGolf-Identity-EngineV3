@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T00:17:42.770985",
+  "generated_at": "2026-02-08T00:21:46.347255",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4480,6 +4480,32 @@
     "trend": "improving",
     "total_rounds": 20
   },
+  "percentile_gauges": {
+    "short_game": {
+      "value": 100,
+      "player_avg": 96.1,
+      "benchmark_avg": 85.0,
+      "rating": "excellent"
+    },
+    "ball_speed": {
+      "value": 86,
+      "player_avg": 235.5,
+      "benchmark_avg": 273.0,
+      "rating": "good"
+    },
+    "consistency": {
+      "value": 62,
+      "player_cv": 0.067,
+      "benchmark_cv": 0.18,
+      "rating": "average"
+    },
+    "attack_angle": {
+      "value": 80,
+      "player_avg": -2.5,
+      "benchmark_avg": -1.5,
+      "rating": "good"
+    }
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5442,7 +5468,7 @@
     ]
   },
   "metadata": {
-    "version": "3.4.0",
+    "version": "3.5.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5461,7 +5487,8 @@
       "SPRINT 6: Momentum indicators (moving averages, trends)",
       "SPRINT 6: Milestone achievements (broke_90/80, personal bests, streaks)",
       "SPRINT 6: Learning curve (mejora por categoría de shot)",
-      "SPRINT 9: Current form chart (últimas 20 rondas con tendencia)"
+      "SPRINT 9: Current form chart (últimas 20 rondas con tendencia)",
+      "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",

@@ -2582,12 +2582,12 @@
                         <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
                             <canvas id="percentileShortGame"></canvas>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                                <div style="font-size: 2.5em; font-weight: 900; color: #5ABF8F; line-height: 1;">91</div>
+                                <div id="shortGameValue" style="font-size: 2.5em; font-weight: 900; color: #5ABF8F; line-height: 1;">91</div>
                                 <div style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 5px;">Percentil</div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
-                            <strong style="color: #5ABF8F;">TOP 9%</strong> - Élite amateur
+                            <span id="shortGameText"><strong style="color: #5ABF8F;">TOP 9%</strong> - Élite amateur</span>
                         </div>
                     </div>
                     
@@ -2597,12 +2597,12 @@
                         <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
                             <canvas id="percentileBallSpeed"></canvas>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                                <div style="font-size: 2.5em; font-weight: 900; color: #4A9FD8; line-height: 1;">78</div>
+                                <div id="ballSpeedValue" style="font-size: 2.5em; font-weight: 900; color: #4A9FD8; line-height: 1;">78</div>
                                 <div style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 5px;">Percentil</div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
-                            <strong style="color: #4A9FD8;">TOP 22%</strong> - Por encima promedio
+                            <span id="ballSpeedText"><strong style="color: #4A9FD8;">TOP 22%</strong> - Por encima promedio</span>
                         </div>
                     </div>
                     
@@ -2612,12 +2612,12 @@
                         <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
                             <canvas id="percentileConsistency"></canvas>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                                <div style="font-size: 2.5em; font-weight: 900; color: #D4B55A; line-height: 1;">65</div>
+                                <div id="consistencyValue" style="font-size: 2.5em; font-weight: 900; color: #D4B55A; line-height: 1;">65</div>
                                 <div style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 5px;">Percentil</div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
-                            <strong style="color: #D4B55A;">PROMEDIO+</strong> - Área de mejora
+                            <span id="consistencyText"><strong style="color: #D4B55A;">PROMEDIO+</strong> - Área de mejora</span>
                         </div>
                     </div>
                     
@@ -2627,12 +2627,12 @@
                         <div style="position: relative; width: 200px; height: 200px; margin: 0 auto;">
                             <canvas id="percentileAttackAngle"></canvas>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
-                                <div style="font-size: 2.5em; font-weight: 900; color: #E88B7A; line-height: 1;">25</div>
+                                <div id="attackAngleValue" style="font-size: 2.5em; font-weight: 900; color: #E88B7A; line-height: 1;">25</div>
                                 <div style="font-size: 0.85em; color: rgba(255,255,255,0.8); margin-top: 5px;">Percentil</div>
                             </div>
                         </div>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center;">
-                            <strong style="color: #E88B7A;">BOTTOM 75%</strong> - Prioridad crítica
+                            <span id="attackAngleText"><strong style="color: #E88B7A;">BOTTOM 75%</strong> - Prioridad crítica</span>
                         </div>
                     </div>
                 </div>
@@ -15705,7 +15705,9 @@
             streakText.style.color = trendColor;
         }
 
-        // 3-6. Percentile Gauges (4 doughnut charts)
+        // 3-6. Percentile Gauges (4 doughnut charts) - DINÁMICO Sprint 9
+        const percentileGauges = dashboardData.percentile_gauges || {};
+
         const percentileConfig = (canvasId, value, color) => {
             const ctx = document.getElementById(canvasId).getContext('2d');
             new Chart(ctx, {
@@ -15729,11 +15731,59 @@
                 }
             });
         };
-        
-        percentileConfig('percentileShortGame', 91, 'rgba(90, 191, 143,0.8)');
-        percentileConfig('percentileBallSpeed', 78, 'rgba(74, 159, 216,0.8)');
-        percentileConfig('percentileConsistency', 65, 'rgba(212, 181, 90,0.8)');
-        percentileConfig('percentileAttackAngle', 25, 'rgba(232, 139, 122,0.8)');
+
+        // Obtener valores dinámicos desde JSON
+        const shortGameValue = percentileGauges.short_game?.value || 0;
+        const ballSpeedValue = percentileGauges.ball_speed?.value || 0;
+        const consistencyValue = percentileGauges.consistency?.value || 0;
+        const attackAngleValue = percentileGauges.attack_angle?.value || 0;
+
+        percentileConfig('percentileShortGame', shortGameValue, 'rgba(90, 191, 143,0.8)');
+        percentileConfig('percentileBallSpeed', ballSpeedValue, 'rgba(74, 159, 216,0.8)');
+        percentileConfig('percentileConsistency', consistencyValue, 'rgba(212, 181, 90,0.8)');
+        percentileConfig('percentileAttackAngle', attackAngleValue, 'rgba(232, 139, 122,0.8)');
+
+        // Actualizar valores y textos de los gauges dinámicamente
+        if (percentileGauges && Object.keys(percentileGauges).length > 0) {
+            // Helper function para generar texto descriptivo
+            const getPercentileText = (value, color) => {
+                const topPercent = 100 - value;
+                let description = '';
+                let category = '';
+
+                if (value >= 90) {
+                    category = `TOP ${topPercent}%`;
+                    description = 'Élite amateur';
+                } else if (value >= 75) {
+                    category = `TOP ${topPercent}%`;
+                    description = 'Por encima promedio';
+                } else if (value >= 50) {
+                    category = 'PROMEDIO+';
+                    description = 'Área de mejora';
+                } else {
+                    category = `BOTTOM ${value}%`;
+                    description = 'Prioridad crítica';
+                }
+
+                return `<strong style="color: ${color};">${category}</strong> - ${description}`;
+            };
+
+            // 1. Short Game
+            document.getElementById('shortGameValue').textContent = shortGameValue;
+            document.getElementById('shortGameText').innerHTML = getPercentileText(shortGameValue, '#5ABF8F');
+
+            // 2. Ball Speed
+            document.getElementById('ballSpeedValue').textContent = ballSpeedValue;
+            document.getElementById('ballSpeedText').innerHTML = getPercentileText(ballSpeedValue, '#4A9FD8');
+
+            // 3. Consistency
+            document.getElementById('consistencyValue').textContent = consistencyValue;
+            document.getElementById('consistencyText').innerHTML = getPercentileText(consistencyValue, '#D4B55A');
+
+            // 4. Attack Angle
+            document.getElementById('attackAngleValue').textContent = attackAngleValue;
+            document.getElementById('attackAngleText').innerHTML = getPercentileText(attackAngleValue, '#E88B7A');
+        }
 
         // 7. HCP Trajectory Chart (Evolution + projection) - FIXED ID conflict
         const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart').getContext('2d');
