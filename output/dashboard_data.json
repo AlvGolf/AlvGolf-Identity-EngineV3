@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T18:18:05.791439",
+  "generated_at": "2026-02-08T18:21:10.075857",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -8026,6 +8026,91 @@
     "best_zone": "0-50m",
     "worst_zone": "200+m"
   },
+  "tempo_analysis": {
+    "player_tempo": {
+      "driver": 2.8,
+      "irons": 2.6,
+      "wedges": 2.4,
+      "avg_backswing": 0.84,
+      "avg_downswing": 0.3
+    },
+    "pga_benchmarks": {
+      "ideal_tempo": 3.0,
+      "range_low": 2.5,
+      "range_high": 3.5
+    },
+    "analysis": {
+      "rating": "ideal",
+      "recommendation": "Maintain current tempo consistency across all clubs",
+      "avg_tempo": 2.6
+    }
+  },
+  "strokes_gained": {
+    "categories": [
+      {
+        "category": "Off the Tee (Driving)",
+        "player_avg": 32.5,
+        "hcp15_benchmark": 30.0,
+        "strokes_gained": -2.5,
+        "percentile": 35,
+        "rating": "poor"
+      },
+      {
+        "category": "Approach Shots",
+        "player_avg": 26.8,
+        "hcp15_benchmark": 25.0,
+        "strokes_gained": -1.8,
+        "percentile": 40,
+        "rating": "poor"
+      },
+      {
+        "category": "Short Game",
+        "player_avg": 19.2,
+        "hcp15_benchmark": 21.0,
+        "strokes_gained": 1.8,
+        "percentile": 75,
+        "rating": "excellent"
+      },
+      {
+        "category": "Putting",
+        "player_avg": 31.5,
+        "hcp15_benchmark": 31.0,
+        "strokes_gained": -0.5,
+        "percentile": 48,
+        "rating": "average"
+      },
+      {
+        "category": "Around the Green",
+        "player_avg": 8.2,
+        "hcp15_benchmark": 9.5,
+        "strokes_gained": 1.3,
+        "percentile": 70,
+        "rating": "good"
+      },
+      {
+        "category": "Tee to Green",
+        "player_avg": 59.3,
+        "hcp15_benchmark": 55.0,
+        "strokes_gained": -4.3,
+        "percentile": 32,
+        "rating": "poor"
+      }
+    ],
+    "total_sg": -6.0,
+    "best_category": "Short Game",
+    "worst_category": "Tee to Green",
+    "summary": {
+      "strengths": [
+        "Short Game",
+        "Around the Green"
+      ],
+      "weaknesses": [
+        "Off the Tee (Driving)",
+        "Approach Shots",
+        "Tee to Green"
+      ]
+    }
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -8988,7 +9073,7 @@
     ]
   },
   "metadata": {
-    "version": "4.6.0",
+    "version": "4.7.0",
     "sprint": 11,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -9029,7 +9114,9 @@
       "SPRINT 11: Swing DNA (fingerprint 12 dimensiones vs benchmarks)",
       "SPRINT 11: Quick wins matrix (matriz dificultad vs impacto para priorización)",
       "SPRINT 11: Club distance comparison (comparación distancias vs benchmarks PGA/HCP)",
-      "SPRINT 11: Comfort zones (análisis zonas de confort por distancia)"
+      "SPRINT 11: Comfort zones (análisis zonas de confort por distancia)",
+      "SPRINT 11: Tempo analysis (análisis tempo backswing/downswing vs PGA)",
+      "SPRINT 11: Strokes gained (análisis por categoría vs HCP 15 benchmark)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
