@@ -15802,8 +15802,18 @@
     // Escuchar evento de datos listos
     document.addEventListener('dashboardDataReady', initializeCurrentFormAndGauges);
 
+        // ============================================
+        // HARDCODED CHARTS (Tab 1 Overview)
+        // ============================================
+        function initializeHardcodedCharts() {
+            console.log('📊 Inicializando gráficos hardcodeados (Tab 1 Overview)...');
+
         // 7. HCP Trajectory Chart (Evolution + projection) - FIXED ID conflict
-        const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart').getContext('2d');
+        const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart')?.getContext('2d');
+        if (!hcpTrajectoryCtx) {
+            console.warn('⚠️ hcpTrajectoryChart canvas not found');
+            return;
+        }
         new Chart(hcpTrajectoryCtx, {
             type: 'line',
             data: {
@@ -16166,6 +16176,12 @@
             console.error('Error en Advanced History Charts:', error.message, error.stack);
             alert('Error al cargar algunos gráficos avanzados. Revisa la consola para más detalles.');
         }
+
+        console.log('✅ Gráficos hardcodeados inicializados correctamente (9 charts)');
+    }
+
+    // Inicializar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', initializeHardcodedCharts);
 
         // ============================================================
         // FASE 5 - FUNCIONES DE INICIALIZACIÓN
