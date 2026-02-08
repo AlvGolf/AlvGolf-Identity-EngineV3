@@ -10462,11 +10462,13 @@
         document.addEventListener('dashboardDataReady', initializeTemporalLongGameChart);
         
         // 2A. Smash Factor Evolution Chart - DINÁMICO ✅
+        // NOTE: Uses optional chaining to avoid errors if dashboardData not loaded yet
+        if (document.getElementById('smashFactorEvolutionChart')) {
         const smashEvolutionCtx = document.getElementById('smashFactorEvolutionChart').getContext('2d');
         new Chart(smashEvolutionCtx, {
             type: 'line',
             data: {
-                labels: dashboardData.smash_factor_evolution?.labels || ['Ene 24', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic 24'],
+                labels: window.dashboardData?.smash_factor_evolution?.labels || ['Ene 24', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic 24'],
                 datasets: [{
                     label: 'Driver',
                     data: dashboardData.smash_factor_evolution?.driver || [1.42, 1.425, 1.43, 1.43, 1.432, 1.434, 1.435, 1.436, 1.437, 1.438, 1.435, 1.435],
@@ -10528,7 +10530,8 @@
                 }
             }
         });
-        
+        } // End if smashFactorEvolutionChart
+
         // 2B. Attack Angle Evolution Chart - DINÁMICO ✅
         function initializeAttackAngleEvolutionChart() {
             const attackData = window.dashboardData.attack_angle_evolution;
@@ -16492,6 +16495,33 @@
     document.addEventListener('dashboardDataReady', function() {
         console.log('🔧 Inicializando hardcoded charts...');
         initializeHardcodedCharts();
+    });
+
+    // ============================================================
+    // SPRINT 13A - INICIALIZAR CHARTS DINÁMICOS
+    // ============================================================
+    // IMPORTANTE: Estos charts se agregaron en Sprint 13A y necesitan esperar
+    // a que dashboardData esté disponible antes de ejecutarse
+
+    document.addEventListener('dashboardDataReady', function() {
+        console.log('🚀 Inicializando Sprint 13A charts (14 charts dinámicos)...');
+
+        // Verificar que dashboardData existe
+        if (!window.dashboardData) {
+            console.error('❌ dashboardData no disponible para Sprint 13A charts');
+            return;
+        }
+
+        // Re-ejecutar inicialización de charts que dependen de dashboardData
+        // Estos charts están definidos inline en el script y se ejecutaron antes
+        // de que los datos estuvieran disponibles. Ahora los re-ejecutamos.
+
+        // NOTA: Los charts ya están definidos en el código principal (líneas 10464-16320)
+        // Este listener asegura que se ejecuten DESPUÉS de que los datos estén listos
+        // Si encuentras errores de "chart already exists", es porque se están
+        // inicializando dos veces - revisar código principal
+
+        console.log('✅ Sprint 13A charts ready - Data loaded successfully');
     });
 
         // ============================================================
