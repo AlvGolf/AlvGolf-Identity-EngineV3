@@ -16209,27 +16209,26 @@
             }
         });
         
-        // 6. Volatility Index
+        // 6. Volatility Index - DINÁMICO ✅
         const volatilityCtx = document.getElementById('volatilityChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const volatilityData = dashboardData.volatility_index || [];
+        const volatilityLabels = volatilityData.length > 0 ? volatilityData.map(q => q.quarter) : ['2024-Q2', '2024-Q3', '2024-Q4', '2025-Q2', '2025-Q3', '2025-Q4'];
+        const volatilityStdDev = volatilityData.length > 0 ? volatilityData.map(q => q.std_dev) : [8.5, 6.2, 5.8, 7.1, 4.8, 5.2];
+
         new Chart(volatilityCtx, {
             type: 'line',
             data: {
-                labels: ['2024-Q2', '2024-Q3', '2024-Q4', '2025-Q2', '2025-Q3', '2025-Q4'],
+                labels: volatilityLabels,
                 datasets: [{
                     label: 'Desviación Estándar (σ)',
-                    data: [8.5, 6.2, 5.8, 7.1, 4.8, 5.2],
+                    data: volatilityStdDev,
                     borderColor: '#E88B7A',
                     backgroundColor: 'rgba(232, 139, 122,0.2)',
                     fill: true,
                     tension: 0.4,
                     borderWidth: 3
-                }, {
-                    label: 'Tendencia',
-                    data: [8, 7, 6, 6, 5, 5],
-                    borderColor: 'rgba(90, 191, 143,0.5)',
-                    borderDash: [5, 5],
-                    borderWidth: 2,
-                    pointRadius: 0
                 }]
             },
             options: {
@@ -16242,15 +16241,21 @@
             }
         });
         
-        // 7. Estado de Forma Chart (Mis Campos tab)
+        // 7. Estado de Forma Chart (Mis Campos tab) - DINÁMICO ✅
         const estadoFormaCtx = document.getElementById('estadoFormaChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const estadoFormaData = dashboardData.estado_forma || [];
+        const estadoFormaLabels = estadoFormaData.length > 0 ? estadoFormaData.map(m => m.month) : ['May 24', 'Jun 24', 'Jul 24', 'Ago 24', 'Sep 24', 'Oct 24', 'Nov 24', 'May 25', 'Jun 25', 'Jul 25', 'Ago 25', 'Sep 25', 'Oct 25', 'Nov 25', 'Dic 25'];
+        const estadoFormaScores = estadoFormaData.length > 0 ? estadoFormaData.map(m => m.avg_score) : [102, 99, 104, 95, 106, 108, 101, 103, 100, 96, 89, 92, 99, 88, 90];
+
         new Chart(estadoFormaCtx, {
             type: 'line',
             data: {
-                labels: ['May 24', 'Jun 24', 'Jul 24', 'Ago 24', 'Sep 24', 'Oct 24', 'Nov 24', 'May 25', 'Jun 25', 'Jul 25', 'Ago 25', 'Sep 25', 'Oct 25', 'Nov 25', 'Dic 25'],
+                labels: estadoFormaLabels,
                 datasets: [{
                     label: 'Scoring',
-                    data: [102, 99, 104, 95, 106, 108, 101, 103, 100, 96, 89, 92, 99, 88, 90],
+                    data: estadoFormaScores,
                     borderColor: '#4A9FD8',
                     backgroundColor: function(context) {
                         const idx = context.dataIndex;
@@ -16274,19 +16279,26 @@
             }
         });
         
-        // 8. HCP Curve Position
+        // 8. HCP Curve Position - DINÁMICO ✅
         const hcpCurveCtx = document.getElementById('hcpCurveChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const hcpCurveData = dashboardData.hcp_curve_position?.distribution || {};
+        const hcpCurveLabels = hcpCurveData.bins || ['<89 (excelente)', '89-95 (esperado)', '95-101 (normal)', '101-107 (por encima)', '>107 (mal día)'];
+        const hcpCurveActual = hcpCurveData.actual || [15, 36, 30, 15, 4];
+        const hcpCurveExpected = hcpCurveData.expected || [16, 34, 34, 13, 3];
+
         new Chart(hcpCurveCtx, {
             type: 'bar',
             data: {
-                labels: ['<89 (excelente)', '89-95 (esperado)', '95-101 (normal)', '101-107 (por encima)', '>107 (mal día)'],
+                labels: hcpCurveLabels,
                 datasets: [{
-                    label: 'Tus Rondas (%)',
-                    data: [15, 36, 30, 15, 4],
+                    label: 'Tus Rondas (count)',
+                    data: hcpCurveActual,
                     backgroundColor: ['rgba(90, 191, 143,0.8)', 'rgba(74, 159, 216,0.8)', 'rgba(212, 181, 90,0.8)', 'rgba(255, 165, 0, 0.8)', 'rgba(232, 139, 122,0.8)']
                 }, {
-                    label: 'HCP 23 Normal (%)',
-                    data: [16, 34, 34, 13, 3],
+                    label: 'Distribución Normal Esperada',
+                    data: hcpCurveExpected,
                     type: 'line',
                     borderColor: 'rgba(255, 255, 255, 0.5)',
                     borderDash: [5, 5],
@@ -16304,8 +16316,13 @@
             }
         });
         
-        // 9. Prediction Model
+        // 9. Prediction Model - PARCIALMENTE DINÁMICO ⚠️
         const predictionCtx = document.getElementById('predictionChart').getContext('2d');
+
+        // El backend solo genera predicted_score, necesita expandirse para serie completa
+        const predictionData = dashboardData.prediction_model || {};
+        const predictedScore = predictionData.predicted_score || 94.8;
+
         new Chart(predictionCtx, {
             type: 'line',
             data: {
@@ -16320,7 +16337,7 @@
                     borderWidth: 3
                 }, {
                     label: 'Proyección',
-                    data: [null, null, null, null, null, null, 95.7, 94.6, 93.8],
+                    data: [null, null, null, null, null, null, 95.7, predictedScore, predictedScore - 0.8],
                     borderColor: '#D4B55A',
                     borderDash: [10, 5],
                     fill: false,
