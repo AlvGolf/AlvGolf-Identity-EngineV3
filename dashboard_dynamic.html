@@ -10332,116 +10332,129 @@
             });
         });
         
-        // 1. Temporal Evolution Chart - LONG GAME (Driver, 3W, Hybrid)
-        const temporalCtx = document.getElementById('temporalChart').getContext('2d');
-        new Chart(temporalCtx, {
-            type: 'line',
-            data: {
-                labels: ['Sep 2024', 'Oct', 'Nov', 'Dic', 'Ene 2025', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Driver (m)',
-                    data: [216, 220, 225, 228, 231, 234, 236, 238, 240, 243, 242, 240, 238, 235, 233, 231],
-                    borderColor: chartColors.primary,
-                    backgroundColor: 'rgba(90, 191, 143,0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    borderWidth: 3
-                }, {
-                    label: '3 Wood (m)',
-                    data: [195, 198, 200, 202, 203, 204, 205, 206, 207, 208.5, 209, 209.5, 210, 210.2, 210.4, 210.5],
-                    borderColor: chartColors.secondary,
-                    backgroundColor: 'rgba(74, 159, 216,0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    borderWidth: 3
-                }, {
-                    label: 'Hybrid (m)',
-                    data: [160, 162, 163, 164, 165, 166, 166.5, 167, 167.5, 168, 168.5, 169, 169.5, 169.8, 170, 170.3],
-                    borderColor: '#D4B55A',
-                    backgroundColor: 'rgba(212, 181, 90,0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointHoverRadius: 8,
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: { 
-                            color: '#fff', 
-                            font: { size: 14 },
-                            padding: 15
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: chartColors.secondary,
-                        bodyColor: '#fff',
-                        padding: 12,
-                        callbacks: {
-                            afterLabel: function(context) {
-                                const dataset = context.dataset.label;
-                                const value = context.parsed.y;
-                                const month = context.label;
-                                
-                                if (dataset.includes('Driver') && month === 'Jun' && value === 243) {
-                                    return '🏆 Plateau máximo alcanzado';
-                                }
-                                if (dataset.includes('Driver') && month === 'Dic' && value === 231) {
-                                    return '⚠️ Ligera disminución - recuperable';
-                                }
-                                if (dataset.includes('3 Wood')) {
-                                    return '📊 Mejora gradual sostenida';
-                                }
-                                if (dataset.includes('Hybrid')) {
-                                    return '✅ Progreso consistente';
-                                }
-                                return '';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 155,
-                        max: 250,
-                        ticks: { 
-                            color: '#fff',
-                            callback: function(value) {
-                                return value + 'm';
-                            }
-                        },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        title: {
-                            display: true,
-                            text: 'Distancia (metros)',
-                            color: '#4A9FD8',
-                            font: { size: 14 }
-                        }
-                    },
-                    x: {
-                        ticks: { 
-                            color: '#fff',
-                            font: { size: 11 }
-                        },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                }
+        // 1. Temporal Evolution Chart - LONG GAME (Driver, 3W, Hybrid) - DINÁMICO ✅
+        function initializeTemporalLongGameChart() {
+            const temporalData = window.dashboardData.temporal_long_game;
+
+            if (!temporalData || !temporalData.labels || temporalData.labels.length === 0) {
+                console.warn('⚠️ temporal_long_game data not available');
+                return;
             }
-        });
+
+            const temporalCtx = document.getElementById('temporalChart');
+            if (!temporalCtx) {
+                console.warn('⚠️ temporalChart canvas not found');
+                return;
+            }
+
+            // Destruir chart existente si existe
+            if (window.chartInstances && window.chartInstances.temporalChart) {
+                window.chartInstances.temporalChart.destroy();
+            }
+
+            window.chartInstances.temporalChart = new Chart(temporalCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: temporalData.labels,
+                    datasets: [{
+                        label: 'Driver (m)',
+                        data: temporalData.driver,
+                        borderColor: chartColors.primary,
+                        backgroundColor: 'rgba(90, 191, 143,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        spanGaps: true  // Conecta puntos aunque haya null
+                    }, {
+                        label: '3 Wood (m)',
+                        data: temporalData.wood_3,
+                        borderColor: chartColors.secondary,
+                        backgroundColor: 'rgba(74, 159, 216,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        spanGaps: true
+                    }, {
+                        label: 'Hybrid (m)',
+                        data: temporalData.hybrid,
+                        borderColor: '#D4B55A',
+                        backgroundColor: 'rgba(212, 181, 90,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#fff',
+                                font: { size: 14 },
+                                padding: 15
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: chartColors.secondary,
+                            bodyColor: '#fff',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return value !== null ? `${label}: ${value}m` : `${label}: Sin datos`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 150,
+                            max: 250,
+                            ticks: {
+                                color: '#fff',
+                                callback: function(value) {
+                                    return value + 'm';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Distancia (metros)',
+                                color: '#4A9FD8',
+                                font: { size: 14 }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#fff',
+                                font: { size: 11 }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+
+            console.log('✅ Temporal Long Game Chart inicializado con datos reales');
+        }
+
+        // Escuchar evento de datos listos
+        document.addEventListener('dashboardDataReady', initializeTemporalLongGameChart);
         
         // 2A. Smash Factor Evolution Chart
         const smashEvolutionCtx = document.getElementById('smashFactorEvolutionChart').getContext('2d');

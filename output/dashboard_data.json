@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T04:12:07.667817",
+  "generated_at": "2026-02-08T16:03:14.802879",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4594,6 +4594,48 @@
     "target": 19.0,
     "improvement_rate": -0.7
   },
+  "temporal_long_game": {
+    "labels": [
+      "Jun 2024",
+      "Sep 2024",
+      "Mar 2025",
+      "Jun 2025",
+      "Jul 2025",
+      "Sep 2025",
+      "Nov 2025",
+      "Dec 2025"
+    ],
+    "driver": [
+      204.4,
+      null,
+      210.5,
+      null,
+      218.2,
+      null,
+      213.9,
+      212.7
+    ],
+    "wood_3": [
+      null,
+      212.3,
+      null,
+      190.0,
+      186.2,
+      197.7,
+      null,
+      208.4
+    ],
+    "hybrid": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      160.5
+    ]
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5556,7 +5598,7 @@
     ]
   },
   "metadata": {
-    "version": "3.6.0",
+    "version": "3.7.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5577,7 +5619,8 @@
       "SPRINT 6: Learning curve (mejora por categoría de shot)",
       "SPRINT 9: Current form chart (últimas 20 rondas con tendencia)",
       "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)",
-      "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)"
+      "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)",
+      "SPRINT 9: Temporal long game (evolución mensual Driver, 3W, Hybrid)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
