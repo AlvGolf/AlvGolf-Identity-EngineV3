@@ -67,8 +67,13 @@
         // CARGA DEL JSON AL INICIAR
         // ============================================================
 
-        // Cargar dashboard_data.json al inicio
-        fetch('output/dashboard_data.json')
+        // Cargar dashboard_data.json al inicio (intenta raíz primero, luego output/)
+        fetch('dashboard_data.json')
+            .catch(() => {
+                // Fallback: intentar desde output/
+                console.warn('⚠️ Intentando cargar desde output/dashboard_data.json');
+                return fetch('output/dashboard_data.json');
+            })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -16483,8 +16488,11 @@
         console.log('✅ Gráficos hardcodeados inicializados correctamente (9 charts)');
     }
 
-    // Inicializar inmediatamente (el script está al final del HTML, DOM ya está listo)
-    initializeHardcodedCharts();
+    // Inicializar hardcoded charts cuando los datos estén listos (modificado Sprint 13A)
+    document.addEventListener('dashboardDataReady', function() {
+        console.log('🔧 Inicializando hardcoded charts...');
+        initializeHardcodedCharts();
+    });
 
         // ============================================================
         // FASE 5 - FUNCIONES DE INICIALIZACIÓN
