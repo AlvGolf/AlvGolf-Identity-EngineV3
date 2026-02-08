@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T16:56:00.597170",
+  "generated_at": "2026-02-08T17:15:25.873506",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4800,6 +4800,74 @@
       null
     ]
   },
+  "campo_performance": {
+    "LA DEHESA": {
+      "best": 93,
+      "average": 102.9,
+      "worst": 117,
+      "rounds": 16
+    },
+    "MARINA GOLF": {
+      "best": 88,
+      "average": 96.8,
+      "worst": 105,
+      "rounds": 11
+    },
+    "REAL CLUB LAS ROZAS MADRID": {
+      "best": 97,
+      "average": 104.6,
+      "worst": 110,
+      "rounds": 8
+    },
+    "VALLE DEL ESTE": {
+      "best": 89,
+      "average": 96.4,
+      "worst": 112,
+      "rounds": 5
+    },
+    "RFEG": {
+      "best": 104,
+      "average": 105.0,
+      "worst": 107,
+      "rounds": 3
+    },
+    "NUEVO PORTIL": {
+      "best": 89,
+      "average": 90.5,
+      "worst": 92,
+      "rounds": 2
+    },
+    "LA FAISANERA": {
+      "best": 99,
+      "average": 102.5,
+      "worst": 106,
+      "rounds": 2
+    },
+    "GOLF EL ROMPIDO CAMPO NORTE": {
+      "best": 94,
+      "average": 95.0,
+      "worst": 96,
+      "rounds": 2
+    },
+    "DESERT SPRINGS": {
+      "best": 99,
+      "average": 99.0,
+      "worst": 99,
+      "rounds": 1
+    },
+    "PALOMAREJOS GOLF": {
+      "best": 108,
+      "average": 108.0,
+      "worst": 108,
+      "rounds": 1
+    },
+    "CIUDAD FINANCIERA SANTANDER": {
+      "best": 101,
+      "average": 101.0,
+      "worst": 101,
+      "rounds": 1
+    }
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5762,8 +5830,8 @@
     ]
   },
   "metadata": {
-    "version": "4.0.0",
-    "sprint": 9,
+    "version": "4.1.0",
+    "sprint": 10,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
       "SPRINT 1: Club data merged (basic + launch + dispersion)",
@@ -5788,7 +5856,8 @@
       "SPRINT 9: Irons evolution (evolución mensual 5i-9i)",
       "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)",
       "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)",
-      "SPRINT 9: Smash factor evolution (evolución mensual eficiencia 4 categorías)"
+      "SPRINT 9: Smash factor evolution (evolución mensual eficiencia 4 categorías)",
+      "SPRINT 10: Campo performance (mejor/promedio/peor score por campo)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
