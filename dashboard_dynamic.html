@@ -11846,7 +11846,8 @@
         });
         } // End if sixMonthProjection
 
-        // 9. SWOT Matrix Chart - Complete 4 Quadrants
+        // 9. SWOT Matrix Chart - PROTEGIDO ✅ (hardcoded por complejidad)
+        if (document.getElementById('swotMatrix')) {
         const swotCtx = document.getElementById('swotMatrix').getContext('2d');
         new Chart(swotCtx, {
             type: 'radar',
@@ -11995,8 +11996,10 @@
                 }
             }
         });
-        
-        // 10. Benchmark Comparison Radar - You vs PGA Tour vs HCP15
+        } // End if swotMatrix
+
+        // 10. Benchmark Comparison Radar - PROTEGIDO ✅ (hardcoded por complejidad)
+        if (document.getElementById('benchmarkComparisonRadar')) {
         const benchmarkCtx = document.getElementById('benchmarkComparisonRadar').getContext('2d');
         new Chart(benchmarkCtx, {
             type: 'radar',
@@ -12128,7 +12131,8 @@
                 }
             }
         });
-        
+        } // End if benchmarkComparisonRadar
+
         // Club Performance Cards
         // DATOS AHORA CARGADOS DINÁMICAMENTE DESDE dashboard_data.json
 
@@ -12778,7 +12782,8 @@
             }
         });
         
-        // 13. ROI Plan Chart - Before vs After
+        // 13. ROI Plan Chart - PROTEGIDO ✅ (hardcoded por complejidad)
+        if (document.getElementById('roiPlanChart')) {
         const roiCtx = document.getElementById('roiPlanChart').getContext('2d');
         new Chart(roiCtx, {
             type: 'radar',
@@ -12863,6 +12868,7 @@
                 }
             }
         });
+        } // End if roiPlanChart
 
         // 14. Comfort Zones Heat Map Chart - DINÁMICO ✅
         if (document.getElementById('comfortZonesChart')) {
@@ -16527,7 +16533,8 @@
             }
         });
         
-        // 12. ROI de Práctica
+        // 12. ROI de Práctica - PROTEGIDO ✅ (hardcoded por simplicidad)
+        if (document.getElementById('roiPracticeChart')) {
         const roiPracticeCtx = document.getElementById('roiPracticeChart').getContext('2d');
         new Chart(roiPracticeCtx, {
             type: 'bar',
@@ -16551,7 +16558,8 @@
                 }
             }
         });
-        
+        } // End if roiPracticeChart
+
         } catch (error) {
             console.error('Error en Advanced History Charts:', error.message, error.stack);
             alert('Error al cargar algunos gráficos avanzados. Revisa la consola para más detalles.');
