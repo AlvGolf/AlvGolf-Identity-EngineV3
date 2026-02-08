@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T17:15:25.873506",
+  "generated_at": "2026-02-08T17:44:43.762835",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4868,6 +4868,94 @@
       "rounds": 1
     }
   },
+  "hcp_evolution_rfeg": {
+    "labels": [
+      "Apr 2024",
+      "May 2024",
+      "Jun 2024",
+      "Jul 2024",
+      "Aug 2024",
+      "Sep 2024",
+      "Oct 2024",
+      "Nov 2024",
+      "Dec 2024",
+      "Mar 2025",
+      "Apr 2025",
+      "May 2025",
+      "Jul 2025",
+      "Aug 2025",
+      "Sep 2025",
+      "Oct 2025",
+      "Nov 2025",
+      "Dec 2025"
+    ],
+    "values": [
+      37.3,
+      34.3,
+      34.0,
+      29.5,
+      28.2,
+      34.5,
+      38.0,
+      31.5,
+      31.5,
+      30.0,
+      31.0,
+      31.2,
+      26.0,
+      21.0,
+      26.7,
+      27.0,
+      23.5,
+      22.5
+    ],
+    "source": "estimated"
+  },
+  "scoring_zones_by_course": {},
+  "volatility_index": [
+    {
+      "quarter": "Q2 2024",
+      "avg_score": 107.6,
+      "std_dev": 4.3,
+      "coefficient_variation": 4.0,
+      "rounds": 7
+    },
+    {
+      "quarter": "Q2 2025",
+      "avg_score": 103.1,
+      "std_dev": 4.5,
+      "coefficient_variation": 4.4,
+      "rounds": 9
+    },
+    {
+      "quarter": "Q3 2024",
+      "avg_score": 101.7,
+      "std_dev": 5.7,
+      "coefficient_variation": 5.6,
+      "rounds": 10
+    },
+    {
+      "quarter": "Q3 2025",
+      "avg_score": 95.1,
+      "std_dev": 4.7,
+      "coefficient_variation": 4.9,
+      "rounds": 13
+    },
+    {
+      "quarter": "Q4 2024",
+      "avg_score": 104.8,
+      "std_dev": 5.6,
+      "coefficient_variation": 5.4,
+      "rounds": 5
+    },
+    {
+      "quarter": "Q4 2025",
+      "avg_score": 95.7,
+      "std_dev": 5.8,
+      "coefficient_variation": 6.1,
+      "rounds": 7
+    }
+  ],
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5830,7 +5918,7 @@
     ]
   },
   "metadata": {
-    "version": "4.1.0",
+    "version": "4.2.0",
     "sprint": 10,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5857,7 +5945,10 @@
       "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)",
       "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)",
       "SPRINT 9: Smash factor evolution (evolución mensual eficiencia 4 categorías)",
-      "SPRINT 10: Campo performance (mejor/promedio/peor score por campo)"
+      "SPRINT 10: Campo performance (mejor/promedio/peor score por campo)",
+      "SPRINT 10: HCP evolution RFEG (handicap oficial estimado mensual)",
+      "SPRINT 10: Scoring zones by course (distribución birdie/par/bogey por campo)",
+      "SPRINT 10: Volatility index (índice de variabilidad por quarter)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
