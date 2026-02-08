@@ -13129,7 +13129,7 @@
                             }
                         },
                         y: {
-                            reverse: true,
+                            reverse: false,  // Scores: menos es mejor, pero eje normal (85 abajo, 120 arriba)
                             ticks: {
                                 color: 'rgba(255, 255, 255, 0.7)',
                                 stepSize: 5
@@ -14677,7 +14677,7 @@
                             },
                             ticks: { color: '#E8E8E8' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            reverse: true
+                            reverse: false  // Scores: valores bajos abajo, altos arriba
                         },
                         y1: {
                             type: 'linear',
@@ -14842,7 +14842,7 @@
                             },
                             ticks: { color: '#E8E8E8' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            reverse: true
+                            reverse: false  // Scores: valores bajos abajo, altos arriba
                         },
                         x: {
                             title: {
@@ -15428,10 +15428,11 @@
                     title: { display: true, text: 'Mejora sostenida de 6.4 golpes desde inicio', color: '#5ABF8F', font: { size: 13 }}
                 },
                 scales: {
-                    y: { 
+                    y: {
                         title: { display: true, text: 'Score Promedio', color: '#4A9FD8' },
                         min: 90,
                         max: 110,
+                        reverse: true,  // Valores más altos arriba (peor score arriba)
                         ticks: { color: '#fff' }
                     },
                     x: { ticks: { color: '#fff' }}
@@ -15799,8 +15800,135 @@
         console.log('✅ Current Form Chart y Percentile Gauges inicializados correctamente');
     }
 
+    // ============================================
+    // HCP TRAJECTORY CHART - DINÁMICO (Sprint 9 TASK 9.3)
+    // ============================================
+    function initializeHCPTrajectory() {
+        console.log('📊 Inicializando HCP Trajectory Chart (dinámico)...');
+
+        const hcpData = window.dashboardData.hcp_trajectory;
+        if (!hcpData || !hcpData.historical || !hcpData.projection) {
+            console.warn('⚠️ HCP trajectory data not available');
+            return;
+        }
+
+        const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart')?.getContext('2d');
+        if (!hcpTrajectoryCtx) {
+            console.warn('⚠️ hcpTrajectoryChart canvas not found');
+            return;
+        }
+
+        // Combinar labels: historical + projection
+        const allLabels = [...hcpData.historical.labels, ...hcpData.projection.labels];
+
+        // Dataset 1: HCP Real (histórico)
+        const historicalData = [...hcpData.historical.values, ...Array(hcpData.projection.labels.length).fill(null)];
+
+        // Dataset 2: Proyección (null en histórico, valores en proyección)
+        const projectionData = [...Array(hcpData.historical.labels.length).fill(null), ...hcpData.projection.values];
+
+        // Dataset 3: Milestone (si existe)
+        let milestoneData = Array(allLabels.length).fill(null);
+        if (hcpData.milestones && hcpData.milestones.length > 0) {
+            const milestone = hcpData.milestones[0];
+            const milestoneIndex = allLabels.indexOf(milestone.month);
+            if (milestoneIndex !== -1) {
+                milestoneData[milestoneIndex] = milestone.hcp;
+            }
+        }
+
+        // Calcular mejora total
+        const improvement = (hcpData.historical.values[0] - hcpData.current).toFixed(1);
+
+        new Chart(hcpTrajectoryCtx, {
+            type: 'line',
+            data: {
+                labels: allLabels,
+                datasets: [{
+                    label: 'HCP Real',
+                    data: historicalData,
+                    borderColor: '#5ABF8F',
+                    backgroundColor: function(context) {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return null;
+                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                        gradient.addColorStop(0, 'rgba(90, 191, 143,0.05)');
+                        gradient.addColorStop(1, 'rgba(90, 191, 143,0.25)');
+                        return gradient;
+                    },
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#5ABF8F',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }, {
+                    label: 'Proyección con Plan',
+                    data: projectionData,
+                    borderColor: '#D4B55A',
+                    borderDash: [10, 5],
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#D4B55A',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }, {
+                    label: hcpData.milestones[0]?.label || 'Sub-20 Goal',
+                    data: milestoneData,
+                    borderColor: '#D4B55A',
+                    backgroundColor: '#D4B55A',
+                    pointRadius: 12,
+                    pointStyle: 'star',
+                    showLine: false,
+                    pointBorderWidth: 3,
+                    pointBorderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, labels: { color: '#fff', font: { size: 12 }}},
+                    title: {
+                        display: true,
+                        text: `Mejora sostenida: ${improvement} puntos en ${hcpData.historical.labels.length} meses | Proyección: HCP ${hcpData.target} en Q2-2026`,
+                        color: '#5ABF8F',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Handicap', color: '#4A9FD8', font: { size: 13 }},
+                        reverse: true,
+                        min: 18,
+                        max: 36,
+                        ticks: {
+                            color: '#fff',
+                            stepSize: 2
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#fff',
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        console.log('✅ HCP Trajectory Chart inicializado con datos reales');
+    }
+
     // Escuchar evento de datos listos
     document.addEventListener('dashboardDataReady', initializeCurrentFormAndGauges);
+    document.addEventListener('dashboardDataReady', initializeHCPTrajectory);
 
         // ============================================
         // HARDCODED CHARTS (Tab 1 Overview)
@@ -15808,7 +15936,10 @@
         function initializeHardcodedCharts() {
             console.log('📊 Inicializando gráficos hardcodeados (Tab 1 Overview)...');
 
-        // 7. HCP Trajectory Chart (Evolution + projection) - FIXED ID conflict
+        // 7. HCP Trajectory Chart - AHORA DINÁMICO (movido a initializeHCPTrajectory)
+        // (Este chart ahora se inicializa con datos reales del JSON en TASK 9.3)
+
+        /* COMENTADO - YA NO ES HARDCODED
         const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart')?.getContext('2d');
         if (!hcpTrajectoryCtx) {
             console.warn('⚠️ hcpTrajectoryChart canvas not found');
@@ -15896,6 +16027,7 @@
                 }
             }
         });
+        */  // FIN COMENTADO - HCP Trajectory ahora es dinámico
 
         // ============================================
         // ADVANCED HISTORY CHARTS (12 new charts)
@@ -16098,11 +16230,11 @@
                     title: { display: true, text: 'Progresión de récords: 92 → 89 → 88', color: '#D4B55A', font: { size: 13 }}
                 },
                 scales: {
-                    y: { 
-                        title: { display: true, text: 'Score', color: '#4A9FD8' }, 
-                        min: 85, 
-                        max: 95, 
-                        reverse: true, 
+                    y: {
+                        title: { display: true, text: 'Score', color: '#4A9FD8' },
+                        min: 85,
+                        max: 95,
+                        reverse: false,  // Scores: valores bajos abajo, altos arriba
                         ticks: { color: '#fff' }
                     },
                     x: { ticks: { color: '#fff' }}

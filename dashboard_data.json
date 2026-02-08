@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T01:13:33.542290",
+  "generated_at": "2026-02-08T04:12:07.667817",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4506,6 +4506,94 @@
       "rating": "good"
     }
   },
+  "hcp_trajectory": {
+    "historical": {
+      "labels": [
+        "Apr 2024",
+        "May 2024",
+        "Jun 2024",
+        "Jul 2024",
+        "Aug 2024",
+        "Sep 2024",
+        "Oct 2024",
+        "Nov 2024",
+        "Dec 2024",
+        "Mar 2025",
+        "Apr 2025",
+        "May 2025",
+        "Jul 2025",
+        "Aug 2025",
+        "Sep 2025",
+        "Oct 2025",
+        "Nov 2025",
+        "Dec 2025"
+      ],
+      "values": [
+        35.8,
+        35.2,
+        32.6,
+        30.6,
+        30.7,
+        33.6,
+        34.7,
+        33.7,
+        31.0,
+        30.8,
+        30.8,
+        29.4,
+        26.1,
+        24.6,
+        24.9,
+        25.7,
+        24.3,
+        23.0
+      ]
+    },
+    "projection": {
+      "labels": [
+        "Jan 2026",
+        "Feb 2026",
+        "Mar 2026",
+        "Apr 2026",
+        "May 2026",
+        "Jun 2026"
+      ],
+      "values": [
+        22.3,
+        21.6,
+        20.9,
+        20.2,
+        19.5,
+        18.8
+      ],
+      "confidence_low": [
+        22.8,
+        22.1,
+        21.4,
+        20.7,
+        20.0,
+        19.3
+      ],
+      "confidence_high": [
+        21.8,
+        21.1,
+        20.4,
+        19.7,
+        19.0,
+        18.3
+      ]
+    },
+    "milestones": [
+      {
+        "month": "May 2026",
+        "hcp": 20.0,
+        "label": "Sub-20 Goal"
+      }
+    ],
+    "current": 23.0,
+    "target": 19.0,
+    "improvement_rate": -0.7
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5468,7 +5556,7 @@
     ]
   },
   "metadata": {
-    "version": "3.5.0",
+    "version": "3.6.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5488,7 +5576,8 @@
       "SPRINT 6: Milestone achievements (broke_90/80, personal bests, streaks)",
       "SPRINT 6: Learning curve (mejora por categoría de shot)",
       "SPRINT 9: Current form chart (últimas 20 rondas con tendencia)",
-      "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)"
+      "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)",
+      "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
