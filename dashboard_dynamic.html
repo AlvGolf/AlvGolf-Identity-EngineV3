@@ -11145,10 +11145,11 @@
         */
 
         // 4. Smash Factor Chart - ALL CLUBS - DINÁMICO ✅
+        if (document.getElementById('smashFactorChart')) {
         const smashCtx = document.getElementById('smashFactorChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const smashFactorClubs = dashboardData.club_statistics || [];
+        const smashFactorClubs = window.dashboardData?.club_statistics || [];
         const smashFactorLabels = smashFactorClubs.length > 0 ? smashFactorClubs.map(c => c.name) : ['Driver', '3W', 'Hybrid', '5i', '6i', '7i', '8i', '9i', 'PW', 'GW', 'SW'];
         const smashFactorData = smashFactorClubs.length > 0 ? smashFactorClubs.map(c => c.smash_factor_est) : [1.435, 1.483, 1.38, 1.320, 1.315, 1.325, 1.318, 1.322, 1.310, 1.305, 1.300];
 
@@ -11215,7 +11216,8 @@
                 }
             }
         });
-        
+        } // End if smashFactorChart
+
         // 5. Club Distance Chart - Total Distance + Carry Distance
         const clubDistCtx = document.getElementById('clubDistanceChart').getContext('2d');
         new Chart(clubDistCtx, {
@@ -12584,10 +12586,11 @@
         */
 
         // 11. Club Distance Comparison Chart - DINÁMICO ✅
+        if (document.getElementById('clubDistanceComparison')) {
         const clubDistCompCtx = document.getElementById('clubDistanceComparison').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const clubDistData = dashboardData.club_distance_comparison?.clubs || [];
+        const clubDistData = window.dashboardData?.club_distance_comparison?.clubs || [];
         const clubDistLabels = clubDistData.length > 0 ? clubDistData.map(c => c.club) : ['Driver', '3W', 'Hybrid', '5i', '6i', '7i', '8i', '9i', 'PW', 'GW', 'SW'];
         const clubDistPlayer = clubDistData.length > 0 ? clubDistData.map(c => c.player_distance) : [231.6, 215.2, 171.9, 152.2, 140.0, 140.9, 124.8, 123.4, 112.0, 96.0, 90.7];
         const clubDistPGA = clubDistData.length > 0 ? clubDistData.map(c => c.pga_tour) : [290, 250, 225, 195, 183, 172, 160, 148, 136, 118, 95];
@@ -12673,7 +12676,8 @@
                 }
             }
         });
-        
+        } // End if clubDistanceComparison
+
         // 12. Dispersion Comparison Chart
         const dispersionCtx = document.getElementById('dispersionComparison').getContext('2d');
         new Chart(dispersionCtx, {
@@ -12851,12 +12855,13 @@
                 }
             }
         });
-        
+
         // 14. Comfort Zones Heat Map Chart - DINÁMICO ✅
+        if (document.getElementById('comfortZonesChart')) {
         const comfortCtx = document.getElementById('comfortZonesChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const comfortZonesData = dashboardData.comfort_zones?.zones || [];
+        const comfortZonesData = window.dashboardData?.comfort_zones?.zones || [];
         const comfortZonesLabels = comfortZonesData.length > 0 ? comfortZonesData.map(z => z.range) : ['50-70m\n(SW)', '70-90m\n(GW)', '90-110m\n(PW)', '110-130m\n(9i)', '130-150m\n(7-8i)', '150-170m\n(5-6i)', '170-190m\n(GAP!)', '190-220m\n(3W)', '220-250m\n(Driver)'];
         const comfortZonesConfidence = comfortZonesData.length > 0 ? comfortZonesData.map(z => z.gir_percentage) : [95, 95, 92, 88, 85, 83, 45, 62, 60];
 
@@ -12933,7 +12938,8 @@
                 }
             }
         });
-        
+        } // End if comfortZonesChart
+
         // 15. Dispersion Scatter Plots for Each Club
         // Helper function to create individual club dispersion chart
         function createIndividualDispersionChart(canvasId, clubData) {
@@ -15190,10 +15196,11 @@
         // ============================================
 
         // 1. Shot Zones Heat Map - DINÁMICO ✅
+        if (document.getElementById('shotZonesChart')) {
         const shotZonesCtx = document.getElementById('shotZonesChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const shotZonesData = dashboardData.shot_zones_heatmap?.zones || [];
+        const shotZonesData = window.dashboardData?.shot_zones_heatmap?.zones || [];
         const shotZonesDatasets = shotZonesData.length > 0 ? shotZonesData.map((clubData, idx) => {
             const colors = ['rgba(232, 139, 122,0.6)', 'rgba(255, 165, 0, 0.6)', 'rgba(212, 181, 90,0.6)', 'rgba(90, 191, 143,0.8)', 'rgba(74, 159, 216,0.6)'];
             const radii = [12, 10, 8, 8, 6];
@@ -15240,12 +15247,14 @@
                 }
             }
         });
-        
+        } // End if shotZonesChart
+
         // 2. Scoring Probability - DINÁMICO ✅
+        if (document.getElementById('scoringProbChart')) {
         const scoringProbCtx = document.getElementById('scoringProbChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const scoringProbData = dashboardData.scoring_probability?.distance_ranges || [];
+        const scoringProbData = window.dashboardData?.scoring_probability?.distance_ranges || [];
         const scoringProbLabels = scoringProbData.length > 0 ? scoringProbData.map(r => r.range) : ['50m', '80m', '110m', '140m', '170m', '200m', '230m'];
         const scoringProbPar = scoringProbData.length > 0 ? scoringProbData.map(r => r.probabilities.par) : [85, 82, 72, 58, 42, 28, 18];
         const scoringProbBirdie = scoringProbData.length > 0 ? scoringProbData.map(r => r.probabilities.birdie) : [20, 18, 12, 5, 2, 0, 0];
@@ -15281,7 +15290,8 @@
                 }
             }
         });
-        
+        } // End if scoringProbChart
+
         // 3. Tempo Analysis
         const tempoCtx = document.getElementById('tempoChart').getContext('2d');
         new Chart(tempoCtx, {
@@ -15331,10 +15341,11 @@
         });
         
         // 5. Swing DNA Fingerprint (Radar) - DINÁMICO ✅
+        if (document.getElementById('swingDNAChart')) {
         const swingDNACtx = document.getElementById('swingDNAChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const swingDNAData = dashboardData.swing_dna?.dimensions || [];
+        const swingDNAData = window.dashboardData?.swing_dna?.dimensions || [];
         const swingDNALabels = swingDNAData.length > 0 ? swingDNAData.map(d => d.name) : ['Ball Speed', 'Smash Factor', 'Launch Angle', 'Spin Rate', 'Attack Angle', 'Consistency', 'Distance', 'Accuracy', 'Short Game', 'Tempo', 'Path', 'Face'];
         const swingDNAPlayer = swingDNAData.length > 0 ? swingDNAData.map(d => d.player_value) : [87, 91, 72, 78, 25, 68, 58, 42, 92, 65, 55, 60];
         const swingDNAPGA = swingDNAData.length > 0 ? swingDNAData.map(d => d.pga_benchmark) : [95, 98, 92, 90, 95, 88, 95, 90, 95, 90, 92, 90];
@@ -15373,7 +15384,8 @@
                 }
             }
         });
-        
+        } // End if swingDNAChart
+
         // 6. Quick Wins Matrix (Bubble)
         const quickWinsCtx = document.getElementById('quickWinsChart').getContext('2d');
         new Chart(quickWinsCtx, {
@@ -15423,14 +15435,15 @@
         // ============================================
         
         // 1. Handicap Evolution RFEG - DINÁMICO ✅
+        if (document.getElementById('hcpEvolutionChart')) {
         const hcpEvolutionCtx = document.getElementById('hcpEvolutionChart').getContext('2d');
         new Chart(hcpEvolutionCtx, {
             type: 'line',
             data: {
-                labels: dashboardData.hcp_evolution_rfeg?.labels || ['Mar 2024', 'Dic 2024', 'May 2025', 'Jun 2025', 'Sep 2025 (Actual)'],
+                labels: window.dashboardData?.hcp_evolution_rfeg?.labels || ['Mar 2024', 'Dic 2024', 'May 2025', 'Jun 2025', 'Sep 2025 (Actual)'],
                 datasets: [{
                     label: 'Handicap Oficial RFEG',
-                    data: dashboardData.hcp_evolution_rfeg?.values || [32.0, 32.0, 21.9, 22.9, 23.2],
+                    data: window.dashboardData?.hcp_evolution_rfeg?.values || [32.0, 32.0, 21.9, 22.9, 23.2],
                     borderColor: '#5ABF8F',
                     backgroundColor: 'rgba(90, 191, 143,0.1)',
                     fill: true,
@@ -15459,12 +15472,14 @@
                 }
             }
         });
-        
+        } // End if hcpEvolutionChart
+
         // 2. Performance por Campo - Gráfico de Barras Agrupadas - DINÁMICO ✅
+        if (document.getElementById('campoPerfChart')) {
         const campoPerfCtx = document.getElementById('campoPerfChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON y ordenar por promedio
-        const campoPerfData = dashboardData.campo_performance || {};
+        const campoPerfData = window.dashboardData?.campo_performance || {};
         const campoPerfEntries = Object.entries(campoPerfData).sort((a, b) => a[1].average - b[1].average);
         const campoPerfLabels = campoPerfEntries.length > 0 ? campoPerfEntries.map(([name, _]) => name) : ['NUEVO PORTIL', 'EL ROMPIDO N.', 'MARINA GOLF', 'VALLE DEL ESTE', 'DESERT SPRINGS', 'SANTANDER', 'LA FAISANERA', 'LA DEHESA', 'LAS ROZAS', 'RFEG', 'PALOMAREJOS'];
         const campoPerfBest = campoPerfEntries.length > 0 ? campoPerfEntries.map(([_, data]) => data.best) : [89, 94, 88, 89, 99, 101, 99, 93, 97, 104, 108];
@@ -15545,7 +15560,8 @@
                 }
             }
         });
-        
+        } // End if campoPerfChart
+
         // 3. Quarterly Trend
         const quarterlyTrendCtx = document.getElementById('quarterlyTrendChart').getContext('2d');
         new Chart(quarterlyTrendCtx, {
@@ -15592,11 +15608,12 @@
         });
         
         // 4. Differential Distribution - DINÁMICO ✅
+        if (document.getElementById('diffDistChart')) {
         const diffDistCtx = document.getElementById('diffDistChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const diffDistData = dashboardData.differential_distribution?.distribution || { excellent: 0, good: 5, average: 11, poor: 12, very_poor: 24 };
-        const diffDistStats = dashboardData.differential_distribution?.stats || { total_rounds: 52 };
+        const diffDistData = window.dashboardData?.differential_distribution?.distribution || { excellent: 0, good: 5, average: 11, poor: 12, very_poor: 24 };
+        const diffDistStats = window.dashboardData?.differential_distribution?.stats || { total_rounds: 52 };
         const diffDistValues = [
             diffDistData.excellent + diffDistData.good,  // Combinamos excelente + bueno
             diffDistData.average,
@@ -15628,8 +15645,9 @@
                 }
             }
         });
-        
-        
+        } // End if diffDistChart
+
+
         // ============================================
         // OVERVIEW TAB - NEW CHARTS
         // ============================================
@@ -16236,10 +16254,11 @@
         });
         
         // 6. Volatility Index - DINÁMICO ✅
+        if (document.getElementById('volatilityChart')) {
         const volatilityCtx = document.getElementById('volatilityChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const volatilityData = dashboardData.volatility_index || [];
+        const volatilityData = window.dashboardData?.volatility_index || [];
         const volatilityLabels = volatilityData.length > 0 ? volatilityData.map(q => q.quarter) : ['2024-Q2', '2024-Q3', '2024-Q4', '2025-Q2', '2025-Q3', '2025-Q4'];
         const volatilityStdDev = volatilityData.length > 0 ? volatilityData.map(q => q.std_dev) : [8.5, 6.2, 5.8, 7.1, 4.8, 5.2];
 
@@ -16266,12 +16285,14 @@
                 }
             }
         });
-        
+        } // End if volatilityChart
+
         // 7. Estado de Forma Chart (Mis Campos tab) - DINÁMICO ✅
+        if (document.getElementById('estadoFormaChart')) {
         const estadoFormaCtx = document.getElementById('estadoFormaChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const estadoFormaData = dashboardData.estado_forma || [];
+        const estadoFormaData = window.dashboardData?.estado_forma || [];
         const estadoFormaLabels = estadoFormaData.length > 0 ? estadoFormaData.map(m => m.month) : ['May 24', 'Jun 24', 'Jul 24', 'Ago 24', 'Sep 24', 'Oct 24', 'Nov 24', 'May 25', 'Jun 25', 'Jul 25', 'Ago 25', 'Sep 25', 'Oct 25', 'Nov 25', 'Dic 25'];
         const estadoFormaScores = estadoFormaData.length > 0 ? estadoFormaData.map(m => m.avg_score) : [102, 99, 104, 95, 106, 108, 101, 103, 100, 96, 89, 92, 99, 88, 90];
 
@@ -16304,12 +16325,14 @@
                 }
             }
         });
-        
+        } // End if estadoFormaChart
+
         // 8. HCP Curve Position - DINÁMICO ✅
+        if (document.getElementById('hcpCurveChart')) {
         const hcpCurveCtx = document.getElementById('hcpCurveChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
-        const hcpCurveData = dashboardData.hcp_curve_position?.distribution || {};
+        const hcpCurveData = window.dashboardData?.hcp_curve_position?.distribution || {};
         const hcpCurveLabels = hcpCurveData.bins || ['<89 (excelente)', '89-95 (esperado)', '95-101 (normal)', '101-107 (por encima)', '>107 (mal día)'];
         const hcpCurveActual = hcpCurveData.actual || [15, 36, 30, 15, 4];
         const hcpCurveExpected = hcpCurveData.expected || [16, 34, 34, 13, 3];
@@ -16341,12 +16364,14 @@
                 }
             }
         });
-        
+        } // End if hcpCurveChart
+
         // 9. Prediction Model - PARCIALMENTE DINÁMICO ⚠️
+        if (document.getElementById('predictionChart')) {
         const predictionCtx = document.getElementById('predictionChart').getContext('2d');
 
         // El backend solo genera predicted_score, necesita expandirse para serie completa
-        const predictionData = dashboardData.prediction_model || {};
+        const predictionData = window.dashboardData?.prediction_model || {};
         const predictedScore = predictionData.predicted_score || 94.8;
 
         new Chart(predictionCtx, {
@@ -16380,7 +16405,8 @@
                 }
             }
         });
-        
+        } // End if predictionChart
+
         // 10. Milestones Timeline (simplified - no time adapter needed)
         const milestonesCtx = document.getElementById('milestonesChart').getContext('2d');
         new Chart(milestonesCtx, {
