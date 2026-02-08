@@ -16180,8 +16180,8 @@
         console.log('✅ Gráficos hardcodeados inicializados correctamente (9 charts)');
     }
 
-    // Inicializar cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', initializeHardcodedCharts);
+    // Inicializar inmediatamente (el script está al final del HTML, DOM ya está listo)
+    initializeHardcodedCharts();
 
         // ============================================================
         // FASE 5 - FUNCIONES DE INICIALIZACIÓN
