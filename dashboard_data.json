@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T16:24:11.011540",
+  "generated_at": "2026-02-08T16:32:03.764277",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4692,6 +4692,36 @@
       null
     ]
   },
+  "wedges_evolution": {
+    "labels": [
+      "Mar 2025",
+      "Jun 2025",
+      "Aug 2025",
+      "Nov 2025",
+      "Dec 2025"
+    ],
+    "pitching_wedge": [
+      98.0,
+      107.4,
+      118.2,
+      108.3,
+      97.6
+    ],
+    "gap_wedge": [
+      null,
+      92.8,
+      null,
+      null,
+      92.4
+    ],
+    "sand_wedge": [
+      null,
+      84.0,
+      null,
+      null,
+      96.1
+    ]
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5654,7 +5684,7 @@
     ]
   },
   "metadata": {
-    "version": "3.8.0",
+    "version": "3.9.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5677,7 +5707,8 @@
       "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)",
       "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)",
       "SPRINT 9: Temporal long game (evolución mensual Driver, 3W, Hybrid)",
-      "SPRINT 9: Irons evolution (evolución mensual 5i-9i)"
+      "SPRINT 9: Irons evolution (evolución mensual 5i-9i)",
+      "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",

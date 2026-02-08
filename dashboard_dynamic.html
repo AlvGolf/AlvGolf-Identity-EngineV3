@@ -10819,81 +10819,111 @@
         // Escuchar evento de datos listos
         document.addEventListener('dashboardDataReady', initializeIronsEvolutionChart);
         
-        // 2C. Wedges Evolution Chart (18 months)
-        const wedgesEvolutionCtx = document.getElementById('wedgesEvolutionChart').getContext('2d');
-        new Chart(wedgesEvolutionCtx, {
-            type: 'line',
-            data: {
-                labels: ['Sep 2024', 'Oct', 'Nov', 'Dic', 'Ene 2025', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: 'Pitching Wedge (m)',
-                    data: [88, 89, 90, 91, 92, 92.5, 93, 93.5, 94, 94.3, 94.6, 94.9, 95.1, 95.3, 95.4, 95.6],
-                    borderColor: '#5ABF8F',
-                    backgroundColor: 'rgba(90, 191, 143,0.1)',
-                    tension: 0.4,
-                    pointRadius: 5,
-                    fill: true
-                }, {
-                    label: 'Gap Wedge (m)',
-                    data: [74, 75, 76, 76.5, 77, 77.5, 78, 78.5, 79, 79.5, 79.8, 80.1, 80.3, 80.5, 80.7, 80.9],
-                    borderColor: '#4A9FD8',
-                    backgroundColor: 'rgba(74, 159, 216,0.1)',
-                    tension: 0.4,
-                    pointRadius: 5,
-                    fill: true
-                }, {
-                    label: 'Sand Wedge (m)',
-                    data: [58, 59, 60, 60.5, 61, 61.5, 62, 62.5, 63, 63.3, 63.6, 63.9, 64.1, 64.3, 64.5, 64.7],
-                    borderColor: '#D4B55A',
-                    backgroundColor: 'rgba(212, 181, 90,0.1)',
-                    tension: 0.4,
-                    pointRadius: 5,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { 
-                        labels: { 
-                            color: '#fff',
-                            font: { size: 12 }
-                        } 
-                    },
-                    tooltip: {
-                        callbacks: {
-                            afterLabel: function(context) {
-                                if (context.datasetIndex === 2) {
-                                    return '⭐ Tour-caliber';
+        // 2C. Wedges Evolution Chart - DINÁMICO ✅
+        function initializeWedgesEvolutionChart() {
+            const wedgesData = window.dashboardData.wedges_evolution;
+
+            if (!wedgesData || !wedgesData.labels || wedgesData.labels.length === 0) {
+                console.warn('⚠️ wedges_evolution data not available');
+                return;
+            }
+
+            const wedgesEvolutionCtx = document.getElementById('wedgesEvolutionChart');
+            if (!wedgesEvolutionCtx) {
+                console.warn('⚠️ wedgesEvolutionChart canvas not found');
+                return;
+            }
+
+            // Destruir chart existente si existe
+            if (window.chartInstances && window.chartInstances.wedgesEvolutionChart) {
+                window.chartInstances.wedgesEvolutionChart.destroy();
+            }
+
+            window.chartInstances.wedgesEvolutionChart = new Chart(wedgesEvolutionCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: wedgesData.labels,
+                    datasets: [{
+                        label: 'Pitching Wedge (m)',
+                        data: wedgesData.pitching_wedge,
+                        borderColor: '#5ABF8F',
+                        backgroundColor: 'rgba(90, 191, 143,0.1)',
+                        tension: 0.4,
+                        pointRadius: 5,
+                        fill: true,
+                        spanGaps: true
+                    }, {
+                        label: 'Gap Wedge (m)',
+                        data: wedgesData.gap_wedge,
+                        borderColor: '#4A9FD8',
+                        backgroundColor: 'rgba(74, 159, 216,0.1)',
+                        tension: 0.4,
+                        pointRadius: 5,
+                        fill: true,
+                        spanGaps: true
+                    }, {
+                        label: 'Sand Wedge (m)',
+                        data: wedgesData.sand_wedge,
+                        borderColor: '#D4B55A',
+                        backgroundColor: 'rgba(212, 181, 90,0.1)',
+                        tension: 0.4,
+                        pointRadius: 5,
+                        fill: true,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff',
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: chartColors.secondary,
+                            bodyColor: '#fff',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return value !== null ? `${label}: ${value}m` : `${label}: Sin datos`;
                                 }
-                                return '';
                             }
                         }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 55,
-                        max: 100,
-                        ticks: { color: '#fff' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        title: {
-                            display: true,
-                            text: 'Distancia (m)',
-                            color: '#4A9FD8'
-                        }
                     },
-                    x: {
-                        ticks: { 
-                            color: '#fff',
-                            font: { size: 10 }
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 80,
+                            max: 125,
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Distancia (m)',
+                                color: '#4A9FD8'
+                            }
                         },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        x: {
+                            ticks: {
+                                color: '#fff',
+                                font: { size: 10 }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
                     }
                 }
-            }
-        });
+            });
+
+            console.log('✅ Wedges Evolution Chart inicializado con datos reales');
+        }
+
+        // Escuchar evento de datos listos
+        document.addEventListener('dashboardDataReady', initializeWedgesEvolutionChart);
         
         // 2D. Category Improvement Chart
         const categoryImprovementCtx = document.getElementById('categoryImprovementChart').getContext('2d');
