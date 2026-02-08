@@ -10700,82 +10700,124 @@
             }
         });
         
-        // 2D. Irons Evolution Chart (18 months)
-        const ironsEvolutionCtx = document.getElementById('ironsEvolutionChart').getContext('2d');
-        new Chart(ironsEvolutionCtx, {
-            type: 'line',
-            data: {
-                labels: ['Sep 2024', 'Oct', 'Nov', 'Dic', 'Ene 2025', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-                datasets: [{
-                    label: '5-Iron (m)',
-                    data: [140, 141, 142, 143, 144, 145, 145.5, 146, 146.5, 147, 147.3, 147.5, 147.7, 147.8, 147.9, 148],
-                    borderColor: '#5ABF8F',
-                    backgroundColor: 'rgba(90, 191, 143,0.05)',
-                    tension: 0.4,
-                    pointRadius: 4
-                }, {
-                    label: '6-Iron (m)',
-                    data: [133, 134, 135, 136, 137, 137.5, 138, 138.5, 139, 139.5, 139.8, 140, 140.2, 140.3, 140.4, 140.5],
-                    borderColor: '#4A9FD8',
-                    backgroundColor: 'rgba(74, 159, 216,0.05)',
-                    tension: 0.4,
-                    pointRadius: 4
-                }, {
-                    label: '7-Iron (m)',
-                    data: [129, 130, 131, 132, 133, 133.5, 134, 134.5, 135, 135.5, 135.8, 136, 136.2, 136.4, 136.5, 136.6],
-                    borderColor: '#D4B55A',
-                    backgroundColor: 'rgba(212, 181, 90,0.05)',
-                    tension: 0.4,
-                    pointRadius: 4
-                }, {
-                    label: '8-Iron (m)',
-                    data: [124, 125, 126, 127, 128, 128.5, 129, 129.5, 130, 130.3, 130.5, 130.6, 130.7, 130.8, 130.85, 130.9],
-                    borderColor: '#D4B55A',
-                    backgroundColor: 'rgba(255, 140, 0, 0.05)',
-                    tension: 0.4,
-                    pointRadius: 4
-                }, {
-                    label: '9-Iron (m)',
-                    data: [112, 113, 114, 114.5, 115, 115.5, 116, 116.5, 117, 117.3, 117.6, 117.8, 118, 118.1, 118.2, 118.3],
-                    borderColor: '#E88B7A',
-                    backgroundColor: 'rgba(232, 139, 122,0.05)',
-                    tension: 0.4,
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { 
-                        labels: { 
-                            color: '#fff',
-                            font: { size: 12 }
-                        } 
-                    }
+        // 2D. Irons Evolution Chart - DINÁMICO ✅
+        function initializeIronsEvolutionChart() {
+            const ironsData = window.dashboardData.irons_evolution;
+
+            if (!ironsData || !ironsData.labels || ironsData.labels.length === 0) {
+                console.warn('⚠️ irons_evolution data not available');
+                return;
+            }
+
+            const ironsEvolutionCtx = document.getElementById('ironsEvolutionChart');
+            if (!ironsEvolutionCtx) {
+                console.warn('⚠️ ironsEvolutionChart canvas not found');
+                return;
+            }
+
+            // Destruir chart existente si existe
+            if (window.chartInstances && window.chartInstances.ironsEvolutionChart) {
+                window.chartInstances.ironsEvolutionChart.destroy();
+            }
+
+            window.chartInstances.ironsEvolutionChart = new Chart(ironsEvolutionCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ironsData.labels,
+                    datasets: [{
+                        label: '5-Iron (m)',
+                        data: ironsData.iron_5,
+                        borderColor: '#5ABF8F',
+                        backgroundColor: 'rgba(90, 191, 143,0.05)',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        spanGaps: true
+                    }, {
+                        label: '6-Iron (m)',
+                        data: ironsData.iron_6,
+                        borderColor: '#4A9FD8',
+                        backgroundColor: 'rgba(74, 159, 216,0.05)',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        spanGaps: true
+                    }, {
+                        label: '7-Iron (m)',
+                        data: ironsData.iron_7,
+                        borderColor: '#D4B55A',
+                        backgroundColor: 'rgba(212, 181, 90,0.05)',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        spanGaps: true
+                    }, {
+                        label: '8-Iron (m)',
+                        data: ironsData.iron_8,
+                        borderColor: '#FF8C00',
+                        backgroundColor: 'rgba(255, 140, 0, 0.05)',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        spanGaps: true
+                    }, {
+                        label: '9-Iron (m)',
+                        data: ironsData.iron_9,
+                        borderColor: '#E88B7A',
+                        backgroundColor: 'rgba(232, 139, 122,0.05)',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        spanGaps: true
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        min: 110,
-                        max: 150,
-                        ticks: { color: '#fff' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        title: {
-                            display: true,
-                            text: 'Distancia (m)',
-                            color: '#4A9FD8'
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff',
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: chartColors.secondary,
+                            bodyColor: '#fff',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.dataset.label || '';
+                                    const value = context.parsed.y;
+                                    return value !== null ? `${label}: ${value}m` : `${label}: Sin datos`;
+                                }
+                            }
                         }
                     },
-                    x: {
-                        ticks: { 
-                            color: '#fff',
-                            font: { size: 10 }
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 105,
+                            max: 155,
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Distancia (m)',
+                                color: '#4A9FD8'
+                            }
                         },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        x: {
+                            ticks: {
+                                color: '#fff',
+                                font: { size: 10 }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
                     }
                 }
-            }
-        });
+            });
+
+            console.log('✅ Irons Evolution Chart inicializado con datos reales');
+        }
+
+        // Escuchar evento de datos listos
+        document.addEventListener('dashboardDataReady', initializeIronsEvolutionChart);
         
         // 2C. Wedges Evolution Chart (18 months)
         const wedgesEvolutionCtx = document.getElementById('wedgesEvolutionChart').getContext('2d');
