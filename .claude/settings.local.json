@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(ls:*)",
+      "Bash(/usr/bin/time:*)",
+      "Bash(dir:*)",
+      "Bash(dashboard_dynamic.html \")",
+      "Bash(start \"\" \"http://localhost:8000/dashboard_dynamic.html\")",
+      "Bash(tree:*)",
+      "Bash(powershell -Command \"\\(Get-Content ''dashboard_dynamic.html''\\).Count\")",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh --version:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git checkout:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(start python start_dashboard_server.py:*)",
+      "Bash(node:*)",
+      "Bash(copy:*)",
+      "WebFetch(domain:alvgolf.github.io)",
+      "Bash(pip install:*)"
+    ]
+  }
+}

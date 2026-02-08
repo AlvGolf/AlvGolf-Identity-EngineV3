@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T17:55:11.410571",
+  "generated_at": "2026-02-08T18:03:36.855192",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4870,46 +4870,20 @@
   },
   "hcp_evolution_rfeg": {
     "labels": [
-      "Apr 2024",
-      "May 2024",
-      "Jun 2024",
-      "Jul 2024",
-      "Aug 2024",
-      "Sep 2024",
-      "Oct 2024",
-      "Nov 2024",
+      "Mar 2024",
       "Dec 2024",
-      "Mar 2025",
-      "Apr 2025",
       "May 2025",
-      "Jul 2025",
-      "Aug 2025",
-      "Sep 2025",
-      "Oct 2025",
-      "Nov 2025",
-      "Dec 2025"
+      "Jun 2025",
+      "Sep 2025"
     ],
     "values": [
-      37.3,
-      34.3,
-      34.0,
-      29.5,
-      28.2,
-      34.5,
-      38.0,
+      32.0,
+      36.0,
       31.5,
-      31.5,
-      30.0,
-      31.0,
-      31.2,
-      26.0,
-      21.0,
-      26.7,
-      27.0,
-      23.5,
-      22.5
+      28.0,
+      27.0
     ],
-    "source": "estimated"
+    "source": "rfeg_official"
   },
   "scoring_zones_by_course": {},
   "volatility_index": [
