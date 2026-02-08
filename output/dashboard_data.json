@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T18:33:46.145126",
+  "generated_at": "2026-02-08T18:36:36.880545",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -8271,6 +8271,93 @@
       "overall_rating": 71.2
     }
   },
+  "roi_plan": {
+    "plan": [
+      {
+        "action": "Putting practice <3m (repetitions drill)",
+        "time_investment": 2,
+        "difficulty": 2,
+        "expected_improvement": 2.5,
+        "timeframe": "4 weeks",
+        "roi_score": 1.25,
+        "priority": 1
+      },
+      {
+        "action": "Course management training (decision making)",
+        "time_investment": 1,
+        "difficulty": 3,
+        "expected_improvement": 2.2,
+        "timeframe": "6 weeks",
+        "roi_score": 2.2,
+        "priority": 1
+      },
+      {
+        "action": "Chipping consistency practice (short game)",
+        "time_investment": 2,
+        "difficulty": 4,
+        "expected_improvement": 1.9,
+        "timeframe": "6 weeks",
+        "roi_score": 0.95,
+        "priority": 2
+      },
+      {
+        "action": "Driver accuracy training (alignment + tempo)",
+        "time_investment": 3,
+        "difficulty": 7,
+        "expected_improvement": 2.0,
+        "timeframe": "12 weeks",
+        "roi_score": 0.67,
+        "priority": 3
+      },
+      {
+        "action": "Approach shots 100-150m (distance control)",
+        "time_investment": 2,
+        "difficulty": 6,
+        "expected_improvement": 1.5,
+        "timeframe": "8 weeks",
+        "roi_score": 0.75,
+        "priority": 3
+      },
+      {
+        "action": "Mental game coaching (pressure situations)",
+        "time_investment": 1,
+        "difficulty": 8,
+        "expected_improvement": 1.3,
+        "timeframe": "12 weeks",
+        "roi_score": 1.3,
+        "priority": 4
+      }
+    ],
+    "summary": {
+      "total_time": 11,
+      "total_improvement": 11.4,
+      "timeframe": "16 weeks (4 months)",
+      "feasibility": "medium",
+      "avg_roi": 1.04
+    },
+    "milestones": [
+      {
+        "week": 4,
+        "target": "Complete putting drill program (2.5 strokes saved)"
+      },
+      {
+        "week": 6,
+        "target": "Implement course management improvements (2.2 strokes)"
+      },
+      {
+        "week": 8,
+        "target": "Achieve chipping consistency benchmark (1.9 strokes)"
+      },
+      {
+        "week": 12,
+        "target": "Complete driver accuracy program (2.0 strokes)"
+      },
+      {
+        "week": 16,
+        "target": "Total improvement: ~10 strokes (HCP -5 to -6 points)"
+      }
+    ]
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -9233,7 +9320,7 @@
     ]
   },
   "metadata": {
-    "version": "4.8.0",
+    "version": "5.0.0",
     "sprint": 12,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -9279,7 +9366,8 @@
       "SPRINT 11: Strokes gained (análisis por categoría vs HCP 15 benchmark)",
       "SPRINT 12: Six month projection (proyección HCP y scores 6 meses)",
       "SPRINT 12: SWOT matrix (análisis SWOT automático)",
-      "SPRINT 12: Benchmark radar (comparación multidimensional vs benchmarks)"
+      "SPRINT 12: Benchmark radar (comparación multidimensional vs benchmarks)",
+      "SPRINT 12: ROI plan (plan de mejora con análisis ROI y milestones)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
