@@ -10521,73 +10521,93 @@
             }
         });
         
-        // 2B. Attack Angle Evolution Chart
-        const attackEvolutionCtx = document.getElementById('attackAngleEvolutionChart').getContext('2d');
-        new Chart(attackEvolutionCtx, {
-            type: 'line',
-            data: {
-                labels: ['Ene 24', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic 24'],
-                datasets: [{
-                    label: 'Attack Angle Real (°)',
-                    data: [-2.5, -1.8, -2.2, -3.0, -1.5, -0.9, -2.8, -3.5, -1.2, -2.0, -4.2, -0.9],
-                    borderColor: '#E88B7A',
-                    backgroundColor: 'rgba(232, 139, 122,0.2)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    borderWidth: 3
-                }, {
-                    label: 'Objetivo Mínimo (-4°)',
-                    data: [-4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4, -4],
-                    borderColor: '#D4B55A',
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    borderWidth: 2
-                }, {
-                    label: 'Objetivo Óptimo (-5°)',
-                    data: [-5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5],
-                    borderColor: '#5ABF8F',
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { labels: { color: '#fff', font: { size: 11 } } }
+        // 2B. Attack Angle Evolution Chart - DINÁMICO ✅
+        function initializeAttackAngleEvolutionChart() {
+            const attackData = window.dashboardData.attack_angle_evolution;
+
+            if (!attackData || !attackData.labels || attackData.labels.length === 0) {
+                console.warn('⚠️ attack_angle_evolution data not available');
+                return;
+            }
+
+            const attackEvolutionCtx = document.getElementById('attackAngleEvolutionChart');
+            if (!attackEvolutionCtx) {
+                console.warn('⚠️ attackAngleEvolutionChart canvas not found');
+                return;
+            }
+
+            // Destruir chart existente si existe
+            if (window.chartInstances && window.chartInstances.attackAngleEvolutionChart) {
+                window.chartInstances.attackAngleEvolutionChart.destroy();
+            }
+
+            window.chartInstances.attackAngleEvolutionChart = new Chart(attackEvolutionCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: attackData.labels,
+                    datasets: [{
+                        label: 'Attack Angle (°)',
+                        data: attackData.attack_angle,
+                        borderColor: '#E88B7A',
+                        backgroundColor: 'rgba(232, 139, 122,0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        spanGaps: true
+                    }]
                 },
-                scales: {
-                    y: {
-                        min: -7,
-                        max: 0,
-                        reverse: false,
-                        ticks: { 
-                            color: '#fff',
-                            callback: function(value) {
-                                return value + '°';
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#fff', font: { size: 11 } } },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: chartColors.secondary,
+                            bodyColor: '#fff',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed.y;
+                                    return value !== null ? `Attack Angle: ${value}°` : 'Sin datos';
+                                }
                             }
-                        },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        title: {
-                            display: true,
-                            text: 'Attack Angle (grados)',
-                            color: '#E88B7A'
                         }
                     },
-                    x: {
-                        ticks: { 
-                            color: '#fff',
-                            maxRotation: 45,
-                            minRotation: 45,
-                            font: { size: 10 }
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#fff',
+                                callback: function(value) {
+                                    return value + '°';
+                                }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            title: {
+                                display: true,
+                                text: 'Attack Angle (grados)',
+                                color: '#E88B7A'
+                            }
                         },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        x: {
+                            ticks: {
+                                color: '#fff',
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: { size: 10 }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
                     }
                 }
-            }
-        });
+            });
+
+            console.log('✅ Attack Angle Evolution Chart inicializado con datos reales');
+        }
+
+        // Escuchar evento de datos listos
+        document.addEventListener('dashboardDataReady', initializeAttackAngleEvolutionChart);
         
         // 2C. Projection Chart (Updated to 18 months: 12 historical + 6 projected)
         const projectionCtx = document.getElementById('projectionChart').getContext('2d');

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T16:32:03.764277",
+  "generated_at": "2026-02-08T16:39:28.734953",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4722,6 +4722,22 @@
       96.1
     ]
   },
+  "attack_angle_evolution": {
+    "labels": [
+      "Jun 2024",
+      "Mar 2025",
+      "Jul 2025",
+      "Nov 2025",
+      "Dec 2025"
+    ],
+    "attack_angle": [
+      7.3,
+      4.2,
+      0.8,
+      2.8,
+      2.3
+    ]
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5684,7 +5700,7 @@
     ]
   },
   "metadata": {
-    "version": "3.9.0",
+    "version": "3.10.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5708,7 +5724,8 @@
       "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)",
       "SPRINT 9: Temporal long game (evolución mensual Driver, 3W, Hybrid)",
       "SPRINT 9: Irons evolution (evolución mensual 5i-9i)",
-      "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)"
+      "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)",
+      "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
