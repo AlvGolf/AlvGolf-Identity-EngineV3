@@ -11718,7 +11718,8 @@
             }
         });
         
-        // 8. Six Month Projection
+        // 8. Six Month Projection - PROTEGIDO ✅ (hardcoded por complejidad)
+        if (document.getElementById('sixMonthProjection')) {
         const sixMonthCtx = document.getElementById('sixMonthProjection').getContext('2d');
         new Chart(sixMonthCtx, {
             type: 'line',
@@ -11843,7 +11844,8 @@
                 }
             }
         });
-        
+        } // End if sixMonthProjection
+
         // 9. SWOT Matrix Chart - Complete 4 Quadrants
         const swotCtx = document.getElementById('swotMatrix').getContext('2d');
         new Chart(swotCtx, {
@@ -15298,15 +15300,25 @@
         });
         } // End if scoringProbChart
 
-        // 3. Tempo Analysis
+        // 3. Tempo Analysis - DINÁMICO ✅
+        if (document.getElementById('tempoChart')) {
         const tempoCtx = document.getElementById('tempoChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const tempoData = window.dashboardData?.tempo_analysis?.player_tempo || {};
+        const tempoAvg = {
+            backswing: (tempoData.driver?.backswing + tempoData.irons?.backswing + tempoData.wedges?.backswing) / 3 || 0.63,
+            downswing: (tempoData.driver?.downswing + tempoData.irons?.downswing + tempoData.wedges?.downswing) / 3 || 0.25
+        };
+        const tempoTotal = tempoAvg.backswing + tempoAvg.downswing;
+
         new Chart(tempoCtx, {
             type: 'bar',
             data: {
                 labels: ['Backswing', 'Downswing', 'Total'],
                 datasets: [{
                     label: 'Tu Tempo (seg)',
-                    data: [0.63, 0.25, 0.88],
+                    data: [tempoAvg.backswing, tempoAvg.downswing, tempoTotal],
                     backgroundColor: 'rgba(232, 139, 122,0.7)'
                 }, {
                     label: 'PGA Tour (seg)',
@@ -15323,16 +15335,26 @@
                 }
             }
         });
+        } // End if tempoChart
         
-        // 4. Strokes Gained
+        // 4. Strokes Gained - DINÁMICO ✅
+        if (document.getElementById('strokesGainedChart')) {
         const strokesGainedCtx = document.getElementById('strokesGainedChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const sgData = window.dashboardData?.strokes_gained?.categories || {};
+        const sgTeeToGreen = sgData.tee_to_green?.strokes_gained || -2.4;
+        const sgApproach = sgData.approach?.strokes_gained || -0.8;
+        const sgShortGame = sgData.short_game?.strokes_gained || 1.9;
+        const sgTotal = window.dashboardData?.strokes_gained?.total_strokes_gained || -1.3;
+
         new Chart(strokesGainedCtx, {
             type: 'bar',
             data: {
                 labels: ['Tee to Green', 'Approach', 'Short Game', 'Total'],
                 datasets: [{
                     label: 'Strokes Gained vs HCP15',
-                    data: [-2.4, -0.8, 1.9, -1.3],
+                    data: [sgTeeToGreen, sgApproach, sgShortGame, sgTotal],
                     backgroundColor: ['rgba(232, 139, 122,0.7)', 'rgba(255, 165, 0, 0.7)', 'rgba(90, 191, 143,0.7)', 'rgba(100, 149, 237, 0.7)']
                 }]
             },
@@ -15345,6 +15367,7 @@
                 }
             }
         });
+        } // End if strokesGainedChart
         
         // 5. Swing DNA Fingerprint (Radar) - DINÁMICO ✅
         if (document.getElementById('swingDNAChart')) {
@@ -15392,36 +15415,49 @@
         });
         } // End if swingDNAChart
 
-        // 6. Quick Wins Matrix (Bubble)
+        // 6. Quick Wins Matrix (Bubble) - DINÁMICO ✅
+        if (document.getElementById('quickWinsChart')) {
         const quickWinsCtx = document.getElementById('quickWinsChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const quickWinsOpps = window.dashboardData?.quick_wins_matrix?.opportunities || [];
+        const quickWinsDatasets = quickWinsOpps.length > 0 ? quickWinsOpps.map((opp, idx) => {
+            const colors = ['rgba(90, 191, 143,0.7)', 'rgba(90, 191, 143,0.6)', 'rgba(212, 181, 90,0.7)', 'rgba(255, 165, 0, 0.7)', 'rgba(100, 149, 237, 0.6)', 'rgba(100, 149, 237, 0.5)'];
+            return {
+                label: opp.area,
+                data: [{x: opp.difficulty, y: opp.impact * 5, r: opp.estimated_improvement * 8}], // Scale impact and radius
+                backgroundColor: colors[idx % colors.length]
+            };
+        }) : [{
+            label: 'Launch Angle',
+            data: [{x: 3, y: 45, r: 20}],
+            backgroundColor: 'rgba(90, 191, 143,0.7)'
+        }, {
+            label: '5W Nuevo',
+            data: [{x: 1, y: 18, r: 15}],
+            backgroundColor: 'rgba(90, 191, 143,0.6)'
+        }, {
+            label: 'Tempo Training',
+            data: [{x: 7, y: 22, r: 18}],
+            backgroundColor: 'rgba(212, 181, 90,0.7)'
+        }, {
+            label: 'Ball Speed',
+            data: [{x: 8, y: 8, r: 12}],
+            backgroundColor: 'rgba(255, 165, 0, 0.7)'
+        }, {
+            label: 'Grip Fix',
+            data: [{x: 2, y: 5, r: 8}],
+            backgroundColor: 'rgba(100, 149, 237, 0.6)'
+        }, {
+            label: 'Alignment',
+            data: [{x: 1, y: 3, r: 6}],
+            backgroundColor: 'rgba(100, 149, 237, 0.5)'
+        }];
+
         new Chart(quickWinsCtx, {
             type: 'bubble',
             data: {
-                datasets: [{
-                    label: 'Launch Angle',
-                    data: [{x: 3, y: 45, r: 20}],
-                    backgroundColor: 'rgba(90, 191, 143,0.7)'
-                }, {
-                    label: '5W Nuevo',
-                    data: [{x: 1, y: 18, r: 15}],
-                    backgroundColor: 'rgba(90, 191, 143,0.6)'
-                }, {
-                    label: 'Tempo Training',
-                    data: [{x: 7, y: 22, r: 18}],
-                    backgroundColor: 'rgba(212, 181, 90,0.7)'
-                }, {
-                    label: 'Ball Speed',
-                    data: [{x: 8, y: 8, r: 12}],
-                    backgroundColor: 'rgba(255, 165, 0, 0.7)'
-                }, {
-                    label: 'Grip Fix',
-                    data: [{x: 2, y: 5, r: 8}],
-                    backgroundColor: 'rgba(100, 149, 237, 0.6)'
-                }, {
-                    label: 'Alignment',
-                    data: [{x: 1, y: 3, r: 6}],
-                    backgroundColor: 'rgba(100, 149, 237, 0.5)'
-                }]
+                datasets: quickWinsDatasets
             },
             options: {
                 responsive: true,
@@ -15435,6 +15471,7 @@
                 }
             }
         });
+        } // End if quickWinsChart
         
         // ============================================
         // MI HISTORIAL - REAL DATA CHARTS
