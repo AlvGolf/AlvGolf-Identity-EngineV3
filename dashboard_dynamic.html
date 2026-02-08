@@ -12356,7 +12356,8 @@
             }
         });
         
-        // 9. Launch Angle Analysis Chart
+        // 9. Launch Angle Analysis Chart - PROTEGIDO ✅ (hardcoded por complejidad)
+        if (document.getElementById('launchAngleChart')) {
         const launchAngleCtx = document.getElementById('launchAngleChart').getContext('2d');
         new Chart(launchAngleCtx, {
             type: 'bar',
@@ -12443,6 +12444,7 @@
                 }
             }
         });
+        } // End if launchAngleChart
 
         /* COMENTADO - CÓDIGO LEGACY bubbleChart
         // 10. Bubble Chart - Distance vs Consistency vs Ball Speed
@@ -16456,7 +16458,8 @@
         });
         } // End if predictionChart
 
-        // 10. Milestones Timeline (simplified - no time adapter needed)
+        // 10. Milestones Timeline - PROTEGIDO ✅ (hardcoded por simplicidad)
+        if (document.getElementById('milestonesChart')) {
         const milestonesCtx = document.getElementById('milestonesChart').getContext('2d');
         new Chart(milestonesCtx, {
             type: 'line',
@@ -16495,8 +16498,10 @@
                 }
             }
         });
-        
-        // 11. Learning Curve
+        } // End if milestonesChart
+
+        // 11. Learning Curve - PROTEGIDO ✅ (hardcoded por simplicidad)
+        if (document.getElementById('learningCurveChart')) {
         const learningCurveCtx = document.getElementById('learningCurveChart').getContext('2d');
         new Chart(learningCurveCtx, {
             type: 'line',
@@ -16532,7 +16537,8 @@
                 }
             }
         });
-        
+        } // End if learningCurveChart
+
         // 12. ROI de Práctica - PROTEGIDO ✅ (hardcoded por simplicidad)
         if (document.getElementById('roiPracticeChart')) {
         const roiPracticeCtx = document.getElementById('roiPracticeChart').getContext('2d');
