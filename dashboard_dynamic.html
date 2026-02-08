@@ -12692,6 +12692,142 @@
         });
         } // End if clubDistanceComparison
 
+        // 11.5 Club Gaps Analysis Chart - DINÁMICO ✅
+        if (document.getElementById('gapAnalysisChart')) {
+        const gapAnalysisCtx = document.getElementById('gapAnalysisChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const clubGapsData = window.dashboardData?.club_gaps?.gaps || [];
+
+        // Preparar datos para el chart
+        const gapLabels = clubGapsData.length > 0 ? clubGapsData.map(g => g.transition) :
+            ['Driver→3W', '3W→Hybrid', 'Hybrid→5i', '5i→6i', '6i→7i', '7i→8i', '8i→9i', '9i→PW', 'PW→GW', 'GW→SW'];
+
+        const gapYourGaps = clubGapsData.length > 0 ? clubGapsData.map(g => g.your_gap) :
+            [35.5, 40.2, 22.3, 7.5, 3.9, 8.4, 11.2, 13.8, 8.5, 5.2];
+
+        const gapPGATour = clubGapsData.length > 0 ? clubGapsData.map(g => g.pga_benchmark) :
+            [23, 18, 18, 12, 10, 10, 10, 12, 8, 6];
+
+        const gapHCP15 = clubGapsData.length > 0 ? clubGapsData.map(g => g.hcp15_benchmark) :
+            [28, 25, 22, 14, 13, 12, 12, 14, 10, 8];
+
+        new Chart(gapAnalysisCtx, {
+            type: 'bar',
+            data: {
+                labels: gapLabels,
+                datasets: [{
+                    label: 'Tus Gaps (m)',
+                    data: gapYourGaps,
+                    backgroundColor: 'rgba(74, 159, 216,0.8)',
+                    borderColor: '#4A9FD8',
+                    borderWidth: 2
+                }, {
+                    label: 'PGA Tour Ideal (m)',
+                    data: gapPGATour,
+                    backgroundColor: 'rgba(212, 181, 90,0.6)',
+                    borderColor: '#D4B55A',
+                    borderWidth: 2,
+                    borderDash: [5, 5]
+                }, {
+                    label: 'Amateur HCP15 (m)',
+                    data: gapHCP15,
+                    backgroundColor: 'rgba(90, 191, 143,0.4)',
+                    borderColor: '#5ABF8F',
+                    borderWidth: 2,
+                    borderDash: [3, 3]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#fff',
+                            font: { size: 12 },
+                            padding: 15
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Análisis de Gaps Entre Palos Consecutivos',
+                        color: '#4A9FD8',
+                        font: { size: 15, weight: 'bold' },
+                        padding: 20
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#4A9FD8',
+                        bodyColor: '#fff',
+                        padding: 12,
+                        callbacks: {
+                            afterBody: function(context) {
+                                const index = context[0].dataIndex;
+                                const yourGap = gapYourGaps[index];
+                                const pgaGap = gapPGATour[index];
+                                const hcp15Gap = gapHCP15[index];
+
+                                const vsPGA = yourGap - pgaGap;
+                                const vsHCP15 = yourGap - hcp15Gap;
+
+                                let status = '';
+                                if (yourGap > pgaGap + 10) {
+                                    status = '❌ GAP CRÍTICO - Considerar nuevo palo';
+                                } else if (yourGap > hcp15Gap + 5) {
+                                    status = '⚠️ Gap amplio - Revisar';
+                                } else if (yourGap < 8) {
+                                    status = '✅ Excelente spacing - Tour level';
+                                } else {
+                                    status = '✓ Gap aceptable';
+                                }
+
+                                return [
+                                    '',
+                                    `vs PGA: ${vsPGA > 0 ? '+' : ''}${vsPGA.toFixed(1)}m`,
+                                    `vs HCP15: ${vsHCP15 > 0 ? '+' : ''}${vsHCP15.toFixed(1)}m`,
+                                    '',
+                                    status
+                                ];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 45,
+                        title: {
+                            display: true,
+                            text: 'Distancia del Gap (metros)',
+                            color: '#4A9FD8',
+                            font: { size: 13, weight: 'bold' }
+                        },
+                        ticks: {
+                            color: '#fff',
+                            font: { size: 11 },
+                            callback: function(value) {
+                                return value + 'm';
+                            }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#fff',
+                            font: { size: 10 },
+                            maxRotation: 45,
+                            minRotation: 45
+                        },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        } // End if gapAnalysisChart
+
         // 12. Dispersion Comparison Chart
         const dispersionCtx = document.getElementById('dispersionComparison').getContext('2d');
         new Chart(dispersionCtx, {
