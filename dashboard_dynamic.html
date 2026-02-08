@@ -11307,6 +11307,7 @@
             }
         });
         
+        /* COMENTADO - CÓDIGO HARDCODED ANTIGUO - Reemplazado por versión dinámica en línea 12696
         // 6. Gap Analysis Chart - Your Gaps vs PGA Tour vs HCP15 Amateur
         const gapCtx = document.getElementById('gapAnalysisChart').getContext('2d');
         new Chart(gapCtx, {
@@ -11462,7 +11463,8 @@
                 }
             }
         });
-        
+        */ // FIN CÓDIGO HARDCODED COMENTADO - Reemplazado por versión dinámica
+
         // 7. Radar Charts by Category - Long Game, Mid Game (Irons), Short Game (Wedges)
         
         // 7A. Long Game Radar (Driver, 3W, Hybrid)
@@ -12694,6 +12696,12 @@
 
         // 11.5 Club Gaps Analysis Chart - DINÁMICO ✅
         if (document.getElementById('gapAnalysisChart')) {
+        // Destruir chart existente si existe
+        window.chartInstances = window.chartInstances || {};
+        if (window.chartInstances.gapAnalysisChart) {
+            window.chartInstances.gapAnalysisChart.destroy();
+        }
+
         const gapAnalysisCtx = document.getElementById('gapAnalysisChart').getContext('2d');
 
         // Extraer datos dinámicos del JSON
@@ -12712,7 +12720,7 @@
         const gapHCP15 = clubGapsData.length > 0 ? clubGapsData.map(g => g.hcp15_benchmark) :
             [28, 25, 22, 14, 13, 12, 12, 14, 10, 8];
 
-        new Chart(gapAnalysisCtx, {
+        window.chartInstances.gapAnalysisChart = new Chart(gapAnalysisCtx, {
             type: 'bar',
             data: {
                 labels: gapLabels,
