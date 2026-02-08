@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T18:14:31.678252",
+  "generated_at": "2026-02-08T18:18:05.791439",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -7809,6 +7809,223 @@
       "Directional Control"
     ]
   },
+  "quick_wins_matrix": {
+    "opportunities": [
+      {
+        "skill": "Putting <3m",
+        "difficulty": 2,
+        "impact": 8,
+        "priority": "quick_win",
+        "estimated_improvement": 2.5
+      },
+      {
+        "skill": "Bunker Play",
+        "difficulty": 5,
+        "impact": 6,
+        "priority": "strategic",
+        "estimated_improvement": 1.8
+      },
+      {
+        "skill": "Course Management",
+        "difficulty": 3,
+        "impact": 7,
+        "priority": "quick_win",
+        "estimated_improvement": 2.2
+      },
+      {
+        "skill": "Driver Accuracy",
+        "difficulty": 7,
+        "impact": 8,
+        "priority": "strategic",
+        "estimated_improvement": 2.0
+      },
+      {
+        "skill": "Approach Shots 100-150m",
+        "difficulty": 6,
+        "impact": 7,
+        "priority": "strategic",
+        "estimated_improvement": 1.5
+      },
+      {
+        "skill": "Chipping Consistency",
+        "difficulty": 4,
+        "impact": 7,
+        "priority": "quick_win",
+        "estimated_improvement": 1.9
+      },
+      {
+        "skill": "Mental Game",
+        "difficulty": 8,
+        "impact": 6,
+        "priority": "strategic",
+        "estimated_improvement": 1.3
+      },
+      {
+        "skill": "Distance Control Wedges",
+        "difficulty": 5,
+        "impact": 6,
+        "priority": "strategic",
+        "estimated_improvement": 1.4
+      },
+      {
+        "skill": "Ball Striking Irons",
+        "difficulty": 9,
+        "impact": 5,
+        "priority": "luxury",
+        "estimated_improvement": 1.0
+      },
+      {
+        "skill": "Pre-shot Routine",
+        "difficulty": 2,
+        "impact": 5,
+        "priority": "quick_win",
+        "estimated_improvement": 0.8
+      }
+    ],
+    "summary": {
+      "total_opportunities": 10,
+      "quick_wins": 4,
+      "strategic_moves": 5,
+      "total_potential_improvement": 16.4
+    }
+  },
+  "club_distance_comparison": {
+    "clubs": [
+      {
+        "club": "3W",
+        "player_distance": 202.3,
+        "pga_tour": 255,
+        "hcp15": 210,
+        "hcp23": 185,
+        "vs_pga": -20.7,
+        "vs_hcp15": -3.7,
+        "vs_hcp23": 9.4,
+        "rating": "above"
+      },
+      {
+        "club": "5i",
+        "player_distance": 148.0,
+        "pga_tour": 195,
+        "hcp15": 170,
+        "hcp23": 155,
+        "vs_pga": -24.1,
+        "vs_hcp15": -12.9,
+        "vs_hcp23": -4.5,
+        "rating": "at"
+      },
+      {
+        "club": "6i",
+        "player_distance": 132.8,
+        "pga_tour": 185,
+        "hcp15": 160,
+        "hcp23": 145,
+        "vs_pga": -28.2,
+        "vs_hcp15": -17.0,
+        "vs_hcp23": -8.4,
+        "rating": "below"
+      },
+      {
+        "club": "7i",
+        "player_distance": 136.6,
+        "pga_tour": 170,
+        "hcp15": 150,
+        "hcp23": 135,
+        "vs_pga": -19.6,
+        "vs_hcp15": -8.9,
+        "vs_hcp23": 1.2,
+        "rating": "at"
+      },
+      {
+        "club": "8i",
+        "player_distance": 119.2,
+        "pga_tour": 160,
+        "hcp15": 140,
+        "hcp23": 125,
+        "vs_pga": -25.5,
+        "vs_hcp15": -14.8,
+        "vs_hcp23": -4.6,
+        "rating": "at"
+      },
+      {
+        "club": "9i",
+        "player_distance": 117.6,
+        "pga_tour": 145,
+        "hcp15": 130,
+        "hcp23": 115,
+        "vs_pga": -18.9,
+        "vs_hcp15": -9.6,
+        "vs_hcp23": 2.2,
+        "rating": "at"
+      },
+      {
+        "club": "PW",
+        "player_distance": 107.7,
+        "pga_tour": 130,
+        "hcp15": 120,
+        "hcp23": 105,
+        "vs_pga": -17.2,
+        "vs_hcp15": -10.3,
+        "vs_hcp23": 2.5,
+        "rating": "at"
+      }
+    ]
+  },
+  "comfort_zones": {
+    "zones": [
+      {
+        "range": "0-50m",
+        "min_dist": 0,
+        "max_dist": 50,
+        "shots": 156,
+        "avg_score": 4.2,
+        "consistency": 0.8,
+        "comfort_level": "high",
+        "gir_percentage": 65
+      },
+      {
+        "range": "50-100m",
+        "min_dist": 50,
+        "max_dist": 100,
+        "shots": 134,
+        "avg_score": 4.5,
+        "consistency": 0.9,
+        "comfort_level": "high",
+        "gir_percentage": 48
+      },
+      {
+        "range": "100-150m",
+        "min_dist": 100,
+        "max_dist": 150,
+        "shots": 98,
+        "avg_score": 4.8,
+        "consistency": 1.1,
+        "comfort_level": "medium",
+        "gir_percentage": 32
+      },
+      {
+        "range": "150-200m",
+        "min_dist": 150,
+        "max_dist": 200,
+        "shots": 72,
+        "avg_score": 5.2,
+        "consistency": 1.3,
+        "comfort_level": "medium",
+        "gir_percentage": 22
+      },
+      {
+        "range": "200+m",
+        "min_dist": 200,
+        "max_dist": 999,
+        "shots": 45,
+        "avg_score": 5.6,
+        "consistency": 1.5,
+        "comfort_level": "low",
+        "gir_percentage": 12
+      }
+    ],
+    "best_zone": "0-50m",
+    "worst_zone": "200+m"
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -8771,7 +8988,7 @@
     ]
   },
   "metadata": {
-    "version": "4.5.0",
+    "version": "4.6.0",
     "sprint": 11,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -8809,7 +9026,10 @@
       "SPRINT 10: ROI practice (ROI frecuencia de práctica vs mejora)",
       "SPRINT 11: Shot zones heatmap (heat map zonas de caída de shots)",
       "SPRINT 11: Scoring probability (probabilidad birdie/par/bogey por distancia)",
-      "SPRINT 11: Swing DNA (fingerprint 12 dimensiones vs benchmarks)"
+      "SPRINT 11: Swing DNA (fingerprint 12 dimensiones vs benchmarks)",
+      "SPRINT 11: Quick wins matrix (matriz dificultad vs impacto para priorización)",
+      "SPRINT 11: Club distance comparison (comparación distancias vs benchmarks PGA/HCP)",
+      "SPRINT 11: Comfort zones (análisis zonas de confort por distancia)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
