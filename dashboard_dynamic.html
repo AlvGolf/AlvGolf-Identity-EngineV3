@@ -15535,11 +15535,22 @@
         // FIN COMENTADO playerProfileRadar
         */
 
-        // 2. Current Form Chart (últimas 20 rondas) - DINÁMICO Sprint 9
-        const currentFormCtx = document.getElementById('currentFormChart').getContext('2d');
+        // ============================================
+        // CURRENT FORM & PERCENTILE GAUGES (SPRINT 9)
+        // ============================================
+        function initializeCurrentFormAndGauges() {
+            console.log('📊 Inicializando Current Form Chart y Percentile Gauges...');
 
-        // Obtener datos dinámicos de current_form
-        const currentFormData = dashboardData.current_form || {};
+            if (!window.dashboardData) {
+                console.error('❌ dashboardData no disponible');
+                return;
+            }
+
+            // 2. Current Form Chart (últimas 20 rondas) - DINÁMICO Sprint 9
+            const currentFormCtx = document.getElementById('currentFormChart').getContext('2d');
+
+            // Obtener datos dinámicos de current_form
+            const currentFormData = window.dashboardData.current_form || {};
         const formScores = currentFormData.scores || [];
         const formLabels = (currentFormData.labels || []).map(fecha => {
             // Convertir "YYYY-MM-DD" a "DD/MM"
@@ -15706,7 +15717,7 @@
         }
 
         // 3-6. Percentile Gauges (4 doughnut charts) - DINÁMICO Sprint 9
-        const percentileGauges = dashboardData.percentile_gauges || {};
+        const percentileGauges = window.dashboardData.percentile_gauges || {};
 
         const percentileConfig = (canvasId, value, color) => {
             const ctx = document.getElementById(canvasId).getContext('2d');
@@ -15784,6 +15795,12 @@
             document.getElementById('attackAngleValue').textContent = attackAngleValue;
             document.getElementById('attackAngleText').innerHTML = getPercentileText(attackAngleValue, '#E88B7A');
         }
+
+        console.log('✅ Current Form Chart y Percentile Gauges inicializados correctamente');
+    }
+
+    // Escuchar evento de datos listos
+    document.addEventListener('dashboardDataReady', initializeCurrentFormAndGauges);
 
         // 7. HCP Trajectory Chart (Evolution + projection) - FIXED ID conflict
         const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart').getContext('2d');
