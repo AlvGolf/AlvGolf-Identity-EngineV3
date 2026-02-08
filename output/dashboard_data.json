@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T16:39:28.734953",
+  "generated_at": "2026-02-08T16:56:00.597170",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -4738,6 +4738,68 @@
       2.3
     ]
   },
+  "smash_factor_evolution": {
+    "labels": [
+      "Jun 2024",
+      "Sep 2024",
+      "Mar 2025",
+      "Jun 2025",
+      "Jul 2025",
+      "Aug 2025",
+      "Sep 2025",
+      "Nov 2025",
+      "Dec 2025",
+      "Jan 2026"
+    ],
+    "driver": [
+      1.45,
+      null,
+      1.45,
+      null,
+      1.45,
+      null,
+      null,
+      1.45,
+      1.45,
+      null
+    ],
+    "woods": [
+      null,
+      1.4,
+      null,
+      1.4,
+      1.4,
+      null,
+      1.4,
+      null,
+      1.4,
+      null
+    ],
+    "irons": [
+      null,
+      1.35,
+      1.35,
+      1.35,
+      1.35,
+      1.35,
+      null,
+      null,
+      1.35,
+      1.35
+    ],
+    "wedges": [
+      null,
+      null,
+      1.3,
+      1.3,
+      null,
+      1.3,
+      null,
+      1.3,
+      1.3,
+      null
+    ]
+  },
   "launch_metrics": {
     "summary": {
       "total_shots": 478,
@@ -5700,7 +5762,7 @@
     ]
   },
   "metadata": {
-    "version": "3.10.0",
+    "version": "4.0.0",
     "sprint": 9,
     "changes": [
       "SPRINT 1: Dispersion scatter data generada (11 palos)",
@@ -5725,7 +5787,8 @@
       "SPRINT 9: Temporal long game (evolución mensual Driver, 3W, Hybrid)",
       "SPRINT 9: Irons evolution (evolución mensual 5i-9i)",
       "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)",
-      "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)"
+      "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)",
+      "SPRINT 9: Smash factor evolution (evolución mensual eficiencia 4 categorías)"
     ],
     "data_sources": {
       "flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx",
