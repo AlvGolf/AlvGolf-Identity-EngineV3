@@ -11136,15 +11136,21 @@
         // FIN COMENTADO directionalChart
         */
 
-        // 4. Smash Factor Chart - ALL CLUBS
+        // 4. Smash Factor Chart - ALL CLUBS - DINÁMICO ✅
         const smashCtx = document.getElementById('smashFactorChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const smashFactorClubs = dashboardData.club_statistics || [];
+        const smashFactorLabels = smashFactorClubs.length > 0 ? smashFactorClubs.map(c => c.name) : ['Driver', '3W', 'Hybrid', '5i', '6i', '7i', '8i', '9i', 'PW', 'GW', 'SW'];
+        const smashFactorData = smashFactorClubs.length > 0 ? smashFactorClubs.map(c => c.smash_factor_est) : [1.435, 1.483, 1.38, 1.320, 1.315, 1.325, 1.318, 1.322, 1.310, 1.305, 1.300];
+
         new Chart(smashCtx, {
             type: 'bar',
             data: {
-                labels: ['Driver', '3W', 'Hybrid', '5i', '6i', '7i', '8i', '9i', 'PW', 'GW', 'SW'],
+                labels: smashFactorLabels,
                 datasets: [{
                     label: 'Smash Factor',
-                    data: [1.435, 1.483, 1.38, 1.320, 1.315, 1.325, 1.318, 1.322, 1.310, 1.305, 1.300],
+                    data: smashFactorData,
                     backgroundColor: function(context) {
                         const value = context.parsed.y;
                         if (value >= 1.43) return chartColors.primary;
@@ -12838,29 +12844,25 @@
             }
         });
         
-        // 14. Comfort Zones Heat Map Chart
+        // 14. Comfort Zones Heat Map Chart - DINÁMICO ✅
         const comfortCtx = document.getElementById('comfortZonesChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const comfortZonesData = dashboardData.comfort_zones?.zones || [];
+        const comfortZonesLabels = comfortZonesData.length > 0 ? comfortZonesData.map(z => z.range) : ['50-70m\n(SW)', '70-90m\n(GW)', '90-110m\n(PW)', '110-130m\n(9i)', '130-150m\n(7-8i)', '150-170m\n(5-6i)', '170-190m\n(GAP!)', '190-220m\n(3W)', '220-250m\n(Driver)'];
+        const comfortZonesConfidence = comfortZonesData.length > 0 ? comfortZonesData.map(z => z.gir_percentage) : [95, 95, 92, 88, 85, 83, 45, 62, 60];
+
         new Chart(comfortCtx, {
             type: 'bar',
             data: {
-                labels: [
-                    '50-70m\n(SW)', 
-                    '70-90m\n(GW)', 
-                    '90-110m\n(PW)', 
-                    '110-130m\n(9i)', 
-                    '130-150m\n(7-8i)', 
-                    '150-170m\n(5-6i)', 
-                    '170-190m\n(GAP!)', 
-                    '190-220m\n(3W)', 
-                    '220-250m\n(Driver)'
-                ],
+                labels: comfortZonesLabels,
                 datasets: [{
-                    label: 'Nivel de Confianza (%)',
-                    data: [95, 95, 92, 88, 85, 83, 45, 62, 60],
+                    label: 'GIR % (Confianza)',
+                    data: comfortZonesConfidence,
                     backgroundColor: function(context) {
                         const value = context.parsed.y;
-                        if (value >= 90) return 'rgba(90, 191, 143,0.8)'; // Verde
-                        if (value >= 75) return 'rgba(212, 181, 90,0.7)'; // Amarillo
+                        if (value >= 50) return 'rgba(90, 191, 143,0.8)'; // Verde
+                        if (value >= 30) return 'rgba(212, 181, 90,0.7)'; // Amarillo
                         return 'rgba(232, 139, 122,0.7)'; // Rojo
                     },
                     borderColor: function(context) {
@@ -15179,41 +15181,43 @@
         // Algunos charts están comentados individualmente para evitar conflictos
         // ============================================
 
-        // 1. Shot Zones Heat Map
+        // 1. Shot Zones Heat Map - DINÁMICO ✅
         const shotZonesCtx = document.getElementById('shotZonesChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const shotZonesData = dashboardData.shot_zones_heatmap?.zones || [];
+        const shotZonesDatasets = shotZonesData.length > 0 ? shotZonesData.map((clubData, idx) => {
+            const colors = ['rgba(232, 139, 122,0.6)', 'rgba(255, 165, 0, 0.6)', 'rgba(212, 181, 90,0.6)', 'rgba(90, 191, 143,0.8)', 'rgba(74, 159, 216,0.6)'];
+            const radii = [12, 10, 8, 8, 6];
+            return {
+                label: clubData.club,
+                data: clubData.shots.map(shot => ({x: shot.x, y: shot.y})),
+                backgroundColor: colors[idx % colors.length],
+                pointRadius: radii[idx % radii.length]
+            };
+        }) : [{
+            label: 'Driver',
+            data: [{x: -91.6, y: 231}, {x: -85, y: 225}],
+            backgroundColor: 'rgba(232, 139, 122,0.6)',
+            pointRadius: 12
+        }];
+
+        // Agregar línea central
+        shotZonesDatasets.push({
+            label: 'Centro Fairway',
+            data: [{x: 0, y: 250}, {x: 0, y: 200}, {x: 0, y: 150}, {x: 0, y: 100}],
+            borderColor: 'rgba(74, 159, 216,0.5)',
+            borderWidth: 2,
+            borderDash: [10, 5],
+            pointRadius: 0,
+            showLine: true,
+            fill: false
+        });
+
         new Chart(shotZonesCtx, {
             type: 'scatter',
             data: {
-                datasets: [{
-                    label: 'Driver',
-                    data: [{x: -91.6, y: 231}, {x: -85, y: 225}, {x: -95, y: 238}, {x: -88, y: 228}, {x: -92, y: 233}],
-                    backgroundColor: 'rgba(232, 139, 122,0.6)',
-                    pointRadius: 12
-                }, {
-                    label: '3W/Hybrid',
-                    data: [{x: -34, y: 215}, {x: -30, y: 212}, {x: -38, y: 218}, {x: 136, y: 172}],
-                    backgroundColor: 'rgba(255, 165, 0, 0.6)',
-                    pointRadius: 10
-                }, {
-                    label: 'Irons',
-                    data: [{x: -20, y: 152}, {x: 48, y: 140}, {x: -10, y: 141}, {x: -12, y: 125}, {x: -9, y: 123}],
-                    backgroundColor: 'rgba(212, 181, 90,0.6)',
-                    pointRadius: 8
-                }, {
-                    label: 'Wedges',
-                    data: [{x: 16, y: 112}, {x: -6, y: 96}, {x: -8, y: 91}],
-                    backgroundColor: 'rgba(90, 191, 143,0.8)',
-                    pointRadius: 8
-                }, {
-                    label: 'Centro Fairway',
-                    data: [{x: 0, y: 250}, {x: 0, y: 200}, {x: 0, y: 150}, {x: 0, y: 100}],
-                    borderColor: 'rgba(74, 159, 216,0.5)',
-                    borderWidth: 2,
-                    borderDash: [10, 5],
-                    pointRadius: 0,
-                    showLine: true,
-                    fill: false
-                }]
+                datasets: shotZonesDatasets
             },
             options: {
                 responsive: true,
@@ -15229,15 +15233,22 @@
             }
         });
         
-        // 2. Scoring Probability
+        // 2. Scoring Probability - DINÁMICO ✅
         const scoringProbCtx = document.getElementById('scoringProbChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const scoringProbData = dashboardData.scoring_probability?.distance_ranges || [];
+        const scoringProbLabels = scoringProbData.length > 0 ? scoringProbData.map(r => r.range) : ['50m', '80m', '110m', '140m', '170m', '200m', '230m'];
+        const scoringProbPar = scoringProbData.length > 0 ? scoringProbData.map(r => r.probabilities.par) : [85, 82, 72, 58, 42, 28, 18];
+        const scoringProbBirdie = scoringProbData.length > 0 ? scoringProbData.map(r => r.probabilities.birdie) : [20, 18, 12, 5, 2, 0, 0];
+
         new Chart(scoringProbCtx, {
             type: 'line',
             data: {
-                labels: ['50m', '80m', '110m', '140m', '170m', '200m', '230m'],
+                labels: scoringProbLabels,
                 datasets: [{
                     label: 'Prob Par %',
-                    data: [85, 82, 72, 58, 42, 28, 18],
+                    data: scoringProbPar,
                     borderColor: '#5ABF8F',
                     backgroundColor: 'rgba(90, 191, 143,0.1)',
                     fill: true,
@@ -15245,7 +15256,7 @@
                     borderWidth: 3
                 }, {
                     label: 'Prob Birdie %',
-                    data: [20, 18, 12, 5, 2, 0, 0],
+                    data: scoringProbBirdie,
                     borderColor: '#D4B55A',
                     backgroundColor: 'rgba(212, 181, 90,0.1)',
                     fill: true,
@@ -15311,22 +15322,29 @@
             }
         });
         
-        // 5. Swing DNA Fingerprint (Radar)
+        // 5. Swing DNA Fingerprint (Radar) - DINÁMICO ✅
         const swingDNACtx = document.getElementById('swingDNAChart').getContext('2d');
+
+        // Extraer datos dinámicos del JSON
+        const swingDNAData = dashboardData.swing_dna?.dimensions || [];
+        const swingDNALabels = swingDNAData.length > 0 ? swingDNAData.map(d => d.name) : ['Ball Speed', 'Smash Factor', 'Launch Angle', 'Spin Rate', 'Attack Angle', 'Consistency', 'Distance', 'Accuracy', 'Short Game', 'Tempo', 'Path', 'Face'];
+        const swingDNAPlayer = swingDNAData.length > 0 ? swingDNAData.map(d => d.player_value) : [87, 91, 72, 78, 25, 68, 58, 42, 92, 65, 55, 60];
+        const swingDNAPGA = swingDNAData.length > 0 ? swingDNAData.map(d => d.pga_benchmark) : [95, 98, 92, 90, 95, 88, 95, 90, 95, 90, 92, 90];
+
         new Chart(swingDNACtx, {
             type: 'radar',
             data: {
-                labels: ['Ball Speed', 'Smash Factor', 'Launch Angle', 'Spin Rate', 'Attack Angle', 'Consistency', 'Distance', 'Accuracy', 'Short Game', 'Tempo', 'Path', 'Face'],
+                labels: swingDNALabels,
                 datasets: [{
                     label: 'Tu Perfil',
-                    data: [87, 91, 72, 78, 25, 68, 58, 42, 92, 65, 55, 60],
+                    data: swingDNAPlayer,
                     borderColor: '#5ABF8F',
                     backgroundColor: 'rgba(90, 191, 143,0.2)',
                     pointBackgroundColor: '#5ABF8F',
                     borderWidth: 2
                 }, {
-                    label: 'PGA Tour Promedio',
-                    data: [95, 98, 92, 90, 95, 88, 95, 90, 95, 90, 92, 90],
+                    label: 'PGA Tour Benchmark',
+                    data: swingDNAPGA,
                     borderColor: '#E88B7A',
                     backgroundColor: 'rgba(232, 139, 122,0.1)',
                     pointBackgroundColor: '#E88B7A',
