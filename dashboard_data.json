@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-08T22:19:16.644567",
+  "generated_at": "2026-02-12T01:47:51.512010",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -10,7 +10,7 @@
     "primera_ronda": "2024-04-15",
     "ultima_ronda": "2025-12-07",
     "campos_jugados": 11,
-    "golpes_flightscope": 479
+    "golpes_flightscope": 493
   },
   "club_statistics": [
     {
@@ -123,27 +123,27 @@
     },
     {
       "name": "Gap Wedge",
-      "distance": "92.6m",
-      "deviation": "4.5m I",
+      "distance": "93.0m",
+      "deviation": "2.9m I",
       "speed": "134.6 km/h",
       "rating": 5,
       "category": "short",
-      "distance_raw": 92.57142857142857,
-      "speed_raw": 134.64285714285714,
+      "distance_raw": 93.05,
+      "speed_raw": 134.55,
       "smash_factor_est": 1.35,
       "club_speed_est": 99.7
     },
     {
       "name": "Sand Wedge",
-      "distance": "88.2m",
-      "deviation": "0.8m I",
-      "speed": "131.3 km/h",
+      "distance": "86.3m",
+      "deviation": "0.4m I",
+      "speed": "129.1 km/h",
       "rating": 5,
       "category": "short",
-      "distance_raw": 88.17241379310344,
-      "speed_raw": 131.3448275862069,
+      "distance_raw": 86.32432432432432,
+      "speed_raw": 129.05405405405406,
       "smash_factor_est": 1.35,
-      "club_speed_est": 97.3
+      "club_speed_est": 95.6
     }
   ],
   "club_gaps": {
@@ -155,8 +155,8 @@
     "6i-8i": 13.6,
     "8i-9i": 1.6,
     "9i-PW": 9.9,
-    "PW-Gap": 15.1,
-    "Gap-Sand": 4.4
+    "PW-Gap": 14.6,
+    "Gap-Sand": 6.7
   },
   "dispersion_by_club": {
     "Driver": {
@@ -1963,6 +1963,10 @@
           "y": 103
         },
         {
+          "x": -3.4,
+          "y": 93
+        },
+        {
           "x": 1.0,
           "y": 84
         },
@@ -1985,6 +1989,14 @@
         {
           "x": 7.7,
           "y": 84
+        },
+        {
+          "x": 6.3,
+          "y": 93
+        },
+        {
+          "x": 5.4,
+          "y": 89
         }
       ],
       "good": [
@@ -1993,22 +2005,34 @@
           "y": 98
         },
         {
-          "x": -3.4,
-          "y": 93
-        },
-        {
           "x": -8.1,
           "y": 97
         },
         {
           "x": -8.6,
           "y": 101
+        },
+        {
+          "x": -7.4,
+          "y": 96
+        },
+        {
+          "x": 1.0,
+          "y": 94
+        },
+        {
+          "x": 2.6,
+          "y": 95
         }
       ],
       "excellent": [
         {
           "x": -1.8,
           "y": 102
+        },
+        {
+          "x": -1.8,
+          "y": 98
         }
       ],
       "xMin": -24.8,
@@ -2098,16 +2122,40 @@
         {
           "x": -6.8,
           "y": 58
+        },
+        {
+          "x": -1.3,
+          "y": 79
+        },
+        {
+          "x": 10.5,
+          "y": 82
+        },
+        {
+          "x": 8.5,
+          "y": 75
+        },
+        {
+          "x": -1.5,
+          "y": 81
+        },
+        {
+          "x": -0.9,
+          "y": 72
+        },
+        {
+          "x": 0.1,
+          "y": 72
+        },
+        {
+          "x": -2.8,
+          "y": 70
         }
       ],
       "good": [
         {
           "x": -2.7,
           "y": 94
-        },
-        {
-          "x": -3.1,
-          "y": 95
         },
         {
           "x": -7.7,
@@ -2124,12 +2172,20 @@
         {
           "x": -6.0,
           "y": 106
+        },
+        {
+          "x": -6.0,
+          "y": 106
         }
       ],
       "excellent": [
         {
           "x": -3.6,
           "y": 101
+        },
+        {
+          "x": -3.1,
+          "y": 95
         },
         {
           "x": -0.4,
@@ -2198,11 +2254,17 @@
     "6i": {
       "labels": [
         "2024-09",
-        "2025-03"
+        "2025-03",
+        "2025-06",
+        "2025-10",
+        "2025-12"
       ],
       "values": [
         141.0,
-        131.16
+        128.83333333333334,
+        127.0,
+        139.5,
+        129.25
       ]
     },
     "7i": {
@@ -2261,20 +2323,24 @@
     },
     "GW 52": {
       "labels": [
+        "2025-03",
         "2025-06",
         "2025-12"
       ],
       "values": [
+        94.16666666666667,
         92.8,
         92.44444444444444
       ]
     },
     "SW 58": {
       "labels": [
+        "2025-04",
         "2025-06",
         "2025-12"
       ],
       "values": [
+        79.625,
         84.0,
         96.1
       ]
@@ -3051,19 +3117,19 @@
       },
       "GW 52": {
         "p10": 84.0,
-        "p25": 87.8,
-        "p50": 92.0,
-        "p75": 100.2,
-        "p90": 101.7,
-        "count": 14
+        "p25": 89.8,
+        "p50": 93.5,
+        "p75": 98.0,
+        "p90": 101.1,
+        "count": 20
       },
       "SW 58": {
-        "p10": 69.4,
+        "p10": 70.0,
         "p25": 75.0,
-        "p50": 87.0,
-        "p75": 101.0,
-        "p90": 107.8,
-        "count": 29
+        "p50": 82.0,
+        "p75": 98.0,
+        "p90": 106.0,
+        "count": 37
       }
     },
     "score_percentiles": {
@@ -3167,24 +3233,24 @@
       "right_pct": 36.7
     },
     "GW 52": {
-      "left": 6,
-      "center": 7,
-      "right": 1,
-      "total": 14,
+      "left": 7,
+      "center": 10,
+      "right": 3,
+      "total": 20,
       "bias": "left",
-      "left_pct": 42.9,
+      "left_pct": 35.0,
       "center_pct": 50.0,
-      "right_pct": 7.1
+      "right_pct": 15.0
     },
     "SW 58": {
-      "left": 9,
-      "center": 14,
-      "right": 6,
-      "total": 29,
+      "left": 10,
+      "center": 19,
+      "right": 8,
+      "total": 37,
       "bias": "neutral",
-      "left_pct": 31.0,
-      "center_pct": 48.3,
-      "right_pct": 20.7
+      "left_pct": 27.0,
+      "center_pct": 51.4,
+      "right_pct": 21.6
     }
   },
   "bubble_chart_data": {
@@ -3273,20 +3339,20 @@
       {
         "club": "Gap Wedge",
         "club_code": "GW 52",
-        "x": 92.6,
-        "y": 91.1,
-        "size": 14,
+        "x": 93.0,
+        "y": 92.4,
+        "size": 20,
         "category": "short",
-        "std": 8.3
+        "std": 7.1
       },
       {
         "club": "Sand Wedge",
         "club_code": "SW 58",
-        "x": 88.2,
-        "y": 80.6,
-        "size": 29,
+        "x": 86.3,
+        "y": 81.1,
+        "size": 37,
         "category": "short",
-        "std": 17.1
+        "std": 16.3
       }
     ]
   },
@@ -3302,13 +3368,13 @@
       "Launch Angle"
     ],
     "player": [
-      6.5,
+      6.4,
       8.0,
-      8.2,
+      8.3,
       9.7,
       10,
       10,
-      5.5,
+      5.6,
       10.0
     ],
     "pga_tour": [
@@ -3409,16 +3475,16 @@
     "GW 52": {
       "avg_height": 27.9,
       "max_height": 34.0,
-      "avg_launch_angle": 36.0,
+      "avg_launch_angle": 35.7,
       "flight_time_est": 4.2,
-      "shot_count": 14
+      "shot_count": 20
     },
     "SW 58": {
-      "avg_height": 26.1,
+      "avg_height": 25.5,
       "max_height": 36.0,
-      "avg_launch_angle": 35.9,
-      "flight_time_est": 4.0,
-      "shot_count": 29
+      "avg_launch_angle": 36.3,
+      "flight_time_est": 3.9,
+      "shot_count": 37
     }
   },
   "best_worst_rounds": {
@@ -4393,20 +4459,20 @@
       "data_points": 146
     },
     "mid_game": {
-      "initial_avg": 120.9,
-      "current_avg": 117.8,
-      "improvement": -3.1,
-      "improvement_rate": 0.023,
+      "initial_avg": 118.3,
+      "current_avg": 117.7,
+      "improvement": -0.5,
+      "improvement_rate": 0.032,
       "trend": "stable",
       "data_points": 210
     },
     "short_game": {
-      "initial_avg": 91.0,
-      "current_avg": 96.8,
-      "improvement": 5.8,
-      "improvement_rate": 0.068,
+      "initial_avg": 93.8,
+      "current_avg": 96.9,
+      "improvement": 3.0,
+      "improvement_rate": 0.097,
       "trend": "stable",
-      "data_points": 103
+      "data_points": 117
     }
   },
   "current_form": {
@@ -4483,7 +4549,7 @@
   "percentile_gauges": {
     "short_game": {
       "value": 100,
-      "player_avg": 96.1,
+      "player_avg": 95.7,
       "benchmark_avg": 85.0,
       "rating": "excellent"
     },
@@ -4643,6 +4709,7 @@
       "Jun 2025",
       "Jul 2025",
       "Aug 2025",
+      "Oct 2025",
       "Dec 2025",
       "Jan 2026"
     ],
@@ -4653,15 +4720,17 @@
       null,
       null,
       null,
+      null,
       null
     ],
     "iron_6": [
       141.0,
-      131.2,
+      128.8,
+      127.0,
       null,
       null,
-      null,
-      null,
+      139.5,
+      129.2,
       null
     ],
     "iron_7": [
@@ -4669,6 +4738,7 @@
       121.9,
       137.5,
       141.0,
+      null,
       null,
       null,
       null
@@ -4680,6 +4750,7 @@
       null,
       127.8,
       null,
+      null,
       119.7
     ],
     "iron_9": [
@@ -4688,6 +4759,7 @@
       110.5,
       130.0,
       null,
+      null,
       109.2,
       null
     ]
@@ -4695,6 +4767,7 @@
   "wedges_evolution": {
     "labels": [
       "Mar 2025",
+      "Apr 2025",
       "Jun 2025",
       "Aug 2025",
       "Nov 2025",
@@ -4702,12 +4775,14 @@
     ],
     "pitching_wedge": [
       98.0,
+      null,
       107.4,
       118.2,
       108.3,
       97.6
     ],
     "gap_wedge": [
+      94.2,
       null,
       92.8,
       null,
@@ -4716,6 +4791,7 @@
     ],
     "sand_wedge": [
       null,
+      79.6,
       84.0,
       null,
       null,
@@ -4743,10 +4819,12 @@
       "Jun 2024",
       "Sep 2024",
       "Mar 2025",
+      "Apr 2025",
       "Jun 2025",
       "Jul 2025",
       "Aug 2025",
       "Sep 2025",
+      "Oct 2025",
       "Nov 2025",
       "Dec 2025",
       "Jan 2026"
@@ -4756,7 +4834,9 @@
       null,
       1.45,
       null,
+      null,
       1.45,
+      null,
       null,
       null,
       1.45,
@@ -4767,10 +4847,12 @@
       null,
       1.4,
       null,
+      null,
       1.4,
       1.4,
       null,
       1.4,
+      null,
       null,
       1.4,
       null
@@ -4779,10 +4861,12 @@
       null,
       1.35,
       1.35,
+      null,
       1.35,
       1.35,
       1.35,
       null,
+      1.35,
       null,
       1.35,
       1.35
@@ -4792,8 +4876,10 @@
       null,
       1.3,
       1.3,
+      1.3,
       null,
       1.3,
+      null,
       null,
       1.3,
       1.3,
@@ -6984,6 +7070,36 @@
             "x": 7.7,
             "y": 84.0,
             "distance": 84.0
+          },
+          {
+            "x": 1.8,
+            "y": 98.0,
+            "distance": 98.0
+          },
+          {
+            "x": 7.4,
+            "y": 96.0,
+            "distance": 96.0
+          },
+          {
+            "x": 1.0,
+            "y": 94.0,
+            "distance": 94.0
+          },
+          {
+            "x": 6.3,
+            "y": 93.0,
+            "distance": 93.0
+          },
+          {
+            "x": 5.4,
+            "y": 89.0,
+            "distance": 89.0
+          },
+          {
+            "x": 2.6,
+            "y": 95.0,
+            "distance": 95.0
           }
         ]
       },
@@ -7619,30 +7735,70 @@
             "x": 6.8,
             "y": 58.0,
             "distance": 58.0
+          },
+          {
+            "x": 1.3,
+            "y": 79.0,
+            "distance": 79.0
+          },
+          {
+            "x": 10.5,
+            "y": 82.0,
+            "distance": 82.0
+          },
+          {
+            "x": 8.5,
+            "y": 75.0,
+            "distance": 75.0
+          },
+          {
+            "x": 1.5,
+            "y": 81.0,
+            "distance": 81.0
+          },
+          {
+            "x": 6.0,
+            "y": 106.0,
+            "distance": 106.0
+          },
+          {
+            "x": 0.9,
+            "y": 72.0,
+            "distance": 72.0
+          },
+          {
+            "x": 0.1,
+            "y": 72.0,
+            "distance": 72.0
+          },
+          {
+            "x": 2.8,
+            "y": 70.0,
+            "distance": 70.0
           }
         ]
       }
     ],
     "density_map": {
       "center": {
-        "count": 121,
-        "percentage": 25.3
+        "count": 129,
+        "percentage": 26.2
       },
       "left": {
         "count": 0,
         "percentage": 0.0
       },
       "right": {
-        "count": 358,
-        "percentage": 74.7
+        "count": 364,
+        "percentage": 73.8
       },
       "short": {
-        "count": 132,
-        "percentage": 27.6
+        "count": 139,
+        "percentage": 28.2
       },
       "long": {
-        "count": 121,
-        "percentage": 25.3
+        "count": 124,
+        "percentage": 25.2
       }
     }
   },
@@ -8360,10 +8516,10 @@
   },
   "launch_metrics": {
     "summary": {
-      "total_shots": 478,
+      "total_shots": 492,
       "clubs_analyzed": 11,
-      "avg_ball_speed_pct_pga": 91.4,
-      "avg_carry_pct_pga": 81.7,
+      "avg_ball_speed_pct_pga": 91.2,
+      "avg_carry_pct_pga": 81.6,
       "avg_launch_delta_pga": 4.0
     },
     "clubs": [
@@ -8567,44 +8723,44 @@
       },
       {
         "club": "GW 52",
-        "n": 14,
-        "carry_mean": 92.6,
-        "carry_std": 8.3,
-        "total_mean": 96.0,
+        "n": 20,
+        "carry_mean": 93.0,
+        "carry_std": 7.1,
+        "total_mean": 96.2,
         "ball_speed_mean": 134.6,
-        "launch_angle_mean": 36.0,
-        "launch_angle_std": 2.9,
-        "height_mean": 27.9,
-        "attack_angle_est": -1.4,
-        "attack_angle_std": 2.9,
-        "launch_delta_pga": 5.5,
+        "launch_angle_mean": 35.7,
+        "launch_angle_std": 2.6,
+        "height_mean": 28.0,
+        "attack_angle_est": -1.7,
+        "attack_angle_std": 2.6,
+        "launch_delta_pga": 5.2,
         "ball_speed_pct_pga": 90.9,
-        "carry_pct_pga": 81.9,
-        "height_delta_pga": 2.9,
-        "attack_delta_pga": 4.1,
-        "carry_pct_hcp15": 100.7,
+        "carry_pct_pga": 82.3,
+        "height_delta_pga": 3.0,
+        "attack_delta_pga": 3.8,
+        "carry_pct_hcp15": 101.1,
         "launch_rating": "needs_work",
         "speed_rating": "good",
         "attack_rating": "needs_work"
       },
       {
         "club": "SW 58",
-        "n": 29,
-        "carry_mean": 88.2,
-        "carry_std": 17.1,
-        "total_mean": 90.7,
-        "ball_speed_mean": 131.3,
-        "launch_angle_mean": 35.9,
-        "launch_angle_std": 6.7,
-        "height_mean": 26.1,
-        "attack_angle_est": -5.9,
-        "attack_angle_std": 6.7,
-        "launch_delta_pga": 2.9,
-        "ball_speed_pct_pga": 98.7,
-        "carry_pct_pga": 92.8,
-        "height_delta_pga": 4.1,
-        "attack_delta_pga": -0.2,
-        "carry_pct_hcp15": 113.1,
+        "n": 37,
+        "carry_mean": 86.3,
+        "carry_std": 16.3,
+        "total_mean": 89.1,
+        "ball_speed_mean": 129.1,
+        "launch_angle_mean": 36.3,
+        "launch_angle_std": 6.8,
+        "height_mean": 25.5,
+        "attack_angle_est": -5.5,
+        "attack_angle_std": 6.8,
+        "launch_delta_pga": 3.3,
+        "ball_speed_pct_pga": 97.1,
+        "carry_pct_pga": 90.8,
+        "height_delta_pga": 3.5,
+        "attack_delta_pga": 0.2,
+        "carry_pct_hcp15": 110.6,
         "launch_rating": "good",
         "speed_rating": "elite",
         "attack_rating": "tour_caliber"
@@ -8647,17 +8803,17 @@
         "club": "GW 52",
         "type": "launch_too_high",
         "priority": "high",
-        "message": "GW 52: Launch angle 36.0° is +5.5° vs PGA. Work on delofting through impact."
+        "message": "GW 52: Launch angle 35.7° is +5.2° vs PGA. Work on delofting through impact."
       }
     ]
   },
   "dispersion_analysis": {
     "summary": {
-      "total_shots": 479,
+      "total_shots": 493,
       "clubs_analyzed": 11,
-      "avg_consistency_score": 33.0,
-      "avg_dispersion_ratio": 11.0,
-      "avg_lateral_std": 15.0,
+      "avg_consistency_score": 34.0,
+      "avg_dispersion_ratio": 10.8,
+      "avg_lateral_std": 14.9,
       "overall_rating": "critical"
     },
     "clubs": [
@@ -8951,66 +9107,66 @@
       },
       {
         "club": "GW 52",
-        "n": 14,
-        "lateral_mean": -4.5,
-        "lateral_std": 7.7,
+        "n": 20,
+        "lateral_mean": -2.9,
+        "lateral_std": 7.3,
         "lateral_range": 29.5,
         "lateral_min": -21.8,
         "lateral_max": 7.7,
         "bias_direction": "left",
-        "carry_mean": 92.6,
-        "carry_std": 8.3,
-        "carry_cv": 8.9,
-        "dispersion_area": 199.8,
-        "dispersion_ratio": 8.3,
-        "corridor_80_lateral": 15.1,
-        "corridor_80_long": 17.7,
-        "lateral_vs_pga": 2.19,
+        "carry_mean": 93.0,
+        "carry_std": 7.1,
+        "carry_cv": 7.6,
+        "dispersion_area": 163.1,
+        "dispersion_ratio": 7.9,
+        "corridor_80_lateral": 16.4,
+        "corridor_80_long": 17.1,
+        "lateral_vs_pga": 2.1,
         "pga_lateral_std": 3.5,
-        "carry_std_vs_pga": 2.76,
+        "carry_std_vs_pga": 2.36,
         "pga_carry_std": 3.0,
-        "lateral_vs_hcp15": 1.1,
+        "lateral_vs_hcp15": 1.05,
         "hcp15_lateral_std": 7.0,
-        "consistency_score": 37,
+        "consistency_score": 40,
         "consistency_rating": "needs_work",
         "pattern": {
           "shape": "scattered",
           "lateral_tendency": "left_biased",
           "longitudinal_tendency": "short_biased",
-          "lateral_skew": -0.65,
-          "longitudinal_skew": -0.55
+          "lateral_skew": -0.84,
+          "longitudinal_skew": -0.77
         }
       },
       {
         "club": "SW 58",
-        "n": 29,
-        "lateral_mean": -0.8,
-        "lateral_std": 13.2,
+        "n": 37,
+        "lateral_mean": -0.4,
+        "lateral_std": 11.9,
         "lateral_range": 71.2,
         "lateral_min": -23.5,
         "lateral_max": 47.7,
         "bias_direction": "center",
-        "carry_mean": 88.2,
-        "carry_std": 17.1,
-        "carry_cv": 19.4,
-        "dispersion_area": 709.9,
-        "dispersion_ratio": 15.0,
-        "corridor_80_lateral": 23.2,
-        "corridor_80_long": 38.4,
-        "lateral_vs_pga": 4.41,
+        "carry_mean": 86.3,
+        "carry_std": 16.3,
+        "carry_cv": 18.9,
+        "dispersion_area": 611.8,
+        "dispersion_ratio": 13.8,
+        "corridor_80_lateral": 21.1,
+        "corridor_80_long": 36.0,
+        "lateral_vs_pga": 3.98,
         "pga_lateral_std": 3.0,
-        "carry_std_vs_pga": 5.7,
+        "carry_std_vs_pga": 5.44,
         "pga_carry_std": 3.0,
-        "lateral_vs_hcp15": 2.2,
+        "lateral_vs_hcp15": 1.99,
         "hcp15_lateral_std": 6.0,
-        "consistency_score": 4,
+        "consistency_score": 7,
         "consistency_rating": "critical",
         "pattern": {
           "shape": "scattered",
           "lateral_tendency": "right_biased",
           "longitudinal_tendency": "neutral",
           "lateral_skew": 1.63,
-          "longitudinal_skew": 0.22
+          "longitudinal_skew": 0.47
         }
       }
     ],
@@ -9024,8 +9180,8 @@
         "score": 41
       },
       {
-        "club": "8i",
-        "score": 39
+        "club": "GW 52",
+        "score": 40
       }
     ],
     "worst_clubs": [
@@ -9039,7 +9195,7 @@
       },
       {
         "club": "SW 58",
-        "score": 4
+        "score": 7
       }
     ],
     "recommendations": [
@@ -9071,7 +9227,7 @@
         "club": "SW 58",
         "type": "lateral_dispersion",
         "priority": "high",
-        "message": "SW 58: Lateral dispersion 13.2m is 2.2x HCP-15 level. Focus on face angle control at impact."
+        "message": "SW 58: Lateral dispersion 11.9m is 2.0x HCP-15 level. Focus on face angle control at impact."
       },
       {
         "club": "PW",
@@ -9083,7 +9239,7 @@
         "club": "SW 58",
         "type": "distance_inconsistency",
         "priority": "medium",
-        "message": "SW 58: Distance CV 19.4% (target: <8%). Work on strike consistency."
+        "message": "SW 58: Distance CV 18.9% (target: <8%). Work on strike consistency."
       }
     ]
   },
