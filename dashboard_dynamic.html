@@ -7648,149 +7648,158 @@
 
             <!-- SECCIÓN: LAUNCH METRICS -->
             <section class="dashboard-section" id="launch-metrics">
-                <h2>🎯 Launch Metrics - Análisis de Lanzamiento</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em;">
-                    Comparación de métricas de lanzamiento vs PGA Tour
-                </p>
+                <!-- Envolver TODO en pastilla transparente -->
+                <div class="stat-card" style="padding: 30px; margin-bottom: 30px;">
+                    <h2 style="color: #4A9FD8; margin-top: 0;">🎯 Launch Metrics - Análisis de Lanzamiento</h2>
+                    <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em; line-height: 1.6;">
+                        Análisis detallado de métricas de lanzamiento (ball speed, ángulo, altura) comparado con benchmarks PGA Tour. Identifica áreas de optimización en tu técnica de swing.
+                    </p>
 
-                <!-- Gráfico de Launch Metrics por Palo -->
-                <div class="chart-container" style="height: 400px; max-height: 400px;">
-                    <canvas id="launchMetricsChart"></canvas>
-                </div>
+                    <!-- Gráfico de Launch Metrics por Palo -->
+                    <div class="chart-container" style="height: 400px; max-height: 400px; margin-bottom: 25px;">
+                        <canvas id="launchMetricsChart"></canvas>
+                    </div>
 
-                <!-- Stats como pastilla debajo del gráfico -->
-                <div style="margin: 20px 0; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Shots Analizados</div>
-                            <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-launch-shots">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Palos Analizados</div>
-                            <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-launch-clubs">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Ball Speed vs PGA</div>
-                            <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-ball-speed-pga">-%</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Carry vs PGA</div>
-                            <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-carry-pga">-%</div>
+                    <!-- Stats como pastilla debajo del gráfico -->
+                    <div style="margin: 25px 0; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Shots Analizados</div>
+                                <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-launch-shots">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Palos Analizados</div>
+                                <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-launch-clubs">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Ball Speed vs PGA</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-ball-speed-pga">-%</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Carry vs PGA</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-carry-pga">-%</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tabla de Recomendaciones Launch -->
-                <div class="recommendations-box">
-                    <h3>💡 Recomendaciones de Launch</h3>
-                    <div id="launch-recommendations"></div>
+                    <!-- Análisis y Recomendaciones -->
+                    <div class="recommendations-box" style="margin-top: 25px;">
+                        <h3>💡 Análisis y Datos Clave</h3>
+                        <div id="launch-recommendations"></div>
+                    </div>
                 </div>
             </section>
 
             <!-- SECCIÓN: DISPERSION ANALYSIS -->
             <section class="dashboard-section" id="dispersion-analysis">
-                <h2>📊 Dispersion Analysis - Análisis de Dispersión</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em;">
-                    Patrones de dispersión lateral y longitudinal por palo
-                </p>
+                <!-- Envolver TODO en pastilla transparente -->
+                <div class="stat-card" style="padding: 30px; margin-bottom: 30px;">
+                    <h2 style="color: #5ABF8F; margin-top: 0;">📊 Dispersion Analysis - Análisis de Dispersión</h2>
+                    <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em; line-height: 1.6;">
+                        Análisis de patrones de dispersión lateral y longitudinal por palo. Evalúa consistencia, áreas de caída y predictibilidad del vuelo de bola.
+                    </p>
 
-                <!-- Gráfico de Dispersión por Palo -->
-                <div class="chart-container" style="height: 400px; max-height: 400px;">
-                    <canvas id="dispersionChart"></canvas>
-                </div>
+                    <!-- Gráfico de Dispersión por Palo -->
+                    <div class="chart-container" style="height: 400px; max-height: 400px; margin-bottom: 25px;">
+                        <canvas id="dispersionChart"></canvas>
+                    </div>
 
-                <!-- Stats como pastilla debajo del gráfico -->
-                <div style="margin: 20px 0; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Score Promedio</div>
-                            <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-dispersion-score">-/100</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Rating General</div>
-                            <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-dispersion-rating">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Dispersión Lateral Promedio</div>
-                            <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-lateral-std">- m</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Ratio de Dispersión</div>
-                            <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-disp-ratio">-%</div>
+                    <!-- Stats como pastilla debajo del gráfico -->
+                    <div style="margin: 25px 0; padding: 20px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Score Promedio</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-dispersion-score">-/100</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Rating General</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-dispersion-rating">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Dispersión Lateral Promedio</div>
+                                <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-lateral-std">- m</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Ratio de Dispersión</div>
+                                <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-disp-ratio">-%</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Mejores y Peores Palos -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>🏆 Mejores Palos (Consistencia)</h3>
-                        <div id="dispersion-best-clubs"></div>
+                    <!-- Mejores y Peores Palos -->
+                    <div class="stats-grid" style="margin: 25px 0;">
+                        <div class="stat-card" style="background: rgba(90,191,143,0.05);">
+                            <h3>🏆 Mejores Palos (Consistencia)</h3>
+                            <div id="dispersion-best-clubs"></div>
+                        </div>
+                        <div class="stat-card" style="background: rgba(232,139,122,0.05);">
+                            <h3>⚠️ Palos que Necesitan Trabajo</h3>
+                            <div id="dispersion-worst-clubs"></div>
+                        </div>
                     </div>
-                    <div class="stat-card">
-                        <h3>⚠️ Palos que Necesitan Trabajo</h3>
-                        <div id="dispersion-worst-clubs"></div>
-                    </div>
-                </div>
 
-                <!-- Tabla de Recomendaciones Dispersión -->
-                <div class="recommendations-box">
-                    <h3>💡 Recomendaciones de Dispersión</h3>
-                    <div id="dispersion-recommendations"></div>
+                    <!-- Análisis y Recomendaciones -->
+                    <div class="recommendations-box" style="margin-top: 25px;">
+                        <h3>💡 Análisis y Datos Clave</h3>
+                        <div id="dispersion-recommendations"></div>
+                    </div>
                 </div>
             </section>
 
             <!-- SECCIÓN: CONSISTENCY BENCHMARKS -->
             <section class="dashboard-section" id="consistency-benchmarks">
-                <h2>📈 Consistency Benchmarks - Consistencia de Scoring</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em;">
-                    Análisis de consistencia y comparación con benchmarks HCP
-                </p>
+                <!-- Envolver TODO en pastilla transparente -->
+                <div class="stat-card" style="padding: 30px; margin-bottom: 30px;">
+                    <h2 style="color: #D4B55A; margin-top: 0;">📈 Consistency Benchmarks - Consistencia de Scoring</h2>
+                    <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 0.95em; line-height: 1.6;">
+                        Análisis de consistencia de scoring y comparación con benchmarks de tu handicap. Evalúa variabilidad, tendencias y distribución de resultados por hoyo.
+                    </p>
 
-                <!-- Gráfico de Evolución de Scores -->
-                <div class="chart-container" style="height: 400px; max-height: 400px;">
-                    <canvas id="consistencyScoresChart"></canvas>
-                </div>
+                    <!-- Gráfico de Evolución de Scores -->
+                    <div class="chart-container" style="height: 400px; max-height: 400px; margin-bottom: 25px;">
+                        <canvas id="consistencyScoresChart"></canvas>
+                    </div>
 
-                <!-- Stats como pastilla debajo del gráfico -->
-                <div style="margin: 20px 0; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Rondas 18 Hoyos</div>
-                            <div style="color: #4A9FD8; font-size: 1.8em; font-weight: 700;" id="phase5-total-rounds">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Score Promedio</div>
-                            <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-avg-score">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Mejor Score</div>
-                            <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-best-score">-</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Tendencia</div>
-                            <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-trend">-</div>
+                    <!-- Stats como pastilla debajo del gráfico -->
+                    <div style="margin: 25px 0; padding: 20px; background: rgba(212,181,90,0.1); border-radius: 12px; border-left: 4px solid #D4B55A;">
+                        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Rondas 18 Hoyos</div>
+                                <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-total-rounds">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Score Promedio</div>
+                                <div style="color: #D4B55A; font-size: 1.8em; font-weight: 700;" id="phase5-avg-score">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Mejor Score</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-best-score">-</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="color: rgba(255,255,255,0.7); font-size: 0.85em; margin-bottom: 5px;">Tendencia</div>
+                                <div style="color: #5ABF8F; font-size: 1.8em; font-weight: 700;" id="phase5-trend">-</div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tabla de Hole Rates vs Benchmark -->
-                <div class="recommendations-box">
-                    <h3>📊 Distribución de Holes vs Benchmark HCP</h3>
-                    <div class="chart-container" style="height: 300px; max-height: 300px;">
-                        <canvas id="holeRatesChart"></canvas>
+                    <!-- Gráfico de Distribución de Holes -->
+                    <div class="recommendations-box" style="margin: 25px 0;">
+                        <h3>📊 Distribución de Holes vs Benchmark HCP</h3>
+                        <div class="chart-container" style="height: 300px; max-height: 300px; margin-top: 15px;">
+                            <canvas id="holeRatesChart"></canvas>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Mejores y Peores Rondas -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>🏆 Top 5 Mejores Rondas</h3>
-                        <div id="consistency-best-rounds"></div>
-                    </div>
-                    <div class="stat-card">
-                        <h3>📉 Rondas para Mejorar</h3>
-                        <div id="consistency-worst-rounds"></div>
+                    <!-- Mejores y Peores Rondas -->
+                    <div class="stats-grid" style="margin: 25px 0;">
+                        <div class="stat-card" style="background: rgba(90,191,143,0.05);">
+                            <h3>🏆 Top 5 Mejores Rondas</h3>
+                            <div id="consistency-best-rounds"></div>
+                        </div>
+                        <div class="stat-card" style="background: rgba(232,139,122,0.05);">
+                            <h3>📉 Rondas para Mejorar</h3>
+                            <div id="consistency-worst-rounds"></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -12347,26 +12356,33 @@
 
         document.addEventListener('dashboardDataReady', initializeClubPerformanceCards);
         setTimeout(initializeClubPerformanceCards, 500);
-        
+
         // Comparison Radar Chart (compact alternative to detailed metrics)
-        // DINÁMICO: 10 Dimensiones desde JSON
-        const benchmarkData = window.dashboardData?.benchmark_radar || {};
+        // DINÁMICO: 10 Dimensiones desde JSON - EJECUTA DESPUÉS DE CARGAR DATOS
+        function initializeComparisonRadarChart() {
+            if (!document.getElementById('comparisonRadarChart')) {
+                return;
+            }
 
-        // Fallback hardcoded (8 dimensions old)
-        const fallbackDimensions = ['Short Game', 'Tendencia Mejora', 'Consistencia', 'Smash Factor',
-                                     'Velocidad Bola', 'Club Speed', 'Accuracy', 'Launch Angle'];
-        const fallbackPlayer = [9.0, 7.0, 7.0, 7.5, 8.5, 7.5, 4.0, 3.0];
-        const fallbackPGA = [9.5, 6.0, 8.5, 8.5, 9.0, 9.0, 8.0, 8.5];
-        const fallbackHCP15 = [6.0, 5.5, 5.0, 6.5, 6.5, 6.0, 5.5, 6.5];
+            const benchmarkData = window.dashboardData?.benchmark_radar || {};
 
-        // Use dynamic data or fallback (convert 0-100 to 0-10 scale)
-        const dimensions = benchmarkData.dimensions || fallbackDimensions;
-        const playerData = benchmarkData.player ? benchmarkData.player.map(v => v / 10) : fallbackPlayer;
-        const pgaData = benchmarkData.pga_tour ? benchmarkData.pga_tour.map(v => v / 10) : fallbackPGA;
-        const hcp15Data = benchmarkData.hcp15 ? benchmarkData.hcp15.map(v => v / 10) : fallbackHCP15;
+            // Fallback hardcoded (8 dimensions old)
+            const fallbackDimensions = ['Short Game', 'Tendencia Mejora', 'Consistencia', 'Smash Factor',
+                                         'Velocidad Bola', 'Club Speed', 'Accuracy', 'Launch Angle'];
+            const fallbackPlayer = [9.0, 7.0, 7.0, 7.5, 8.5, 7.5, 4.0, 3.0];
+            const fallbackPGA = [9.5, 6.0, 8.5, 8.5, 9.0, 9.0, 8.0, 8.5];
+            const fallbackHCP15 = [6.0, 5.5, 5.0, 6.5, 6.5, 6.0, 5.5, 6.5];
 
-        const comparisonRadarCtx = document.getElementById('comparisonRadarChart').getContext('2d');
-        new Chart(comparisonRadarCtx, {
+            // Use dynamic data or fallback (convert 0-100 to 0-10 scale)
+            const dimensions = benchmarkData.dimensions || fallbackDimensions;
+            const playerData = benchmarkData.player ? benchmarkData.player.map(v => v / 10) : fallbackPlayer;
+            const pgaData = benchmarkData.pga_tour ? benchmarkData.pga_tour.map(v => v / 10) : fallbackPGA;
+            const hcp15Data = benchmarkData.hcp15 ? benchmarkData.hcp15.map(v => v / 10) : fallbackHCP15;
+
+            console.log('🎯 Radar 10D - Dimensions:', dimensions.length, dimensions);
+
+            const comparisonRadarCtx = document.getElementById('comparisonRadarChart').getContext('2d');
+            new Chart(comparisonRadarCtx, {
             type: 'radar',
             data: {
                 labels: dimensions,
@@ -12447,7 +12463,12 @@
                 }
             }
         });
-        
+        } // End initializeComparisonRadarChart
+
+        // Execute after data loads
+        document.addEventListener('dashboardDataReady', initializeComparisonRadarChart);
+        setTimeout(initializeComparisonRadarChart, 500);
+
         // 8. Waterfall Chart - Gap Breakdown vs PGA
         const waterfallCtx = document.getElementById('waterfallChart').getContext('2d');
         new Chart(waterfallCtx, {
