@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-12T01:47:51.512010",
+  "generated_at": "2026-02-12T02:54:53.648410",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -8371,21 +8371,25 @@
   },
   "benchmark_radar": {
     "dimensions": [
+      "Long Game",
+      "Mid Game",
+      "Short Game",
+      "Putting",
       "Driving Distance",
       "Driving Accuracy",
       "Approach Accuracy",
-      "Short Game",
-      "Putting",
       "Consistency",
       "Course Management",
       "Mental Game"
     ],
     "player": [
+      62,
+      68,
+      95,
+      75,
       58,
       62,
       65,
-      95,
-      75,
       68,
       77,
       70
@@ -8398,24 +8402,30 @@
       100,
       100,
       100,
+      100,
+      100,
       100
     ],
     "hcp15": [
+      82,
+      80,
+      85,
+      80,
       80,
       82,
       78,
-      85,
-      80,
       82,
       85,
       80
     ],
     "hcp23": [
-      60,
       65,
       62,
       70,
       68,
+      60,
+      65,
+      62,
       65,
       70,
       65
@@ -8424,7 +8434,7 @@
       "vs_pga": "below",
       "vs_hcp15": "below",
       "vs_hcp23": "above",
-      "overall_rating": 71.2
+      "overall_rating": 70.0
     }
   },
   "roi_plan": {

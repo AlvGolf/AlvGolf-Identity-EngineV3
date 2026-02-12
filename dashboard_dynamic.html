@@ -2068,65 +2068,132 @@
            ============================================================ */
 
         .recommendations-box {
-            background: rgba(15, 32, 39, 0.6);
-            border: 1px solid rgba(74, 159, 216, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
+            background: linear-gradient(135deg, rgba(15, 32, 39, 0.7), rgba(45, 62, 80, 0.5));
+            border: 2px solid rgba(74, 159, 216, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .recommendations-box h3 {
             color: #4A9FD8;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .recommendation-item {
-            padding: 12px;
-            margin: 10px 0;
-            border-left: 4px solid;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-            font-size: 0.95em;
-            line-height: 1.4;
+            padding: 18px 20px;
+            margin: 15px 0;
+            border-left: 5px solid;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            border-radius: 10px;
+            font-size: 1em;
+            line-height: 1.7;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .recommendation-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(74, 159, 216, 0.2);
         }
 
         .recommendation-item strong {
             color: #4A9FD8;
-            margin-right: 8px;
+            margin-right: 10px;
+            font-size: 1.05em;
+            display: inline-block;
+            min-width: 80px;
         }
 
         .recommendation-item.priority-high {
             border-left-color: #E88B7A;
-            background: rgba(232, 139, 122, 0.08);
+            background: linear-gradient(135deg, rgba(232, 139, 122, 0.15), rgba(232, 139, 122, 0.05));
+        }
+
+        .recommendation-item.priority-high strong {
+            color: #E88B7A;
         }
 
         .recommendation-item.priority-medium {
             border-left-color: #D4B55A;
-            background: rgba(212, 181, 90, 0.08);
+            background: linear-gradient(135deg, rgba(212, 181, 90, 0.15), rgba(212, 181, 90, 0.05));
+        }
+
+        .recommendation-item.priority-medium strong {
+            color: #D4B55A;
         }
 
         .recommendation-item.priority-low {
             border-left-color: #5ABF8F;
-            background: rgba(90, 191, 143, 0.08);
+            background: linear-gradient(135deg, rgba(90, 191, 143, 0.15), rgba(90, 191, 143, 0.05));
+        }
+
+        .recommendation-item.priority-low strong {
+            color: #5ABF8F;
+        }
+
+        /* Responsive improvements for recommendations */
+        @media (max-width: 768px) {
+            .recommendation-item {
+                padding: 15px;
+                font-size: 0.95em;
+            }
+
+            .recommendation-item strong {
+                display: block;
+                margin-bottom: 8px;
+            }
         }
 
         #dispersion-best-clubs,
         #dispersion-worst-clubs,
         #consistency-best-rounds,
         #consistency-worst-rounds {
-            padding: 10px 0;
+            padding: 15px 0;
         }
 
         #dispersion-best-clubs div,
         #dispersion-worst-clubs div,
         #consistency-best-rounds div,
         #consistency-worst-rounds div {
-            padding: 8px 12px;
-            margin: 5px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
-            font-size: 0.9em;
+            padding: 12px 16px;
+            margin: 8px 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            border-radius: 8px;
+            font-size: 0.95em;
+            border-left: 3px solid rgba(74, 159, 216, 0.5);
+            transition: all 0.2s ease;
+            line-height: 1.6;
+        }
+
+        #dispersion-best-clubs div:hover,
+        #consistency-best-rounds div:hover {
+            background: linear-gradient(135deg, rgba(90, 191, 143, 0.15), rgba(90, 191, 143, 0.05));
+            border-left-color: #5ABF8F;
+            transform: translateX(3px);
+        }
+
+        #dispersion-worst-clubs div:hover,
+        #consistency-worst-rounds div:hover {
+            background: linear-gradient(135deg, rgba(232, 139, 122, 0.15), rgba(232, 139, 122, 0.05));
+            border-left-color: #E88B7A;
+            transform: translateX(3px);
+        }
+
+        #dispersion-best-clubs div strong,
+        #consistency-best-rounds div strong {
+            color: #5ABF8F;
+        }
+
+        #dispersion-worst-clubs div strong,
+        #consistency-worst-rounds div strong {
+            color: #E88B7A;
         }
 
         #dispersion-best-clubs div {
