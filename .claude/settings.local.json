@@ -23,7 +23,9 @@
       "Bash(node:*)",
       "Bash(copy:*)",
       "WebFetch(domain:alvgolf.github.io)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(git tag:*)",
+      "Bash(start \"\" python -m http.server:*)"
     ]
   }
 }
