@@ -29,7 +29,12 @@
       "Bash(requirements.txt:*)",
       "Bash(.env.example:*)",
       "Bash(echo:*)",
-      "Bash(.env:*)"
+      "Bash(.env:*)",
+      "Bash(app/config.py:*)",
+      "Bash(app/models.py:*)",
+      "Bash(app/rag.py:*)",
+      "Bash(app/agents/analytics_pro.py:*)",
+      "Bash(app/main.py:*)"
     ]
   }
 }
