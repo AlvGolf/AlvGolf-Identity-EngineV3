@@ -25,7 +25,11 @@
       "WebFetch(domain:alvgolf.github.io)",
       "Bash(pip install:*)",
       "Bash(git tag:*)",
-      "Bash(start \"\" python -m http.server:*)"
+      "Bash(start \"\" python -m http.server:*)",
+      "Bash(requirements.txt:*)",
+      "Bash(.env.example:*)",
+      "Bash(echo:*)",
+      "Bash(.env:*)"
     ]
   }
 }
