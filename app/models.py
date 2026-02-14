@@ -35,7 +35,7 @@ class ShotData(BaseModel):
     carry: float = Field(0, description="Carry distance in meters")
     launch_angle: float = Field(0, description="Launch angle in degrees")
     face_to_path: float = Field(0, description="Face-to-path angle in degrees")
-    score: int = Field(0, description="Score on hole (0 if practice)")
+    score: float = Field(0, description="Score on hole (0 if practice, can be avg)")
     notes: str = Field("", description="Optional notes")
 
     class Config:

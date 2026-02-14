@@ -74,20 +74,32 @@ def _embed_texts(texts: List[str]) -> List[List[float]]:
     """
     Generate embeddings using Pinecone's embeddings API.
 
+    Batches requests in chunks of 96 (Pinecone API limit).
+
     Args:
         texts: List of texts to embed
 
     Returns:
         List of embedding vectors
     """
-    # Use Pinecone's embed API
-    embeddings = pc.inference.embed(
-        model="multilingual-e5-large",
-        inputs=texts,
-        parameters={"input_type": "passage"}
-    )
+    BATCH_SIZE = 96
+    all_embeddings = []
 
-    return [e['values'] for e in embeddings]
+    # Process in batches
+    for i in range(0, len(texts), BATCH_SIZE):
+        batch = texts[i:i + BATCH_SIZE]
+        print(f"[INFO] Embedding batch {i//BATCH_SIZE + 1} ({len(batch)} texts)...")
+
+        # Use Pinecone's embed API
+        embeddings = pc.inference.embed(
+            model="multilingual-e5-large",
+            inputs=batch,
+            parameters={"input_type": "passage"}
+        )
+
+        all_embeddings.extend([e['values'] for e in embeddings])
+
+    return all_embeddings
 
 
 # ============ Public Functions ============
