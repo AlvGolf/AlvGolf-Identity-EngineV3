@@ -26,7 +26,7 @@ if index_name not in pc.list_indexes().names():
     print(f"[INFO] Creating Pinecone index: {index_name}")
     pc.create_index(
         name=index_name,
-        dimension=1536,  # Pinecone embeddings dimension
+        dimension=1024,  # multilingual-e5-large dimension
         metric="cosine",
         spec=ServerlessSpec(
             cloud="aws",

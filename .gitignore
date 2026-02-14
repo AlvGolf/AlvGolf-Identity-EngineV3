@@ -74,3 +74,5 @@ src/
 # Temporary files
 nul
 ~$*
+backend.pid
+backend.log

@@ -34,7 +34,11 @@
       "Bash(app/models.py:*)",
       "Bash(app/rag.py:*)",
       "Bash(app/agents/analytics_pro.py:*)",
-      "Bash(app/main.py:*)"
+      "Bash(app/main.py:*)",
+      "Bash(scripts/ingest_initial_data.py:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)"
     ]
   }
 }
