@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlvGolf IA Insights - Análisis Agentic</title>
+    <title>AlvGolf IA Insights - TIER 2 Multi-Agent</title>
 
     <style>
         * {
@@ -47,71 +47,99 @@
         .subtitle {
             font-size: 1.2em;
             color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
         }
 
-        /* Control Panel */
-        .control-panel {
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 6px 16px;
+            background: rgba(74,159,216,0.2);
+            border-radius: 16px;
+            color: #4A9FD8;
+            font-weight: 600;
+            margin-top: 10px;
+            border: 1px solid rgba(74,159,216,0.4);
+        }
+
+        /* AI Sections Container */
+        #ai-sections-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        /* Individual AI Section */
+        .ai-section {
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ai-section:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Gradient per section */
+        .gradient-dna {
+            background: linear-gradient(135deg, rgba(74,159,216,0.15) 0%, rgba(90,191,143,0.15) 100%);
+            border-left: 6px solid #4A9FD8;
+        }
+
+        .gradient-progress {
+            background: linear-gradient(135deg, rgba(90,191,143,0.15) 0%, rgba(212,181,90,0.15) 100%);
+            border-left: 6px solid #5ABF8F;
+        }
+
+        .gradient-action {
+            background: linear-gradient(135deg, rgba(212,181,90,0.15) 0%, rgba(232,139,122,0.15) 100%);
+            border-left: 6px solid #D4B55A;
+        }
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(74,159,216,0.1);
-            border-radius: 15px;
-            border: 2px solid rgba(74,159,216,0.3);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .analyze-btn {
-            padding: 15px 40px;
+        .section-header h3 {
+            font-size: 1.8em;
+            color: #E8E8E8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.2em;
+        }
+
+        .section-badge {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .ai-content {
             font-size: 1.1em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #4A9FD8 0%, #5ABF8F 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(74,159,216,0.4);
+            line-height: 1.8;
+            color: rgba(255,255,255,0.9);
         }
 
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74,159,216,0.6);
+        .motivational-text {
+            margin: 0;
         }
 
-        .analyze-btn:active {
-            transform: translateY(0);
-        }
-
-        .analyze-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .status-badge {
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.95em;
-            font-weight: 600;
-        }
-
-        .status-badge.ready {
-            background: rgba(90,191,143,0.2);
-            color: #5ABF8F;
-            border: 2px solid #5ABF8F;
-        }
-
-        .status-badge.loading {
-            background: rgba(212,181,90,0.2);
-            color: #D4B55A;
-            border: 2px solid #D4B55A;
-            animation: pulse 2s infinite;
-        }
-
-        .status-badge.error {
-            background: rgba(232,139,122,0.2);
-            color: #E88B7A;
-            border: 2px solid #E88B7A;
+        /* Skeleton Loading */
+        .skeleton-loading {
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
         @keyframes pulse {
@@ -119,128 +147,175 @@
             50% { opacity: 0.5; }
         }
 
-        /* Loading Spinner */
-        .loading-container {
-            display: none;
+        .skeleton-line {
+            height: 18px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        /* Technical Toggle Section */
+        .technical-toggle {
             text-align: center;
-            padding: 60px;
-            background: rgba(15,32,39,0.6);
-            border-radius: 20px;
-            margin-bottom: 30px;
+            margin: 40px 0 20px 0;
         }
 
-        .loading-container.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 20px;
-            border: 6px solid rgba(74,159,216,0.2);
-            border-top: 6px solid #4A9FD8;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 1.2em;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .loading-subtext {
-            font-size: 0.95em;
-            color: rgba(255,255,255,0.5);
-            margin-top: 10px;
-        }
-
-        /* Analysis Container */
-        .analysis-container {
-            display: none;
-        }
-
-        .analysis-container.active {
-            display: block;
-        }
-
-        /* Section Card */
-        .section-card {
-            background: rgba(15,32,39,0.6);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            border-left: 5px solid;
+        .btn-secondary {
+            background: rgba(74,159,216,0.2);
+            color: #4A9FD8;
+            border: 2px solid rgba(74,159,216,0.4);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .section-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        .btn-secondary:hover {
+            background: rgba(74,159,216,0.3);
+            border-color: rgba(74,159,216,0.6);
+            transform: translateY(-2px);
         }
 
-        .section-card.section-1 { border-left-color: #4A9FD8; }
-        .section-card.section-2 { border-left-color: #5ABF8F; }
-        .section-card.section-3 { border-left-color: #E88B7A; }
-        .section-card.section-4 { border-left-color: #D4B55A; }
-        .section-card.section-5 { border-left-color: #9B59B6; }
+        .btn-secondary:active {
+            transform: translateY(0);
+        }
 
-        .section-header {
+        /* Technical Panel */
+        .technical-panel {
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(15,32,39,0.8);
+            border-radius: 16px;
+            border: 2px solid rgba(74,159,216,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .technical-panel.hidden {
+            display: none;
+        }
+
+        .panel-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .section-icon {
-            font-size: 2.5em;
-            margin-right: 15px;
+        .panel-header h4 {
+            font-size: 1.5em;
+            color: #4A9FD8;
         }
 
-        .section-title {
-            font-size: 1.8em;
-            font-weight: bold;
+        #close-technical {
+            background: transparent;
+            border: none;
+            color: #E88B7A;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: color 0.3s ease;
         }
 
-        .section-content {
+        #close-technical:hover {
+            color: #ff6b6b;
+        }
+
+        .technical-content {
+            font-size: 1em;
             line-height: 1.8;
             color: rgba(255,255,255,0.85);
             white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
         }
 
-        /* Metadata Footer */
-        .metadata-footer {
+        /* Regenerate Button */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 40px auto;
+            background: linear-gradient(135deg, #4A9FD8 0%, #5ABF8F 100%);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(74,159,216,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 24px rgba(74,159,216,0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Metadata */
+        .ai-metadata {
             text-align: center;
+            margin-top: 40px;
             padding: 20px;
             background: rgba(15,32,39,0.4);
-            border-radius: 15px;
-            color: rgba(255,255,255,0.5);
+            border-radius: 12px;
             font-size: 0.9em;
+            color: rgba(255,255,255,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .ai-metadata span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* Back Button */
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 12px 25px;
-            background: rgba(74,159,216,0.2);
-            color: #4A9FD8;
-            border: 2px solid #4A9FD8;
-            border-radius: 10px;
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            color: white;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            z-index: 1000;
+            border-radius: 8px;
+            transition: background 0.3s ease;
         }
 
-        .back-btn:hover {
-            background: rgba(74,159,216,0.3);
-            transform: translateX(-5px);
+        .back-button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Error State */
+        .error-message {
+            background: rgba(232,139,122,0.2);
+            border: 2px solid rgba(232,139,122,0.4);
+            border-radius: 12px;
+            padding: 20px;
+            color: #E88B7A;
+            text-align: center;
+            margin: 20px 0;
         }
 
         /* Responsive */
@@ -249,227 +324,268 @@
                 font-size: 1.8em;
             }
 
-            .control-panel {
+            .ai-section {
+                padding: 20px;
+            }
+
+            .section-header h3 {
+                font-size: 1.4em;
+            }
+
+            .ai-content {
+                font-size: 1em;
+            }
+
+            .ai-metadata {
                 flex-direction: column;
                 gap: 15px;
-            }
-
-            .section-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .section-icon {
-                margin-right: 0;
-                margin-bottom: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Back Button -->
-    <a href="dashboard_dynamic.html" class="back-btn">← Volver al Dashboard</a>
-
     <div class="container">
-        <!-- Header -->
+        <a href="dashboard_dynamic.html" class="back-button">← Volver al Dashboard</a>
+
         <header>
             <h1>🤖 AlvGolf IA Insights</h1>
-            <p class="subtitle">Análisis Profesional Generado por Analytics Pro Agent</p>
+            <p class="subtitle">Sistema Multi-Agente de Análisis Profesional</p>
+            <span class="badge">TIER 2 - Analytics Pro + Dashboard Writer</span>
         </header>
 
-        <!-- Control Panel -->
-        <div class="control-panel">
-            <div>
-                <button id="analyzeBtn" class="analyze-btn" onclick="generateAnalysis()">
-                    🚀 Generar Análisis Completo
+        <div id="ai-sections-container">
+
+            <!-- SECCIÓN 1: ADN GOLFÍSTICO -->
+            <div class="ai-section gradient-dna">
+                <div class="section-header">
+                    <h3>
+                        <span class="section-icon">🧬</span>
+                        Tu ADN Golfístico
+                    </h3>
+                    <span class="section-badge">Tu Identidad Única</span>
+                </div>
+                <div id="dna-content" class="ai-content">
+                    <div class="skeleton-loading">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: TU EVOLUCIÓN -->
+            <div class="ai-section gradient-progress">
+                <div class="section-header">
+                    <h3>
+                        <span class="section-icon">📈</span>
+                        Tu Evolución
+                    </h3>
+                    <span class="section-badge">Últimas 4 Semanas</span>
+                </div>
+                <div id="progress-content" class="ai-content">
+                    <div class="skeleton-loading">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 3: TU PRÓXIMO NIVEL -->
+            <div class="ai-section gradient-action">
+                <div class="section-header">
+                    <h3>
+                        <span class="section-icon">🎯</span>
+                        Tu Próximo Nivel
+                    </h3>
+                    <span class="section-badge">Plan de Acción</span>
+                </div>
+                <div id="action-content" class="ai-content">
+                    <div class="skeleton-loading">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toggle: Ver análisis técnico -->
+            <div class="technical-toggle">
+                <button id="toggle-technical" class="btn-secondary">
+                    🔬 Ver Análisis Técnico Avanzado
                 </button>
             </div>
-            <div>
-                <span id="statusBadge" class="status-badge ready">
-                    ● Listo para analizar
-                </span>
-            </div>
-        </div>
 
-        <!-- Loading Container -->
-        <div id="loadingContainer" class="loading-container">
-            <div class="spinner"></div>
-            <div class="loading-text">Analizando tu juego...</div>
-            <div class="loading-subtext">El Analytics Pro Agent está procesando tus datos (30-45 segundos)</div>
-        </div>
-
-        <!-- Analysis Container -->
-        <div id="analysisContainer" class="analysis-container">
-            <!-- Section 1: Technical Patterns -->
-            <div class="section-card section-1">
-                <div class="section-header">
-                    <div class="section-icon">🔧</div>
-                    <div class="section-title">1. TECHNICAL PATTERNS</div>
+            <!-- Panel técnico (oculto por defecto) -->
+            <div id="technical-panel" class="technical-panel hidden">
+                <div class="panel-header">
+                    <h4>Análisis Técnico Completo (Analytics Pro)</h4>
+                    <button id="close-technical">✕</button>
                 </div>
-                <div id="section1Content" class="section-content">
-                    <!-- Content will be inserted here -->
+                <div id="technical-content" class="technical-content">
+                    <!-- Se carga el análisis técnico aquí -->
                 </div>
             </div>
 
-            <!-- Section 2: Statistical Trends -->
-            <div class="section-card section-2">
-                <div class="section-header">
-                    <div class="section-icon">📊</div>
-                    <div class="section-title">2. STATISTICAL TRENDS</div>
-                </div>
-                <div id="section2Content" class="section-content">
-                    <!-- Content will be inserted here -->
-                </div>
+            <!-- Botón regenerar -->
+            <button id="regenerate-btn" class="btn-primary">
+                🔄 Regenerar Análisis IA
+            </button>
+
+            <!-- Timestamp y metadata -->
+            <div class="ai-metadata">
+                <span id="generated-timestamp">🕐 Cargando...</span>
+                <span>🤖 Powered by Claude Sonnet 4</span>
+                <span>⚡ Multi-Agent System</span>
             </div>
 
-            <!-- Section 3: Main Gaps -->
-            <div class="section-card section-3">
-                <div class="section-header">
-                    <div class="section-icon">⚠️</div>
-                    <div class="section-title">3. MAIN GAPS</div>
-                </div>
-                <div id="section3Content" class="section-content">
-                    <!-- Content will be inserted here -->
-                </div>
-            </div>
-
-            <!-- Section 4: Recommendations -->
-            <div class="section-card section-4">
-                <div class="section-header">
-                    <div class="section-icon">💡</div>
-                    <div class="section-title">4. RECOMMENDATIONS</div>
-                </div>
-                <div id="section4Content" class="section-content">
-                    <!-- Content will be inserted here -->
-                </div>
-            </div>
-
-            <!-- Section 5: Prediction -->
-            <div class="section-card section-5">
-                <div class="section-header">
-                    <div class="section-icon">🔮</div>
-                    <div class="section-title">5. PREDICTION</div>
-                </div>
-                <div id="section5Content" class="section-content">
-                    <!-- Content will be inserted here -->
-                </div>
-            </div>
-
-            <!-- Metadata Footer -->
-            <div id="metadataFooter" class="metadata-footer">
-                Análisis generado el: <span id="generatedAt">--</span>
-            </div>
         </div>
     </div>
 
     <script>
+        // ============ Configuration ============
         const API_BASE = 'http://localhost:8000';
         const USER_ID = 'alvaro';
 
-        // Generate Analysis
-        async function generateAnalysis() {
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            const statusBadge = document.getElementById('statusBadge');
-            const loadingContainer = document.getElementById('loadingContainer');
-            const analysisContainer = document.getElementById('analysisContainer');
+        // ============ Initialize on Load ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('[Dashboard] Initializing TIER 2 Multi-Agent Dashboard...');
+            await loadAIAnalysis();
+        });
 
-            // Disable button and show loading
-            analyzeBtn.disabled = true;
-            statusBadge.className = 'status-badge loading';
-            statusBadge.textContent = '● Analizando...';
-            loadingContainer.classList.add('active');
-            analysisContainer.classList.remove('active');
+        // ============ Main Functions ============
 
+        async function loadAIAnalysis() {
             try {
-                // Call API
+                console.log('[Dashboard] Loading AI analysis...');
+                showLoadingState();
+
                 const response = await fetch(`${API_BASE}/analyze`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ user_id: USER_ID })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({user_id: USER_ID})
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
 
                 const data = await response.json();
+                console.log('[Dashboard] Analysis received:', data);
 
-                // Parse analysis into sections
-                parseAndDisplayAnalysis(data.analysis, data.generated_at);
+                // Update 3 motivational sections
+                updateMotivationalSections(data.motivational_sections);
 
-                // Update status
-                statusBadge.className = 'status-badge ready';
-                statusBadge.textContent = '✓ Análisis completado';
+                // Store technical analysis for optional view
+                storeTechnicalAnalysis(data.technical_analysis);
 
-                // Show analysis
-                loadingContainer.classList.remove('active');
-                analysisContainer.classList.add('active');
+                // Update timestamp
+                updateTimestamp(data.generated_at);
+
+                console.log('[Dashboard] Analysis loaded successfully');
 
             } catch (error) {
-                console.error('Error generating analysis:', error);
-
-                // Show error
-                statusBadge.className = 'status-badge error';
-                statusBadge.textContent = '✗ Error al generar análisis';
-
-                alert(`Error: ${error.message}\n\nAsegúrate de que el backend esté corriendo en ${API_BASE}`);
-
-                loadingContainer.classList.remove('active');
-            } finally {
-                // Re-enable button
-                analyzeBtn.disabled = false;
+                console.error('[Dashboard] Error loading AI analysis:', error);
+                showErrorState(error.message);
             }
         }
 
-        // Parse analysis text and display in sections
-        function parseAndDisplayAnalysis(analysisText, generatedAt) {
-            // Split by section headers
-            const sections = {
-                1: /## 1\. TECHNICAL PATTERNS([\s\S]*?)(?=## 2\.|$)/,
-                2: /## 2\. STATISTICAL TRENDS([\s\S]*?)(?=## 3\.|$)/,
-                3: /## 3\. MAIN GAPS([\s\S]*?)(?=## 4\.|$)/,
-                4: /## 4\. RECOMMENDATIONS([\s\S]*?)(?=## 5\.|$)/,
-                5: /## 5\. PREDICTION([\s\S]*?)$/
-            };
+        function showLoadingState() {
+            console.log('[Dashboard] Showing loading state...');
+            // Skeletons are already in HTML by default
+        }
 
-            // Extract and display each section
-            for (let i = 1; i <= 5; i++) {
-                const match = analysisText.match(sections[i]);
-                let content = match ? match[1].trim() : 'Sección no disponible';
+        function updateMotivationalSections(sections) {
+            console.log('[Dashboard] Updating motivational sections...');
 
-                // Clean up markdown formatting for display
-                content = content
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>');             // Italic
+            // Section 1: DNA
+            const dnaContent = document.getElementById('dna-content');
+            dnaContent.innerHTML = `<p class="motivational-text">${sections.dna}</p>`;
 
-                document.getElementById(`section${i}Content`).innerHTML = content;
-            }
+            // Section 2: Progress
+            const progressContent = document.getElementById('progress-content');
+            progressContent.innerHTML = `<p class="motivational-text">${sections.progress}</p>`;
 
-            // Update metadata
-            const date = new Date(generatedAt);
-            document.getElementById('generatedAt').textContent = date.toLocaleString('es-ES', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+            // Section 3: Action
+            const actionContent = document.getElementById('action-content');
+            actionContent.innerHTML = `<p class="motivational-text">${sections.action}</p>`;
+
+            console.log('[Dashboard] Motivational sections updated');
+        }
+
+        function storeTechnicalAnalysis(analysis) {
+            // Store in sessionStorage for optional technical view
+            sessionStorage.setItem('technicalAnalysis', analysis);
+            console.log('[Dashboard] Technical analysis stored in session');
+        }
+
+        function updateTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const formatted = date.toLocaleString('es-ES', {
+                day: '2-digit',
+                month: 'short',
                 hour: '2-digit',
                 minute: '2-digit'
             });
+            document.getElementById('generated-timestamp').textContent =
+                `🕐 Actualizado: ${formatted}`;
         }
 
-        // Check API health on load
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch(`${API_BASE}/`);
-                const data = await response.json();
-                console.log('API Status:', data);
-            } catch (error) {
-                console.error('API not available:', error);
-                document.getElementById('statusBadge').className = 'status-badge error';
-                document.getElementById('statusBadge').textContent = '✗ API no disponible';
+        function showErrorState(message) {
+            const errorHTML = `
+                <div class="error-message">
+                    <strong>❌ Error al cargar análisis IA</strong><br>
+                    ${message}<br><br>
+                    Verifica que el backend esté corriendo en ${API_BASE}
+                </div>
+            `;
+
+            document.getElementById('dna-content').innerHTML = errorHTML;
+            document.getElementById('progress-content').innerHTML = '';
+            document.getElementById('action-content').innerHTML = '';
+        }
+
+        // ============ Technical Panel Toggle ============
+
+        document.getElementById('toggle-technical').addEventListener('click', () => {
+            const panel = document.getElementById('technical-panel');
+            const technical = sessionStorage.getItem('technicalAnalysis');
+
+            if (technical) {
+                document.getElementById('technical-content').textContent = technical;
+                panel.classList.remove('hidden');
+
+                // Smooth scroll to panel
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                console.log('[Dashboard] Technical panel opened');
+            } else {
+                alert('No hay análisis técnico disponible. Genera un análisis primero.');
             }
         });
+
+        document.getElementById('close-technical').addEventListener('click', () => {
+            document.getElementById('technical-panel').classList.add('hidden');
+            console.log('[Dashboard] Technical panel closed');
+        });
+
+        // ============ Regenerate Button ============
+
+        document.getElementById('regenerate-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('regenerate-btn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Analizando... (60-90s)';
+
+            console.log('[Dashboard] Regenerating analysis...');
+
+            await loadAIAnalysis();
+
+            btn.innerHTML = '✅ Actualizado';
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Regenerar Análisis IA';
+            }, 2000);
+        });
+
     </script>
 </body>
 </html>

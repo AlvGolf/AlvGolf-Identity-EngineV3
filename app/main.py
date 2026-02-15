@@ -5,7 +5,7 @@ Main API server with 4 endpoints:
 - GET /              Health check
 - POST /ingest       Ingest shots to vector database
 - POST /query        Query RAG with question
-- POST /analyze      Full analysis with Analytics Pro Agent
+- POST /analyze      Full analysis with Multi-Agent System (TIER 2)
 """
 
 from fastapi import FastAPI, HTTPException
@@ -24,6 +24,7 @@ from app.models import (
 )
 from app.rag import ingest_shots, rag_answer
 from app.agents.analytics_pro import analytics_agent
+from app.agents.orchestrator import run_multi_agent_analysis  # TIER 2
 
 
 # ============ Logging Configuration ============
@@ -102,8 +103,8 @@ async def health_check():
     """
     return HealthResponse(
         status="healthy",
-        version="1.0.0",
-        message="AlvGolf Agentic API is running (TIER 1)"
+        version="2.0.0",
+        message="AlvGolf Agentic API is running (TIER 2 - Multi-Agent)"
     )
 
 
@@ -171,34 +172,52 @@ async def query_rag(request: QueryRequest):
 @app.post("/analyze", response_model=AnalyzeResponse)
 async def analyze_golf(request: AnalyzeRequest):
     """
-    Full golf performance analysis with Analytics Pro Agent.
+    Full golf performance analysis with Multi-Agent System (TIER 2).
 
-    Generates structured 5-section technical analysis:
+    Workflow:
+    1. Analytics Pro Agent → Technical analysis (5 sections)
+    2. Dashboard Writer Agent → Motivational sections (3 sections)
+
+    Technical sections:
     1. Technical Patterns
     2. Statistical Trends
     3. Main Gaps
     4. Recommendations
     5. Prediction
 
+    Motivational sections:
+    1. DNA Golfístico (identity)
+    2. Evolución/Progreso (progress)
+    3. Próximo Nivel/Acción (action plan)
+
     Args:
         request: AnalyzeRequest with user_id
 
     Returns:
-        AnalyzeResponse with complete analysis
+        AnalyzeResponse with both technical and motivational analysis
     """
     try:
-        logger.info(f"Analysis request from user {request.user_id}")
+        logger.info(f"[TIER 2] Multi-agent analysis request from user {request.user_id}")
 
-        # Invoke Analytics Pro Agent
-        analysis = await analytics_agent(request.user_id)
+        # Run multi-agent workflow (LangGraph orchestrator)
+        result = await run_multi_agent_analysis(request.user_id)
 
-        logger.success(f"Analysis generated for {request.user_id}")
+        # Check for errors
+        if result.get("error"):
+            raise HTTPException(status_code=500, detail=result["error"])
+
+        logger.success(f"[TIER 2] Multi-agent analysis completed for {request.user_id}")
+
+        from app.models import MotivationalSections
 
         return AnalyzeResponse(
-            analysis=analysis,
+            technical_analysis=result["technical_analysis"],
+            motivational_sections=MotivationalSections(**result["motivational_sections"]),
             generated_at=datetime.now()
         )
 
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Analysis error: {e}")
         raise HTTPException(status_code=500, detail=str(e))

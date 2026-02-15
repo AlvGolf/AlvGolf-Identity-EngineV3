@@ -129,9 +129,17 @@ class AnalyzeRequest(BaseModel):
         }
 
 
+class MotivationalSections(BaseModel):
+    """3 motivational sections from Dashboard Writer Agent (TIER 2)"""
+    dna: str = Field(..., description="DNA Golfístico (60-80 palabras)")
+    progress: str = Field(..., description="Evolución/Progreso (50-70 palabras)")
+    action: str = Field(..., description="Próximo Nivel/Acción (70-90 palabras)")
+
+
 class AnalyzeResponse(BaseModel):
-    """Response for POST /analyze endpoint"""
-    analysis: str = Field(..., description="Technical analysis from Analytics Pro Agent")
+    """Response for POST /analyze endpoint (TIER 2)"""
+    technical_analysis: str = Field(..., description="Technical analysis from Analytics Pro Agent")
+    motivational_sections: MotivationalSections = Field(..., description="Motivational sections from Dashboard Writer Agent")
     generated_at: datetime = Field(default_factory=datetime.now)
     tokens_used: Optional[int] = None
     cache_hit: bool = False
