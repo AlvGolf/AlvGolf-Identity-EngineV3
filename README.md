@@ -1,13 +1,14 @@
 # AlvGolf Dashboard - IA Golf Performance Dashboard 360°
 
-**Versión:** 5.1.1 + TIER 1 Agentic Engine ✅
+**Versión:** 5.1.1 + Multi-Agent System v3.0 ✅
 **Estado:** Production Ready
-**Última actualización:** 2026-02-15
+**Última actualización:** 2026-02-16
 
 [![Dashboard](https://img.shields.io/badge/Dashboard-v5.1.1-blue)]()
 [![Backend](https://img.shields.io/badge/Backend-v5.1.0-green)]()
-[![Agentic](https://img.shields.io/badge/Agentic-TIER%201-purple)]()
-[![Tests](https://img.shields.io/badge/Tests-4%2F4%20passed-success)]()
+[![Agentic](https://img.shields.io/badge/Agentic-v3.0%20Team%203-purple)]()
+[![Agents](https://img.shields.io/badge/Agents-5%20specialists-orange)]()
+[![Tests](https://img.shields.io/badge/Tests-6%2F6%20passed-success)]()
 
 ---
 
@@ -17,61 +18,109 @@ AlvGolf es un sistema completo de análisis de rendimiento de golf que combina:
 
 1. **Dashboard Estático v5.1.1** - 36 visualizaciones de datos con Chart.js
 2. **Backend Generator v5.1.0** - 52 funciones de procesamiento de datos
-3. **Backend Agentic TIER 1** - Sistema RAG + Analytics Pro Agent con Claude Sonnet 4
-4. **Dashboard IA Dinámico** - Análisis personalizado generado por IA
+3. **Multi-Agent System v3.0** - 5 agentes especializados con arquitectura optimizada
+4. **Dashboard IA Dinámico** - Análisis multi-dimensional generado por IA
 
 ### Datos Analizados
 - **52 rondas** de golf (Marzo 2024 - Diciembre 2025)
 - **493 shots** de FlightScope
 - **11 campos** diferentes
-- **120 vectores** en base de datos vectorial (TIER 1)
-- **8 fuentes** de datos integradas (TIER 1)
+- **5 agentes especializados** (Performance, Biomechanics, Practice, UX, Coach)
+- **0 RAG queries** (arquitectura optimizada con data_loader)
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ Arquitectura del Sistema - Multi-Agent v3.0
 
 ```mermaid
 graph TB
     subgraph "Frontend Layer"
-        A[dashboard_dynamic.html<br/>36 Charts estáticos v5.1.1]
-        B[dashboard_agentic.html<br/>IA Insights TIER 1]
+        A[dashboard_dynamic.html<br/>36 Charts v5.1.1]
+        B[dashboard_agentic.html<br/>Multi-Agent Insights v3.0]
     end
 
-    subgraph "Backend TIER 1 - Agentic"
-        C[FastAPI Server<br/>:8000]
-        D[RAG Core<br/>Pinecone + Claude]
-        E[Analytics Pro Agent<br/>5 secciones]
+    subgraph "Multi-Agent System v3.0"
+        C[FastAPI Server :8000]
+        D[Data Loader<br/>106.9 KB, 0 RAG]
+
+        subgraph "Team 2 - Analytics"
+            E1[AgentAnalista<br/>Performance]
+            E2[AgentTecnico<br/>Biomechanics]
+            E3[AgentEstratega<br/>Practice]
+        end
+
+        subgraph "Team 3 - Content"
+            F1[AgentUXWriter<br/>Dashboard Content]
+            F2[AgentCoach<br/>Coaching Reports]
+        end
+
+        G[Dashboard Writer<br/>Motivational]
     end
 
     subgraph "Backend v5.1.0 - Generator"
-        F[generate_dashboard_data.py<br/>52 functions]
+        H[generate_dashboard_data.py<br/>52 functions]
     end
 
     subgraph "Data Layer"
-        G[dashboard_data.json<br/>197 KB, 52 keys]
-        H[Pinecone Vector DB<br/>120 vectors, 8 sources]
-        I[Raw Data<br/>FlightScope + Tarjetas]
+        I[dashboard_data.json<br/>106.9 KB, 52 keys]
+        J[Raw Data<br/>FlightScope + Tarjetas]
     end
 
     subgraph "External APIs"
-        J[Anthropic Claude Sonnet 4<br/>LLM]
-        K[Pinecone Embeddings API<br/>multilingual-e5-large]
+        K[Anthropic Claude Sonnet 4.5<br/>LLM + Prompt Caching]
     end
 
     A -->|Link| B
     B -->|POST /analyze| C
-    C -->|RAG Query| D
-    D -->|Embeddings| K
-    D -->|Retrieve Context| H
-    C -->|Generate Analysis| E
-    E -->|Call LLM| J
+    C -->|Load JSON| D
+    D -->|100% Data| E1 & E2 & E3
+    E1 & E2 & E3 -->|Analysis| F1 & F2
+    F1 & F2 -->|Content| G
+    G -->|Response| B
 
-    I -->|Process| F
-    F -->|Generate| G
-    G -->|Load| A
-    G -->|Ingest| H
+    J -->|Process| H
+    H -->|Generate| I
+    I -->|Load| A
+    I -->|Load| D
+
+    E1 & E2 & E3 & F1 & F2 -->|LLM Calls| K
 ```
+
+**Flujo Optimizado (5.3 minutos):**
+1. Data Loader (0.05s) → Load dashboard_data.json
+2. Team 2 Parallel (148s) → 3 agents simultáneos
+3. Team 3 Parallel (156s) → 2 agents simultáneos
+4. Dashboard Writer (13s) → Output final
+
+---
+
+## 🆕 What's New in v3.0 (2026-02-16)
+
+### Multi-Agent System Complete - 5 Specialists
+
+**🎉 Team 3 Complete:**
+- ✅ **AgentUXWriter** (752 lines) - Dashboard content writer (Spanish, motivational)
+- ✅ **AgentCoach** (807 lines) - Performance coach & PDF report generator
+
+**⚡ Architecture Optimization:**
+- ✅ Eliminated Analytics Pro bottleneck (4 RAG queries → 0)
+- ✅ Team 2 receives 100% backend data (106.9 KB)
+- ✅ 25% faster execution (220s → 166s for Team 2)
+
+**📊 Complete System:**
+- **5 Specialized Agents:** Performance, Biomechanics, Practice, UX, Coach
+- **Execution Time:** 5.3 minutes (317.7s)
+- **Total Output:** 41,701 characters
+- **Cost:** $0.52/month (€0.46/month)
+- **Tests:** 6/6 passed (100%)
+
+**📁 New Files:**
+- `app/agents/analista.py`, `tecnico.py`, `estratega.py` (Team 2)
+- `app/agents/ux_writer.py`, `coach.py` (Team 3)
+- `app/agents/orchestrator.py` (updated with team3_parallel_node)
+- Complete documentation (3 comprehensive guides)
+
+**🔗 Commit:** [09b9aca](https://github.com/AlvGolf/AlvGolf-Identity-EngineV3/commit/09b9aca)
 
 ---
 
