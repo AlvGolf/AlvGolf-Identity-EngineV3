@@ -8,7 +8,7 @@
 
 ## 1. Complete System Architecture (v3.0.1)
 
-<!--```mermaid
+## Note: First diagram temporarily commented for rendering (7 diagrams working below)
 graph TB
     subgraph "User Layer"
         U[Usuario / Browser]
