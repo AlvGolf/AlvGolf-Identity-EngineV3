@@ -15,8 +15,8 @@ graph TB
     end
 
     subgraph "Frontend Layer"
-        FD[dashboard_dynamic.html<br/>v5.1.1 - 36 Charts + AI Content]
-        FA[dashboard_agentic.html<br/>Multi-Agent Insights v3.0]
+        FD[dashboard_dynamic.htmlv5.1.1 - 36 Charts + AI Content]
+        FA[dashboard_agentic.htmlMulti-Agent Insights v3.0]
     end
 
     subgraph "FastAPI Backend - localhost:8000"
@@ -28,48 +28,48 @@ graph TB
     end
 
     subgraph "Multi-Agent Orchestrator (LangGraph)"
-        DL[data_loader_node<br/>106.9 KB JSON, 0 RAG]
+        DL[data_loader_node106.9 KB JSON, 0 RAG]
 
         subgraph "TEAM 2 - Analytics (Parallel)"
-            A1[AgentAnalista<br/>Performance Analysis<br/>650 lines]
-            A2[AgentTecnico<br/>Biomechanics<br/>550 lines]
-            A3[AgentEstratega<br/>Practice Design<br/>600 lines]
+            A1[AgentAnalistaPerformance Analysis650 lines]
+            A2[AgentTecnicoBiomechanics550 lines]
+            A3[AgentEstrategaPractice Design600 lines]
         end
 
         subgraph "TEAM 3 - Content (Parallel)"
-            A4[AgentUXWriter<br/>Dashboard Content<br/>752 lines]
-            A5[AgentCoach<br/>Coaching Reports<br/>807 lines]
+            A4[AgentUXWriterDashboard Content752 lines]
+            A5[AgentCoachCoaching Reports807 lines]
         end
 
-        WR[Dashboard Writer<br/>Motivational Sections]
+        WR[Dashboard WriterMotivational Sections]
     end
 
     subgraph "Data Processing"
-        GEN[generate_dashboard_data.py<br/>52 functions, v5.1.0]
+        GEN[generate_dashboard_data.py52 functions, v5.1.0]
     end
 
     subgraph "Data Storage"
-        JSON[dashboard_data.json<br/>106.9 KB, 52 keys]
-        PC[Pinecone Vector DB<br/>120 vectors, namespace: alvaro]
-        RAW[Raw Data<br/>FlightScope (493 shots)<br/>Tarjetas (52 rounds)]
+        JSON[dashboard_data.json106.9 KB, 52 keys]
+        PC[Pinecone Vector DB120 vectors, namespace: alvaro]
+        RAW[Raw DataFlightScope (493 shots)Tarjetas (52 rounds)]
     end
 
     subgraph "External Services"
-        CLAUDE[Anthropic Claude Sonnet 4<br/>LLM + Prompt Caching]
-        PCAPI[Pinecone Embeddings<br/>multilingual-e5-large, 1024 dim]
+        CLAUDE[Anthropic Claude Sonnet 4LLM + Prompt Caching]
+        PCAPI[Pinecone Embeddingsmultilingual-e5-large, 1024 dim]
     end
 
     U -->|Browse| FD
     U -->|Click IA Insights| FA
-    FD -->|"POST /generate-content<br/>(async, 60-70s)"| EP5
-    FA -->|"POST /analyze<br/>(5.3 min)"| EP4
+    FD -->|"POST /generate-content(async, 60-70s)"| EP5
+    FA -->|"POST /analyze(5.3 min)"| EP4
 
     EP4 --> DL
     EP5 --> A4
 
     DL -->|"100% data"| A1 & A2 & A3
-    A1 & A2 & A3 -->|"Team 2 output<br/>20,400 chars"| A4 & A5
-    A4 & A5 -->|"Team 3 output<br/>20,065 chars"| WR
+    A1 & A2 & A3 -->|"Team 2 output20,400 chars"| A4 & A5
+    A4 & A5 -->|"Team 3 output20,065 chars"| WR
     WR -->|Response| FA
 
     EP5 -->|"Load JSON"| JSON
@@ -108,17 +108,17 @@ sequenceDiagram
 
     Note over FE: Charts visible (< 1s)
 
-    FE->>API: POST /generate-content<br/>{user_id: "alvaro"}
+    FE->>API: POST /generate-content{user_id: "alvaro"}
     Note over FE: Non-blocking async call
 
     API->>FS: Load dashboard_data.json
     FS-->>API: 106.9 KB
 
     API->>UXW: agent.write(user_id, dashboard_data)
-    UXW->>UXW: Build prompt with skill<br/>(~6,000 tokens cached)
+    UXW->>UXW: Build prompt with skill(~6,000 tokens cached)
     UXW->>CL: invoke(skill + data context)
 
-    Note over CL: Generate 10 sections<br/>in Spanish (60-70s)
+    Note over CL: Generate 10 sectionsin Spanish (60-70s)
 
     CL-->>UXW: JSON content response
     UXW->>UXW: Parse + validate content
@@ -191,30 +191,30 @@ stateDiagram-v2
 graph LR
     subgraph "Phase 1: Data Loading (~0.05s)"
         DL[data_loader_node]
-        JSON[(dashboard_data.json<br/>106.9 KB)]
+        JSON[(dashboard_data.json106.9 KB)]
         JSON --> DL
     end
 
     subgraph "Phase 2: Team 2 Analytics (~148s)"
         direction TB
         T2[team2_parallel_node]
-        AN[AgentAnalista<br/>6,154 chars]
-        TE[AgentTecnico<br/>5,389 chars]
-        ES[AgentEstratega<br/>8,857 chars]
+        AN[AgentAnalista6,154 chars]
+        TE[AgentTecnico5,389 chars]
+        ES[AgentEstratega8,857 chars]
         T2 --> AN & TE & ES
     end
 
     subgraph "Phase 3: Team 3 Content (~156s)"
         direction TB
         T3[team3_parallel_node]
-        UX[AgentUXWriter<br/>10,223 chars]
-        CO[AgentCoach<br/>9,842 chars]
+        UX[AgentUXWriter10,223 chars]
+        CO[AgentCoach9,842 chars]
         T3 --> UX & CO
     end
 
     subgraph "Phase 4: Output (~13s)"
-        WR[writer_node<br/>1,236 chars]
-        OUT[Final Output<br/>41,701 chars total]
+        WR[writer_node1,236 chars]
+        OUT[Final Output41,701 chars total]
         WR --> OUT
     end
 
@@ -235,38 +235,38 @@ graph LR
 ```mermaid
 flowchart TD
     subgraph "Raw Data Sources"
-        FS[FlightScope CSV<br/>493 shots, 11 clubs]
-        TC[Tarjetas XLSX<br/>52 rounds, 11 courses]
-        PDF[RFEG PDF<br/>Official HCP history]
+        FS[FlightScope CSV493 shots, 11 clubs]
+        TC[Tarjetas XLSX52 rounds, 11 courses]
+        PDF[RFEG PDFOfficial HCP history]
     end
 
     subgraph "Backend Generator (Python)"
-        GEN[generate_dashboard_data.py<br/>52 functions]
-        ETL["ETL Pipeline:<br/>1. Load raw data<br/>2. Calculate metrics<br/>3. Generate charts data<br/>4. Output JSON"]
+        GEN[generate_dashboard_data.py52 functions]
+        ETL["ETL Pipeline:1. Load raw data2. Calculate metrics3. Generate charts data4. Output JSON"]
     end
 
     subgraph "Static Data Layer"
-        DJ[dashboard_data.json<br/>106.9 KB, 52 keys]
+        DJ[dashboard_data.json106.9 KB, 52 keys]
     end
 
     subgraph "Frontend (HTML + JS)"
         LOAD["fetch('dashboard_data.json')"]
-        CHARTS[Chart.js Rendering<br/>36 dynamic charts]
-        UXLOAD["loadUXContent()<br/>POST /generate-content"]
-        INSERT["insertUXContent()<br/>6 content mappings"]
+        CHARTS[Chart.js Rendering36 dynamic charts]
+        UXLOAD["loadUXContent()POST /generate-content"]
+        INSERT["insertUXContent()6 content mappings"]
     end
 
     subgraph "AI Layer (FastAPI + Claude)"
         ENDPOINT["/generate-content endpoint"]
-        AGENT[AgentUXWriter<br/>Skill: 6,000 tokens]
-        LLM[Claude Sonnet 4<br/>Prompt Caching]
+        AGENT[AgentUXWriterSkill: 6,000 tokens]
+        LLM[Claude Sonnet 4Prompt Caching]
     end
 
     subgraph "Dashboard Output"
-        TAB1["Tab 1: Mi Identidad<br/>+ hero_statement<br/>+ dna_profile"]
-        TAB5["Tab 5: Analisis Profundo<br/>+ insight_boxes"]
-        TAB6["Tab 6: Estrategia<br/>+ quick_wins<br/>+ roi_cards"]
-        TITLES["All Tabs<br/>+ chart_titles"]
+        TAB1["Tab 1: Mi Identidad+ hero_statement+ dna_profile"]
+        TAB5["Tab 5: Analisis Profundo+ insight_boxes"]
+        TAB6["Tab 6: Estrategia+ quick_wins+ roi_cards"]
+        TITLES["All Tabs+ chart_titles"]
     end
 
     FS & TC & PDF --> GEN
@@ -292,26 +292,26 @@ flowchart TD
 graph TB
     subgraph "Execution Costs (Monthly: $0.52)"
         direction LR
-        COLD["Cold Call: $0.185<br/>(1x/month)"]
-        CACHED["Cached Calls: $0.110<br/>(3x/month)"]
-        TOTAL["Total: $0.515/month<br/>~EUR 0.46/month"]
+        COLD["Cold Call: $0.185(1x/month)"]
+        CACHED["Cached Calls: $0.110(3x/month)"]
+        TOTAL["Total: $0.515/month~EUR 0.46/month"]
         COLD --> TOTAL
         CACHED --> TOTAL
     end
 
     subgraph "Performance Breakdown (317.7s total)"
-        P1["Data Loader<br/>0.05s (0.02%)"]
-        P2["Team 2 Parallel<br/>148.4s (46.7%)"]
-        P3["Team 3 Parallel<br/>156.3s (49.2%)"]
-        P4["Writer Node<br/>13.1s (4.1%)"]
+        P1["Data Loader0.05s (0.02%)"]
+        P2["Team 2 Parallel148.4s (46.7%)"]
+        P3["Team 3 Parallel156.3s (49.2%)"]
+        P4["Writer Node13.1s (4.1%)"]
         P1 --> P2 --> P3 --> P4
     end
 
     subgraph "Optimization Techniques"
-        O1["0 RAG Queries<br/>(eliminated bottleneck)"]
-        O2["Prompt Caching<br/>(90% input savings)"]
-        O3["Parallel Execution<br/>(2 parallel stages)"]
-        O4["Single JSON Load<br/>(vs 4 RAG queries)"]
+        O1["0 RAG Queries(eliminated bottleneck)"]
+        O2["Prompt Caching(90% input savings)"]
+        O3["Parallel Execution(2 parallel stages)"]
+        O4["Single JSON Load(vs 4 RAG queries)"]
     end
 
     subgraph "Performance Evolution"
@@ -331,17 +331,17 @@ graph LR
     subgraph "FastAPI Application (localhost:8000)"
         direction TB
 
-        H["GET /<br/>Health Check<br/><100ms"]
-        I["POST /ingest<br/>Data Ingestion<br/>~2s"]
-        Q["POST /query<br/>RAG Query<br/>10-15s"]
-        A["POST /analyze<br/>Full Multi-Agent<br/>~5.3 min"]
-        C["POST /generate-content<br/>UXWriter Only<br/>~60-70s"]
+        H["GET /Health Check<100ms"]
+        I["POST /ingestData Ingestion~2s"]
+        Q["POST /queryRAG Query10-15s"]
+        A["POST /analyzeFull Multi-Agent~5.3 min"]
+        C["POST /generate-contentUXWriter Only~60-70s"]
     end
 
     subgraph "Dependencies"
-        RAG[RAG Core<br/>Pinecone + Embeddings]
-        ORCH[Orchestrator<br/>LangGraph Workflow]
-        UXW[AgentUXWriter<br/>Standalone]
+        RAG[RAG CorePinecone + Embeddings]
+        ORCH[OrchestratorLangGraph Workflow]
+        UXW[AgentUXWriterStandalone]
     end
 
     subgraph "Consumers"
