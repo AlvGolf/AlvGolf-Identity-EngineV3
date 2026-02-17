@@ -20,11 +20,13 @@ from app.models import (
     IngestRequest, IngestResponse,
     QueryRequest, QueryResponse,
     AnalyzeRequest, AnalyzeResponse,
+    ContentGenerateRequest, ContentGenerateResponse,  # Team 3
     ErrorResponse
 )
 from app.rag import ingest_shots, rag_answer
 from app.agents.analytics_pro import analytics_agent
 from app.agents.orchestrator import run_multi_agent_analysis  # TIER 2
+from app.agents.ux_writer import AgentUXWriter  # Team 3
 
 
 # ============ Logging Configuration ============
@@ -220,6 +222,74 @@ async def analyze_golf(request: AnalyzeRequest):
         raise
     except Exception as e:
         logger.error(f"Analysis error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/generate-content", response_model=ContentGenerateResponse)
+async def generate_dashboard_content(request: ContentGenerateRequest):
+    """
+    Generate dashboard UX content with AgentUXWriter (Team 3).
+
+    This endpoint generates user-friendly Spanish content for the dashboard UI,
+    including hero statements, DNA profiles, stat cards, chart titles, narratives,
+    insights, and action items.
+
+    Content Sections Generated:
+    1. hero_statement (50-80 words)
+    2. dna_profile (30-50 words)
+    3. stat_cards (array)
+    4. chart_titles (object)
+    5. trend_narratives (array)
+    6. course_cards (array)
+    7. club_cards (array)
+    8. insight_boxes (array)
+    9. quick_wins (array)
+    10. roi_cards (array)
+
+    Args:
+        request: ContentGenerateRequest with user_id
+
+    Returns:
+        ContentGenerateResponse with content sections and metadata
+    """
+    try:
+        logger.info(f"[Team 3] Content generation request from user {request.user_id}")
+
+        # Load dashboard_data.json
+        from pathlib import Path
+        import json
+
+        json_path = Path(__file__).parent.parent / "output" / "dashboard_data.json"
+
+        if not json_path.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="dashboard_data.json not found. Please run generate_dashboard_data.py first."
+            )
+
+        with open(json_path, 'r', encoding='utf-8') as f:
+            dashboard_data = json.load(f)
+
+        logger.info(f"[Team 3] Loaded dashboard_data.json ({json_path.stat().st_size / 1024:.1f} KB)")
+
+        # Initialize AgentUXWriter and generate content
+        agent = AgentUXWriter()
+        result = await agent.write(request.user_id, dashboard_data=dashboard_data)
+
+        logger.success(f"[Team 3] Content generation completed ({len(str(result['content']))} chars)")
+
+        return ContentGenerateResponse(
+            content=result["content"],
+            metadata=result["metadata"],
+            generated_at=datetime.now()
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Content generation error: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 

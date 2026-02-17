@@ -1,22 +1,60 @@
-# CLAUDE.md - AlvGolf Human Identity Engine
+# CLAUDE.md - AlvGolf Multi-Agent System
 
 ## Project Overview
 
-**AlvGolf Human Identity Engine** is a comprehensive golf performance analytics dashboard (IA Golf Performance Dashboard 360°) built for Alvaro Peralta. It provides multi-dimensional analysis of golf performance across 85 rounds spanning 18 months, featuring 47+ data visualizations, 12 golf courses, and complete equipment analytics.
+**AlvGolf Multi-Agent System** is a comprehensive golf performance analytics platform combining a 360-degree dashboard with a 5-agent AI system. Built for Alvaro Peralta, it provides multi-dimensional analysis of golf performance across 52 rounds spanning 18 months, featuring 36 dynamic data visualizations, 11 golf courses, AI-generated content in Spanish, and complete equipment analytics.
 
 **Primary Language:** Spanish (es)
-**Type:** Single-file static HTML application
-**Deployment:** Ready to deploy as-is (no build process required)
+**Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
+**Version:** v3.0.1 - Multi-Agent System + UXWriter Dashboard Integration
+**Status:** Production Ready
+**Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
 ## Repository Structure
 
 ```
-AlvGolf-Human-Identity-Engine/
-├── index.html                              # Main dashboard application (843 KB, ~13,000 lines)
-├── dashboard_FINAL_M3_I2 (3).html          # Backup/duplicate copy
-├── AIvGolf_Identity_Performance_Enginev2.png  # Branding image
-├── Augusta_National.png                    # Course background image
-└── CLAUDE.md                               # This file
+AlvGolf/
+├── app/                              # FastAPI Backend (Agentic Analytics Engine)
+│   ├── __init__.py
+│   ├── main.py                       # FastAPI app (5 endpoints)
+│   ├── config.py                     # Settings management (.env)
+│   ├── models.py                     # Pydantic models (12 models)
+│   ├── rag.py                        # RAG Core (Pinecone + Claude)
+│   └── agents/                       # Multi-Agent System
+│       ├── __init__.py
+│       ├── orchestrator.py           # LangGraph workflow orchestrator
+│       ├── analytics_pro.py          # Legacy Analytics Agent (TIER 1)
+│       ├── analista.py               # Team 2: Performance analysis (650 lines)
+│       ├── tecnico.py                # Team 2: Biomechanics analysis (550 lines)
+│       ├── estratega.py              # Team 2: Practice design (600 lines)
+│       ├── ux_writer.py              # Team 3: Dashboard content writer (752 lines)
+│       └── coach.py                  # Team 3: Coaching reports (807 lines)
+│
+├── scripts/                          # Test scripts and utilities
+│   ├── test_team3_complete.py        # Team 3 test suite (6 tests)
+│   ├── test_optimized_architecture.py
+│   ├── test_dashboard_integration.py # E2E tests (4/4)
+│   └── ingest_full_data.py           # Data ingestion (120 vectors)
+│
+├── output/
+│   └── dashboard_data.json           # Generated data (106.9 KB, 52 keys)
+│
+├── data/                             # Raw data sources
+│   ├── flightscope/                  # 493 shots, 11 clubs
+│   └── tarjetas/                     # 52 rounds, 11 courses
+│
+├── dashboard_dynamic.html            # Main dashboard (v5.1.1, ~17,000 lines)
+├── dashboard_agentic.html            # AI Insights dashboard
+├── index.html                        # Landing page
+├── generate_dashboard_data.py        # Backend generator (52 functions)
+│
+├── .env                              # API keys (NOT committed)
+├── .env.example                      # Template for .env
+├── requirements.txt                  # Python dependencies
+├── ARCHITECTURE_DIAGRAMS.md          # Mermaid architecture diagrams (8 diagrams)
+├── README.md                         # Project documentation
+└── .claude/
+    └── CLAUDE.md                     # This file
 ```
 
 ## Technology Stack
@@ -25,15 +63,109 @@ AlvGolf-Human-Identity-Engine/
 - **HTML5** - Semantic markup with accessibility support
 - **CSS3** - Embedded styles with 11 media queries for responsive design
 - **Vanilla JavaScript (ES6+)** - No frameworks, pure JS implementation
+- **AI Content Integration** - Async fetch from AgentUXWriter (progressive enhancement)
 
-### External Dependencies (CDN)
-- **Chart.js** - `https://cdn.jsdelivr.net/npm/chart.js` - Data visualization (47+ charts)
+### Backend (FastAPI)
+- **FastAPI** - REST API with 5 endpoints
+- **LangGraph** - Multi-agent orchestrator
+- **Anthropic Claude Sonnet 4** - LLM for all 5 agents
+- **Pinecone** - Vector database (120 vectors, multilingual-e5-large)
+- **Pydantic** - Data validation (12 models)
+- **Loguru** - Structured logging
+
+### External Dependencies (CDN - Frontend)
+- **Chart.js** - `https://cdn.jsdelivr.net/npm/chart.js` - Data visualization (36 charts)
 - **html2pdf.js** - `https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js` - PDF export
 
-### No Build Tools
-- No webpack, transpiler, or bundler
-- No package.json or node_modules
-- Single HTML file contains all styles and scripts
+### External APIs
+- **Anthropic API** - Claude Sonnet 4 (LLM calls, prompt caching)
+- **Pinecone API** - Serverless vector database (US-East-1)
+
+---
+
+## Multi-Agent System v3.0
+
+### Architecture Overview
+
+The system runs 5 specialized AI agents organized in 2 parallel teams, orchestrated by LangGraph:
+
+```
+data_loader_node (106.9 KB JSON, 0 RAG queries)
+  |
+  v
+TEAM 2 PARALLEL (~148s)
+  ├── AgentAnalista   (Performance analysis, 6,154 chars)
+  ├── AgentTecnico    (Biomechanics analysis, 5,389 chars)
+  └── AgentEstratega  (Practice program, 8,857 chars)
+  |
+  v
+TEAM 3 PARALLEL (~156s)
+  ├── AgentUXWriter   (Dashboard content, 10,223 chars)
+  └── AgentCoach      (Coaching reports, 9,842 chars)
+  |
+  v
+writer_node (Motivational sections, 1,236 chars)
+  |
+  v
+END (Total: 41,701 chars, 5.3 minutes)
+```
+
+### Agent Specifications
+
+| Agent | Team | Purpose | Output | Lines |
+|-------|------|---------|--------|-------|
+| AgentAnalista | 2 | Performance analysis | Technical analysis text | 650 |
+| AgentTecnico | 2 | Biomechanics patterns | Biomech analysis text | 550 |
+| AgentEstratega | 2 | Practice program design | Weekly program | 600 |
+| AgentUXWriter | 3 | Dashboard UI content | JSON (10 sections) | 752 |
+| AgentCoach | 3 | Coaching reports | Markdown (PDF-ready) | 807 |
+
+### UXWriter Dashboard Integration (v3.0.1)
+
+AgentUXWriter generates 10 content sections in Spanish that are dynamically inserted into the dashboard:
+
+1. **hero_statement** (50-80 words) --> Tab 1: Mi Identidad
+2. **dna_profile** (30-50 words) --> Tab 1: Mi Identidad
+3. **stat_cards** (array) --> Stats overview
+4. **chart_titles** (object) --> All charts across all tabs
+5. **trend_narratives** (array) --> Temporal evolution
+6. **course_cards** (array) --> Course performance
+7. **club_cards** (array) --> Equipment section
+8. **insight_boxes** (array) --> Tab 5: Analisis Profundo
+9. **quick_wins** (array) --> Tab 6: Estrategia
+10. **roi_cards** (array) --> Tab 6: Estrategia
+
+**Frontend Integration Pattern:**
+- `loadUXContent()` -- async POST to `/generate-content` (non-blocking)
+- `insertUXContent(content)` -- DOM manipulation for 6 content mappings
+- Graceful degradation if backend unavailable (dashboard works without AI content)
+- Progressive enhancement: charts render immediately, AI content appears ~70s later
+
+### API Endpoints
+
+| Method | Path | Purpose | Time |
+|--------|------|---------|------|
+| GET | `/` | Health check | <100ms |
+| POST | `/ingest` | Data ingestion to Pinecone | ~2s |
+| POST | `/query` | RAG query | 10-15s |
+| POST | `/analyze` | Full multi-agent workflow (5 agents) | ~5.3 min |
+| POST | `/generate-content` | UXWriter content only | ~60-70s |
+
+### Cost Analysis
+
+- Monthly operational cost: **$0.52/month** (~EUR 0.46)
+- Per-call (no cache): $0.185
+- Per-call (with cache): $0.110
+- Prompt caching saves 90% on skill tokens
+- 0 RAG queries (eliminated bottleneck)
+
+### Key Design Decisions
+
+1. **0 RAG queries:** Replaced Analytics Pro bottleneck with direct JSON loading
+2. **Separate /generate-content endpoint:** UXWriter runs standalone (~70s) vs full workflow (~5.3 min)
+3. **Progressive enhancement:** Dashboard loads charts first, AI content loads async
+4. **Graceful degradation:** Dashboard fully functional without backend
+5. **Spanish-only:** All AI-generated content in Spanish, motivational tone
 
 ## Application Architecture
 
@@ -525,6 +657,7 @@ Before committing new chart integration:
 
 ### Commit Message Patterns
 ```
+feat(v3.0): complete UXWriter dashboard integration
 feat(sprint13): integrate smash_factor_evolution chart
 fix(sprint13): resolve dashboardData undefined errors
 refactor(charts): apply safety pattern to all 14 Sprint 13A charts
@@ -534,7 +667,7 @@ docs(readme): update with Sprint 13 completion status
 ### Branch Strategy
 - Main branch: `main`
 - All development on `main` (single developer project)
-- Tags for major versions: `v5.0.0`
+- Tags for major versions: `v5.0.0`, `v3.0`
 
 ### Pre-Commit Checklist
 - [ ] All console errors resolved
@@ -542,3 +675,19 @@ docs(readme): update with Sprint 13 completion status
 - [ ] dashboard_data.json in root for GitHub Pages
 - [ ] No hardcoded paths to local directories
 - [ ] All changes functional on both environments
+- [ ] Backend server starts without errors (`python -m app.main`)
+- [ ] /generate-content endpoint responds correctly
+- [ ] AI content integration tested in dashboard
+
+---
+
+## Version History
+
+| Version | Date | Description |
+|---------|------|-------------|
+| v3.0.1 | 2026-02-17 | UXWriter dashboard integration + documentation consolidation |
+| v3.0.0 | 2026-02-16 | Multi-Agent System complete (5 agents, architecture optimization) |
+| v5.1.1 | 2026-02-13 | Heatmap + Mobile optimization |
+| v5.1.0 | 2026-02-12 | 10D radar + data corrections |
+| v5.0.0 | 2026-02-09 | 36 charts dynamized (100% completion) |
+| TIER 1 | 2026-02-15 | Agentic analytics engine (FastAPI + RAG + Agent) |

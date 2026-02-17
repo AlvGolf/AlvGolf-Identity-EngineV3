@@ -145,6 +145,29 @@ class AnalyzeResponse(BaseModel):
     cache_hit: bool = False
 
 
+# ============ Content Generation (Team 3 - UXWriter) ============
+
+class ContentGenerateRequest(BaseModel):
+    """Request for POST /generate-content endpoint"""
+    user_id: str = Field(..., description="User ID")
+    force_refresh: bool = Field(False, description="Force fresh content generation")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "user_id": "alvaro",
+                "force_refresh": False
+            }
+        }
+
+
+class ContentGenerateResponse(BaseModel):
+    """Response for POST /generate-content endpoint (Team 3 - AgentUXWriter)"""
+    content: dict = Field(..., description="Dashboard content sections (hero_statement, dna_profile, stat_cards, etc.)")
+    metadata: dict = Field(..., description="Generation metadata (model, content_length, etc.)")
+    generated_at: datetime = Field(default_factory=datetime.now)
+
+
 # ============ Error ============
 
 class ErrorResponse(BaseModel):

@@ -124,6 +124,245 @@
             });
 
         // ============================================================
+        // LOAD UX CONTENT FROM AGENTUXWRITER (TEAM 3)
+        // ============================================================
+
+        async function loadUXContent() {
+            try {
+                console.log('📝 Loading UX content from AgentUXWriter...');
+
+                const response = await fetch('http://localhost:8000/generate-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: 'alvaro',
+                        force_refresh: false
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                let content = data.content;
+
+                // Handle raw_content wrapper (if AgentUXWriter returns markdown-wrapped JSON)
+                if (content.raw_content && !content.hero_statement) {
+                    console.log('📦 Parsing raw_content wrapper...');
+                    try {
+                        // Remove markdown code fence if present
+                        let rawContent = content.raw_content;
+                        if (rawContent.startsWith('```json')) {
+                            rawContent = rawContent.replace(/```json\n/, '').replace(/\n```$/, '');
+                        }
+                        content = JSON.parse(rawContent);
+                        console.log('✅ Successfully parsed wrapped content');
+                    } catch (parseError) {
+                        console.error('❌ Failed to parse raw_content:', parseError);
+                        throw new Error('Content parsing failed');
+                    }
+                }
+
+                console.log('✅ UX content loaded successfully');
+                console.log('📊 Content sections:', Object.keys(content));
+
+                // Insert content into dashboard sections
+                insertUXContent(content);
+
+            } catch (error) {
+                console.warn('⚠️ Could not load UX content from backend:', error.message);
+                console.warn('   Dashboard will use default content.');
+                // Don't show alert - this is optional enhancement
+            }
+        }
+
+        function insertUXContent(content) {
+            console.log('🎨 Inserting UX content into dashboard...');
+
+            // 1. Hero statement (tab overview)
+            if (content.hero_statement) {
+                const heroElement = document.querySelector('#overview h1');
+                if (heroElement) {
+                    // Create or update hero statement section
+                    let heroSection = document.getElementById('hero-statement-section');
+                    if (!heroSection) {
+                        heroSection = document.createElement('div');
+                        heroSection.id = 'hero-statement-section';
+                        heroSection.style.cssText = 'background: rgba(74,159,216,0.1); padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #4A9FD8;';
+                        heroElement.parentElement.insertBefore(heroSection, heroElement.nextSibling);
+                    }
+                    heroSection.innerHTML = `<p style="font-size: 1.1em; line-height: 1.6; color: #E8E8E8; margin: 0;">${content.hero_statement}</p>`;
+                    console.log('  ✓ Hero statement inserted');
+                }
+            }
+
+            // 2. DNA profile (tab overview)
+            if (content.dna_profile) {
+                // Look for identity or DNA section
+                const overviewTab = document.getElementById('overview');
+                if (overviewTab) {
+                    let dnaSection = document.getElementById('dna-profile-section');
+                    if (!dnaSection) {
+                        dnaSection = document.createElement('div');
+                        dnaSection.id = 'dna-profile-section';
+                        dnaSection.className = 'score-card';
+                        dnaSection.style.cssText = 'background: linear-gradient(135deg, rgba(90,191,143,0.2) 0%, rgba(74,159,216,0.2) 100%); margin: 20px 0;';
+                        // Insert after first chart-container
+                        const firstChart = overviewTab.querySelector('.chart-container');
+                        if (firstChart) {
+                            firstChart.parentElement.insertBefore(dnaSection, firstChart.nextSibling);
+                        }
+                    }
+                    dnaSection.innerHTML = `
+                        <h3 style="color: #5ABF8F; margin-bottom: 10px;">🧬 Tu ADN Golfístico</h3>
+                        <p style="font-size: 1em; line-height: 1.6; color: #E8E8E8;">${content.dna_profile}</p>
+                    `;
+                    console.log('  ✓ DNA profile inserted');
+                }
+            }
+
+            // 3. Chart titles - Update all chart titles if provided
+            if (content.chart_titles && typeof content.chart_titles === 'object') {
+                for (const [chartId, titles] of Object.entries(content.chart_titles)) {
+                    const chartElement = document.getElementById(chartId);
+                    if (chartElement) {
+                        // Find parent container and update title
+                        const container = chartElement.closest('.chart-container');
+                        if (container) {
+                            const titleElement = container.querySelector('h2, h3');
+                            if (titleElement && titles.title) {
+                                titleElement.textContent = titles.title;
+                            }
+                            // Add subtitle if provided
+                            if (titles.subtitle) {
+                                let subtitleElement = container.querySelector('.chart-subtitle');
+                                if (!subtitleElement) {
+                                    subtitleElement = document.createElement('p');
+                                    subtitleElement.className = 'chart-subtitle';
+                                    subtitleElement.style.cssText = 'color: #AAA; font-size: 0.9em; margin-top: 5px;';
+                                    titleElement.parentElement.insertBefore(subtitleElement, titleElement.nextSibling);
+                                }
+                                subtitleElement.textContent = titles.subtitle;
+                            }
+                        }
+                    }
+                }
+                console.log(`  ✓ Updated ${Object.keys(content.chart_titles).length} chart titles`);
+            }
+
+            // 4. Quick wins (tab strategy)
+            if (content.quick_wins && Array.isArray(content.quick_wins) && content.quick_wins.length > 0) {
+                const strategyTab = document.getElementById('strategy');
+                if (strategyTab) {
+                    let quickWinsSection = document.getElementById('ai-quick-wins-section');
+                    if (!quickWinsSection) {
+                        quickWinsSection = document.createElement('div');
+                        quickWinsSection.id = 'ai-quick-wins-section';
+                        quickWinsSection.className = 'chart-container';
+                        strategyTab.insertBefore(quickWinsSection, strategyTab.firstChild);
+                    }
+
+                    const quickWinsHTML = `
+                        <h2>⚡ Victorias Rápidas (Generado por IA)</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.quick_wins.map(win => `
+                                <div style="background: rgba(90,191,143,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                                    <h3 style="color: #5ABF8F; margin-bottom: 10px;">${win.title || 'Oportunidad'}</h3>
+                                    <p style="color: #E8E8E8; margin-bottom: 15px;">${win.description || win.text || ''}</p>
+                                    ${win.impact ? `<p style="color: #D4B55A; font-weight: bold;">💡 Impacto: ${win.impact}</p>` : ''}
+                                    ${win.effort ? `<p style="color: #AAA; font-size: 0.9em;">🎯 Esfuerzo: ${win.effort}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    quickWinsSection.innerHTML = quickWinsHTML;
+                    console.log(`  ✓ Inserted ${content.quick_wins.length} quick wins`);
+                }
+            }
+
+            // 5. ROI cards (tab strategy)
+            if (content.roi_cards && Array.isArray(content.roi_cards) && content.roi_cards.length > 0) {
+                const strategyTab = document.getElementById('strategy');
+                if (strategyTab) {
+                    let roiSection = document.getElementById('ai-roi-section');
+                    if (!roiSection) {
+                        roiSection = document.createElement('div');
+                        roiSection.id = 'ai-roi-section';
+                        roiSection.className = 'chart-container';
+                        strategyTab.appendChild(roiSection);
+                    }
+
+                    const roiHTML = `
+                        <h2>📈 Plan de Acción ROI (Generado por IA)</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.roi_cards.map((card, index) => `
+                                <div style="background: rgba(74,159,216,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #4A9FD8;">
+                                    <h3 style="color: #4A9FD8; margin-bottom: 10px;">${index + 1}. ${card.title || 'Acción'}</h3>
+                                    <p style="color: #E8E8E8; margin-bottom: 15px;">${card.description || card.action || ''}</p>
+                                    ${card.expected_improvement ? `<p style="color: #5ABF8F; font-weight: bold;">📊 Mejora esperada: ${card.expected_improvement}</p>` : ''}
+                                    ${card.timeframe ? `<p style="color: #D4B55A;">⏱️ Plazo: ${card.timeframe}</p>` : ''}
+                                    ${card.priority ? `<p style="color: #E88B7A; font-size: 0.9em;">🎯 Prioridad: ${card.priority}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    roiSection.innerHTML = roiHTML;
+                    console.log(`  ✓ Inserted ${content.roi_cards.length} ROI cards`);
+                }
+            }
+
+            // 6. Insight boxes (tab deep-analysis)
+            if (content.insight_boxes && Array.isArray(content.insight_boxes) && content.insight_boxes.length > 0) {
+                const deepAnalysisTab = document.getElementById('deep-analysis');
+                if (deepAnalysisTab) {
+                    let insightsSection = document.getElementById('ai-insights-section');
+                    if (!insightsSection) {
+                        insightsSection = document.createElement('div');
+                        insightsSection.id = 'ai-insights-section';
+                        insightsSection.className = 'chart-container';
+                        deepAnalysisTab.insertBefore(insightsSection, deepAnalysisTab.firstChild);
+                    }
+
+                    const insightsHTML = `
+                        <h2>💡 Insights Clave (Generado por IA)</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.insight_boxes.map(insight => `
+                                <div style="background: rgba(212,181,90,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #D4B55A;">
+                                    <h3 style="color: #D4B55A; margin-bottom: 10px;">${insight.title || 'Insight'}</h3>
+                                    <p style="color: #E8E8E8; margin-bottom: 15px;">${insight.description || insight.text || ''}</p>
+                                    ${insight.recommendation ? `<p style="color: #5ABF8F; font-style: italic;">→ ${insight.recommendation}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    insightsSection.innerHTML = insightsHTML;
+                    console.log(`  ✓ Inserted ${content.insight_boxes.length} insights`);
+                }
+            }
+
+            console.log('✅ UX content integration complete');
+        }
+
+        // ============================================================
+        // LOAD UX CONTENT AFTER DASHBOARD IS READY
+        // ============================================================
+
+        // Listen for dashboardDataReady and load UX content after delay
+        document.addEventListener('dashboardDataReady', function() {
+            console.log('🎯 dashboardDataReady detected - scheduling UX content load');
+
+            setTimeout(() => {
+                console.log('⏰ Starting UX content load now...');
+                loadUXContent().catch(err => {
+                    console.warn('⚠️ UX content loading failed (non-critical):', err.message);
+                });
+            }, 5000);  // Wait 5 seconds for all charts to initialize
+        }, { once: true });  // Only execute once
+
+        // ============================================================
 
         // Sticky header auto-hide y scroll to top button
         document.addEventListener('DOMContentLoaded', function() {
@@ -16320,7 +16559,12 @@
             return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         }
 
-        new Chart(campoPerfCtx, {
+        // Destroy existing chart if present (prevents "Canvas already in use" error)
+        if (window.chartInstances && window.chartInstances.campoPerfChart) {
+            window.chartInstances.campoPerfChart.destroy();
+        }
+
+        window.chartInstances.campoPerfChart = new Chart(campoPerfCtx, {
             type: 'bar',
             data: {
                 labels: campoPerfLabels,
@@ -16398,7 +16642,6 @@
 
         // Inicializar gráfico cuando los datos estén listos
         document.addEventListener('dashboardDataReady', initializeCampoPerfChart);
-        setTimeout(initializeCampoPerfChart, 500);
 
         // 3. Quarterly Trend
         const quarterlyTrendCtx = document.getElementById('quarterlyTrendChart').getContext('2d');
