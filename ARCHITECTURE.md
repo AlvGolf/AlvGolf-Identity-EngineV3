@@ -1,409 +1,454 @@
-# AlvGolf - Arquitectura del Sistema
+# AlvGolf - Architecture Diagrams v3.0.1
 
-**Versión:** 5.1.1 + TIER 1
-**Fecha:** 2026-02-15
+**Version:** 3.0.1 - Multi-Agent System + UXWriter Dashboard Integration  
+**Date:** 2026-02-17  
+**Purpose:** Comprehensive architectural reference for future development sessions
 
 ---
 
-## 🏗️ Arquitectura General
+## 1. Complete System Architecture (v3.0.1)
 
 ```mermaid
 graph TB
-    subgraph "User Interface"
-        U[Usuario]
+    subgraph "User Layer"
+        U[Usuario / Browser]
     end
 
     subgraph "Frontend Layer"
-        A[dashboard_dynamic.html<br/>v5.1.1 - 36 Charts]
-        B[dashboard_agentic.html<br/>TIER 1 - IA Insights]
+        FD[dashboard_dynamic.html<br/>v5.1.1 - 36 Charts + AI Content]
+        FA[dashboard_agentic.html<br/>Multi-Agent Insights v3.0]
     end
 
-    subgraph "Backend TIER 1"
-        C[FastAPI Server<br/>:8000]
-        D[RAG Core]
-        E[Analytics Pro Agent]
+    subgraph "FastAPI Backend - localhost:8000"
+        EP1["GET / (health)"]
+        EP2["POST /ingest"]
+        EP3["POST /query"]
+        EP4["POST /analyze (5 agents)"]
+        EP5["POST /generate-content (UXWriter)"]
     end
 
-    subgraph "Backend v5.1.0"
-        F[generate_dashboard_data.py<br/>52 functions]
+    subgraph "Multi-Agent Orchestrator (LangGraph)"
+        DL[data_loader_node<br/>106.9 KB JSON, 0 RAG]
+
+        subgraph "TEAM 2 - Analytics (Parallel)"
+            A1[AgentAnalista<br/>Performance Analysis<br/>650 lines]
+            A2[AgentTecnico<br/>Biomechanics<br/>550 lines]
+            A3[AgentEstratega<br/>Practice Design<br/>600 lines]
+        end
+
+        subgraph "TEAM 3 - Content (Parallel)"
+            A4[AgentUXWriter<br/>Dashboard Content<br/>752 lines]
+            A5[AgentCoach<br/>Coaching Reports<br/>807 lines]
+        end
+
+        WR[Dashboard Writer<br/>Motivational Sections]
+    end
+
+    subgraph "Data Processing"
+        GEN[generate_dashboard_data.py<br/>52 functions, v5.1.0]
     end
 
     subgraph "Data Storage"
-        G[dashboard_data.json<br/>197 KB]
-        H[Pinecone Vector DB<br/>120 vectors]
-        I[Raw Data<br/>FlightScope + Tarjetas]
+        JSON[dashboard_data.json<br/>106.9 KB, 52 keys]
+        PC[Pinecone Vector DB<br/>120 vectors, namespace: alvaro]
+        RAW[Raw Data<br/>FlightScope (493 shots)<br/>Tarjetas (52 rounds)]
     end
 
-    subgraph "External APIs"
-        J[Claude Sonnet 4<br/>Anthropic]
-        K[Pinecone Embeddings<br/>multilingual-e5-large]
+    subgraph "External Services"
+        CLAUDE[Anthropic Claude Sonnet 4<br/>LLM + Prompt Caching]
+        PCAPI[Pinecone Embeddings<br/>multilingual-e5-large, 1024 dim]
     end
 
-    U -->|Browse| A
-    A -->|Click IA Insights| B
-    B -->|POST /analyze| C
-    C -->|RAG Query| D
-    D -->|Embed| K
-    D -->|Search| H
-    C -->|Generate| E
-    E -->|LLM Call| J
-    I -->|Process| F
-    F -->|Output| G
-    G -->|Load| A
-    G -->|Ingest| H
+    U -->|Browse| FD
+    U -->|Click IA Insights| FA
+    FD -->|"POST /generate-content<br/>(async, 60-70s)"| EP5
+    FA -->|"POST /analyze<br/>(5.3 min)"| EP4
+
+    EP4 --> DL
+    EP5 --> A4
+
+    DL -->|"100% data"| A1 & A2 & A3
+    A1 & A2 & A3 -->|"Team 2 output<br/>20,400 chars"| A4 & A5
+    A4 & A5 -->|"Team 3 output<br/>20,065 chars"| WR
+    WR -->|Response| FA
+
+    EP5 -->|"Load JSON"| JSON
+    A4 -->|"Content JSON"| FD
+
+    RAW -->|ETL| GEN
+    GEN -->|Generate| JSON
+    JSON -->|"fetch() on load"| FD
+    JSON -->|Load| DL
+
+    A1 & A2 & A3 & A4 & A5 -->|LLM Calls| CLAUDE
+    EP2 -->|Embed + Store| PC
+    EP3 -->|"Embed + Search"| PCAPI
+    PCAPI --> PC
 ```
 
 ---
 
-## 🔄 Data Flow - Analytics Agent
+## 2. UXWriter Dashboard Integration Flow
 
 ```mermaid
 sequenceDiagram
     participant U as Usuario
-    participant D as Dashboard
-    participant F as FastAPI
-    participant R as RAG Core
-    participant P as Pinecone
-    participant E as Embeddings API
-    participant C as Claude Sonnet 4
-    participant A as Analytics Agent
+    participant FE as dashboard_dynamic.html
+    participant API as FastAPI :8000
+    participant UXW as AgentUXWriter
+    participant CL as Claude Sonnet 4
+    participant FS as File System
 
-    U->>D: Click "Generar Análisis"
-    D->>D: Show loading (30-45s)
-    D->>F: POST /analyze {user_id}
-    F->>A: invoke analytics_agent()
-    A->>R: rag_answer(user_id, context_prompt)
-    R->>E: embed_texts([prompt])
-    E-->>R: embeddings [1024 dim]
-    R->>P: query(vector, top_k=5, namespace)
-    P-->>R: matches with metadata
-    R->>R: build_context()
-    R->>C: invoke(prompt + context)
-    Note over C: Generate 5 sections<br/>30-45 seconds
-    C-->>R: analysis text
-    R-->>A: context + answer
-    A->>A: format_5_sections()
-    A-->>F: analysis JSON
-    F-->>D: {analysis, generated_at}
-    D->>D: parseAndDisplayAnalysis()
-    D->>D: Hide loading, show sections
-    D-->>U: Display 5 sections
+    Note over FE: Page Load Begins
+
+    FE->>FS: fetch('dashboard_data.json')
+    FS-->>FE: 106.9 KB JSON
+    FE->>FE: dispatch('dashboardDataReady')
+    FE->>FE: Render 36 charts immediately
+
+    Note over FE: Charts visible (< 1s)
+
+    FE->>API: POST /generate-content<br/>{user_id: "alvaro"}
+    Note over FE: Non-blocking async call
+
+    API->>FS: Load dashboard_data.json
+    FS-->>API: 106.9 KB
+
+    API->>UXW: agent.write(user_id, dashboard_data)
+    UXW->>UXW: Build prompt with skill<br/>(~6,000 tokens cached)
+    UXW->>CL: invoke(skill + data context)
+
+    Note over CL: Generate 10 sections<br/>in Spanish (60-70s)
+
+    CL-->>UXW: JSON content response
+    UXW->>UXW: Parse + validate content
+    UXW-->>API: {content: {...}, metadata: {...}}
+
+    API-->>FE: ContentGenerateResponse
+
+    FE->>FE: insertUXContent(content)
+    FE->>FE: 1. Insert hero_statement (Tab 1)
+    FE->>FE: 2. Insert dna_profile (Tab 1)
+    FE->>FE: 3. Update chart_titles (All tabs)
+    FE->>FE: 4. Insert quick_wins (Tab 6)
+    FE->>FE: 5. Insert roi_cards (Tab 6)
+    FE->>FE: 6. Insert insight_boxes (Tab 5)
+
+    Note over FE: AI content appears (~70s after load)
+
+    FE-->>U: Dashboard fully enhanced
 ```
 
 ---
 
-## 🗂️ Estructura de Datos
-
-### Vector Database (Pinecone)
+## 3. AI Content Lifecycle in Dashboard
 
 ```mermaid
-erDiagram
-    PINECONE_INDEX {
-        string id PK
-        float vector_1024_dim
-        string user_id
-        string date
-        string source
-        string club
-        string text
-    }
+stateDiagram-v2
+    [*] --> PageLoad: User opens dashboard
 
-    NAMESPACE {
-        string name PK
-        int vector_count
-    }
+    PageLoad --> ChartsReady: dashboard_data.json loaded
+    PageLoad --> FetchingAI: POST /generate-content (parallel)
 
-    DATA_SOURCES {
-        string type
-        int count
-    }
+    ChartsReady --> DashboardVisible: 36 charts rendered
+    DashboardVisible --> WaitingForAI: User sees charts, AI loading
 
-    PINECONE_INDEX ||--o{ NAMESPACE : contains
-    NAMESPACE ||--o{ DATA_SOURCES : includes
+    FetchingAI --> AgentProcessing: AgentUXWriter invoked
+    AgentProcessing --> LLMCall: Claude API call (~60-70s)
+    LLMCall --> ContentParsing: JSON response received
+    ContentParsing --> ContentReady: 10 sections validated
 
-    DATA_SOURCES {
-        club_statistics 22
-        momentum 52
-        course_performance 11
-        quarterly_scoring 7
-        strokes_gained 6
-        hcp_evolution 5
-        best_rounds 3
-        worst_rounds 3
-    }
+    FetchingAI --> FetchFailed: Network/API error
+    FetchFailed --> GracefulDegradation: Dashboard works without AI
+
+    WaitingForAI --> ContentReady: Content arrives
+    ContentReady --> InsertContent: insertUXContent() called
+
+    InsertContent --> HeroInserted: hero_statement in Tab 1
+    InsertContent --> DNAInserted: dna_profile in Tab 1
+    InsertContent --> TitlesUpdated: chart_titles across tabs
+    InsertContent --> QuickWinsInserted: quick_wins in Tab 6
+    InsertContent --> ROIInserted: roi_cards in Tab 6
+    InsertContent --> InsightsInserted: insight_boxes in Tab 5
+
+    HeroInserted --> FullyEnhanced
+    DNAInserted --> FullyEnhanced
+    TitlesUpdated --> FullyEnhanced
+    QuickWinsInserted --> FullyEnhanced
+    ROIInserted --> FullyEnhanced
+    InsightsInserted --> FullyEnhanced
+
+    GracefulDegradation --> DashboardVisible: Static content only
+
+    FullyEnhanced --> [*]: Dashboard complete with AI content
 ```
 
-### API Models (Pydantic)
+---
+
+## 4. Multi-Agent Orchestration Workflow
+
+```mermaid
+graph LR
+    subgraph "Phase 1: Data Loading (~0.05s)"
+        DL[data_loader_node]
+        JSON[(dashboard_data.json<br/>106.9 KB)]
+        JSON --> DL
+    end
+
+    subgraph "Phase 2: Team 2 Analytics (~148s)"
+        direction TB
+        T2[team2_parallel_node]
+        AN[AgentAnalista<br/>6,154 chars]
+        TE[AgentTecnico<br/>5,389 chars]
+        ES[AgentEstratega<br/>8,857 chars]
+        T2 --> AN & TE & ES
+    end
+
+    subgraph "Phase 3: Team 3 Content (~156s)"
+        direction TB
+        T3[team3_parallel_node]
+        UX[AgentUXWriter<br/>10,223 chars]
+        CO[AgentCoach<br/>9,842 chars]
+        T3 --> UX & CO
+    end
+
+    subgraph "Phase 4: Output (~13s)"
+        WR[writer_node<br/>1,236 chars]
+        OUT[Final Output<br/>41,701 chars total]
+        WR --> OUT
+    end
+
+    DL -->|"100% data"| T2
+    T2 -->|"Team 2 analysis"| T3
+    T3 -->|"All content"| WR
+
+    style DL fill:#4A9FD8,color:#fff
+    style T2 fill:#5ABF8F,color:#fff
+    style T3 fill:#D4B55A,color:#000
+    style WR fill:#E88B7A,color:#fff
+```
+
+---
+
+## 5. Data Flow: Frontend-Backend-AI
+
+```mermaid
+flowchart TD
+    subgraph "Raw Data Sources"
+        FS[FlightScope CSV<br/>493 shots, 11 clubs]
+        TC[Tarjetas XLSX<br/>52 rounds, 11 courses]
+        PDF[RFEG PDF<br/>Official HCP history]
+    end
+
+    subgraph "Backend Generator (Python)"
+        GEN[generate_dashboard_data.py<br/>52 functions]
+        ETL["ETL Pipeline:<br/>1. Load raw data<br/>2. Calculate metrics<br/>3. Generate charts data<br/>4. Output JSON"]
+    end
+
+    subgraph "Static Data Layer"
+        DJ[dashboard_data.json<br/>106.9 KB, 52 keys]
+    end
+
+    subgraph "Frontend (HTML + JS)"
+        LOAD["fetch('dashboard_data.json')"]
+        CHARTS[Chart.js Rendering<br/>36 dynamic charts]
+        UXLOAD["loadUXContent()<br/>POST /generate-content"]
+        INSERT["insertUXContent()<br/>6 content mappings"]
+    end
+
+    subgraph "AI Layer (FastAPI + Claude)"
+        ENDPOINT["/generate-content endpoint"]
+        AGENT[AgentUXWriter<br/>Skill: 6,000 tokens]
+        LLM[Claude Sonnet 4<br/>Prompt Caching]
+    end
+
+    subgraph "Dashboard Output"
+        TAB1["Tab 1: Mi Identidad<br/>+ hero_statement<br/>+ dna_profile"]
+        TAB5["Tab 5: Analisis Profundo<br/>+ insight_boxes"]
+        TAB6["Tab 6: Estrategia<br/>+ quick_wins<br/>+ roi_cards"]
+        TITLES["All Tabs<br/>+ chart_titles"]
+    end
+
+    FS & TC & PDF --> GEN
+    GEN --> ETL --> DJ
+
+    DJ --> LOAD --> CHARTS
+    DJ --> ENDPOINT
+
+    LOAD -.->|"After charts ready"| UXLOAD
+    UXLOAD --> ENDPOINT
+    ENDPOINT --> AGENT --> LLM
+    LLM --> AGENT --> ENDPOINT --> UXLOAD
+    UXLOAD --> INSERT
+
+    INSERT --> TAB1 & TAB5 & TAB6 & TITLES
+```
+
+---
+
+## 6. Cost and Performance Architecture
+
+```mermaid
+graph TB
+    subgraph "Execution Costs (Monthly: $0.52)"
+        direction LR
+        COLD["Cold Call: $0.185<br/>(1x/month)"]
+        CACHED["Cached Calls: $0.110<br/>(3x/month)"]
+        TOTAL["Total: $0.515/month<br/>~EUR 0.46/month"]
+        COLD --> TOTAL
+        CACHED --> TOTAL
+    end
+
+    subgraph "Performance Breakdown (317.7s total)"
+        P1["Data Loader<br/>0.05s (0.02%)"]
+        P2["Team 2 Parallel<br/>148.4s (46.7%)"]
+        P3["Team 3 Parallel<br/>156.3s (49.2%)"]
+        P4["Writer Node<br/>13.1s (4.1%)"]
+        P1 --> P2 --> P3 --> P4
+    end
+
+    subgraph "Optimization Techniques"
+        O1["0 RAG Queries<br/>(eliminated bottleneck)"]
+        O2["Prompt Caching<br/>(90% input savings)"]
+        O3["Parallel Execution<br/>(2 parallel stages)"]
+        O4["Single JSON Load<br/>(vs 4 RAG queries)"]
+    end
+
+    subgraph "Performance Evolution"
+        V1["MVP: 80s, 1 agent, $0.13"]
+        V2["Team 2: 166s, 3 agents, $0.50"]
+        V3["Team 3: 318s, 5 agents, $0.52"]
+        V1 --> V2 --> V3
+    end
+```
+
+---
+
+## 7. API Endpoint Architecture
+
+```mermaid
+graph LR
+    subgraph "FastAPI Application (localhost:8000)"
+        direction TB
+
+        H["GET /<br/>Health Check<br/><100ms"]
+        I["POST /ingest<br/>Data Ingestion<br/>~2s"]
+        Q["POST /query<br/>RAG Query<br/>10-15s"]
+        A["POST /analyze<br/>Full Multi-Agent<br/>~5.3 min"]
+        C["POST /generate-content<br/>UXWriter Only<br/>~60-70s"]
+    end
+
+    subgraph "Dependencies"
+        RAG[RAG Core<br/>Pinecone + Embeddings]
+        ORCH[Orchestrator<br/>LangGraph Workflow]
+        UXW[AgentUXWriter<br/>Standalone]
+    end
+
+    subgraph "Consumers"
+        DA[dashboard_agentic.html]
+        DD[dashboard_dynamic.html]
+        CLI[curl / scripts]
+    end
+
+    I --> RAG
+    Q --> RAG
+    A --> ORCH
+    C --> UXW
+
+    DA -->|"/analyze"| A
+    DD -->|"/generate-content"| C
+    CLI -->|"any endpoint"| H & I & Q & A & C
+```
+
+---
+
+## 8. Pydantic Models Architecture (Updated v3.0.1)
 
 ```mermaid
 classDiagram
+    class HealthResponse {
+        +status: Literal[healthy, degraded, unhealthy]
+        +version: str
+        +message: str
+        +timestamp: datetime
+    }
+
     class ShotData {
-        +string date
-        +string source
-        +string club
-        +int hole
-        +float ball_speed
-        +float carry
-        +float launch_angle
-        +float face_to_path
-        +float score
-        +string notes
+        +date: str
+        +source: str
+        +club: str
+        +hole: int
+        +ball_speed: float
+        +carry: float
+        +launch_angle: float
+        +face_to_path: float
+        +score: float
+        +notes: str
     }
 
     class IngestRequest {
-        +string user_id
-        +List~ShotData~ shots
+        +user_id: str
+        +shots: List~ShotData~
     }
 
     class IngestResponse {
-        +string status
-        +int chunks_ingested
-        +string message
+        +status: Literal[ok, error]
+        +chunks_ingested: int
+        +message: str
     }
 
     class QueryRequest {
-        +string user_id
-        +string prompt
+        +user_id: str
+        +prompt: str
     }
 
     class QueryResponse {
-        +string answer
+        +answer: str
+        +context_used: List~str~
     }
 
     class AnalyzeRequest {
-        +string user_id
+        +user_id: str
+        +force_refresh: bool
+    }
+
+    class MotivationalSections {
+        +dna: str
+        +progress: str
+        +action: str
     }
 
     class AnalyzeResponse {
-        +string analysis
-        +datetime generated_at
+        +technical_analysis: str
+        +motivational_sections: MotivationalSections
+        +generated_at: datetime
+        +tokens_used: int
+        +cache_hit: bool
+    }
+
+    class ContentGenerateRequest {
+        +user_id: str
+        +force_refresh: bool
+    }
+
+    class ContentGenerateResponse {
+        +content: dict
+        +metadata: dict
+        +generated_at: datetime
+    }
+
+    class ErrorResponse {
+        +error: str
+        +detail: str
+        +timestamp: datetime
     }
 
     IngestRequest --> ShotData
+    AnalyzeResponse --> MotivationalSections
 ```
 
 ---
 
-## 🎯 Analytics Pro Agent Architecture
-
-```mermaid
-graph LR
-    subgraph "Input"
-        A[user_id]
-    end
-
-    subgraph "RAG Context Retrieval"
-        B[rag_answer]
-        C[Pinecone Search<br/>top_k=5]
-        D[Context Documents]
-    end
-
-    subgraph "Agent Processing"
-        E[System Prompt<br/>~2000 tokens]
-        F[Claude Sonnet 4<br/>temp=0.1]
-        G[Prompt Caching]
-    end
-
-    subgraph "Output"
-        H[5 Sections<br/>~2000 tokens]
-    end
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    E --> G
-    F --> H
-
-    style G fill:#90EE90
-    style H fill:#FFD700
-```
-
-### Agent Sections
-
-1. **TECHNICAL PATTERNS** - Swing analysis
-2. **STATISTICAL TRENDS** - Performance evolution
-3. **MAIN GAPS** - Critical improvement areas
-4. **RECOMMENDATIONS** - Drills + Strategy
-5. **PREDICTION** - 30-day projection
-
----
-
-## 🔐 Security Architecture
-
-```mermaid
-graph TB
-    subgraph "API Security"
-        A[CORS Middleware]
-        B[Environment Variables]
-        C[API Keys Rotation]
-    end
-
-    subgraph "Data Privacy"
-        D[Namespace Isolation]
-        E[Local-only Backend]
-        F[No External Tracking]
-    end
-
-    subgraph "Access Control"
-        G[localhost:8000-8001 only]
-        H[Single User: alvaro]
-        I[No Authentication<br/>Development]
-    end
-
-    A --> G
-    B --> C
-    D --> H
-    E --> F
-```
-
----
-
-## 📈 Deployment Architecture (Future)
-
-```mermaid
-graph TB
-    subgraph "Production - TIER 4"
-        A[Vercel<br/>Frontend]
-        B[Railway/Render<br/>Backend]
-        C[Pinecone Cloud<br/>Vector DB]
-        D[Anthropic API<br/>Claude]
-    end
-
-    subgraph "Current - TIER 1"
-        E[localhost:8001<br/>Frontend]
-        F[localhost:8000<br/>Backend]
-        G[Pinecone Serverless<br/>US-East-1]
-        H[Anthropic API<br/>Claude]
-    end
-
-    style E fill:#90EE90
-    style F fill:#90EE90
-    style G fill:#90EE90
-    style H fill:#90EE90
-```
-
----
-
-## 🔄 TIER 2 Architecture (Planned)
-
-```mermaid
-graph TB
-    subgraph "Multi-Agent System"
-        A[FastAPI Endpoint<br/>/analyze]
-        B[LangGraph Orchestrator]
-        C[Analytics Pro Agent<br/>Technical Analysis]
-        D[Dashboard Writer Agent<br/>Motivational Text]
-    end
-
-    subgraph "Output"
-        E[3 IA Sections<br/>Motivational]
-        F[5 Technical Sections<br/>Optional View]
-    end
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    C -.-> F
-
-    style B fill:#FFD700
-    style D fill:#87CEEB
-```
-
----
-
-## 📊 Performance Architecture
-
-```mermaid
-graph LR
-    subgraph "Optimization Strategies"
-        A[Prompt Caching<br/>90% savings]
-        B[Batching<br/>96 texts/request]
-        C[Serverless<br/>Pay-per-use]
-        D[Top-K Retrieval<br/>Only 5 docs]
-    end
-
-    subgraph "Performance Metrics"
-        E[API Health: <100ms]
-        F[RAG Query: 10-15s]
-        G[Analytics: 30-45s]
-        H[Cost: $0.015/analysis]
-    end
-
-    A --> H
-    B --> G
-    C --> H
-    D --> F
-```
-
----
-
-## 🧪 Testing Architecture
-
-```mermaid
-graph TB
-    subgraph "Test Pyramid"
-        A[E2E Tests<br/>4 tests]
-        B[Integration Tests<br/>API + RAG]
-        C[Unit Tests<br/>Models + Utils]
-    end
-
-    subgraph "Test Coverage"
-        D[API Health: 100%]
-        E[Analytics Agent: 100%]
-        F[Dashboard: 100%]
-        G[CORS: 100%]
-    end
-
-    A --> D
-    A --> E
-    A --> F
-    A --> G
-    B --> E
-```
-
----
-
-## 📁 Code Architecture
-
-```
-app/
-├── __init__.py
-├── main.py              # FastAPI app + endpoints
-├── config.py            # Settings (.env)
-├── models.py            # Pydantic (10 models)
-├── rag.py               # RAG Core
-└── agents/
-    └── analytics_pro.py # Analytics Agent
-
-scripts/
-├── ingest_full_data.py       # 120 vectors
-├── test_*.py                 # 7 test scripts
-
-dashboard_agentic.html        # 520 lines (HTML+CSS+JS)
-```
-
----
-
-## 🌊 Error Handling Flow
-
-```mermaid
-graph TB
-    A[User Request] --> B{API Available?}
-    B -->|No| C[Show Error Badge]
-    B -->|Yes| D{Generate Analysis}
-    D -->|Success| E[Display 5 Sections]
-    D -->|Timeout| F[Show Timeout Message]
-    D -->|Error| G[Show Error + Retry Button]
-    C --> H[User Alerted]
-    F --> H
-    G --> H
-    E --> I[Analysis Complete]
-```
-
----
-
-**Documentado por:** Claude Sonnet 4.5
-**Fecha:** 2026-02-15
+**Created by:** Claude Sonnet 4  
+**Date:** 2026-02-17  
+**Purpose:** Comprehensive architectural diagrams for AlvGolf Multi-Agent System v3.0.1
