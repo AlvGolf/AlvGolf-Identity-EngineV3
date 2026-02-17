@@ -8,7 +8,7 @@
 
 ## 1. Complete System Architecture (v3.0.1)
 
-```mermaid
+<!--```mermaid
 graph TB
     subgraph "User Layer"
         U[Usuario / Browser]
@@ -83,7 +83,8 @@ graph TB
     A1 & A2 & A3 & A4 & A5 -->|LLM Calls| CLAUDE
     EP2 -->|Embed + Store| PC
     EP3 -->|"Embed + Search"| PCAPI
-    PCAPI --> PC
+    88-->
+    
 ```
 
 ---
