@@ -2877,7 +2877,699 @@
                         }
                     </style>
                 </div>
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  GOLF IDENTITY BLOCK — insertar en ADN Golfístico tab  -->
+<!-- ═══════════════════════════════════════════════════════ -->
 
+<style>
+/* ── Variables compartidas con el dashboard ───────────────── */
+:root {
+  --gi-gold:      #c9a84c;
+  --gi-gold-dim:  #8a6f30;
+  --gi-teal:      #4fc3a1;
+  --gi-teal-dim:  #2d7a65;
+  --gi-red:       #e05c5c;
+  --gi-blue:      #5b9bd5;
+  --gi-bg:        rgba(10, 18, 12, 0.85);
+  --gi-card:      rgba(255,255,255,0.04);
+  --gi-border:    rgba(201,168,76,0.18);
+  --gi-text:      #d4d8cc;
+  --gi-muted:     #7a8070;
+  --elite:        #4fc3a1;
+  --strong:       #5b9bd5;
+  --developing:   #c9a84c;
+  --focus_area:   #e05c5c;
+}
+
+/* ── Contenedor principal ─────────────────────────────────── */
+.gi-wrapper {
+  margin: 40px 0 20px;
+  padding: 0 4px;
+  animation: giFadeIn 0.7s ease both;
+}
+@keyframes giFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Cabecera arquetipo ───────────────────────────────────── */
+.gi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: linear-gradient(135deg,
+    rgba(201,168,76,0.12) 0%,
+    rgba(79,195,161,0.08) 50%,
+    rgba(10,18,12,0.0) 100%);
+  border: 1px solid var(--gi-border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.gi-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gi-gold), var(--gi-teal), transparent);
+}
+.gi-header-left { flex: 1; min-width: 200px; }
+.gi-archetype-id {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--gi-gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-family: 'Courier New', monospace;
+}
+.gi-archetype-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #eef0e8;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.gi-archetype-tagline {
+  font-size: 13px;
+  color: var(--gi-teal);
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+.gi-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.gi-fit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid var(--gi-gold-dim);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: var(--gi-gold);
+}
+.gi-fit-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gi-gold);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.gi-evolution {
+  font-size: 11px;
+  color: var(--gi-muted);
+  text-align: right;
+}
+.gi-evolution span { color: var(--gi-teal); }
+
+/* ── Grid principal: radar + scores ──────────────────────── */
+.gi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+@media (max-width: 768px) {
+  .gi-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Panel de scores por zona ────────────────────────────── */
+.gi-scores-panel {
+  background: var(--gi-card);
+  border: 1px solid var(--gi-border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.gi-panel-title {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gi-muted);
+  margin-bottom: 16px;
+}
+.gi-dim-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.gi-dim-row:last-child { margin-bottom: 0; }
+.gi-dim-label {
+  font-size: 11px;
+  color: var(--gi-text);
+  width: 86px;
+  flex-shrink: 0;
+  letter-spacing: 0.2px;
+}
+.gi-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.gi-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;  /* starts at 0, animated via JS */
+}
+.gi-dim-score {
+  font-size: 12px;
+  font-weight: 700;
+  width: 34px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.gi-dim-zone {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  width: 72px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+/* Zone colors */
+.zone-elite      { color: var(--elite);      }
+.zone-strong     { color: var(--strong);     }
+.zone-developing { color: var(--developing); }
+.zone-focus_area { color: var(--focus_area); }
+.bar-elite      { background: linear-gradient(90deg, var(--gi-teal-dim), var(--elite)); }
+.bar-strong     { background: linear-gradient(90deg, #3a6a9a, var(--strong)); }
+.bar-developing { background: linear-gradient(90deg, var(--gi-gold-dim), var(--gi-gold)); }
+.bar-focus_area { background: linear-gradient(90deg, #8a3030, var(--gi-red)); }
+
+/* ── Radar mini (SVG generado por JS) ───────────────────── */
+.gi-radar-panel {
+  background: var(--gi-card);
+  border: 1px solid var(--gi-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.gi-radar-svg {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+}
+
+/* ── Insight personalizado ───────────────────────────────── */
+.gi-insight {
+  background: linear-gradient(135deg,
+    rgba(79,195,161,0.06) 0%,
+    rgba(10,18,12,0) 100%);
+  border: 1px solid rgba(79,195,161,0.2);
+  border-left: 3px solid var(--gi-teal);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.gi-insight-label {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gi-teal);
+  margin-bottom: 8px;
+}
+.gi-insight-text {
+  font-size: 13px;
+  color: var(--gi-text);
+  line-height: 1.65;
+}
+.gi-insight-text .highlight-strength { color: var(--elite); font-weight: 600; }
+.gi-insight-text .highlight-gap      { color: var(--gi-red); font-weight: 600; }
+.gi-insight-text .highlight-hcp      { color: var(--gi-gold); font-weight: 600; }
+
+/* ── Fila bottom: estrategia + similares ─────────────────── */
+.gi-bottom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .gi-bottom { grid-template-columns: 1fr; }
+}
+.gi-strategy {
+  background: var(--gi-card);
+  border: 1px solid var(--gi-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.gi-strategy-label {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gi-gold);
+  margin-bottom: 10px;
+}
+.gi-strategy-text {
+  font-size: 12.5px;
+  color: var(--gi-text);
+  line-height: 1.7;
+}
+.gi-pros {
+  background: var(--gi-card);
+  border: 1px solid var(--gi-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.gi-pros-label {
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gi-muted);
+  margin-bottom: 12px;
+}
+.gi-pro-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--gi-text);
+}
+.gi-pro-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gi-gold);
+  flex-shrink: 0;
+}
+
+/* ── Overall score badge ─────────────────────────────────── */
+.gi-overall {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--gi-card);
+  border: 1px solid var(--gi-border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.gi-overall-score-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+.gi-overall-num {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--gi-gold);
+  line-height: 1;
+}
+.gi-overall-denom {
+  font-size: 14px;
+  color: var(--gi-muted);
+}
+.gi-overall-divider {
+  width: 1px; height: 48px;
+  background: var(--gi-border);
+}
+.gi-overall-stats {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.gi-stat-item { display: flex; flex-direction: column; gap: 2px; }
+.gi-stat-label { font-size: 10px; color: var(--gi-muted); letter-spacing: 1px; text-transform: uppercase; }
+.gi-stat-val   { font-size: 16px; font-weight: 700; color: var(--gi-text); }
+.gi-stat-val.teal   { color: var(--gi-teal); }
+.gi-stat-val.gold   { color: var(--gi-gold); }
+</style>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  HTML STRUCTURE                                           -->
+<!-- ══════════════════════════════════════════════════════════ -->
+
+<div class="gi-wrapper" id="golfIdentityBlock">
+
+  <!-- Cabecera arquetipo -->
+  <div class="gi-header">
+    <div class="gi-header-left">
+      <div class="gi-archetype-id" id="gi-arch-id">B3</div>
+      <div class="gi-archetype-name" id="gi-arch-name">El Artista Completo</div>
+      <div class="gi-archetype-tagline" id="gi-arch-tagline">Short game + putting como ventaja real</div>
+    </div>
+    <div class="gi-header-right">
+      <div class="gi-fit-badge">
+        <div class="gi-fit-dot"></div>
+        <span>Identidad validada · <span id="gi-fit-pct">67%</span> match</span>
+      </div>
+      <div class="gi-evolution">
+        Evolución natural → <span id="gi-evo-name">El Amateur Completo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overall score + stats rápidas -->
+  <div class="gi-overall">
+    <div class="gi-overall-score-wrap">
+      <div class="gi-overall-num" id="gi-overall-num">—</div>
+      <div class="gi-overall-denom">/10</div>
+    </div>
+    <div class="gi-overall-divider"></div>
+    <div class="gi-overall-stats">
+      <div class="gi-stat-item">
+        <div class="gi-stat-label">Tee to Green</div>
+        <div class="gi-stat-val teal" id="gi-t2g">—</div>
+      </div>
+      <div class="gi-stat-item">
+        <div class="gi-stat-label">Scoring Game</div>
+        <div class="gi-stat-val teal" id="gi-sg">—</div>
+      </div>
+      <div class="gi-stat-item">
+        <div class="gi-stat-label">Fortaleza</div>
+        <div class="gi-stat-val" id="gi-strength-stat" style="color:var(--elite)">—</div>
+      </div>
+      <div class="gi-stat-item">
+        <div class="gi-stat-label">Foco de mejora</div>
+        <div class="gi-stat-val" id="gi-gap-stat" style="color:var(--focus_area)">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid: barras de dimensiones + radar -->
+  <div class="gi-grid">
+
+    <!-- Panel de scores -->
+    <div class="gi-scores-panel">
+      <div class="gi-panel-title">Perfil de 8 Dimensiones</div>
+      <div id="gi-dimensions-list">
+        <!-- Generado por JS -->
+      </div>
+    </div>
+
+    <!-- Radar SVG -->
+    <div class="gi-radar-panel">
+      <div class="gi-panel-title" style="width:100%">Radar · Scoring Engine</div>
+      <svg class="gi-radar-svg" id="gi-radar-svg" viewBox="0 0 260 260">
+        <!-- Generado por JS -->
+      </svg>
+    </div>
+
+  </div>
+
+  <!-- Insight personalizado -->
+  <div class="gi-insight">
+    <div class="gi-insight-label">✦ Insight personalizado</div>
+    <div class="gi-insight-text" id="gi-insight-text">
+      <!-- Generado por JS con highlighting -->
+    </div>
+  </div>
+
+  <!-- Estrategia + Pro references -->
+  <div class="gi-bottom">
+    <div class="gi-strategy">
+      <div class="gi-strategy-label">⚡ Estrategia prioritaria</div>
+      <div class="gi-strategy-text" id="gi-strategy-text">—</div>
+    </div>
+    <div class="gi-pros">
+      <div class="gi-pros-label">Referencias Pro</div>
+      <div id="gi-pros-list">—</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  JAVASCRIPT                                              -->
+<!-- ══════════════════════════════════════════════════════════ -->
+
+<script>
+(function() {
+  'use strict';
+
+  // Nombres en español para las 8 dimensiones
+  const DIM_LABELS = {
+    long_game:   'Long Game',
+    mid_game:    'Mid Game',
+    short_game:  'Short Game',
+    putting:     'Putting',
+    consistency: 'Consistency',
+    mental:      'Mental',
+    power:       'Power',
+    accuracy:    'Accuracy',
+  };
+
+  const DIM_ORDER = ['long_game','mid_game','short_game','putting','consistency','mental','power','accuracy'];
+
+  function initGolfIdentity() {
+    // Leer datos del JSON global (ajusta el nombre de la variable si es distinto)
+    const dd = window.dashboardData || window.dashboard_data;
+    if (!dd) {
+      console.warn('[GolfIdentity] dashboardData no disponible');
+      return;
+    }
+
+    const sp = dd.scoring_profile;
+    const gi = dd.golf_identity;
+
+    if (!sp || !gi) {
+      console.warn('[GolfIdentity] scoring_profile o golf_identity no encontrados en JSON');
+      document.getElementById('golfIdentityBlock').style.display = 'none';
+      return;
+    }
+
+    // ── Cabecera ────────────────────────────────────────────
+    document.getElementById('gi-arch-id').textContent       = gi.archetype_id;
+    document.getElementById('gi-arch-name').textContent     = gi.archetype_name;
+    document.getElementById('gi-arch-tagline').textContent  = gi.archetype_tagline;
+    document.getElementById('gi-fit-pct').textContent       = Math.round(gi.fit_score * 100) + '%';
+    if (gi.evolution_target) {
+      document.getElementById('gi-evo-name').textContent = gi.evolution_target.name;
+    }
+
+    // ── Overall score ───────────────────────────────────────
+    document.getElementById('gi-overall-num').textContent = sp.overall_score.toFixed(1);
+    document.getElementById('gi-t2g').textContent         = sp.tee_to_green.toFixed(1);
+    document.getElementById('gi-sg').textContent          = sp.scoring_game.toFixed(1);
+
+    const [strengthDim, strengthVal] = sp.top_strength;
+    const [gapDim, gapVal]           = sp.top_gap;
+    document.getElementById('gi-strength-stat').textContent =
+      DIM_LABELS[strengthDim] + ' · ' + strengthVal.toFixed(1);
+    document.getElementById('gi-gap-stat').textContent =
+      DIM_LABELS[gapDim] + ' · ' + gapVal.toFixed(1);
+
+    // ── Dimensiones: barras ─────────────────────────────────
+    const dimList = document.getElementById('gi-dimensions-list');
+    dimList.innerHTML = '';
+
+    DIM_ORDER.forEach(dimKey => {
+      const dim = sp.dimensions[dimKey];
+      if (!dim) return;
+
+      const pct = Math.min(100, (dim.score / 10) * 100);
+      const row = document.createElement('div');
+      row.className = 'gi-dim-row';
+      row.innerHTML = `
+        <div class="gi-dim-label">${DIM_LABELS[dimKey]}</div>
+        <div class="gi-bar-track">
+          <div class="gi-bar-fill bar-${dim.zone}" 
+               style="width:0%" 
+               data-target="${pct}%"></div>
+        </div>
+        <div class="gi-dim-score zone-${dim.zone}">${dim.score.toFixed(1)}</div>
+        <div class="gi-dim-zone zone-${dim.zone}">${zoneLabel(dim.zone)}</div>
+      `;
+      dimList.appendChild(row);
+    });
+
+    // Animar barras con delay escalonado
+    setTimeout(() => {
+      document.querySelectorAll('.gi-bar-fill').forEach((bar, i) => {
+        setTimeout(() => {
+          bar.style.width = bar.dataset.target;
+        }, i * 80);
+      });
+    }, 200);
+
+    // ── Radar SVG ───────────────────────────────────────────
+    renderRadar(sp.dimensions);
+
+    // ── Insight con highlighting ────────────────────────────
+    const insightEl = document.getElementById('gi-insight-text');
+    let insightText = gi.personalized_insight;
+
+    // Highlight strength
+    insightText = insightText.replace(
+      new RegExp(DIM_LABELS[strengthDim], 'gi'),
+      `<span class="highlight-strength">${DIM_LABELS[strengthDim]}</span>`
+    );
+    // Highlight gap
+    insightText = insightText.replace(
+      new RegExp(DIM_LABELS[gapDim], 'gi'),
+      `<span class="highlight-gap">${DIM_LABELS[gapDim]}</span>`
+    );
+    // Highlight HCP
+    insightText = insightText.replace(
+      /HCP\s*[\d.]+/g,
+      m => `<span class="highlight-hcp">${m}</span>`
+    );
+    insightEl.innerHTML = insightText;
+
+    // ── Estrategia ──────────────────────────────────────────
+    document.getElementById('gi-strategy-text').textContent = gi.archetype_strategy;
+
+    // ── Pro references ──────────────────────────────────────
+    const prosList = document.getElementById('gi-pros-list');
+    prosList.innerHTML = '';
+    (gi.pro_references || []).forEach(pro => {
+      const el = document.createElement('div');
+      el.className = 'gi-pro-item';
+      el.innerHTML = `<div class="gi-pro-dot"></div><span>${pro}</span>`;
+      prosList.appendChild(el);
+    });
+  }
+
+  // ── Radar SVG renderer ─────────────────────────────────────
+  function renderRadar(dimensions) {
+    const svg     = document.getElementById('gi-radar-svg');
+    const cx      = 130, cy = 130, R = 100;
+    const keys    = DIM_ORDER;
+    const n       = keys.length;
+    const zoneColors = {
+      elite: '#4fc3a1', strong: '#5b9bd5',
+      developing: '#c9a84c', focus_area: '#e05c5c'
+    };
+
+    svg.innerHTML = '';
+
+    // Grid rings (2, 4, 6, 8, 10)
+    const rings = [2, 4, 6, 8, 10];
+    rings.forEach(ring => {
+      const r = (ring / 10) * R;
+      const pts = keys.map((_, i) => {
+        const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+        return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+      });
+      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+      poly.setAttribute('fill',   'none');
+      poly.setAttribute('stroke', ring === 10 ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.05)');
+      poly.setAttribute('stroke-width', '1');
+      svg.appendChild(poly);
+
+      // Label del ring
+      if (ring % 4 === 0) {
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lbl.setAttribute('x', cx + 4);
+        lbl.setAttribute('y', cy - r + 4);
+        lbl.setAttribute('font-size', '7');
+        lbl.setAttribute('fill', 'rgba(255,255,255,0.25)');
+        lbl.textContent = ring;
+        svg.appendChild(lbl);
+      }
+    });
+
+    // Ejes
+    keys.forEach((_, i) => {
+      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+      const x2 = cx + R * Math.cos(angle);
+      const y2 = cy + R * Math.sin(angle);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('stroke', 'rgba(255,255,255,0.08)');
+      line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+    });
+
+    // Área del jugador
+    const playerPts = keys.map((key, i) => {
+      const dim   = dimensions[key];
+      const score = dim ? dim.score : 5;
+      const r     = (score / 10) * R;
+      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+    });
+
+    const area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    area.setAttribute('points', playerPts.map(p => p.join(',')).join(' '));
+    area.setAttribute('fill',         'rgba(79,195,161,0.15)');
+    area.setAttribute('stroke',       '#4fc3a1');
+    area.setAttribute('stroke-width', '1.5');
+    svg.appendChild(area);
+
+    // Puntos + labels
+    keys.forEach((key, i) => {
+      const dim   = dimensions[key];
+      const score = dim ? dim.score : 5;
+      const zone  = dim ? dim.zone  : 'developing';
+      const [px, py] = playerPts[i];
+      const angle    = (i / n) * 2 * Math.PI - Math.PI / 2;
+
+      // Punto
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', px); dot.setAttribute('cy', py);
+      dot.setAttribute('r', '4');
+      dot.setAttribute('fill', zoneColors[zone] || '#4fc3a1');
+      dot.setAttribute('stroke', '#0a120c'); dot.setAttribute('stroke-width', '1.5');
+      svg.appendChild(dot);
+
+      // Label
+      const lx = cx + (R + 18) * Math.cos(angle);
+      const ly = cy + (R + 18) * Math.sin(angle);
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', lx);
+      label.setAttribute('y', ly + 3);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('font-size', '8');
+      label.setAttribute('fill', zoneColors[zone] || 'rgba(255,255,255,0.5)');
+      label.textContent = DIM_LABELS[key].split(' ')[0];
+      svg.appendChild(label);
+    });
+  }
+
+  // ── Helper: etiqueta zona ────────────────────────────────────
+  function zoneLabel(zone) {
+    return { elite: 'ÉLITE', strong: 'FUERTE', developing: 'DEVELOP', focus_area: 'FOCO' }[zone] || zone;
+  }
+
+  // ── Init: esperar a que los datos estén disponibles ─────────
+  function waitForData(attempts) {
+    const dd = window.dashboardData || window.dashboard_data;
+    if (dd && (dd.scoring_profile || dd.golf_identity)) {
+      initGolfIdentity();
+    } else if (attempts > 0) {
+      setTimeout(() => waitForData(attempts - 1), 150);
+    } else {
+      console.warn('[GolfIdentity] Timeout esperando dashboardData');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => waitForData(20));
+  } else {
+    waitForData(20);
+  }
+
+})();
+</script>
+
+
+
+<script>
+  // Inyectar datos reales del JSON (en producción ya estarán en window.dashboardData)
+  window.dashboardData = {"generated_at": "2026-02-12T02:54:53.648410", "player_stats": {"total_rondas": 52, "mejor_score": 88, "peor_score": 117, "promedio_score": 100.57692307692308, "handicap_actual": 23.2, "mejora_handicap": -8.8, "primera_ronda": "2024-04-15", "ultima_ronda": "2025-12-07", "campos_jugados": 11, "golpes_flightscope": 493}, "club_statistics": [{"name": "Driver", "distance": "212.8m", "deviation": "10.2m I", "speed": "235.5 km/h", "rating": 5, "category": "long", "distance_raw": 212.76237623762376, "speed_raw": 235.54455445544554, "smash_factor_est": 1.42, "club_speed_est": 165.9}, {"name": "3 Wood", "distance": "202.3m", "deviation": "2.9m I", "speed": "226.7 km/h", "rating": 5, "category": "long", "distance_raw": 202.32258064516128, "speed_raw": 226.74193548387098, "smash_factor_est": 1.35, "club_speed_est": 168.0}, {"name": "Hybrid", "distance": "160.5m", "deviation": "4.9m I", "speed": "207.6 km/h", "rating": 5, "category": "long", "distance_raw": 160.5, "speed_raw": 207.64285714285714, "smash_factor_est": 1.35, "club_speed_est": 153.8}, {"name": "5 Iron", "distance": "148.0m", "deviation": "19.8m D", "speed": "192.5 km/h", "rating": 5, "category": "mid", "distance_raw": 148.0, "speed_raw": 192.5, "smash_factor_est": 1.35, "club_speed_est": 142.6}, {"name": "6 Iron", "distance": "132.8m", "deviation": "12.8m I", "speed": "174.5 km/h", "rating": 5, "category": "mid", "distance_raw": 132.8, "speed_raw": 174.5, "smash_factor_est": 1.35, "club_speed_est": 129.3}, {"name": "7 Iron", "distance": "136.6m", "deviation": "4.5m I", "speed": "178.3 km/h", "rating": 5, "category": "mid", "distance_raw": 136.60416666666666, "speed_raw": 178.3125, "smash_factor_est": 1.35, "club_speed_est": 132.1}, {"name": "8 Iron", "distance": "119.2m", "deviation": "2.3m D", "speed": "160.6 km/h", "rating": 5, "category": "mid", "distance_raw": 119.225, "speed_raw": 160.575, "smash_factor_est": 1.35, "club_speed_est": 118.9}, {"name": "9 Iron", "distance": "117.6m", "deviation": "0.8m I", "speed": "158.7 km/h", "rating": 5, "category": "short", "distance_raw": 117.5813953488372, "speed_raw": 158.74418604651163, "smash_factor_est": 1.35, "club_speed_est": 117.6}, {"name": "Pitching W", "distance": "107.7m", "deviation": "2.2m D", "speed": "149.5 km/h", "rating": 5, "category": "short", "distance_raw": 107.65, "speed_raw": 149.48333333333332, "smash_factor_est": 1.35, "club_speed_est": 110.7}, {"name": "Gap Wedge", "distance": "93.0m", "deviation": "2.9m I", "speed": "134.6 km/h", "rating": 5, "category": "short", "distance_raw": 93.05, "speed_raw": 134.55, "smash_factor_est": 1.35, "club_speed_est": 99.7}, {"name": "Sand Wedge", "distance": "86.3m", "deviation": "0.4m I", "speed": "129.1 km/h", "rating": 5, "category": "short", "distance_raw": 86.32432432432432, "speed_raw": 129.05405405405406, "smash_factor_est": 1.35, "club_speed_est": 95.6}], "club_gaps": {"Driver-3W": 10.4, "3W-Hybrid": 41.8, "Hybrid-5i": 12.5, "5i-7i": 11.4, "7i-6i": 3.8, "6i-8i": 13.6, "8i-9i": 1.6, "9i-PW": 9.9, "PW-Gap": 14.6, "Gap-Sand": 6.7}, "dispersion_by_club": {"Driver": {"poor": [{"x": -18.4, "y": 202}, {"x": -24.7, "y": 183}, {"x": 15.3, "y": 203}, {"x": -20.3, "y": 184}, {"x": -20.1, "y": 196}, {"x": -51.0, "y": 183}, {"x": -41.8, "y": 200}, {"x": -73.3, "y": 197}, {"x": 15.1, "y": 204}, {"x": -64.0, "y": 171}, {"x": -46.9, "y": 203}, {"x": -23.6, "y": 193}, {"x": -24.2, "y": 201}, {"x": -38.3, "y": 202}, {"x": -29.8, "y": 203}, {"x": -23.5, "y": 184}, {"x": -44.4, "y": 202}, {"x": -22.1, "y": 203}, {"x": 28.8, "y": 200}, {"x": 19.3, "y": 198}], "regular": [{"x": -18.0, "y": 223}, {"x": -39.8, "y": 236}, {"x": -10.9, "y": 200}, {"x": 21.8, "y": 216}, {"x": -29.9, "y": 221}, {"x": 23.7, "y": 220}, {"x": -10.2, "y": 208}, {"x": 30.8, "y": 218}, {"x": -23.0, "y": 222}, {"x": -15.4, "y": 219}, {"x": 5.4, "y": 210}, {"x": 24.3, "y": 223}, {"x": 34.1, "y": 209}, {"x": -32.5, "y": 223}, {"x": -42.9, "y": 218}, {"x": -34.4, "y": 208}, {"x": -23.6, "y": 223}, {"x": -14.9, "y": 226}, {"x": -10.7, "y": 187}, {"x": -80.9, "y": 209}, {"x": 8.3, "y": 209}, {"x": -6.4, "y": 202}, {"x": 0.0, "y": 192}, {"x": -16.5, "y": 217}, {"x": -33.4, "y": 230}, {"x": 6.6, "y": 179}, {"x": -35.9, "y": 219}, {"x": 25.2, "y": 241}, {"x": 23.9, "y": 214}, {"x": -28.5, "y": 225}, {"x": -23.4, "y": 232}, {"x": 18.5, "y": 236}, {"x": -23.1, "y": 226}, {"x": -11.0, "y": 202}, {"x": 36.2, "y": 226}, {"x": -2.4, "y": 211}, {"x": -1.2, "y": 210}, {"x": 12.1, "y": 222}, {"x": -18.0, "y": 223}, {"x": -39.8, "y": 236}, {"x": -10.9, "y": 200}, {"x": 21.8, "y": 216}, {"x": -29.9, "y": 221}, {"x": 23.7, "y": 220}, {"x": -10.2, "y": 208}, {"x": 30.8, "y": 218}, {"x": 33.4, "y": 214}, {"x": -21.6, "y": 220}, {"x": 3.3, "y": 193}, {"x": -44.6, "y": 214}, {"x": -42.4, "y": 232}, {"x": -50.7, "y": 218}, {"x": -19.5, "y": 215}, {"x": -8.8, "y": 199}, {"x": -64.1, "y": 233}, {"x": 0.0, "y": 200}, {"x": 0.0, "y": 203}, {"x": 0.0, "y": 196}, {"x": 0.0, "y": 212}, {"x": 22.0, "y": 210}, {"x": -3.7, "y": 211}], "good": [{"x": -6.5, "y": 218}, {"x": 8.3, "y": 215}, {"x": -9.5, "y": 213}, {"x": -6.5, "y": 218}], "excellent": [{"x": -0.1, "y": 232}, {"x": 4.0, "y": 223}, {"x": 3.7, "y": 223}, {"x": -0.1, "y": 232}, {"x": 0.0, "y": 232}, {"x": 0.0, "y": 226}, {"x": -3.5, "y": 223}, {"x": -4.1, "y": 220}, {"x": 0.0, "y": 222}, {"x": 0.0, "y": 230}, {"x": 0.0, "y": 224}, {"x": 0.0, "y": 221}, {"x": 0.0, "y": 220}, {"x": 0.0, "y": 221}, {"x": 0.0, "y": 220}, {"x": 0.0, "y": 220}], "xMin": -92.6, "xMax": 47.9, "yMin": 164.0, "yMax": 248.0}, "3Wood": {"poor": [{"x": -38.7, "y": 183}, {"x": 20.1, "y": 156}, {"x": -17.8, "y": 192}], "regular": [{"x": -17.3, "y": 199}, {"x": 11.0, "y": 218}, {"x": -13.3, "y": 204}, {"x": -17.4, "y": 209}, {"x": 45.5, "y": 202}, {"x": -6.0, "y": 190}, {"x": 17.4, "y": 201}, {"x": -65.2, "y": 196}, {"x": 11.9, "y": 197}, {"x": 11.9, "y": 193}, {"x": -13.5, "y": 188}, {"x": 4.0, "y": 186}, {"x": -3.1, "y": 184}, {"x": 11.0, "y": 204}, {"x": -13.3, "y": 204}, {"x": -17.4, "y": 209}, {"x": 11.0, "y": 197}], "good": [{"x": 0.0, "y": 204}, {"x": 0.0, "y": 209}, {"x": -6.3, "y": 216}, {"x": -6.3, "y": 216}, {"x": 1.8, "y": 208}], "excellent": [{"x": 0.0, "y": 218}, {"x": 0.0, "y": 221}, {"x": 0.0, "y": 216}, {"x": 1.8, "y": 221}, {"x": -3.5, "y": 210}, {"x": 1.8, "y": 221}], "xMin": -76.3, "xMax": 56.6, "yMin": 149.5, "yMax": 227.5}, "Hybrid": {"poor": [{"x": 20.7, "y": 152}, {"x": 32.1, "y": 139}], "regular": [{"x": -14.7, "y": 163}, {"x": -9.5, "y": 155}, {"x": -11.5, "y": 151}, {"x": -19.4, "y": 163}, {"x": -17.0, "y": 167}, {"x": 9.1, "y": 159}, {"x": -15.0, "y": 169}, {"x": -16.8, "y": 160}, {"x": -23.1, "y": 156}], "good": [{"x": -9.1, "y": 176}, {"x": 6.2, "y": 171}], "excellent": [{"x": -0.7, "y": 166}], "xMin": -28.6, "xMax": 37.6, "yMin": 135.3, "yMax": 179.7}, "5Iron": {"poor": [{"x": 20.9, "y": 146}], "regular": [{"x": 12.6, "y": 145}, {"x": 12.9, "y": 151}, {"x": 38.0, "y": 149}, {"x": 9.6, "y": 147}, {"x": 25.1, "y": 150}], "good": [], "excellent": [], "xMin": 6.8, "xMax": 40.8, "yMin": 144.4, "yMax": 151.6}, "6Iron": {"poor": [{"x": -27.8, "y": 120}, {"x": -20.6, "y": 114}, {"x": -36.5, "y": 117}], "regular": [{"x": 0.0, "y": 130}, {"x": 0.0, "y": 131}, {"x": -39.6, "y": 133}, {"x": -23.0, "y": 130}, {"x": -29.8, "y": 142}, {"x": -15.5, "y": 134}, {"x": 18.8, "y": 136}, {"x": -11.3, "y": 116}, {"x": -22.6, "y": 127}, {"x": 32.6, "y": 128}, {"x": -10.9, "y": 146}, {"x": -33.9, "y": 149}, {"x": -19.9, "y": 127}, {"x": -23.8, "y": 131}, {"x": -30.2, "y": 131}, {"x": -35.9, "y": 133}, {"x": -0.4, "y": 93}, {"x": -30.7, "y": 132}], "good": [{"x": -8.0, "y": 139}, {"x": -9.2, "y": 148}, {"x": -6.4, "y": 138}, {"x": 0.8, "y": 133}, {"x": 0.0, "y": 138}], "excellent": [{"x": 0.0, "y": 140}, {"x": 0.0, "y": 149}, {"x": 0.0, "y": 155}, {"x": -0.8, "y": 144}], "xMin": -46.8, "xMax": 39.8, "yMin": 86.8, "yMax": 161.2}, "7Iron": {"poor": [{"x": -27.1, "y": 123}, {"x": -17.8, "y": 117}], "regular": [{"x": -9.7, "y": 123}, {"x": 0.2, "y": 113}, {"x": 4.6, "y": 127}, {"x": -10.4, "y": 122}, {"x": -8.5, "y": 102}, {"x": -13.1, "y": 137}, {"x": -5.8, "y": 118}, {"x": 12.3, "y": 142}, {"x": -10.1, "y": 142}, {"x": -10.3, "y": 136}, {"x": -13.5, "y": 138}, {"x": 4.0, "y": 128}, {"x": 7.7, "y": 132}, {"x": 12.3, "y": 142}, {"x": -21.3, "y": 146}, {"x": -10.1, "y": 142}, {"x": -21.3, "y": 138}, {"x": -10.3, "y": 136}, {"x": -13.5, "y": 138}, {"x": 4.0, "y": 128}, {"x": -18.3, "y": 139}, {"x": 7.7, "y": 132}, {"x": -22.8, "y": 148}, {"x": 24.2, "y": 136}, {"x": 20.2, "y": 134}, {"x": -13.2, "y": 148}, {"x": 13.4, "y": 143}, {"x": -6.4, "y": 136}, {"x": -9.8, "y": 128}], "good": [{"x": 1.2, "y": 137}, {"x": -7.5, "y": 144}, {"x": -8.0, "y": 143}, {"x": 0.6, "y": 140}, {"x": -6.6, "y": 142}, {"x": -7.7, "y": 139}, {"x": -7.5, "y": 144}, {"x": -8.0, "y": 143}, {"x": 0.6, "y": 140}, {"x": -6.6, "y": 142}, {"x": -7.7, "y": 139}], "excellent": [{"x": 2.6, "y": 147}, {"x": -2.2, "y": 151}, {"x": 0.9, "y": 147}, {"x": 2.6, "y": 147}, {"x": -2.2, "y": 151}, {"x": 0.9, "y": 147}], "xMin": -32.2, "xMax": 29.3, "yMin": 97.1, "yMax": 155.9}, "8Iron": {"poor": [{"x": -24.2, "y": 107}], "regular": [{"x": -10.8, "y": 127}, {"x": 4.4, "y": 107}, {"x": -4.9, "y": 119}, {"x": -19.2, "y": 120}, {"x": 12.5, "y": 117}, {"x": -16.5, "y": 117}, {"x": 17.2, "y": 122}, {"x": 9.1, "y": 116}, {"x": 22.5, "y": 117}, {"x": 4.3, "y": 106}, {"x": 17.9, "y": 116}, {"x": 0.6, "y": 116}, {"x": 17.2, "y": 122}, {"x": 9.1, "y": 116}, {"x": 22.5, "y": 117}, {"x": 4.3, "y": 106}, {"x": 2.2, "y": 109}, {"x": 17.9, "y": 116}, {"x": 0.6, "y": 116}, {"x": 22.1, "y": 120}, {"x": 21.1, "y": 132}, {"x": 16.8, "y": 133}, {"x": 17.6, "y": 126}, {"x": 5.4, "y": 115}, {"x": -2.7, "y": 115}, {"x": 3.0, "y": 117}, {"x": -14.8, "y": 112}, {"x": 0.0, "y": 115}, {"x": -11.7, "y": 126}, {"x": -10.2, "y": 120}], "good": [{"x": -8.9, "y": 128}, {"x": -2.3, "y": 122}, {"x": -7.7, "y": 130}, {"x": -2.3, "y": 122}, {"x": -7.7, "y": 130}, {"x": -7.9, "y": 124}], "excellent": [{"x": -3.9, "y": 127}, {"x": -2.1, "y": 123}, {"x": 2.5, "y": 123}], "xMin": -28.9, "xMax": 27.2, "yMin": 103.3, "yMax": 135.7}, "9Iron": {"poor": [{"x": -17.6, "y": 111}, {"x": -19.4, "y": 105}], "regular": [{"x": -7.2, "y": 106}, {"x": -7.1, "y": 113}, {"x": -13.6, "y": 115}, {"x": -7.0, "y": 100}, {"x": -7.3, "y": 103}, {"x": -4.0, "y": 116}, {"x": 10.2, "y": 119}, {"x": -1.0, "y": 104}, {"x": 8.2, "y": 113}, {"x": 2.4, "y": 107}, {"x": 6.0, "y": 115}, {"x": 9.8, "y": 109}, {"x": -0.0, "y": 114}, {"x": 23.5, "y": 116}, {"x": 7.8, "y": 116}, {"x": -3.9, "y": 98}, {"x": 8.3, "y": 104}, {"x": -26.0, "y": 119}, {"x": -11.0, "y": 114}, {"x": -5.9, "y": 117}, {"x": 3.5, "y": 100}, {"x": -0.4, "y": 110}, {"x": -18.6, "y": 116}, {"x": -20.5, "y": 118}, {"x": -1.8, "y": 106}, {"x": -4.0, "y": 116}, {"x": 10.2, "y": 119}, {"x": -1.0, "y": 104}, {"x": 8.2, "y": 113}, {"x": 2.4, "y": 107}, {"x": 6.0, "y": 115}, {"x": 9.8, "y": 109}, {"x": -0.0, "y": 114}, {"x": 23.5, "y": 116}, {"x": 7.8, "y": 116}, {"x": -3.9, "y": 98}, {"x": 22.7, "y": 160}, {"x": 15.8, "y": 138}, {"x": -19.1, "y": 151}, {"x": -19.3, "y": 150}, {"x": -14.8, "y": 126}, {"x": -8.9, "y": 116}, {"x": -7.9, "y": 117}, {"x": -15.5, "y": 124}, {"x": 12.5, "y": 123}, {"x": 18.8, "y": 122}, {"x": -7.9, "y": 117}, {"x": -15.5, "y": 124}, {"x": 16.9, "y": 134}, {"x": 12.9, "y": 126}, {"x": 12.5, "y": 123}, {"x": 18.8, "y": 122}, {"x": -7.9, "y": 117}, {"x": -15.5, "y": 124}, {"x": 16.9, "y": 134}, {"x": 12.9, "y": 126}, {"x": 8.6, "y": 102}, {"x": -9.6, "y": 102}, {"x": 9.2, "y": 104}, {"x": -14.5, "y": 110}, {"x": 5.8, "y": 103}, {"x": 3.9, "y": 110}, {"x": 5.0, "y": 99}, {"x": -17.4, "y": 115}, {"x": 12.1, "y": 108}, {"x": -4.8, "y": 109}, {"x": -14.3, "y": 110}, {"x": -2.8, "y": 106}], "good": [{"x": -4.3, "y": 123}, {"x": -6.6, "y": 120}, {"x": -4.3, "y": 123}, {"x": -6.6, "y": 120}, {"x": -7.4, "y": 151}, {"x": 7.9, "y": 142}, {"x": -5.2, "y": 127}, {"x": -5.7, "y": 124}, {"x": -5.5, "y": 122}, {"x": -2.5, "y": 119}, {"x": -8.0, "y": 119}], "excellent": [{"x": 1.3, "y": 124}, {"x": -1.6, "y": 127}, {"x": 2.6, "y": 136}, {"x": 2.6, "y": 136}, {"x": 2.6, "y": 136}], "xMin": -30.9, "xMax": 28.4, "yMin": 91.8, "yMax": 166.2}, "PW": {"poor": [{"x": 30.8, "y": 94}], "regular": [{"x": -17.8, "y": 114}, {"x": 11.8, "y": 105}, {"x": 6.5, "y": 102}, {"x": 6.5, "y": 98}, {"x": 0.0, "y": 105}, {"x": 0.0, "y": 98}, {"x": 0.0, "y": 94}, {"x": 0.0, "y": 97}, {"x": 1.3, "y": 103}, {"x": -0.2, "y": 82}, {"x": -3.4, "y": 103}, {"x": 2.1, "y": 78}, {"x": 8.1, "y": 101}, {"x": 0.8, "y": 100}, {"x": 6.9, "y": 86}, {"x": -9.3, "y": 103}, {"x": 13.6, "y": 88}, {"x": 4.8, "y": 91}, {"x": -5.5, "y": 94}, {"x": 14.5, "y": 101}, {"x": -15.5, "y": 110}, {"x": 4.5, "y": 102}, {"x": -12.3, "y": 112}, {"x": -12.2, "y": 104}, {"x": -6.4, "y": 103}, {"x": 15.5, "y": 121}, {"x": 1.9, "y": 107}, {"x": -3.1, "y": 91}, {"x": 5.0, "y": 105}, {"x": -14.1, "y": 109}, {"x": 7.9, "y": 98}, {"x": 5.4, "y": 94}, {"x": -7.9, "y": 97}, {"x": -10.8, "y": 131}, {"x": 16.4, "y": 121}, {"x": 19.9, "y": 114}, {"x": 10.4, "y": 136}, {"x": -0.4, "y": 103}, {"x": -5.2, "y": 106}, {"x": -75.2, "y": 117}, {"x": 34.3, "y": 141}, {"x": 31.0, "y": 121}, {"x": 25.8, "y": 120}, {"x": 31.1, "y": 136}, {"x": 18.3, "y": 123}, {"x": 5.6, "y": 102}, {"x": 1.2, "y": 97}, {"x": -4.7, "y": 105}, {"x": -4.3, "y": 91}], "good": [{"x": 2.7, "y": 113}, {"x": -4.7, "y": 114}, {"x": -1.2, "y": 112}, {"x": 0.0, "y": 109}, {"x": -1.3, "y": 114}, {"x": 6.1, "y": 122}, {"x": -2.9, "y": 110}, {"x": -2.0, "y": 115}, {"x": 5.8, "y": 122}], "excellent": [{"x": -2.5, "y": 174}], "xMin": -86.2, "xMax": 45.2, "yMin": 68.4, "yMax": 183.6}, "GW": {"poor": [], "regular": [{"x": -10.7, "y": 101}, {"x": 0.3, "y": 90}, {"x": -21.8, "y": 103}, {"x": -3.4, "y": 93}, {"x": 1.0, "y": 84}, {"x": -13.0, "y": 91}, {"x": 3.6, "y": 75}, {"x": -1.7, "y": 90}, {"x": 1.0, "y": 87}, {"x": 7.7, "y": 84}, {"x": 6.3, "y": 93}, {"x": 5.4, "y": 89}], "good": [{"x": -8.1, "y": 98}, {"x": -8.1, "y": 97}, {"x": -8.6, "y": 101}, {"x": -7.4, "y": 96}, {"x": 1.0, "y": 94}, {"x": 2.6, "y": 95}], "excellent": [{"x": -1.8, "y": 102}, {"x": -1.8, "y": 98}], "xMin": -24.8, "xMax": 10.7, "yMin": 72.2, "yMax": 105.8}, "SW": {"poor": [], "regular": [{"x": -22.8, "y": 101}, {"x": -23.5, "y": 103}, {"x": -17.0, "y": 93}, {"x": -10.4, "y": 87}, {"x": 19.0, "y": 117}, {"x": 13.2, "y": 125}, {"x": 47.7, "y": 82}, {"x": -1.3, "y": 79}, {"x": 10.5, "y": 82}, {"x": 8.5, "y": 75}, {"x": -1.5, "y": 81}, {"x": -0.9, "y": 72}, {"x": 0.1, "y": 72}, {"x": -2.8, "y": 70}, {"x": -0.6, "y": 67}, {"x": -2.9, "y": 77}, {"x": -5.8, "y": 59}, {"x": -11.0, "y": 79}, {"x": -2.5, "y": 75}, {"x": -6.8, "y": 58}, {"x": -1.3, "y": 79}, {"x": 10.5, "y": 82}, {"x": 8.5, "y": 75}, {"x": -1.5, "y": 81}, {"x": -0.9, "y": 72}, {"x": 0.1, "y": 72}, {"x": -2.8, "y": 70}], "good": [{"x": -2.7, "y": 94}, {"x": -7.7, "y": 98}, {"x": 0.4, "y": 92}, {"x": 9.4, "y": 105}, {"x": -6.0, "y": 106}, {"x": -6.0, "y": 106}], "excellent": [{"x": -3.6, "y": 101}, {"x": -3.1, "y": 95}, {"x": -0.4, "y": 97}, {"x": 2.3, "y": 115}], "xMin": -30.6, "xMax": 54.8, "yMin": 51.3, "yMax": 131.7}}, "temporal_evolution": {"Dr": {"labels": ["2024-06", "2025-03", "2025-07", "2025-11", "2025-12"], "values": [204.4, 210.54545454545453, 218.22222222222223, 213.88888888888889, 212.70689655172413]}, "3W": {"labels": ["2024-09", "2025-06", "2025-07", "2025-09", "2025-12"], "values": [212.27272727272728, 190.0, 186.25, 197.66666666666666, 208.42857142857142]}, "Hyb": {"labels": ["2025-12"], "values": [160.5]}, "5i": {"labels": ["2025-06"], "values": [148.0]}, "6i": {"labels": ["2024-09", "2025-03", "2025-06", "2025-10", "2025-12"], "values": [141.0, 128.83333333333334, 127.0, 139.5, 129.25]}, "7i": {"labels": ["2025-03", "2025-06", "2025-07"], "values": [121.9, 137.5, 141.03125]}, "8i": {"labels": ["2025-03", "2025-08", "2026-01"], "values": [117.64, 127.75, 119.72727272727273]}, "9i": {"labels": ["2025-03", "2025-06", "2025-07", "2025-12"], "values": [112.125, 110.5, 129.96666666666667, 109.15]}, "PW": {"labels": ["2025-03", "2025-06", "2025-08", "2025-11", "2025-12"], "values": [98.0, 107.42857142857143, 118.22727272727273, 108.28571428571429, 97.6]}, "GW 52": {"labels": ["2025-03", "2025-06", "2025-12"], "values": [94.16666666666667, 92.8, 92.44444444444444]}, "SW 58": {"labels": ["2025-04", "2025-06", "2025-12"], "values": [79.625, 84.0, 96.1]}}, "course_statistics": [{"nombre": "LA DEHESA", "rondas_jugadas": 16, "promedio": 102.9375, "mejor_score": 93, "peor_score": 117, "par": 72, "vc": 71.5, "slope": 144, "primera_fecha": "2024-04-19", "ultima_fecha": "2025-12-07"}, {"nombre": "MARINA GOLF", "rondas_jugadas": 11, "promedio": 96.81818181818181, "mejor_score": 88, "peor_score": 105, "par": 71, "vc": 66.4, "slope": 126, "primera_fecha": "2024-07-19", "ultima_fecha": "2025-11-16"}, {"nombre": "REAL CLUB LAS ROZAS MADRID", "rondas_jugadas": 8, "promedio": 104.625, "mejor_score": 97, "peor_score": 110, "par": 70, "vc": 69.2, "slope": 127, "primera_fecha": "2024-05-23", "ultima_fecha": "2025-10-01"}, {"nombre": "VALLE DEL ESTE", "rondas_jugadas": 5, "promedio": 96.4, "mejor_score": 89, "peor_score": 112, "par": 71, "vc": 68.9, "slope": 127, "primera_fecha": "2024-07-23", "ultima_fecha": "2025-11-15"}, {"nombre": "RFEG", "rondas_jugadas": 3, "promedio": 105.0, "mejor_score": 104, "peor_score": 107, "par": 72, "vc": 71.1, "slope": 126, "primera_fecha": "2024-04-15", "ultima_fecha": "2024-05-09"}, {"nombre": "NUEVO PORTIL", "rondas_jugadas": 2, "promedio": 90.5, "mejor_score": 89, "peor_score": 92, "par": 71, "vc": 69.0, "slope": 125, "primera_fecha": "2024-08-13", "ultima_fecha": "2025-08-16"}, {"nombre": "LA FAISANERA", "rondas_jugadas": 2, "promedio": 102.5, "mejor_score": 99, "peor_score": 106, "par": 71, "vc": 69.7, "slope": 123, "primera_fecha": "2024-06-27", "ultima_fecha": "2024-12-27"}, {"nombre": "GOLF EL ROMPIDO CAMPO NORTE", "rondas_jugadas": 2, "promedio": 95.0, "mejor_score": 94, "peor_score": 96, "par": 72, "vc": 70.1, "slope": 129, "primera_fecha": "2025-08-12", "ultima_fecha": "2025-08-14"}, {"nombre": "DESERT SPRINGS", "rondas_jugadas": 1, "promedio": 99.0, "mejor_score": 99, "peor_score": 99, "par": 71, "vc": 69.9, "slope": 130, "primera_fecha": "2024-08-08", "ultima_fecha": "2024-08-08"}, {"nombre": "PALOMAREJOS GOLF", "rondas_jugadas": 1, "promedio": 108.0, "mejor_score": 108, "peor_score": 108, "par": 72, "vc": 69.8, "slope": 136, "primera_fecha": "2024-12-01", "ultima_fecha": "2024-12-01"}, {"nombre": "CIUDAD FINANCIERA SANTANDER", "rondas_jugadas": 1, "promedio": 101.0, "mejor_score": 101, "peor_score": 101, "par": 72, "vc": 71.5, "slope": 133, "primera_fecha": "2025-05-31", "ultima_fecha": "2025-05-31"}], "score_history": {"rounds": [{"date": "2024-04-15", "course": "RFEG", "score": 107, "differential": 35, "par": 72, "slope": 126, "vc": 71.1, "milestones": ["first_round"]}, {"date": "2024-04-19", "course": "LA DEHESA", "score": 117, "differential": 45, "par": 72, "slope": 144, "vc": 71.5, "milestones": ["worst_round"]}, {"date": "2024-04-29", "course": "RFEG", "score": 104, "differential": 32, "par": 72, "slope": 126, "vc": 71.1, "milestones": []}, {"date": "2024-05-09", "course": "RFEG", "score": 104, "differential": 32, "par": 72, "slope": 126, "vc": 71.1, "milestones": []}, {"date": "2024-05-23", "course": "REAL CLUB LAS ROZAS MADRID", "score": 105, "differential": 35, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-05-27", "course": "REAL CLUB LAS ROZAS MADRID", "score": 110, "differential": 40, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-06-27", "course": "LA FAISANERA", "score": 106, "differential": 35, "par": 71, "slope": 123, "vc": 69.7, "milestones": []}, {"date": "2024-07-19", "course": "MARINA GOLF", "score": 104, "differential": 33, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2024-07-23", "course": "VALLE DEL ESTE", "score": 99, "differential": 28, "par": 71, "slope": 127, "vc": 68.9, "milestones": []}, {"date": "2024-08-04", "course": "MARINA GOLF", "score": 104, "differential": 33, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2024-08-08", "course": "DESERT SPRINGS", "score": 99, "differential": 28, "par": 71, "slope": 130, "vc": 69.9, "milestones": []}, {"date": "2024-08-13", "course": "NUEVO PORTIL", "score": 92, "differential": 21, "par": 71, "slope": 125, "vc": 69.0, "milestones": []}, {"date": "2024-08-18", "course": "VALLE DEL ESTE", "score": 112, "differential": 41, "par": 71, "slope": 127, "vc": 68.9, "milestones": []}, {"date": "2024-08-20", "course": "MARINA GOLF", "score": 98, "differential": 27, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2024-08-24", "course": "MARINA GOLF", "score": 96, "differential": 25, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2024-09-25", "course": "REAL CLUB LAS ROZAS MADRID", "score": 109, "differential": 39, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-09-27", "course": "REAL CLUB LAS ROZAS MADRID", "score": 104, "differential": 34, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-10-25", "course": "LA DEHESA", "score": 110, "differential": 38, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2024-11-08", "course": "REAL CLUB LAS ROZAS MADRID", "score": 97, "differential": 27, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-11-22", "course": "REAL CLUB LAS ROZAS MADRID", "score": 110, "differential": 40, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2024-12-01", "course": "PALOMAREJOS GOLF", "score": 108, "differential": 36, "par": 72, "slope": 136, "vc": 69.8, "milestones": []}, {"date": "2024-12-27", "course": "LA FAISANERA", "score": 99, "differential": 28, "par": 71, "slope": 123, "vc": 69.7, "milestones": []}, {"date": "2025-03-13", "course": "LA DEHESA", "score": 102, "differential": 4, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-04-02", "course": "LA DEHESA", "score": 111, "differential": 39, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-04-13", "course": "MARINA GOLF", "score": 100, "differential": 29, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-04-15", "course": "MARINA GOLF", "score": 105, "differential": 34, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-04-17", "course": "MARINA GOLF", "score": 94, "differential": 23, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-04-30", "course": "LA DEHESA", "score": 105, "differential": 33, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-05-06", "course": "LA DEHESA", "score": 107, "differential": 35, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-05-19", "course": "LA DEHESA", "score": 102, "differential": 30, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-05-23", "course": "REAL CLUB LAS ROZAS MADRID", "score": 103, "differential": 33, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2025-05-31", "course": "CIUDAD FINANCIERA SANTANDER", "score": 101, "differential": 29, "par": 72, "slope": 133, "vc": 71.5, "milestones": []}, {"date": "2025-07-19", "course": "LA DEHESA", "score": 103, "differential": 31, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-07-26", "course": "MARINA GOLF", "score": 93, "differential": 22, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-08-01", "course": "LA DEHESA", "score": 101, "differential": 29, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-08-05", "course": "VALLE DEL ESTE", "score": 92, "differential": 21, "par": 71, "slope": 127, "vc": 68.9, "milestones": []}, {"date": "2025-08-08", "course": "MARINA GOLF", "score": 94, "differential": 23, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-08-12", "course": "GOLF EL ROMPIDO CAMPO NORTE", "score": 94, "differential": 22, "par": 72, "slope": 129, "vc": 70.1, "milestones": []}, {"date": "2025-08-14", "course": "GOLF EL ROMPIDO CAMPO NORTE", "score": 96, "differential": 24, "par": 72, "slope": 129, "vc": 70.1, "milestones": []}, {"date": "2025-08-16", "course": "NUEVO PORTIL", "score": 89, "differential": 18, "par": 71, "slope": 125, "vc": 69.0, "milestones": ["broke_90"]}, {"date": "2025-08-21", "course": "MARINA GOLF", "score": 89, "differential": 18, "par": 71, "slope": 126, "vc": 66.4, "milestones": []}, {"date": "2025-08-24", "course": "VALLE DEL ESTE", "score": 89, "differential": 18, "par": 71, "slope": 127, "vc": 68.9, "milestones": []}, {"date": "2025-09-02", "course": "LA DEHESA", "score": 95, "differential": 23, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-09-07", "course": "LA DEHESA", "score": 100, "differential": 28, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-09-14", "course": "LA DEHESA", "score": 101, "differential": 29, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-10-01", "course": "REAL CLUB LAS ROZAS MADRID", "score": 99, "differential": 29, "par": 70, "slope": 127, "vc": 69.2, "milestones": []}, {"date": "2025-11-10", "course": "LA DEHESA", "score": 107, "differential": 35, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-11-15", "course": "VALLE DEL ESTE", "score": 90, "differential": 19, "par": 71, "slope": 127, "vc": 68.9, "milestones": []}, {"date": "2025-11-16", "course": "MARINA GOLF", "score": 88, "differential": 17, "par": 71, "slope": 126, "vc": 66.4, "milestones": ["personal_best"]}, {"date": "2025-11-30", "course": "LA DEHESA", "score": 97, "differential": 25, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-12-03", "course": "LA DEHESA", "score": 96, "differential": 24, "par": 72, "slope": 144, "vc": 71.5, "milestones": []}, {"date": "2025-12-07", "course": "LA DEHESA", "score": 93, "differential": 21, "par": 72, "slope": 144, "vc": 71.5, "milestones": ["most_recent"]}], "best_round": {"date": "2025-11-16", "course": "MARINA GOLF", "score": 88, "differential": 17, "par": 71, "slope": 126, "vc": 66.4, "milestones": ["personal_best"]}, "worst_round": {"date": "2024-04-19", "course": "LA DEHESA", "score": 117, "differential": 45, "par": 72, "slope": 144, "vc": 71.5, "milestones": ["worst_round"]}, "trend": "improving", "avg_score": 100.6, "total_rounds": 52}, "percentiles": {"distance_percentiles": {"Dr": {"p10": 196.0, "p25": 202.0, "p50": 216.0, "p75": 223.0, "p90": 230.0, "count": 101}, "3W": {"p10": 186.0, "p25": 194.5, "p50": 204.0, "p75": 213.0, "p90": 218.0, "count": 31}, "Hyb": {"p10": 151.3, "p25": 155.2, "p50": 161.5, "p75": 166.8, "p90": 170.4, "count": 14}, "5i": {"p10": 145.5, "p25": 146.2, "p50": 148.0, "p75": 149.8, "p90": 150.5, "count": 6}, "6i": {"p10": 116.9, "p25": 128.5, "p50": 133.0, "p75": 139.8, "p90": 148.1, "count": 30}, "7i": {"p10": 122.7, "p25": 132.0, "p50": 139.0, "p75": 143.0, "p90": 147.0, "count": 48}, "8i": {"p10": 108.8, "p25": 116.0, "p50": 118.0, "p75": 123.2, "p90": 128.2, "count": 40}, "9i": {"p10": 103.5, "p25": 109.0, "p50": 116.0, "p75": 123.0, "p90": 135.0, "count": 86}, "PW": {"p10": 91.0, "p25": 98.0, "p50": 105.0, "p75": 114.0, "p90": 122.1, "count": 60}, "GW 52": {"p10": 84.0, "p25": 89.8, "p50": 93.5, "p75": 98.0, "p90": 101.1, "count": 20}, "SW 58": {"p10": 70.0, "p25": 75.0, "p50": 82.0, "p75": 98.0, "p90": 106.0, "count": 37}}, "score_percentiles": {"p10": 92, "p25": 95, "p50": 101, "p75": 105, "p90": 109, "count": 52}}, "directional_distribution": {"Dr": {"left": 53, "center": 25, "right": 23, "total": 101, "bias": "left", "left_pct": 52.5, "center_pct": 24.8, "right_pct": 22.8}, "3W": {"left": 12, "center": 11, "right": 8, "total": 31, "bias": "neutral", "left_pct": 38.7, "center_pct": 35.5, "right_pct": 25.8}, "Hyb": {"left": 9, "center": 1, "right": 4, "total": 14, "bias": "left", "left_pct": 64.3, "center_pct": 7.1, "right_pct": 28.6}, "5i": {"left": 0, "center": 0, "right": 6, "total": 6, "bias": "right", "left_pct": 0.0, "center_pct": 0.0, "right_pct": 100.0}, "6i": {"left": 19, "center": 9, "right": 2, "total": 30, "bias": "left", "left_pct": 63.3, "center_pct": 30.0, "right_pct": 6.7}, "7i": {"left": 28, "center": 13, "right": 7, "total": 48, "bias": "left", "left_pct": 58.3, "center_pct": 27.1, "right_pct": 14.6}, "8i": {"left": 11, "center": 15, "right": 14, "total": 40, "bias": "neutral", "left_pct": 27.5, "center_pct": 37.5, "right_pct": 35.0}, "9i": {"left": 33, "center": 25, "right": 28, "total": 86, "bias": "neutral", "left_pct": 38.4, "center_pct": 29.1, "right_pct": 32.6}, "PW": {"left": 12, "center": 26, "right": 22, "total": 60, "bias": "right", "left_pct": 20.0, "center_pct": 43.3, "right_pct": 36.7}, "GW 52": {"left": 7, "center": 10, "right": 3, "total": 20, "bias": "left", "left_pct": 35.0, "center_pct": 50.0, "right_pct": 15.0}, "SW 58": {"left": 10, "center": 19, "right": 8, "total": 37, "bias": "neutral", "left_pct": 27.0, "center_pct": 51.4, "right_pct": 21.6}}, "bubble_chart_data": {"bubbles": [{"club": "Driver", "club_code": "Dr", "x": 212.8, "y": 93.4, "size": 101, "category": "long", "std": 14.1}, {"club": "3 Wood", "club_code": "3W", "x": 202.3, "y": 92.9, "size": 31, "category": "long", "std": 14.3}, {"club": "Hybrid", "club_code": "Hyb", "x": 160.5, "y": 94.1, "size": 14, "category": "long", "std": 9.5}, {"club": "5 Iron", "club_code": "5i", "x": 148.0, "y": 98.4, "size": 6, "category": "mid", "std": 2.4}, {"club": "6 Iron", "club_code": "6i", "x": 132.8, "y": 90.6, "size": 30, "category": "mid", "std": 12.5}, {"club": "7 Iron", "club_code": "7i", "x": 136.6, "y": 92.4, "size": 48, "category": "mid", "std": 10.4}, {"club": "8 Iron", "club_code": "8i", "x": 119.2, "y": 94.1, "size": 40, "category": "mid", "std": 7.0}, {"club": "9 Iron", "club_code": "9i", "x": 117.6, "y": 89.3, "size": 86, "category": "mid", "std": 12.5}, {"club": "PW", "club_code": "PW", "x": 107.6, "y": 85.5, "size": 60, "category": "short", "std": 15.6}, {"club": "Gap Wedge", "club_code": "GW 52", "x": 93.0, "y": 92.4, "size": 20, "category": "short", "std": 7.1}, {"club": "Sand Wedge", "club_code": "SW 58", "x": 86.3, "y": 81.1, "size": 37, "category": "short", "std": 16.3}]}, "player_profile_radar": {"labels": ["Short Game", "Tendencia Mejora", "Consistencia", "Smash Factor", "Velocidad Bola", "Club Speed", "Accuracy", "Launch Angle"], "player": [6.4, 8.0, 8.3, 9.7, 10, 10, 5.6, 10.0], "pga_tour": [9.5, 6.0, 8.5, 8.5, 9.0, 9.0, 8.0, 8.5], "hcp15": [8.0, 6.5, 7.0, 7.5, 7.5, 7.5, 6.5, 7.0], "hcp23": [6.5, 5.0, 5.5, 6.5, 6.0, 6.0, 5.0, 6.0]}, "trajectory_data": {"Dr": {"avg_height": 29.0, "max_height": 41.0, "avg_launch_angle": 12.7, "flight_time_est": 9.6, "shot_count": 101}, "3W": {"avg_height": 32.8, "max_height": 47.0, "avg_launch_angle": 15.6, "flight_time_est": 9.1, "shot_count": 31}, "Hyb": {"avg_height": 33.1, "max_height": 41.0, "avg_launch_angle": 17.2, "flight_time_est": 7.2, "shot_count": 14}, "5i": {"avg_height": 33.0, "max_height": 38.0, "avg_launch_angle": 20.5, "flight_time_est": 6.7, "shot_count": 6}, "6i": {"avg_height": 25.0, "max_height": 35.0, "avg_launch_angle": 19.3, "flight_time_est": 6.0, "shot_count": 30}, "7i": {"avg_height": 30.2, "max_height": 37.0, "avg_launch_angle": 22.0, "flight_time_est": 6.1, "shot_count": 48}, "8i": {"avg_height": 26.4, "max_height": 39.0, "avg_launch_angle": 24.4, "flight_time_est": 5.4, "shot_count": 40}, "9i": {"avg_height": 28.0, "max_height": 40.0, "avg_launch_angle": 26.7, "flight_time_est": 5.3, "shot_count": 86}, "PW": {"avg_height": 26.5, "max_height": 34.0, "avg_launch_angle": 29.0, "flight_time_est": 4.8, "shot_count": 60}, "GW 52": {"avg_height": 27.9, "max_height": 34.0, "avg_launch_angle": 35.7, "flight_time_est": 4.2, "shot_count": 20}, "SW 58": {"avg_height": 25.5, "max_height": 36.0, "avg_launch_angle": 36.3, "flight_time_est": 3.9, "shot_count": 37}}, "best_worst_rounds": {"best_rounds": [{"date": "2025-11-16", "course": "MARINA GOLF", "score": 88, "differential": 17, "par": 71, "golpes_ida": [5, 3, 4, 7, 4, 7, 4, 6, 4], "golpes_vuelta": [6, 6, 5, 4, 4, 4, 6, 3, 6], "total_ida": 44, "total_vuelta": 44}, {"date": "2025-08-21", "course": "MARINA GOLF", "score": 89, "differential": 18, "par": 71, "golpes_ida": [4, 3, 7, 7, 3, 4, 5, 6, 4], "golpes_vuelta": [5, 5, 5, 5, 5, 6, 6, 4, 5], "total_ida": 43, "total_vuelta": 46}, {"date": "2025-08-16", "course": "NUEVO PORTIL", "score": 89, "differential": 18, "par": 71, "golpes_ida": [4, 4, 6, 6, 6, 5, 4, 4, 6], "golpes_vuelta": [4, 6, 5, 4, 6, 5, 5, 5, 4], "total_ida": 45, "total_vuelta": 44}], "worst_rounds": [{"date": "2025-04-02", "course": "LA DEHESA", "score": 111, "differential": 39, "par": 72, "golpes_ida": [6, 6, 6, 5, 6, 8, 6, 6, 6], "golpes_vuelta": [6, 5, 7, 6, 9, 6, 7, 5, 5], "total_ida": 55, "total_vuelta": 56}, {"date": "2024-08-18", "course": "VALLE DEL ESTE", "score": 112, "differential": 41, "par": 71, "golpes_ida": [6, 7, 8, 8, 9, 5, 4, 5, 7], "golpes_vuelta": [7, 6, 7, 6, 4, 6, 5, 6, 6], "total_ida": 59, "total_vuelta": 53}, {"date": "2024-04-19", "course": "LA DEHESA", "score": 117, "differential": 45, "par": 72, "golpes_ida": [8, 8, 5, 5, 5, 10, 8, 6, 3], "golpes_vuelta": [6, 8, 7, 7, 7, 8, 5, 6, 5], "total_ida": 58, "total_vuelta": 59}], "comparison": {"avg_best_score": 88.7, "avg_worst_score": 113.3, "score_difference": 24.7, "best_avg_hole_ida": [4.3, 3.3, 5.7, 6.7, 4.3, 5.3, 4.3, 5.3, 4.7], "best_avg_hole_vuelta": [5.0, 5.7, 5.0, 4.3, 5.0, 5.0, 5.7, 4.0, 5.0], "worst_avg_hole_ida": [6.7, 7.0, 6.3, 6.0, 6.7, 7.7, 6.0, 5.7, 5.3], "worst_avg_hole_vuelta": [6.3, 6.3, 7.0, 6.3, 6.7, 6.7, 5.7, 5.7, 5.3]}}, "quarterly_scoring": {"Q1_2025": {"avg_score": 102.0, "rounds": 1, "best": 102, "worst": 102, "trend": "first_quarter", "change_vs_prev": 0}, "Q2_2024": {"avg_score": 107.6, "rounds": 7, "best": 104, "worst": 117, "trend": "declining", "change_vs_prev": -5.6}, "Q2_2025": {"avg_score": 103.1, "rounds": 9, "best": 94, "worst": 111, "trend": "improving", "change_vs_prev": 4.5}, "Q3_2024": {"avg_score": 101.7, "rounds": 10, "best": 92, "worst": 112, "trend": "stable", "change_vs_prev": 1.4}, "Q3_2025": {"avg_score": 95.1, "rounds": 13, "best": 89, "worst": 103, "trend": "improving", "change_vs_prev": 6.6}, "Q4_2024": {"avg_score": 104.8, "rounds": 5, "best": 97, "worst": 110, "trend": "declining", "change_vs_prev": -9.7}, "Q4_2025": {"avg_score": 95.7, "rounds": 7, "best": 88, "worst": 107, "trend": "improving", "change_vs_prev": 9.1}}, "monthly_volatility": {"2024-04": {"avg_score": 109.3, "std_dev": 5.6, "volatility_score": 9.9, "rounds": 3, "cv": 5.1}, "2024-05": {"avg_score": 106.3, "std_dev": 2.6, "volatility_score": 10.0, "rounds": 3, "cv": 2.5}, "2024-06": {"avg_score": 106.0, "std_dev": 0.0, "volatility_score": 0.0, "rounds": 1, "cv": 0.0}, "2024-07": {"avg_score": 101.5, "std_dev": 2.5, "volatility_score": 10.0, "rounds": 2, "cv": 2.5}, "2024-08": {"avg_score": 100.2, "std_dev": 6.4, "volatility_score": 8.6, "rounds": 6, "cv": 6.4}, "2024-09": {"avg_score": 106.5, "std_dev": 2.5, "volatility_score": 10.0, "rounds": 2, "cv": 2.3}, "2024-10": {"avg_score": 110.0, "std_dev": 0.0, "volatility_score": 0.0, "rounds": 1, "cv": 0.0}, "2024-11": {"avg_score": 103.5, "std_dev": 6.5, "volatility_score": 8.7, "rounds": 2, "cv": 6.3}, "2024-12": {"avg_score": 103.5, "std_dev": 4.5, "volatility_score": 10.0, "rounds": 2, "cv": 4.3}, "2025-03": {"avg_score": 102.0, "std_dev": 0.0, "volatility_score": 0.0, "rounds": 1, "cv": 0.0}, "2025-04": {"avg_score": 103.0, "std_dev": 5.7, "volatility_score": 9.5, "rounds": 5, "cv": 5.5}, "2025-05": {"avg_score": 103.2, "std_dev": 2.3, "volatility_score": 10.0, "rounds": 4, "cv": 2.2}, "2025-07": {"avg_score": 98.0, "std_dev": 5.0, "volatility_score": 9.9, "rounds": 2, "cv": 5.1}, "2025-08": {"avg_score": 93.0, "std_dev": 3.9, "volatility_score": 10.0, "rounds": 8, "cv": 4.2}, "2025-09": {"avg_score": 98.7, "std_dev": 2.6, "volatility_score": 10.0, "rounds": 3, "cv": 2.7}, "2025-10": {"avg_score": 99.0, "std_dev": 0.0, "volatility_score": 0.0, "rounds": 1, "cv": 0.0}, "2025-11": {"avg_score": 95.5, "std_dev": 7.4, "volatility_score": 7.2, "rounds": 4, "cv": 7.8}, "2025-12": {"avg_score": 94.5, "std_dev": 1.5, "volatility_score": 10.0, "rounds": 2, "cv": 1.6}}, "momentum_indicators": [{"date": "2024-04-15", "score": 107, "sma_5": 107.0, "sma_10": 107.0, "momentum": 0.0, "direction": "stable", "acceleration": 0.0}, {"date": "2024-04-19", "score": 117, "sma_5": 112.0, "sma_10": 112.0, "momentum": 0.0, "direction": "stable", "acceleration": 0.0}, {"date": "2024-04-29", "score": 104, "sma_5": 109.3, "sma_10": 109.3, "momentum": 0.0, "direction": "stable", "acceleration": 0.0}, {"date": "2024-05-09", "score": 104, "sma_5": 108.0, "sma_10": 108.0, "momentum": 0.0, "direction": "stable", "acceleration": 0.0}, {"date": "2024-05-23", "score": 105, "sma_5": 107.4, "sma_10": 107.4, "momentum": 0.0, "direction": "stable", "acceleration": 0.0}, {"date": "2024-05-27", "score": 110, "sma_5": 108.0, "sma_10": 107.8, "momentum": -0.17, "direction": "stable", "acceleration": -0.17}, {"date": "2024-06-27", "score": 106, "sma_5": 105.8, "sma_10": 107.6, "momentum": 1.77, "direction": "improving", "acceleration": 1.94}, {"date": "2024-07-19", "score": 104, "sma_5": 105.8, "sma_10": 107.1, "momentum": 1.33, "direction": "improving", "acceleration": -0.44}, {"date": "2024-07-23", "score": 99, "sma_5": 104.8, "sma_10": 106.2, "momentum": 1.42, "direction": "improving", "acceleration": 0.09}, {"date": "2024-08-04", "score": 104, "sma_5": 104.6, "sma_10": 106.0, "momentum": 1.4, "direction": "improving", "acceleration": -0.02}, {"date": "2024-08-08", "score": 99, "sma_5": 102.4, "sma_10": 105.2, "momentum": 2.8, "direction": "improving", "acceleration": 1.4}, {"date": "2024-08-13", "score": 92, "sma_5": 99.6, "sma_10": 102.7, "momentum": 3.1, "direction": "improving", "acceleration": 0.3}, {"date": "2024-08-18", "score": 112, "sma_5": 101.2, "sma_10": 103.5, "momentum": 2.3, "direction": "improving", "acceleration": -0.8}, {"date": "2024-08-20", "score": 98, "sma_5": 101.0, "sma_10": 102.9, "momentum": 1.9, "direction": "improving", "acceleration": -0.4}, {"date": "2024-08-24", "score": 96, "sma_5": 99.4, "sma_10": 102.0, "momentum": 2.6, "direction": "improving", "acceleration": 0.7}, {"date": "2024-09-25", "score": 109, "sma_5": 101.4, "sma_10": 101.9, "momentum": 0.5, "direction": "stable", "acceleration": -2.1}, {"date": "2024-09-27", "score": 104, "sma_5": 103.8, "sma_10": 101.7, "momentum": -2.1, "direction": "declining", "acceleration": -2.6}, {"date": "2024-10-25", "score": 110, "sma_5": 103.4, "sma_10": 102.3, "momentum": -1.1, "direction": "declining", "acceleration": 1.0}, {"date": "2024-11-08", "score": 97, "sma_5": 103.2, "sma_10": 102.1, "momentum": -1.1, "direction": "declining", "acceleration": -0.0}, {"date": "2024-11-22", "score": 110, "sma_5": 106.0, "sma_10": 102.7, "momentum": -3.3, "direction": "declining", "acceleration": -2.2}, {"date": "2024-12-01", "score": 108, "sma_5": 105.8, "sma_10": 103.6, "momentum": -2.2, "direction": "declining", "acceleration": 1.1}, {"date": "2024-12-27", "score": 99, "sma_5": 104.8, "sma_10": 104.3, "momentum": -0.5, "direction": "stable", "acceleration": 1.7}, {"date": "2025-03-13", "score": 102, "sma_5": 103.2, "sma_10": 103.3, "momentum": 0.1, "direction": "stable", "acceleration": 0.6}, {"date": "2025-04-02", "score": 111, "sma_5": 106.0, "sma_10": 104.6, "momentum": -1.4, "direction": "declining", "acceleration": -1.5}, {"date": "2025-04-13", "score": 100, "sma_5": 104.0, "sma_10": 105.0, "momentum": 1.0, "direction": "stable", "acceleration": 2.4}, {"date": "2025-04-15", "score": 105, "sma_5": 103.4, "sma_10": 104.6, "momentum": 1.2, "direction": "improving", "acceleration": 0.2}, {"date": "2025-04-17", "score": 94, "sma_5": 102.4, "sma_10": 103.6, "momentum": 1.2, "direction": "improving", "acceleration": -0.0}, {"date": "2025-04-30", "score": 105, "sma_5": 103.0, "sma_10": 103.1, "momentum": 0.1, "direction": "stable", "acceleration": -1.1}, {"date": "2025-05-06", "score": 107, "sma_5": 102.2, "sma_10": 104.1, "momentum": 1.9, "direction": "improving", "acceleration": 1.8}, {"date": "2025-05-19", "score": 102, "sma_5": 102.6, "sma_10": 103.3, "momentum": 0.7, "direction": "stable", "acceleration": -1.2}, {"date": "2025-05-23", "score": 103, "sma_5": 102.2, "sma_10": 102.8, "momentum": 0.6, "direction": "stable", "acceleration": -0.1}, {"date": "2025-05-31", "score": 101, "sma_5": 103.6, "sma_10": 103.0, "momentum": -0.6, "direction": "stable", "acceleration": -1.2}, {"date": "2025-07-19", "score": 103, "sma_5": 103.2, "sma_10": 103.1, "momentum": -0.1, "direction": "stable", "acceleration": 0.5}, {"date": "2025-07-26", "score": 93, "sma_5": 100.4, "sma_10": 101.3, "momentum": 0.9, "direction": "stable", "acceleration": 1.0}, {"date": "2025-08-01", "score": 101, "sma_5": 100.2, "sma_10": 101.4, "momentum": 1.2, "direction": "improving", "acceleration": 0.3}, {"date": "2025-08-05", "score": 92, "sma_5": 98.0, "sma_10": 100.1, "momentum": 2.1, "direction": "improving", "acceleration": 0.9}, {"date": "2025-08-08", "score": 94, "sma_5": 96.6, "sma_10": 100.1, "momentum": 3.5, "direction": "improving", "acceleration": 1.4}, {"date": "2025-08-12", "score": 94, "sma_5": 94.8, "sma_10": 99.0, "momentum": 4.2, "direction": "improving", "acceleration": 0.7}, {"date": "2025-08-14", "score": 96, "sma_5": 95.4, "sma_10": 97.9, "momentum": 2.5, "direction": "improving", "acceleration": -1.7}, {"date": "2025-08-16", "score": 89, "sma_5": 93.0, "sma_10": 96.6, "momentum": 3.6, "direction": "improving", "acceleration": 1.1}, {"date": "2025-08-21", "score": 89, "sma_5": 92.4, "sma_10": 95.2, "momentum": 2.8, "direction": "improving", "acceleration": -0.8}, {"date": "2025-08-24", "score": 89, "sma_5": 91.4, "sma_10": 94.0, "momentum": 2.6, "direction": "improving", "acceleration": -0.2}, {"date": "2025-09-02", "score": 95, "sma_5": 91.6, "sma_10": 93.2, "momentum": 1.6, "direction": "improving", "acceleration": -1.0}, {"date": "2025-09-07", "score": 100, "sma_5": 92.4, "sma_10": 93.9, "momentum": 1.5, "direction": "improving", "acceleration": -0.1}, {"date": "2025-09-14", "score": 101, "sma_5": 94.8, "sma_10": 93.9, "momentum": -0.9, "direction": "stable", "acceleration": -2.4}, {"date": "2025-10-01", "score": 99, "sma_5": 96.8, "sma_10": 94.6, "momentum": -2.2, "direction": "declining", "acceleration": -1.3}, {"date": "2025-11-10", "score": 107, "sma_5": 100.4, "sma_10": 95.9, "momentum": -4.5, "direction": "declining", "acceleration": -2.3}, {"date": "2025-11-15", "score": 90, "sma_5": 99.4, "sma_10": 95.5, "momentum": -3.9, "direction": "declining", "acceleration": 0.6}, {"date": "2025-11-16", "score": 88, "sma_5": 97.0, "sma_10": 94.7, "momentum": -2.3, "direction": "declining", "acceleration": 1.6}, {"date": "2025-11-30", "score": 97, "sma_5": 96.2, "sma_10": 95.5, "momentum": -0.7, "direction": "stable", "acceleration": 1.6}, {"date": "2025-12-03", "score": 96, "sma_5": 95.6, "sma_10": 96.2, "momentum": 0.6, "direction": "stable", "acceleration": 1.3}, {"date": "2025-12-07", "score": 93, "sma_5": 92.8, "sma_10": 96.6, "momentum": 3.8, "direction": "improving", "acceleration": 3.2}], "milestone_achievements": [{"date": "2024-04-15", "type": "personal_best", "value": 107, "course": "RFEG", "description": "Nuevo personal best: 107"}, {"date": "2024-04-29", "type": "personal_best", "value": 104, "course": "RFEG", "description": "Nuevo personal best: 104"}, {"date": "2024-07-23", "type": "broke_100", "value": 99, "course": "VALLE DEL ESTE", "description": "Primera vez bajo 100 (score: 99)"}, {"date": "2024-07-23", "type": "personal_best", "value": 99, "course": "VALLE DEL ESTE", "description": "Nuevo personal best: 99"}, {"date": "2024-08-13", "type": "personal_best", "value": 92, "course": "NUEVO PORTIL", "description": "Nuevo personal best: 92"}, {"date": "2025-08-16", "type": "broke_90", "value": 89, "course": "NUEVO PORTIL", "description": "Primera vez bajo 90 (score: 89)"}, {"date": "2025-08-16", "type": "personal_best", "value": 89, "course": "NUEVO PORTIL", "description": "Nuevo personal best: 89"}, {"date": "2025-09-02", "type": "consistency_streak", "value": 3, "course": "Multiple courses", "description": "Racha de 3 rondas consecutivas bajo 90 (desde 2025-08-16)"}, {"date": "2025-11-16", "type": "personal_best", "value": 88, "course": "MARINA GOLF", "description": "Nuevo personal best: 88"}], "learning_curve": {"long_game": {"initial_avg": 209.1, "current_avg": 182.6, "improvement": -26.5, "improvement_rate": -0.14, "trend": "stable", "data_points": 146}, "mid_game": {"initial_avg": 118.3, "current_avg": 117.7, "improvement": -0.5, "improvement_rate": 0.032, "trend": "stable", "data_points": 210}, "short_game": {"initial_avg": 93.8, "current_avg": 96.9, "improvement": 3.0, "improvement_rate": 0.097, "trend": "stable", "data_points": 117}}, "current_form": {"labels": ["2025-07-19", "2025-07-26", "2025-08-01", "2025-08-05", "2025-08-08", "2025-08-12", "2025-08-14", "2025-08-16", "2025-08-21", "2025-08-24", "2025-09-02", "2025-09-07", "2025-09-14", "2025-10-01", "2025-11-10", "2025-11-15", "2025-11-16", "2025-11-30", "2025-12-03", "2025-12-07"], "scores": [103, 93, 101, 92, 94, 94, 96, 89, 89, 89, 95, 100, 101, 99, 107, 90, 88, 97, 96, 93], "courses": ["LA DEHESA", "MARINA GOLF", "LA DEHESA", "VALLE DEL ESTE", "MARINA GOLF", "GOLF EL ROMPIDO CAMPO NORTE", "GOLF EL ROMPIDO CAMPO NORTE", "NUEVO PORTIL", "MARINA GOLF", "VALLE DEL ESTE", "LA DEHESA", "LA DEHESA", "LA DEHESA", "REAL CLUB LAS ROZAS MADRID", "LA DEHESA", "VALLE DEL ESTE", "MARINA GOLF", "LA DEHESA", "LA DEHESA", "LA DEHESA"], "average": 95.3, "trend": "improving", "total_rounds": 20}, "percentile_gauges": {"short_game": {"value": 100, "player_avg": 95.7, "benchmark_avg": 85.0, "rating": "excellent"}, "ball_speed": {"value": 86, "player_avg": 235.5, "benchmark_avg": 273.0, "rating": "good"}, "consistency": {"value": 62, "player_cv": 0.067, "benchmark_cv": 0.18, "rating": "average"}, "attack_angle": {"value": 80, "player_avg": -2.5, "benchmark_avg": -1.5, "rating": "good"}}, "hcp_trajectory": {"historical": {"labels": ["Apr 2024", "May 2024", "Jun 2024", "Jul 2024", "Aug 2024", "Sep 2024", "Oct 2024", "Nov 2024", "Dec 2024", "Mar 2025", "Apr 2025", "May 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025"], "values": [35.8, 35.2, 32.6, 30.6, 30.7, 33.6, 34.7, 33.7, 31.0, 30.8, 30.8, 29.4, 26.1, 24.6, 24.9, 25.7, 24.3, 23.0]}, "projection": {"labels": ["Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026"], "values": [22.3, 21.6, 20.9, 20.2, 19.5, 18.8], "confidence_low": [22.8, 22.1, 21.4, 20.7, 20.0, 19.3], "confidence_high": [21.8, 21.1, 20.4, 19.7, 19.0, 18.3]}, "milestones": [{"month": "May 2026", "hcp": 20.0, "label": "Sub-20 Goal"}], "current": 23.0, "target": 19.0, "improvement_rate": -0.7}, "temporal_long_game": {"labels": ["Jun 2024", "Sep 2024", "Mar 2025", "Jun 2025", "Jul 2025", "Sep 2025", "Nov 2025", "Dec 2025"], "driver": [204.4, null, 210.5, null, 218.2, null, 213.9, 212.7], "wood_3": [null, 212.3, null, 190.0, 186.2, 197.7, null, 208.4], "hybrid": [null, null, null, null, null, null, null, 160.5]}, "irons_evolution": {"labels": ["Sep 2024", "Mar 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Oct 2025", "Dec 2025", "Jan 2026"], "iron_5": [null, null, 148.0, null, null, null, null, null], "iron_6": [141.0, 128.8, 127.0, null, null, 139.5, 129.2, null], "iron_7": [null, 121.9, 137.5, 141.0, null, null, null, null], "iron_8": [null, 117.6, null, null, 127.8, null, null, 119.7], "iron_9": [null, 112.1, 110.5, 130.0, null, null, 109.2, null]}, "wedges_evolution": {"labels": ["Mar 2025", "Apr 2025", "Jun 2025", "Aug 2025", "Nov 2025", "Dec 2025"], "pitching_wedge": [98.0, null, 107.4, 118.2, 108.3, 97.6], "gap_wedge": [94.2, null, 92.8, null, null, 92.4], "sand_wedge": [null, 79.6, 84.0, null, null, 96.1]}, "attack_angle_evolution": {"labels": ["Jun 2024", "Mar 2025", "Jul 2025", "Nov 2025", "Dec 2025"], "attack_angle": [7.3, 4.2, 0.8, 2.8, 2.3]}, "smash_factor_evolution": {"labels": ["Jun 2024", "Sep 2024", "Mar 2025", "Apr 2025", "Jun 2025", "Jul 2025", "Aug 2025", "Sep 2025", "Oct 2025", "Nov 2025", "Dec 2025", "Jan 2026"], "driver": [1.45, null, 1.45, null, null, 1.45, null, null, null, 1.45, 1.45, null], "woods": [null, 1.4, null, null, 1.4, 1.4, null, 1.4, null, null, 1.4, null], "irons": [null, 1.35, 1.35, null, 1.35, 1.35, 1.35, null, 1.35, null, 1.35, 1.35], "wedges": [null, null, 1.3, 1.3, 1.3, null, 1.3, null, null, 1.3, 1.3, null]}, "campo_performance": {"LA DEHESA": {"best": 93, "average": 102.9, "worst": 117, "rounds": 16}, "MARINA GOLF": {"best": 88, "average": 96.8, "worst": 105, "rounds": 11}, "REAL CLUB LAS ROZAS MADRID": {"best": 97, "average": 104.6, "worst": 110, "rounds": 8}, "VALLE DEL ESTE": {"best": 89, "average": 96.4, "worst": 112, "rounds": 5}, "RFEG": {"best": 104, "average": 105.0, "worst": 107, "rounds": 3}, "NUEVO PORTIL": {"best": 89, "average": 90.5, "worst": 92, "rounds": 2}, "LA FAISANERA": {"best": 99, "average": 102.5, "worst": 106, "rounds": 2}, "GOLF EL ROMPIDO CAMPO NORTE": {"best": 94, "average": 95.0, "worst": 96, "rounds": 2}, "DESERT SPRINGS": {"best": 99, "average": 99.0, "worst": 99, "rounds": 1}, "PALOMAREJOS GOLF": {"best": 108, "average": 108.0, "worst": 108, "rounds": 1}, "CIUDAD FINANCIERA SANTANDER": {"best": 101, "average": 101.0, "worst": 101, "rounds": 1}}, "hcp_evolution_rfeg": {"labels": ["Mar 2024", "Dec 2024", "May 2025", "Jun 2025", "Sep 2025"], "values": [32.0, 36.0, 31.5, 28.0, 27.0], "source": "rfeg_official"}, "scoring_zones_by_course": {}, "volatility_index": [{"quarter": "Q2 2024", "avg_score": 107.6, "std_dev": 4.3, "coefficient_variation": 4.0, "rounds": 7}, {"quarter": "Q2 2025", "avg_score": 103.1, "std_dev": 4.5, "coefficient_variation": 4.4, "rounds": 9}, {"quarter": "Q3 2024", "avg_score": 101.7, "std_dev": 5.7, "coefficient_variation": 5.6, "rounds": 10}, {"quarter": "Q3 2025", "avg_score": 95.1, "std_dev": 4.7, "coefficient_variation": 4.9, "rounds": 13}, {"quarter": "Q4 2024", "avg_score": 104.8, "std_dev": 5.6, "coefficient_variation": 5.4, "rounds": 5}, {"quarter": "Q4 2025", "avg_score": 95.7, "std_dev": 5.8, "coefficient_variation": 6.1, "rounds": 7}], "estado_forma": [{"month": "Mar 2025", "avg_score": 102.0, "rounds": 1, "vs_baseline": 4.1, "form": "poor"}, {"month": "Apr 2025", "avg_score": 103.0, "rounds": 5, "vs_baseline": 5.1, "form": "poor"}, {"month": "May 2025", "avg_score": 103.2, "rounds": 4, "vs_baseline": 5.4, "form": "poor"}, {"month": "Jul 2025", "avg_score": 98.0, "rounds": 2, "vs_baseline": 0.1, "form": "average"}, {"month": "Aug 2025", "avg_score": 93.0, "rounds": 8, "vs_baseline": -4.9, "form": "good"}, {"month": "Sep 2025", "avg_score": 98.7, "rounds": 3, "vs_baseline": 0.8, "form": "average"}, {"month": "Oct 2025", "avg_score": 99.0, "rounds": 1, "vs_baseline": 1.1, "form": "average"}, {"month": "Nov 2025", "avg_score": 95.5, "rounds": 4, "vs_baseline": -2.4, "form": "good"}, {"month": "Dec 2025", "avg_score": 94.5, "rounds": 2, "vs_baseline": -3.4, "form": "good"}], "hcp_curve_position": {"distribution": {"bins": ["85-90", "90-95", "95-100", "100-105", "105-110", "110-115", "115-120"], "actual": [4, 8, 11, 14, 9, 5, 1], "expected": [2.5, 7.6, 13.6, 14.4, 9.1, 3.4, 0.8]}, "stats": {"mean": 100.6, "std_dev": 6.8, "skewness": 0.04}}, "differential_distribution": {"differentials": [32.0, 32.0, 26.0, 24.0, 28.0, 33.0, 22.0, 21.0, 22.0, 17.0, 16.0, 45.0, 38.0, 30.0, 39.0, 33.0, 35.0, 30.0, 31.0, 29.0, 23.0, 28.0, 29.0, 35.0, 25.0, 24.0, 21.0, 33.0, 38.0, 37.0, 32.0, 25.0, 38.0, 31.0, 27.0, 27.0, 20.0, 17.0, 27.0, 40.0, 20.0, 17.0, 18.0, 34.0, 27.0, 36.0, 22.0, 24.0, 29.0, 35.0, 32.0, 32.0], "distribution": {"excellent": 0, "good": 5, "average": 11, "poor": 12, "very_poor": 24}, "stats": {"mean": 28.6, "median": 29.0, "best": 16.0, "worst": 45.0, "total_rounds": 52}}, "prediction_model": {"predicted_score": 94.8, "confidence_range": [84.3, 105.4], "trend": "stable", "model_accuracy": 0.0}, "roi_practice": {"analysis": [{"period": "Q1 2025", "rounds_played": 1, "avg_score": 102.0, "improvement_vs_prev": 0, "roi": "neutral"}, {"period": "Q2 2024", "rounds_played": 7, "avg_score": 107.6, "improvement_vs_prev": 5.6, "roi": "negative"}, {"period": "Q2 2025", "rounds_played": 9, "avg_score": 103.1, "improvement_vs_prev": -4.5, "roi": "positive"}, {"period": "Q3 2024", "rounds_played": 10, "avg_score": 101.7, "improvement_vs_prev": -1.4, "roi": "neutral"}, {"period": "Q3 2025", "rounds_played": 13, "avg_score": 95.1, "improvement_vs_prev": -6.6, "roi": "positive"}, {"period": "Q4 2024", "rounds_played": 5, "avg_score": 104.8, "improvement_vs_prev": 9.7, "roi": "negative"}, {"period": "Q4 2025", "rounds_played": 7, "avg_score": 95.7, "improvement_vs_prev": -9.1, "roi": "positive"}], "correlation": -0.42, "recommendation": "increase_frequency"}, "shot_zones_heatmap": {"zones": [{"club": "3W", "shots": [{"x": 11.0, "y": 218.0, "distance": 218.0}, {"x": 1.8, "y": 221.0, "distance": 221.0}, {"x": 13.3, "y": 204.0, "distance": 204.0}, {"x": 6.3, "y": 216.0, "distance": 216.0}, {"x": 17.4, "y": 209.0, "distance": 209.0}, {"x": 17.3, "y": 199.0, "distance": 199.0}, {"x": 11.0, "y": 218.0, "distance": 218.0}, {"x": 1.8, "y": 221.0, "distance": 221.0}, {"x": 13.3, "y": 204.0, "distance": 204.0}, {"x": 6.3, "y": 216.0, "distance": 216.0}, {"x": 17.4, "y": 209.0, "distance": 209.0}, {"x": 45.5, "y": 202.0, "distance": 202.0}, {"x": 6.0, "y": 190.0, "distance": 190.0}, {"x": 17.4, "y": 201.0, "distance": 201.0}, {"x": 38.7, "y": 183.0, "distance": 183.0}, {"x": 20.1, "y": 156.0, "distance": 156.0}, {"x": 3.5, "y": 210.0, "distance": 210.0}, {"x": 65.2, "y": 196.0, "distance": 196.0}, {"x": 11.9, "y": 197.0, "distance": 197.0}, {"x": 11.9, "y": 193.0, "distance": 193.0}, {"x": 17.8, "y": 192.0, "distance": 192.0}, {"x": 13.5, "y": 188.0, "distance": 188.0}, {"x": 4.0, "y": 186.0, "distance": 186.0}, {"x": 3.1, "y": 184.0, "distance": 184.0}, {"x": 11.0, "y": 204.0, "distance": 204.0}, {"x": 1.8, "y": 221.0, "distance": 221.0}, {"x": 13.3, "y": 204.0, "distance": 204.0}, {"x": 6.3, "y": 216.0, "distance": 216.0}, {"x": 17.4, "y": 209.0, "distance": 209.0}, {"x": 11.0, "y": 197.0, "distance": 197.0}, {"x": 1.8, "y": 208.0, "distance": 208.0}]}, {"club": "5i", "shots": [{"x": 12.6, "y": 145.0, "distance": 145.0}, {"x": 12.9, "y": 151.0, "distance": 151.0}, {"x": 38.0, "y": 149.0, "distance": 149.0}, {"x": 9.6, "y": 147.0, "distance": 147.0}, {"x": 25.1, "y": 150.0, "distance": 150.0}, {"x": 20.9, "y": 146.0, "distance": 146.0}]}, {"club": "6i", "shots": [{"x": 33.0, "y": 130.0, "distance": 130.0}, {"x": 15.1, "y": 140.0, "distance": 140.0}, {"x": 2.4, "y": 131.0, "distance": 131.0}, {"x": 26.7, "y": 149.0, "distance": 149.0}, {"x": 17.3, "y": 155.0, "distance": 155.0}, {"x": 39.6, "y": 133.0, "distance": 133.0}, {"x": 23.0, "y": 130.0, "distance": 130.0}, {"x": 29.8, "y": 142.0, "distance": 142.0}, {"x": 27.8, "y": 120.0, "distance": 120.0}, {"x": 20.6, "y": 114.0, "distance": 114.0}, {"x": 15.5, "y": 134.0, "distance": 134.0}, {"x": 36.5, "y": 117.0, "distance": 117.0}, {"x": 18.8, "y": 136.0, "distance": 136.0}, {"x": 8.0, "y": 139.0, "distance": 139.0}, {"x": 11.3, "y": 116.0, "distance": 116.0}, {"x": 22.6, "y": 127.0, "distance": 127.0}, {"x": 9.2, "y": 148.0, "distance": 148.0}, {"x": 6.4, "y": 138.0, "distance": 138.0}, {"x": 32.6, "y": 128.0, "distance": 128.0}, {"x": 0.8, "y": 144.0, "distance": 144.0}, {"x": 0.8, "y": 133.0, "distance": 133.0}, {"x": 10.9, "y": 146.0, "distance": 146.0}, {"x": 33.9, "y": 149.0, "distance": 149.0}, {"x": 0.5, "y": 138.0, "distance": 138.0}, {"x": 19.9, "y": 127.0, "distance": 127.0}, {"x": 23.8, "y": 131.0, "distance": 131.0}, {"x": 30.2, "y": 131.0, "distance": 131.0}, {"x": 35.9, "y": 133.0, "distance": 133.0}, {"x": 0.4, "y": 93.0, "distance": 93.0}, {"x": 30.7, "y": 132.0, "distance": 132.0}]}, {"club": "7i", "shots": [{"x": 9.7, "y": 123.0, "distance": 123.0}, {"x": 0.2, "y": 113.0, "distance": 113.0}, {"x": 4.6, "y": 127.0, "distance": 127.0}, {"x": 10.4, "y": 122.0, "distance": 122.0}, {"x": 27.1, "y": 123.0, "distance": 123.0}, {"x": 17.8, "y": 117.0, "distance": 117.0}, {"x": 8.5, "y": 102.0, "distance": 102.0}, {"x": 13.1, "y": 137.0, "distance": 137.0}, {"x": 5.8, "y": 118.0, "distance": 118.0}, {"x": 1.2, "y": 137.0, "distance": 137.0}, {"x": 2.6, "y": 147.0, "distance": 147.0}, {"x": 2.2, "y": 151.0, "distance": 151.0}, {"x": 0.9, "y": 147.0, "distance": 147.0}, {"x": 7.5, "y": 144.0, "distance": 144.0}, {"x": 12.3, "y": 142.0, "distance": 142.0}, {"x": 10.1, "y": 142.0, "distance": 142.0}, {"x": 10.3, "y": 136.0, "distance": 136.0}, {"x": 13.5, "y": 138.0, "distance": 138.0}, {"x": 4.0, "y": 128.0, "distance": 128.0}, {"x": 8.0, "y": 143.0, "distance": 143.0}, {"x": 0.6, "y": 140.0, "distance": 140.0}, {"x": 6.6, "y": 142.0, "distance": 142.0}, {"x": 7.7, "y": 139.0, "distance": 139.0}, {"x": 7.7, "y": 132.0, "distance": 132.0}, {"x": 2.6, "y": 147.0, "distance": 147.0}, {"x": 2.2, "y": 151.0, "distance": 151.0}, {"x": 0.9, "y": 147.0, "distance": 147.0}, {"x": 7.5, "y": 144.0, "distance": 144.0}, {"x": 12.3, "y": 142.0, "distance": 142.0}, {"x": 21.3, "y": 146.0, "distance": 146.0}, {"x": 10.1, "y": 142.0, "distance": 142.0}, {"x": 21.3, "y": 138.0, "distance": 138.0}, {"x": 10.3, "y": 136.0, "distance": 136.0}, {"x": 13.5, "y": 138.0, "distance": 138.0}, {"x": 4.0, "y": 128.0, "distance": 128.0}, {"x": 8.0, "y": 143.0, "distance": 143.0}, {"x": 18.3, "y": 139.0, "distance": 139.0}, {"x": 0.6, "y": 140.0, "distance": 140.0}, {"x": 6.6, "y": 142.0, "distance": 142.0}, {"x": 7.7, "y": 139.0, "distance": 139.0}, {"x": 7.7, "y": 132.0, "distance": 132.0}, {"x": 22.8, "y": 148.0, "distance": 148.0}, {"x": 24.2, "y": 136.0, "distance": 136.0}, {"x": 20.2, "y": 134.0, "distance": 134.0}, {"x": 13.2, "y": 148.0, "distance": 148.0}, {"x": 13.4, "y": 143.0, "distance": 143.0}, {"x": 6.4, "y": 136.0, "distance": 136.0}, {"x": 9.8, "y": 128.0, "distance": 128.0}]}, {"club": "8i", "shots": [{"x": 8.9, "y": 128.0, "distance": 128.0}, {"x": 10.8, "y": 127.0, "distance": 127.0}, {"x": 4.4, "y": 107.0, "distance": 107.0}, {"x": 4.9, "y": 119.0, "distance": 119.0}, {"x": 19.2, "y": 120.0, "distance": 120.0}, {"x": 24.2, "y": 107.0, "distance": 107.0}, {"x": 12.5, "y": 117.0, "distance": 117.0}, {"x": 16.5, "y": 117.0, "distance": 117.0}, {"x": 2.3, "y": 122.0, "distance": 122.0}, {"x": 17.2, "y": 122.0, "distance": 122.0}, {"x": 9.1, "y": 116.0, "distance": 116.0}, {"x": 22.5, "y": 117.0, "distance": 117.0}, {"x": 4.3, "y": 106.0, "distance": 106.0}, {"x": 17.9, "y": 116.0, "distance": 116.0}, {"x": 0.6, "y": 116.0, "distance": 116.0}, {"x": 7.7, "y": 130.0, "distance": 130.0}, {"x": 2.3, "y": 122.0, "distance": 122.0}, {"x": 17.2, "y": 122.0, "distance": 122.0}, {"x": 9.1, "y": 116.0, "distance": 116.0}, {"x": 22.5, "y": 117.0, "distance": 117.0}, {"x": 4.3, "y": 106.0, "distance": 106.0}, {"x": 2.2, "y": 109.0, "distance": 109.0}, {"x": 17.9, "y": 116.0, "distance": 116.0}, {"x": 0.6, "y": 116.0, "distance": 116.0}, {"x": 7.7, "y": 130.0, "distance": 130.0}, {"x": 22.1, "y": 120.0, "distance": 120.0}, {"x": 21.1, "y": 132.0, "distance": 132.0}, {"x": 16.8, "y": 133.0, "distance": 133.0}, {"x": 17.6, "y": 126.0, "distance": 126.0}, {"x": 3.9, "y": 127.0, "distance": 127.0}, {"x": 5.4, "y": 115.0, "distance": 115.0}, {"x": 2.7, "y": 115.0, "distance": 115.0}, {"x": 7.9, "y": 124.0, "distance": 124.0}, {"x": 3.0, "y": 117.0, "distance": 117.0}, {"x": 14.8, "y": 112.0, "distance": 112.0}, {"x": 2.1, "y": 123.0, "distance": 123.0}, {"x": 0, "y": 115.0, "distance": 115.0}, {"x": 11.7, "y": 126.0, "distance": 126.0}, {"x": 2.5, "y": 123.0, "distance": 123.0}, {"x": 10.2, "y": 120.0, "distance": 120.0}]}, {"club": "9i", "shots": [{"x": 7.2, "y": 106.0, "distance": 106.0}, {"x": 7.1, "y": 113.0, "distance": 113.0}, {"x": 13.6, "y": 115.0, "distance": 115.0}, {"x": 17.6, "y": 111.0, "distance": 111.0}, {"x": 7.0, "y": 100.0, "distance": 100.0}, {"x": 7.3, "y": 103.0, "distance": 103.0}, {"x": 4.0, "y": 116.0, "distance": 116.0}, {"x": 4.3, "y": 123.0, "distance": 123.0}, {"x": 6.6, "y": 120.0, "distance": 120.0}, {"x": 10.2, "y": 119.0, "distance": 119.0}, {"x": 1.0, "y": 104.0, "distance": 104.0}, {"x": 8.2, "y": 113.0, "distance": 113.0}, {"x": 2.4, "y": 107.0, "distance": 107.0}, {"x": 6.0, "y": 115.0, "distance": 115.0}, {"x": 9.8, "y": 109.0, "distance": 109.0}, {"x": 0.0, "y": 114.0, "distance": 114.0}, {"x": 23.5, "y": 116.0, "distance": 116.0}, {"x": 7.8, "y": 116.0, "distance": 116.0}, {"x": 3.9, "y": 98.0, "distance": 98.0}, {"x": 8.3, "y": 104.0, "distance": 104.0}, {"x": 26.0, "y": 119.0, "distance": 119.0}, {"x": 11.0, "y": 114.0, "distance": 114.0}, {"x": 5.9, "y": 117.0, "distance": 117.0}, {"x": 3.5, "y": 100.0, "distance": 100.0}, {"x": 0.4, "y": 110.0, "distance": 110.0}, {"x": 18.6, "y": 116.0, "distance": 116.0}, {"x": 19.4, "y": 105.0, "distance": 105.0}, {"x": 20.5, "y": 118.0, "distance": 118.0}, {"x": 1.8, "y": 106.0, "distance": 106.0}, {"x": 4.0, "y": 116.0, "distance": 116.0}, {"x": 4.3, "y": 123.0, "distance": 123.0}, {"x": 6.6, "y": 120.0, "distance": 120.0}, {"x": 10.2, "y": 119.0, "distance": 119.0}, {"x": 1.0, "y": 104.0, "distance": 104.0}, {"x": 8.2, "y": 113.0, "distance": 113.0}, {"x": 2.4, "y": 107.0, "distance": 107.0}, {"x": 6.0, "y": 115.0, "distance": 115.0}, {"x": 9.8, "y": 109.0, "distance": 109.0}, {"x": 0.0, "y": 114.0, "distance": 114.0}, {"x": 23.5, "y": 116.0, "distance": 116.0}, {"x": 7.8, "y": 116.0, "distance": 116.0}, {"x": 3.9, "y": 98.0, "distance": 98.0}, {"x": 22.7, "y": 160.0, "distance": 160.0}, {"x": 7.4, "y": 151.0, "distance": 151.0}, {"x": 15.8, "y": 138.0, "distance": 138.0}, {"x": 7.9, "y": 142.0, "distance": 142.0}, {"x": 19.1, "y": 151.0, "distance": 151.0}, {"x": 19.3, "y": 150.0, "distance": 150.0}, {"x": 1.3, "y": 124.0, "distance": 124.0}, {"x": 5.2, "y": 127.0, "distance": 127.0}, {"x": 1.6, "y": 127.0, "distance": 127.0}, {"x": 14.8, "y": 126.0, "distance": 126.0}, {"x": 5.7, "y": 124.0, "distance": 124.0}, {"x": 8.9, "y": 116.0, "distance": 116.0}, {"x": 5.5, "y": 122.0, "distance": 122.0}, {"x": 7.9, "y": 117.0, "distance": 117.0}, {"x": 2.6, "y": 136.0, "distance": 136.0}, {"x": 15.5, "y": 124.0, "distance": 124.0}, {"x": 12.5, "y": 123.0, "distance": 123.0}, {"x": 18.8, "y": 122.0, "distance": 122.0}, {"x": 7.9, "y": 117.0, "distance": 117.0}, {"x": 2.6, "y": 136.0, "distance": 136.0}, {"x": 15.5, "y": 124.0, "distance": 124.0}, {"x": 16.9, "y": 134.0, "distance": 134.0}, {"x": 12.9, "y": 126.0, "distance": 126.0}, {"x": 12.5, "y": 123.0, "distance": 123.0}, {"x": 18.8, "y": 122.0, "distance": 122.0}, {"x": 7.9, "y": 117.0, "distance": 117.0}, {"x": 2.6, "y": 136.0, "distance": 136.0}, {"x": 15.5, "y": 124.0, "distance": 124.0}, {"x": 16.9, "y": 134.0, "distance": 134.0}, {"x": 12.9, "y": 126.0, "distance": 126.0}, {"x": 2.5, "y": 119.0, "distance": 119.0}, {"x": 8.6, "y": 102.0, "distance": 102.0}, {"x": 8.0, "y": 119.0, "distance": 119.0}, {"x": 9.6, "y": 102.0, "distance": 102.0}, {"x": 9.2, "y": 104.0, "distance": 104.0}, {"x": 14.5, "y": 110.0, "distance": 110.0}, {"x": 5.8, "y": 103.0, "distance": 103.0}, {"x": 3.9, "y": 110.0, "distance": 110.0}, {"x": 5.0, "y": 99.0, "distance": 99.0}, {"x": 17.4, "y": 115.0, "distance": 115.0}, {"x": 12.1, "y": 108.0, "distance": 108.0}, {"x": 4.8, "y": 109.0, "distance": 109.0}, {"x": 14.3, "y": 110.0, "distance": 110.0}, {"x": 2.8, "y": 106.0, "distance": 106.0}]}, {"club": "Dr", "shots": [{"x": 0, "y": 232.0, "distance": 232.0}, {"x": 18.0, "y": 223.0, "distance": 223.0}, {"x": 39.8, "y": 236.0, "distance": 236.0}, {"x": 10.9, "y": 200.0, "distance": 200.0}, {"x": 6.5, "y": 218.0, "distance": 218.0}, {"x": 21.8, "y": 216.0, "distance": 216.0}, {"x": 29.9, "y": 221.0, "distance": 221.0}, {"x": 23.7, "y": 220.0, "distance": 220.0}, {"x": 10.2, "y": 208.0, "distance": 208.0}, {"x": 18.4, "y": 202.0, "distance": 202.0}, {"x": 30.8, "y": 218.0, "distance": 218.0}, {"x": 24.7, "y": 183.0, "distance": 183.0}, {"x": 23.0, "y": 222.0, "distance": 222.0}, {"x": 15.4, "y": 219.0, "distance": 219.0}, {"x": 5.4, "y": 210.0, "distance": 210.0}, {"x": 24.3, "y": 223.0, "distance": 223.0}, {"x": 15.3, "y": 203.0, "distance": 203.0}, {"x": 20.3, "y": 184.0, "distance": 184.0}, {"x": 34.1, "y": 209.0, "distance": 209.0}, {"x": 32.5, "y": 223.0, "distance": 223.0}, {"x": 42.9, "y": 218.0, "distance": 218.0}, {"x": 34.4, "y": 208.0, "distance": 208.0}, {"x": 23.6, "y": 223.0, "distance": 223.0}, {"x": 20.1, "y": 196.0, "distance": 196.0}, {"x": 51.0, "y": 183.0, "distance": 183.0}, {"x": 41.8, "y": 200.0, "distance": 200.0}, {"x": 73.3, "y": 197.0, "distance": 197.0}, {"x": 8.3, "y": 215.0, "distance": 215.0}, {"x": 14.9, "y": 226.0, "distance": 226.0}, {"x": 10.7, "y": 187.0, "distance": 187.0}, {"x": 80.9, "y": 209.0, "distance": 209.0}, {"x": 8.3, "y": 209.0, "distance": 209.0}, {"x": 15.1, "y": 204.0, "distance": 204.0}, {"x": 64.0, "y": 171.0, "distance": 171.0}, {"x": 6.4, "y": 202.0, "distance": 202.0}, {"x": 8.3, "y": 192.0, "distance": 192.0}, {"x": 16.5, "y": 217.0, "distance": 217.0}, {"x": 46.9, "y": 203.0, "distance": 203.0}, {"x": 33.4, "y": 230.0, "distance": 230.0}, {"x": 23.6, "y": 193.0, "distance": 193.0}, {"x": 24.2, "y": 201.0, "distance": 201.0}, {"x": 38.3, "y": 202.0, "distance": 202.0}, {"x": 6.6, "y": 179.0, "distance": 179.0}, {"x": 29.8, "y": 203.0, "distance": 203.0}, {"x": 35.9, "y": 219.0, "distance": 219.0}, {"x": 25.2, "y": 241.0, "distance": 241.0}, {"x": 4.0, "y": 223.0, "distance": 223.0}, {"x": 23.9, "y": 214.0, "distance": 214.0}, {"x": 28.5, "y": 225.0, "distance": 225.0}, {"x": 23.4, "y": 232.0, "distance": 232.0}, {"x": 18.5, "y": 236.0, "distance": 236.0}, {"x": 23.1, "y": 226.0, "distance": 226.0}, {"x": 3.7, "y": 223.0, "distance": 223.0}, {"x": 11.0, "y": 202.0, "distance": 202.0}, {"x": 9.5, "y": 213.0, "distance": 213.0}, {"x": 36.2, "y": 226.0, "distance": 226.0}, {"x": 2.4, "y": 211.0, "distance": 211.0}, {"x": 1.2, "y": 210.0, "distance": 210.0}, {"x": 12.1, "y": 222.0, "distance": 222.0}, {"x": 0.1, "y": 232.0, "distance": 232.0}, {"x": 18.0, "y": 223.0, "distance": 223.0}, {"x": 39.8, "y": 236.0, "distance": 236.0}, {"x": 10.9, "y": 200.0, "distance": 200.0}, {"x": 6.5, "y": 218.0, "distance": 218.0}, {"x": 21.8, "y": 216.0, "distance": 216.0}, {"x": 29.9, "y": 221.0, "distance": 221.0}, {"x": 23.7, "y": 220.0, "distance": 220.0}, {"x": 10.2, "y": 208.0, "distance": 208.0}, {"x": 30.8, "y": 218.0, "distance": 218.0}, {"x": 49.9, "y": 232.0, "distance": 232.0}, {"x": 15.7, "y": 226.0, "distance": 226.0}, {"x": 33.4, "y": 214.0, "distance": 214.0}, {"x": 21.6, "y": 220.0, "distance": 220.0}, {"x": 3.3, "y": 193.0, "distance": 193.0}, {"x": 44.6, "y": 214.0, "distance": 214.0}, {"x": 3.5, "y": 223.0, "distance": 223.0}, {"x": 42.4, "y": 232.0, "distance": 232.0}, {"x": 50.7, "y": 218.0, "distance": 218.0}, {"x": 23.5, "y": 184.0, "distance": 184.0}, {"x": 44.4, "y": 202.0, "distance": 202.0}, {"x": 19.5, "y": 215.0, "distance": 215.0}, {"x": 4.1, "y": 220.0, "distance": 220.0}, {"x": 8.8, "y": 199.0, "distance": 199.0}, {"x": 64.1, "y": 233.0, "distance": 233.0}, {"x": 12.2, "y": 200.0, "distance": 200.0}, {"x": 26.8, "y": 203.0, "distance": 203.0}, {"x": 18.2, "y": 222.0, "distance": 222.0}, {"x": 15.1, "y": 230.0, "distance": 230.0}, {"x": 15.7, "y": 224.0, "distance": 224.0}, {"x": 37.31, "y": 221.0, "distance": 221.0}, {"x": 38.9, "y": 220.0, "distance": 220.0}, {"x": 37.3, "y": 221.0, "distance": 221.0}, {"x": 39.9, "y": 220.0, "distance": 220.0}, {"x": 24.9, "y": 220.0, "distance": 220.0}, {"x": 45.1, "y": 196.0, "distance": 196.0}, {"x": 1.0, "y": 212.0, "distance": 212.0}, {"x": 22.0, "y": 210.0, "distance": 210.0}, {"x": 22.1, "y": 203.0, "distance": 203.0}, {"x": 28.8, "y": 200.0, "distance": 200.0}, {"x": 3.7, "y": 211.0, "distance": 211.0}, {"x": 19.3, "y": 198.0, "distance": 198.0}]}, {"club": "GW 52", "shots": [{"x": 10.7, "y": 101.0, "distance": 101.0}, {"x": 8.1, "y": 98.0, "distance": 98.0}, {"x": 0.3, "y": 90.0, "distance": 90.0}, {"x": 21.8, "y": 103.0, "distance": 103.0}, {"x": 3.4, "y": 93.0, "distance": 93.0}, {"x": 8.1, "y": 97.0, "distance": 97.0}, {"x": 1.0, "y": 84.0, "distance": 84.0}, {"x": 13.0, "y": 91.0, "distance": 91.0}, {"x": 3.6, "y": 75.0, "distance": 75.0}, {"x": 1.7, "y": 90.0, "distance": 90.0}, {"x": 1.8, "y": 102.0, "distance": 102.0}, {"x": 8.6, "y": 101.0, "distance": 101.0}, {"x": 1.0, "y": 87.0, "distance": 87.0}, {"x": 7.7, "y": 84.0, "distance": 84.0}, {"x": 1.8, "y": 98.0, "distance": 98.0}, {"x": 7.4, "y": 96.0, "distance": 96.0}, {"x": 1.0, "y": 94.0, "distance": 94.0}, {"x": 6.3, "y": 93.0, "distance": 93.0}, {"x": 5.4, "y": 89.0, "distance": 89.0}, {"x": 2.6, "y": 95.0, "distance": 95.0}]}, {"club": "Hyb", "shots": [{"x": 14.7, "y": 163.0, "distance": 163.0}, {"x": 9.5, "y": 155.0, "distance": 155.0}, {"x": 11.5, "y": 151.0, "distance": 151.0}, {"x": 19.4, "y": 163.0, "distance": 163.0}, {"x": 20.7, "y": 152.0, "distance": 152.0}, {"x": 17.0, "y": 167.0, "distance": 167.0}, {"x": 9.1, "y": 176.0, "distance": 176.0}, {"x": 9.1, "y": 159.0, "distance": 159.0}, {"x": 32.1, "y": 139.0, "distance": 139.0}, {"x": 15.0, "y": 169.0, "distance": 169.0}, {"x": 6.2, "y": 171.0, "distance": 171.0}, {"x": 16.8, "y": 160.0, "distance": 160.0}, {"x": 23.1, "y": 156.0, "distance": 156.0}, {"x": 0.7, "y": 166.0, "distance": 166.0}]}, {"club": "Hyb ", "shots": [{"x": 37.8, "y": 172.0, "distance": 172.0}, {"x": 36.4, "y": 175.0, "distance": 175.0}, {"x": 22.9, "y": 176.0, "distance": 176.0}, {"x": 21.7, "y": 178.0, "distance": 178.0}, {"x": 29.7, "y": 182.0, "distance": 182.0}, {"x": 12.9, "y": 180.0, "distance": 180.0}, {"x": 4.5, "y": 176.0, "distance": 176.0}, {"x": 25.5, "y": 164.0, "distance": 164.0}, {"x": 36.8, "y": 129.0, "distance": 129.0}, {"x": 5.4, "y": 178.0, "distance": 178.0}, {"x": 18.3, "y": 146.0, "distance": 146.0}, {"x": 11.9, "y": 162.0, "distance": 162.0}, {"x": 19.41, "y": 162.0, "distance": 162.0}, {"x": 11.6, "y": 144.0, "distance": 144.0}, {"x": 11.1, "y": 156.0, "distance": 156.0}, {"x": 9.8, "y": 161.0, "distance": 161.0}, {"x": 21.5, "y": 155.0, "distance": 155.0}, {"x": 27.8, "y": 153.0, "distance": 153.0}, {"x": 31.4, "y": 167.0, "distance": 167.0}, {"x": 20.8, "y": 166.0, "distance": 166.0}]}, {"club": "PW", "shots": [{"x": 2.7, "y": 113.0, "distance": 113.0}, {"x": 17.8, "y": 114.0, "distance": 114.0}, {"x": 4.7, "y": 114.0, "distance": 114.0}, {"x": 11.8, "y": 105.0, "distance": 105.0}, {"x": 6.5, "y": 102.0, "distance": 102.0}, {"x": 6.5, "y": 98.0, "distance": 98.0}, {"x": 1.2, "y": 112.0, "distance": 112.0}, {"x": 5.0, "y": 105.0, "distance": 105.0}, {"x": 14.1, "y": 109.0, "distance": 109.0}, {"x": 7.9, "y": 98.0, "distance": 98.0}, {"x": 5.4, "y": 94.0, "distance": 94.0}, {"x": 7.9, "y": 97.0, "distance": 97.0}, {"x": 1.3, "y": 103.0, "distance": 103.0}, {"x": 0.2, "y": 82.0, "distance": 82.0}, {"x": 3.4, "y": 103.0, "distance": 103.0}, {"x": 2.1, "y": 78.0, "distance": 78.0}, {"x": 8.1, "y": 101.0, "distance": 101.0}, {"x": 0.8, "y": 100.0, "distance": 100.0}, {"x": 6.9, "y": 86.0, "distance": 86.0}, {"x": 9.3, "y": 103.0, "distance": 103.0}, {"x": 13.6, "y": 88.0, "distance": 88.0}, {"x": 4.8, "y": 91.0, "distance": 91.0}, {"x": 5.5, "y": 94.0, "distance": 94.0}, {"x": 14.5, "y": 101.0, "distance": 101.0}, {"x": 15.5, "y": 110.0, "distance": 110.0}, {"x": 4.5, "y": 102.0, "distance": 102.0}, {"x": 1.3, "y": 114.0, "distance": 114.0}, {"x": 12.3, "y": 112.0, "distance": 112.0}, {"x": 12.2, "y": 104.0, "distance": 104.0}, {"x": 6.4, "y": 103.0, "distance": 103.0}, {"x": 15.5, "y": 121.0, "distance": 121.0}, {"x": 1.9, "y": 107.0, "distance": 107.0}, {"x": 3.1, "y": 91.0, "distance": 91.0}, {"x": 5.0, "y": 105.0, "distance": 105.0}, {"x": 14.1, "y": 109.0, "distance": 109.0}, {"x": 7.9, "y": 98.0, "distance": 98.0}, {"x": 5.4, "y": 94.0, "distance": 94.0}, {"x": 7.9, "y": 97.0, "distance": 97.0}, {"x": 6.1, "y": 122.0, "distance": 122.0}, {"x": 10.8, "y": 131.0, "distance": 131.0}, {"x": 16.4, "y": 121.0, "distance": 121.0}, {"x": 2.9, "y": 110.0, "distance": 110.0}, {"x": 19.9, "y": 114.0, "distance": 114.0}, {"x": 10.4, "y": 136.0, "distance": 136.0}, {"x": 2.0, "y": 115.0, "distance": 115.0}, {"x": 0.4, "y": 103.0, "distance": 103.0}, {"x": 5.2, "y": 106.0, "distance": 106.0}, {"x": 30.8, "y": 94.0, "distance": 94.0}, {"x": 2.5, "y": 174.0, "distance": 174.0}, {"x": 75.2, "y": 117.0, "distance": 117.0}, {"x": 34.3, "y": 141.0, "distance": 141.0}, {"x": 31.0, "y": 121.0, "distance": 121.0}, {"x": 25.8, "y": 120.0, "distance": 120.0}, {"x": 31.1, "y": 136.0, "distance": 136.0}, {"x": 18.3, "y": 123.0, "distance": 123.0}, {"x": 5.8, "y": 122.0, "distance": 122.0}, {"x": 5.6, "y": 102.0, "distance": 102.0}, {"x": 1.2, "y": 97.0, "distance": 97.0}, {"x": 4.7, "y": 105.0, "distance": 105.0}, {"x": 4.3, "y": 91.0, "distance": 91.0}]}, {"club": "SW 58", "shots": [{"x": 22.8, "y": 101.0, "distance": 101.0}, {"x": 3.6, "y": 101.0, "distance": 101.0}, {"x": 23.5, "y": 103.0, "distance": 103.0}, {"x": 17.0, "y": 93.0, "distance": 93.0}, {"x": 2.7, "y": 94.0, "distance": 94.0}, {"x": 3.1, "y": 95.0, "distance": 95.0}, {"x": 0.4, "y": 97.0, "distance": 97.0}, {"x": 7.7, "y": 98.0, "distance": 98.0}, {"x": 0.4, "y": 92.0, "distance": 92.0}, {"x": 10.4, "y": 87.0, "distance": 87.0}, {"x": 19.0, "y": 117.0, "distance": 117.0}, {"x": 2.3, "y": 115.0, "distance": 115.0}, {"x": 13.2, "y": 125.0, "distance": 125.0}, {"x": 47.7, "y": 82.0, "distance": 82.0}, {"x": 9.4, "y": 105.0, "distance": 105.0}, {"x": 1.3, "y": 79.0, "distance": 79.0}, {"x": 10.5, "y": 82.0, "distance": 82.0}, {"x": 8.5, "y": 75.0, "distance": 75.0}, {"x": 1.5, "y": 81.0, "distance": 81.0}, {"x": 6.0, "y": 106.0, "distance": 106.0}, {"x": 0.9, "y": 72.0, "distance": 72.0}, {"x": 0.1, "y": 72.0, "distance": 72.0}, {"x": 2.8, "y": 70.0, "distance": 70.0}, {"x": 0.6, "y": 67.0, "distance": 67.0}, {"x": 2.9, "y": 77.0, "distance": 77.0}, {"x": 5.8, "y": 59.0, "distance": 59.0}, {"x": 11.0, "y": 79.0, "distance": 79.0}, {"x": 2.5, "y": 75.0, "distance": 75.0}, {"x": 6.8, "y": 58.0, "distance": 58.0}, {"x": 1.3, "y": 79.0, "distance": 79.0}, {"x": 10.5, "y": 82.0, "distance": 82.0}, {"x": 8.5, "y": 75.0, "distance": 75.0}, {"x": 1.5, "y": 81.0, "distance": 81.0}, {"x": 6.0, "y": 106.0, "distance": 106.0}, {"x": 0.9, "y": 72.0, "distance": 72.0}, {"x": 0.1, "y": 72.0, "distance": 72.0}, {"x": 2.8, "y": 70.0, "distance": 70.0}]}], "density_map": {"center": {"count": 129, "percentage": 26.2}, "left": {"count": 0, "percentage": 0.0}, "right": {"count": 364, "percentage": 73.8}, "short": {"count": 139, "percentage": 28.2}, "long": {"count": 124, "percentage": 25.2}}}, "scoring_probability": {"distance_ranges": [{"range": "0-50m", "min_dist": 0, "max_dist": 50, "shots": 66, "probabilities": {"birdie": 15, "par": 50, "bogey": 25, "double_plus": 10}}, {"range": "50-100m", "min_dist": 50, "max_dist": 100, "shots": 55, "probabilities": {"birdie": 8, "par": 45, "bogey": 35, "double_plus": 12}}, {"range": "100-150m", "min_dist": 100, "max_dist": 150, "shots": 44, "probabilities": {"birdie": 3, "par": 35, "bogey": 45, "double_plus": 17}}, {"range": "150-200m", "min_dist": 150, "max_dist": 200, "shots": 33, "probabilities": {"birdie": 1, "par": 25, "bogey": 50, "double_plus": 24}}, {"range": "200+m", "min_dist": 200, "max_dist": 999, "shots": 22, "probabilities": {"birdie": 0, "par": 15, "bogey": 55, "double_plus": 30}}]}, "swing_dna": {"dimensions": [{"name": "Ball Speed", "player_value": 86, "pga_benchmark": 100, "hcp15_benchmark": 75, "hcp23_benchmark": 60}, {"name": "Smash Factor", "player_value": 82, "pga_benchmark": 100, "hcp15_benchmark": 85, "hcp23_benchmark": 72}, {"name": "Launch Angle", "player_value": 75, "pga_benchmark": 100, "hcp15_benchmark": 80, "hcp23_benchmark": 65}, {"name": "Spin Rate", "player_value": 70, "pga_benchmark": 100, "hcp15_benchmark": 78, "hcp23_benchmark": 68}, {"name": "Attack Angle", "player_value": 80, "pga_benchmark": 100, "hcp15_benchmark": 82, "hcp23_benchmark": 70}, {"name": "Club Path", "player_value": 65, "pga_benchmark": 100, "hcp15_benchmark": 75, "hcp23_benchmark": 60}, {"name": "Face Angle", "player_value": 62, "pga_benchmark": 100, "hcp15_benchmark": 73, "hcp23_benchmark": 58}, {"name": "Consistency", "player_value": 68, "pga_benchmark": 100, "hcp15_benchmark": 76, "hcp23_benchmark": 62}, {"name": "Distance Control", "player_value": 72, "pga_benchmark": 100, "hcp15_benchmark": 78, "hcp23_benchmark": 64}, {"name": "Directional Control", "player_value": 58, "pga_benchmark": 100, "hcp15_benchmark": 72, "hcp23_benchmark": 55}, {"name": "Short Game", "player_value": 95, "pga_benchmark": 100, "hcp15_benchmark": 82, "hcp23_benchmark": 68}, {"name": "Course Management", "player_value": 77, "pga_benchmark": 100, "hcp15_benchmark": 80, "hcp23_benchmark": 65}], "overall_score": 74.2, "strengths": ["Short Game", "Ball Speed", "Smash Factor"], "weaknesses": ["Club Path", "Face Angle", "Directional Control"]}, "quick_wins_matrix": {"opportunities": [{"skill": "Putting <3m", "difficulty": 2, "impact": 8, "priority": "quick_win", "estimated_improvement": 2.5}, {"skill": "Bunker Play", "difficulty": 5, "impact": 6, "priority": "strategic", "estimated_improvement": 1.8}, {"skill": "Course Management", "difficulty": 3, "impact": 7, "priority": "quick_win", "estimated_improvement": 2.2}, {"skill": "Driver Accuracy", "difficulty": 7, "impact": 8, "priority": "strategic", "estimated_improvement": 2.0}, {"skill": "Approach Shots 100-150m", "difficulty": 6, "impact": 7, "priority": "strategic", "estimated_improvement": 1.5}, {"skill": "Chipping Consistency", "difficulty": 4, "impact": 7, "priority": "quick_win", "estimated_improvement": 1.9}, {"skill": "Mental Game", "difficulty": 8, "impact": 6, "priority": "strategic", "estimated_improvement": 1.3}, {"skill": "Distance Control Wedges", "difficulty": 5, "impact": 6, "priority": "strategic", "estimated_improvement": 1.4}, {"skill": "Ball Striking Irons", "difficulty": 9, "impact": 5, "priority": "luxury", "estimated_improvement": 1.0}, {"skill": "Pre-shot Routine", "difficulty": 2, "impact": 5, "priority": "quick_win", "estimated_improvement": 0.8}], "summary": {"total_opportunities": 10, "quick_wins": 4, "strategic_moves": 5, "total_potential_improvement": 16.4}}, "club_distance_comparison": {"clubs": [{"club": "3W", "player_distance": 202.3, "pga_tour": 255, "hcp15": 210, "hcp23": 185, "vs_pga": -20.7, "vs_hcp15": -3.7, "vs_hcp23": 9.4, "rating": "above"}, {"club": "5i", "player_distance": 148.0, "pga_tour": 195, "hcp15": 170, "hcp23": 155, "vs_pga": -24.1, "vs_hcp15": -12.9, "vs_hcp23": -4.5, "rating": "at"}, {"club": "6i", "player_distance": 132.8, "pga_tour": 185, "hcp15": 160, "hcp23": 145, "vs_pga": -28.2, "vs_hcp15": -17.0, "vs_hcp23": -8.4, "rating": "below"}, {"club": "7i", "player_distance": 136.6, "pga_tour": 170, "hcp15": 150, "hcp23": 135, "vs_pga": -19.6, "vs_hcp15": -8.9, "vs_hcp23": 1.2, "rating": "at"}, {"club": "8i", "player_distance": 119.2, "pga_tour": 160, "hcp15": 140, "hcp23": 125, "vs_pga": -25.5, "vs_hcp15": -14.8, "vs_hcp23": -4.6, "rating": "at"}, {"club": "9i", "player_distance": 117.6, "pga_tour": 145, "hcp15": 130, "hcp23": 115, "vs_pga": -18.9, "vs_hcp15": -9.6, "vs_hcp23": 2.2, "rating": "at"}, {"club": "PW", "player_distance": 107.7, "pga_tour": 130, "hcp15": 120, "hcp23": 105, "vs_pga": -17.2, "vs_hcp15": -10.3, "vs_hcp23": 2.5, "rating": "at"}]}, "comfort_zones": {"zones": [{"range": "0-50m", "min_dist": 0, "max_dist": 50, "shots": 156, "avg_score": 4.2, "consistency": 0.8, "comfort_level": "high", "gir_percentage": 65}, {"range": "50-100m", "min_dist": 50, "max_dist": 100, "shots": 134, "avg_score": 4.5, "consistency": 0.9, "comfort_level": "high", "gir_percentage": 48}, {"range": "100-150m", "min_dist": 100, "max_dist": 150, "shots": 98, "avg_score": 4.8, "consistency": 1.1, "comfort_level": "medium", "gir_percentage": 32}, {"range": "150-200m", "min_dist": 150, "max_dist": 200, "shots": 72, "avg_score": 5.2, "consistency": 1.3, "comfort_level": "medium", "gir_percentage": 22}, {"range": "200+m", "min_dist": 200, "max_dist": 999, "shots": 45, "avg_score": 5.6, "consistency": 1.5, "comfort_level": "low", "gir_percentage": 12}], "best_zone": "0-50m", "worst_zone": "200+m"}, "tempo_analysis": {"player_tempo": {"driver": 2.8, "irons": 2.6, "wedges": 2.4, "avg_backswing": 0.84, "avg_downswing": 0.3}, "pga_benchmarks": {"ideal_tempo": 3.0, "range_low": 2.5, "range_high": 3.5}, "analysis": {"rating": "ideal", "recommendation": "Maintain current tempo consistency across all clubs", "avg_tempo": 2.6}}, "strokes_gained": {"categories": [{"category": "Off the Tee (Driving)", "player_avg": 32.5, "hcp15_benchmark": 30.0, "strokes_gained": -2.5, "percentile": 35, "rating": "poor"}, {"category": "Approach Shots", "player_avg": 26.8, "hcp15_benchmark": 25.0, "strokes_gained": -1.8, "percentile": 40, "rating": "poor"}, {"category": "Short Game", "player_avg": 19.2, "hcp15_benchmark": 21.0, "strokes_gained": 1.8, "percentile": 75, "rating": "excellent"}, {"category": "Putting", "player_avg": 31.5, "hcp15_benchmark": 31.0, "strokes_gained": -0.5, "percentile": 48, "rating": "average"}, {"category": "Around the Green", "player_avg": 8.2, "hcp15_benchmark": 9.5, "strokes_gained": 1.3, "percentile": 70, "rating": "good"}, {"category": "Tee to Green", "player_avg": 59.3, "hcp15_benchmark": 55.0, "strokes_gained": -4.3, "percentile": 32, "rating": "poor"}], "total_sg": -6.0, "best_category": "Short Game", "worst_category": "Tee to Green", "summary": {"strengths": ["Short Game", "Around the Green"], "weaknesses": ["Off the Tee (Driving)", "Approach Shots", "Tee to Green"]}}, "six_month_projection": {"months": ["Feb 2026", "Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026"], "projected_hcp": [27.0, 26.4, 25.8, 25.5, 25.3, 25.2], "projected_avg_score": [100.6, 99.8, 99.2, 98.7, 98.4, 98.3], "confidence_interval": {"hcp_low": [25.0, 24.4, 23.8, 23.5, 23.3, 23.2], "hcp_high": [29.0, 28.4, 27.8, 27.5, 27.3, 27.2], "score_low": [97.6, 96.8, 96.2, 95.7, 95.4, 95.3], "score_high": [103.6, 102.8, 102.2, 101.7, 101.4, 101.3]}, "milestones": [], "assumptions": {"practice_frequency": "Current level (2-3x per week)", "improvement_rate": -0.72, "consistency_factor": 0.85}}, "swot_matrix": {"strengths": ["Short Game excellence (95 percentile vs HCP 23)", "Consistent improvement trend (-8.8 HCP in 18 months)", "Strong around-the-green performance (+1.3 SG)", "High practice commitment and data tracking discipline", "Ideal tempo consistency (2.6 avg, within PGA range)"], "weaknesses": ["Driving distance below HCP 23 benchmark (-2.5 SG)", "Inconsistent ball striking with irons (approach -1.8 SG)", "Tee-to-green performance needs major improvement (-4.3 SG)", "Distance control beyond 150m (comfort zone drops significantly)", "High scoring volatility (coefficient of variation varies by quarter)"], "opportunities": ["Quick wins available in putting <3m (2.5 strokes potential)", "Course management improvements (2.2 strokes potential)", "Driver accuracy training (high impact, 2.0 strokes potential)", "Consistent practice ROI (-0.42 correlation shows benefit)", "Sub-20 handicap achievable by Jul 2026 with current trajectory"], "threats": ["Improvement rate may plateau without targeted practice", "Scoring volatility could increase under competitive pressure", "Weather conditions impact outdoor practice availability", "Risk of injury from high practice frequency", "Potential burnout from intense improvement focus"], "summary": {"key_strength": "Elite short game performance", "critical_weakness": "Tee-to-green consistency", "best_opportunity": "Quick wins in putting and course management", "main_threat": "Improvement plateau without structured practice"}}, "benchmark_radar": {"dimensions": ["Long Game", "Mid Game", "Short Game", "Putting", "Driving Distance", "Driving Accuracy", "Approach Accuracy", "Consistency", "Course Management", "Mental Game"], "player": [62, 68, 95, 75, 58, 62, 65, 68, 77, 70], "pga_tour": [100, 100, 100, 100, 100, 100, 100, 100, 100, 100], "hcp15": [82, 80, 85, 80, 80, 82, 78, 82, 85, 80], "hcp23": [65, 62, 70, 68, 60, 65, 62, 65, 70, 65], "analysis": {"vs_pga": "below", "vs_hcp15": "below", "vs_hcp23": "above", "overall_rating": 70.0}}, "roi_plan": {"plan": [{"action": "Putting practice <3m (repetitions drill)", "time_investment": 2, "difficulty": 2, "expected_improvement": 2.5, "timeframe": "4 weeks", "roi_score": 1.25, "priority": 1}, {"action": "Course management training (decision making)", "time_investment": 1, "difficulty": 3, "expected_improvement": 2.2, "timeframe": "6 weeks", "roi_score": 2.2, "priority": 1}, {"action": "Chipping consistency practice (short game)", "time_investment": 2, "difficulty": 4, "expected_improvement": 1.9, "timeframe": "6 weeks", "roi_score": 0.95, "priority": 2}, {"action": "Driver accuracy training (alignment + tempo)", "time_investment": 3, "difficulty": 7, "expected_improvement": 2.0, "timeframe": "12 weeks", "roi_score": 0.67, "priority": 3}, {"action": "Approach shots 100-150m (distance control)", "time_investment": 2, "difficulty": 6, "expected_improvement": 1.5, "timeframe": "8 weeks", "roi_score": 0.75, "priority": 3}, {"action": "Mental game coaching (pressure situations)", "time_investment": 1, "difficulty": 8, "expected_improvement": 1.3, "timeframe": "12 weeks", "roi_score": 1.3, "priority": 4}], "summary": {"total_time": 11, "total_improvement": 11.4, "timeframe": "16 weeks (4 months)", "feasibility": "medium", "avg_roi": 1.04}, "milestones": [{"week": 4, "target": "Complete putting drill program (2.5 strokes saved)"}, {"week": 6, "target": "Implement course management improvements (2.2 strokes)"}, {"week": 8, "target": "Achieve chipping consistency benchmark (1.9 strokes)"}, {"week": 12, "target": "Complete driver accuracy program (2.0 strokes)"}, {"week": 16, "target": "Total improvement: ~10 strokes (HCP -5 to -6 points)"}]}, "launch_metrics": {"summary": {"total_shots": 492, "clubs_analyzed": 11, "avg_ball_speed_pct_pga": 91.2, "avg_carry_pct_pga": 81.6, "avg_launch_delta_pga": 4.0}, "clubs": [{"club": "Dr", "n": 101, "carry_mean": 212.8, "carry_std": 14.1, "total_mean": 231.6, "ball_speed_mean": 235.5, "launch_angle_mean": 12.7, "launch_angle_std": 4.1, "height_mean": 29.0, "attack_angle_est": 4.1, "attack_angle_std": 4.1, "launch_delta_pga": 2.3, "ball_speed_pct_pga": 85.9, "carry_pct_pga": 81.8, "height_delta_pga": 1.0, "attack_delta_pga": 5.1, "carry_pct_hcp15": 101.3, "launch_rating": "good", "speed_rating": "average", "attack_rating": "critical"}, {"club": "3W", "n": 31, "carry_mean": 202.3, "carry_std": 14.3, "total_mean": 218.1, "ball_speed_mean": 226.7, "launch_angle_mean": 15.6, "launch_angle_std": 4.0, "height_mean": 32.8, "attack_angle_est": 3.3, "attack_angle_std": 4.0, "launch_delta_pga": 6.4, "ball_speed_pct_pga": 93.3, "carry_pct_pga": 86.1, "height_delta_pga": 5.8, "attack_delta_pga": 6.2, "carry_pct_hcp15": 106.5, "launch_rating": "needs_work", "speed_rating": "good", "attack_rating": "critical"}, {"club": "Hyb", "n": 33, "carry_mean": 162.7, "carry_std": 12.5, "total_mean": 169.4, "ball_speed_mean": 207.9, "launch_angle_mean": 16.9, "launch_angle_std": 3.4, "height_mean": 32.6, "attack_angle_est": 0.5, "attack_angle_std": 3.4, "launch_delta_pga": 4.9, "ball_speed_pct_pga": 92.8, "carry_pct_pga": 77.5, "height_delta_pga": 6.6, "attack_delta_pga": 3.8, "carry_pct_hcp15": 98.6, "launch_rating": "needs_work", "speed_rating": "good", "attack_rating": "needs_work"}, {"club": "5i", "n": 6, "carry_mean": 148.0, "carry_std": 2.4, "total_mean": 152.2, "ball_speed_mean": 192.5, "launch_angle_mean": 20.5, "launch_angle_std": 1.5, "height_mean": 33.0, "attack_angle_est": 1.0, "attack_angle_std": 1.5, "launch_delta_pga": 6.4, "ball_speed_pct_pga": 92.1, "carry_pct_pga": 79.6, "height_delta_pga": 5.0, "attack_delta_pga": 4.7, "carry_pct_hcp15": 98.7, "launch_rating": "needs_work", "speed_rating": "good", "attack_rating": "needs_work"}, {"club": "6i", "n": 30, "carry_mean": 132.8, "carry_std": 12.5, "total_mean": 140.0, "ball_speed_mean": 174.5, "launch_angle_mean": 19.3, "launch_angle_std": 3.0, "height_mean": 25.0, "attack_angle_est": -2.5, "attack_angle_std": 3.0, "launch_delta_pga": 3.4, "ball_speed_pct_pga": 86.8, "carry_pct_pga": 75.5, "height_delta_pga": -4.0, "attack_delta_pga": 1.6, "carry_pct_hcp15": 93.5, "launch_rating": "good", "speed_rating": "average", "attack_rating": "good"}, {"club": "7i", "n": 48, "carry_mean": 136.6, "carry_std": 10.4, "total_mean": 140.9, "ball_speed_mean": 178.3, "launch_angle_mean": 22.0, "launch_angle_std": 2.4, "height_mean": 30.2, "attack_angle_est": -1.2, "attack_angle_std": 2.4, "launch_delta_pga": 4.4, "ball_speed_pct_pga": 92.4, "carry_pct_pga": 81.8, "height_delta_pga": 0.2, "attack_delta_pga": 3.1, "carry_pct_hcp15": 101.2, "launch_rating": "needs_work", "speed_rating": "good", "attack_rating": "needs_work"}, {"club": "8i", "n": 40, "carry_mean": 119.2, "carry_std": 7.0, "total_mean": 123.8, "ball_speed_mean": 160.6, "launch_angle_mean": 24.4, "launch_angle_std": 3.3, "height_mean": 26.4, "attack_angle_est": -1.9, "attack_angle_std": 3.3, "launch_delta_pga": 3.4, "ball_speed_pct_pga": 87.8, "carry_pct_pga": 76.9, "height_delta_pga": -2.6, "attack_delta_pga": 2.8, "carry_pct_hcp15": 94.6, "launch_rating": "good", "speed_rating": "average", "attack_rating": "good"}, {"club": "9i", "n": 86, "carry_mean": 117.6, "carry_std": 12.5, "total_mean": 121.8, "ball_speed_mean": 158.7, "launch_angle_mean": 26.7, "launch_angle_std": 5.0, "height_mean": 28.0, "attack_angle_est": -2.5, "attack_angle_std": 5.0, "launch_delta_pga": 2.5, "ball_speed_pct_pga": 91.7, "carry_pct_pga": 82.2, "height_delta_pga": 0.0, "attack_delta_pga": 2.5, "carry_pct_hcp15": 99.7, "launch_rating": "good", "speed_rating": "good", "attack_rating": "good"}, {"club": "PW", "n": 60, "carry_mean": 107.6, "carry_std": 15.6, "total_mean": 112.0, "ball_speed_mean": 149.5, "launch_angle_mean": 29.0, "launch_angle_std": 6.4, "height_mean": 26.5, "attack_angle_est": -2.7, "attack_angle_std": 6.4, "launch_delta_pga": 2.0, "ball_speed_pct_pga": 92.9, "carry_pct_pga": 82.8, "height_delta_pga": -0.5, "attack_delta_pga": 2.6, "carry_pct_hcp15": 100.6, "launch_rating": "tour_caliber", "speed_rating": "good", "attack_rating": "good"}, {"club": "GW 52", "n": 20, "carry_mean": 93.0, "carry_std": 7.1, "total_mean": 96.2, "ball_speed_mean": 134.6, "launch_angle_mean": 35.7, "launch_angle_std": 2.6, "height_mean": 28.0, "attack_angle_est": -1.7, "attack_angle_std": 2.6, "launch_delta_pga": 5.2, "ball_speed_pct_pga": 90.9, "carry_pct_pga": 82.3, "height_delta_pga": 3.0, "attack_delta_pga": 3.8, "carry_pct_hcp15": 101.1, "launch_rating": "needs_work", "speed_rating": "good", "attack_rating": "needs_work"}, {"club": "SW 58", "n": 37, "carry_mean": 86.3, "carry_std": 16.3, "total_mean": 89.1, "ball_speed_mean": 129.1, "launch_angle_mean": 36.3, "launch_angle_std": 6.8, "height_mean": 25.5, "attack_angle_est": -5.5, "attack_angle_std": 6.8, "launch_delta_pga": 3.3, "ball_speed_pct_pga": 97.1, "carry_pct_pga": 90.8, "height_delta_pga": 3.5, "attack_delta_pga": 0.2, "carry_pct_hcp15": 110.6, "launch_rating": "good", "speed_rating": "elite", "attack_rating": "tour_caliber"}], "best_clubs": [], "worst_clubs": [], "recommendations": [{"club": "Dr", "type": "attack_angle", "priority": "high", "message": "Driver attack angle est. 4.1° (PGA: -1.0°). Consider teeing ball higher and moving it forward."}, {"club": "3W", "type": "launch_too_high", "priority": "high", "message": "3W: Launch angle 15.6° is +6.4° vs PGA. Work on delofting through impact."}, {"club": "Hyb", "type": "launch_too_high", "priority": "high", "message": "Hyb: Launch angle 16.9° is +4.9° vs PGA. Work on delofting through impact."}, {"club": "5i", "type": "launch_too_high", "priority": "high", "message": "5i: Launch angle 20.5° is +6.4° vs PGA. Work on delofting through impact."}, {"club": "7i", "type": "launch_too_high", "priority": "high", "message": "7i: Launch angle 22.0° is +4.4° vs PGA. Work on delofting through impact."}, {"club": "GW 52", "type": "launch_too_high", "priority": "high", "message": "GW 52: Launch angle 35.7° is +5.2° vs PGA. Work on delofting through impact."}]}, "dispersion_analysis": {"summary": {"total_shots": 493, "clubs_analyzed": 11, "avg_consistency_score": 34.0, "avg_dispersion_ratio": 10.8, "avg_lateral_std": 14.9, "overall_rating": "critical"}, "clubs": [{"club": "Dr", "n": 101, "lateral_mean": -11.1, "lateral_std": 26.8, "lateral_range": 130.8, "lateral_min": -80.9, "lateral_max": 49.9, "bias_direction": "left", "carry_mean": 212.8, "carry_std": 14.1, "carry_cv": 6.6, "dispersion_area": 1187.1, "dispersion_ratio": 12.6, "corridor_80_lateral": 66.7, "corridor_80_long": 34.0, "lateral_vs_pga": 2.23, "pga_lateral_std": 12.0, "carry_std_vs_pga": 1.76, "pga_carry_std": 8.0, "lateral_vs_hcp15": 1.22, "hcp15_lateral_std": 22.0, "consistency_score": 34, "consistency_rating": "critical", "pattern": {"shape": "wide_lateral", "lateral_tendency": "neutral", "longitudinal_tendency": "short_biased", "lateral_skew": -0.0, "longitudinal_skew": -0.55}}, {"club": "3W", "n": 31, "lateral_mean": -3.7, "lateral_std": 19.4, "lateral_range": 110.7, "lateral_min": -65.2, "lateral_max": 45.5, "bias_direction": "left", "carry_mean": 202.3, "carry_std": 14.3, "carry_cv": 7.1, "dispersion_area": 871.2, "dispersion_ratio": 9.6, "corridor_80_lateral": 29.3, "corridor_80_long": 32.0, "lateral_vs_pga": 1.94, "pga_lateral_std": 10.0, "carry_std_vs_pga": 1.9, "pga_carry_std": 7.5, "lateral_vs_hcp15": 1.08, "hcp15_lateral_std": 18.0, "consistency_score": 38, "consistency_rating": "needs_work", "pattern": {"shape": "scattered", "lateral_tendency": "left_biased", "longitudinal_tendency": "short_biased", "lateral_skew": -0.63, "longitudinal_skew": -1.08}}, {"club": "Hyb", "n": 34, "lateral_mean": -1.4, "lateral_std": 20.9, "lateral_range": 74.6, "lateral_min": -36.8, "lateral_max": 37.8, "bias_direction": "center", "carry_mean": 162.6, "carry_std": 12.3, "carry_cv": 7.6, "dispersion_area": 807.8, "dispersion_ratio": 12.9, "corridor_80_lateral": 49.8, "corridor_80_long": 29.9, "lateral_vs_pga": 2.33, "pga_lateral_std": 9.0, "carry_std_vs_pga": 1.76, "pga_carry_std": 7.0, "lateral_vs_hcp15": 1.31, "hcp15_lateral_std": 16.0, "consistency_score": 31, "consistency_rating": "critical", "pattern": {"shape": "wide_lateral", "lateral_tendency": "neutral", "longitudinal_tendency": "short_biased", "lateral_skew": 0.37, "longitudinal_skew": -0.63}}, {"club": "5i", "n": 6, "lateral_mean": 19.8, "lateral_std": 10.6, "lateral_range": 28.4, "lateral_min": 9.6, "lateral_max": 38.0, "bias_direction": "right", "carry_mean": 148.0, "carry_std": 2.4, "carry_cv": 1.6, "dispersion_area": 79.0, "dispersion_ratio": 7.2, "corridor_80_lateral": 20.5, "corridor_80_long": 5.0, "lateral_vs_pga": 1.33, "pga_lateral_std": 8.0, "carry_std_vs_pga": 0.39, "pga_carry_std": 6.0, "lateral_vs_hcp15": 0.76, "hcp15_lateral_std": 14.0, "consistency_score": 68, "consistency_rating": "good", "pattern": {"shape": "tight", "lateral_tendency": "right_biased", "longitudinal_tendency": "neutral", "lateral_skew": 1.08, "longitudinal_skew": 0.0}}, {"club": "6i", "n": 30, "lateral_mean": -16.0, "lateral_std": 16.7, "lateral_range": 72.2, "lateral_min": -39.6, "lateral_max": 32.6, "bias_direction": "left", "carry_mean": 132.8, "carry_std": 12.5, "carry_cv": 9.4, "dispersion_area": 655.8, "dispersion_ratio": 12.6, "corridor_80_lateral": 34.6, "corridor_80_long": 31.2, "lateral_vs_pga": 2.22, "pga_lateral_std": 7.5, "carry_std_vs_pga": 2.27, "pga_carry_std": 5.5, "lateral_vs_hcp15": 1.28, "hcp15_lateral_std": 13.0, "consistency_score": 28, "consistency_rating": "critical", "pattern": {"shape": "scattered", "lateral_tendency": "right_biased", "longitudinal_tendency": "short_biased", "lateral_skew": 0.98, "longitudinal_skew": -0.99}}, {"club": "7i", "n": 48, "lateral_mean": -4.5, "lateral_std": 10.8, "lateral_range": 51.3, "lateral_min": -27.1, "lateral_max": 24.2, "bias_direction": "left", "carry_mean": 136.6, "carry_std": 10.4, "carry_cv": 7.6, "dispersion_area": 354.1, "dispersion_ratio": 7.9, "corridor_80_lateral": 27.0, "corridor_80_long": 24.3, "lateral_vs_pga": 1.67, "pga_lateral_std": 6.5, "carry_std_vs_pga": 2.08, "pga_carry_std": 5.0, "lateral_vs_hcp15": 0.99, "hcp15_lateral_std": 11.0, "consistency_score": 41, "consistency_rating": "needs_work", "pattern": {"shape": "scattered", "lateral_tendency": "neutral", "longitudinal_tendency": "short_biased", "lateral_skew": 0.44, "longitudinal_skew": -1.24}}, {"club": "8i", "n": 40, "lateral_mean": 2.3, "lateral_std": 12.5, "lateral_range": 46.7, "lateral_min": -24.2, "lateral_max": 22.5, "bias_direction": "right", "carry_mean": 119.2, "carry_std": 7.0, "carry_cv": 5.9, "dispersion_area": 274.8, "dispersion_ratio": 10.5, "corridor_80_lateral": 30.2, "corridor_80_long": 19.4, "lateral_vs_pga": 2.28, "pga_lateral_std": 5.5, "carry_std_vs_pga": 1.55, "pga_carry_std": 4.5, "lateral_vs_hcp15": 1.25, "hcp15_lateral_std": 10.0, "consistency_score": 39, "consistency_rating": "needs_work", "pattern": {"shape": "scattered", "lateral_tendency": "neutral", "longitudinal_tendency": "neutral", "lateral_skew": 0.01, "longitudinal_skew": -0.04}}, {"club": "9i", "n": 86, "lateral_mean": -0.8, "lateral_std": 11.3, "lateral_range": 49.5, "lateral_min": -26.0, "lateral_max": 23.5, "bias_direction": "center", "carry_mean": 117.6, "carry_std": 12.5, "carry_cv": 10.7, "dispersion_area": 445.7, "dispersion_ratio": 9.6, "corridor_80_lateral": 28.4, "corridor_80_long": 31.5, "lateral_vs_pga": 2.26, "pga_lateral_std": 5.0, "carry_std_vs_pga": 3.13, "pga_carry_std": 4.0, "lateral_vs_hcp15": 1.26, "hcp15_lateral_std": 9.0, "consistency_score": 31, "consistency_rating": "critical", "pattern": {"shape": "scattered", "lateral_tendency": "neutral", "longitudinal_tendency": "long_biased", "lateral_skew": 0.1, "longitudinal_skew": 1.05}}, {"club": "PW", "n": 60, "lateral_mean": 2.2, "lateral_std": 15.6, "lateral_range": 109.5, "lateral_min": -75.2, "lateral_max": 34.3, "bias_direction": "right", "carry_mean": 107.6, "carry_std": 15.6, "carry_cv": 14.5, "dispersion_area": 764.8, "dispersion_ratio": 14.5, "corridor_80_lateral": 30.7, "corridor_80_long": 31.1, "lateral_vs_pga": 3.9, "pga_lateral_std": 4.0, "carry_std_vs_pga": 4.46, "pga_carry_std": 3.5, "lateral_vs_hcp15": 1.95, "hcp15_lateral_std": 8.0, "consistency_score": 14, "consistency_rating": "critical", "pattern": {"shape": "scattered", "lateral_tendency": "left_biased", "longitudinal_tendency": "long_biased", "lateral_skew": -1.67, "longitudinal_skew": 1.45}}, {"club": "GW 52", "n": 20, "lateral_mean": -2.9, "lateral_std": 7.3, "lateral_range": 29.5, "lateral_min": -21.8, "lateral_max": 7.7, "bias_direction": "left", "carry_mean": 93.0, "carry_std": 7.1, "carry_cv": 7.6, "dispersion_area": 163.1, "dispersion_ratio": 7.9, "corridor_80_lateral": 16.4, "corridor_80_long": 17.1, "lateral_vs_pga": 2.1, "pga_lateral_std": 3.5, "carry_std_vs_pga": 2.36, "pga_carry_std": 3.0, "lateral_vs_hcp15": 1.05, "hcp15_lateral_std": 7.0, "consistency_score": 40, "consistency_rating": "needs_work", "pattern": {"shape": "scattered", "lateral_tendency": "left_biased", "longitudinal_tendency": "short_biased", "lateral_skew": -0.84, "longitudinal_skew": -0.77}}, {"club": "SW 58", "n": 37, "lateral_mean": -0.4, "lateral_std": 11.9, "lateral_range": 71.2, "lateral_min": -23.5, "lateral_max": 47.7, "bias_direction": "center", "carry_mean": 86.3, "carry_std": 16.3, "carry_cv": 18.9, "dispersion_area": 611.8, "dispersion_ratio": 13.8, "corridor_80_lateral": 21.1, "corridor_80_long": 36.0, "lateral_vs_pga": 3.98, "pga_lateral_std": 3.0, "carry_std_vs_pga": 5.44, "pga_carry_std": 3.0, "lateral_vs_hcp15": 1.99, "hcp15_lateral_std": 6.0, "consistency_score": 7, "consistency_rating": "critical", "pattern": {"shape": "scattered", "lateral_tendency": "right_biased", "longitudinal_tendency": "neutral", "lateral_skew": 1.63, "longitudinal_skew": 0.47}}], "best_clubs": [{"club": "5i", "score": 68}, {"club": "7i", "score": 41}, {"club": "GW 52", "score": 40}], "worst_clubs": [{"club": "6i", "score": 28}, {"club": "PW", "score": 14}, {"club": "SW 58", "score": 7}], "recommendations": [{"club": "Hyb", "type": "lateral_dispersion", "priority": "high", "message": "Hyb: Lateral dispersion 20.9m is 1.3x HCP-15 level. Focus on face angle control at impact."}, {"club": "5i", "type": "directional_bias", "priority": "high", "message": "5i: Strong right bias (+19.8m average). Check aim alignment and swing path."}, {"club": "6i", "type": "directional_bias", "priority": "high", "message": "6i: Strong left bias (-16.0m average). Check aim alignment and swing path."}, {"club": "PW", "type": "lateral_dispersion", "priority": "high", "message": "PW: Lateral dispersion 15.6m is 1.9x HCP-15 level. Focus on face angle control at impact."}, {"club": "SW 58", "type": "lateral_dispersion", "priority": "high", "message": "SW 58: Lateral dispersion 11.9m is 2.0x HCP-15 level. Focus on face angle control at impact."}, {"club": "PW", "type": "distance_inconsistency", "priority": "medium", "message": "PW: Distance CV 14.5% (target: <8%). Work on strike consistency."}, {"club": "SW 58", "type": "distance_inconsistency", "priority": "medium", "message": "SW 58: Distance CV 18.9% (target: <8%). Work on strike consistency."}]}, "consistency_benchmarks": {"scoring_18": {"total_rounds": 52, "holes": 18, "score_mean": 100.6, "score_std": 6.8, "score_median": 101.0, "score_min": 88, "score_max": 117, "score_cv": 6.7, "best_5": [{"score": 88, "campo": "MARINA GOLF", "fecha": "2025-11-16"}, {"score": 89, "campo": "MARINA GOLF", "fecha": "2025-08-21"}, {"score": 89, "campo": "NUEVO PORTIL", "fecha": "2025-08-16"}, {"score": 89, "campo": "VALLE DEL ESTE", "fecha": "2025-08-24"}, {"score": 90, "campo": "VALLE DEL ESTE", "fecha": "2025-11-15"}], "worst_5": [{"score": 110, "campo": "REAL CLUB LAS ROZAS MADRID", "fecha": "2024-05-27"}, {"score": 110, "campo": "REAL CLUB LAS ROZAS MADRID", "fecha": "2024-11-22"}, {"score": 111, "campo": "LA DEHESA", "fecha": "2025-04-02"}, {"score": 112, "campo": "VALLE DEL ESTE", "fecha": "2024-08-18"}, {"score": 117, "campo": "LA DEHESA", "fecha": "2024-04-19"}], "diff_mean": 28.8, "diff_std": 7.6, "diff_min": 4, "diff_max": 45, "trend_first_half_avg": 104.3, "trend_second_half_avg": 96.8, "trend_delta": -7.5, "trend_direction": "improving"}, "scoring_9": {"error": "no_rounds_with_9_holes"}, "handicap_benchmark": {"current_hcp": 23.2, "bracket": "hcp_25", "benchmark": {"avg_score": 101, "std_score": 7.5, "best": 91, "worst": 115}, "player_scoring": {"total_rounds": 52, "holes": 18, "score_mean": 100.6, "score_std": 6.8, "score_median": 101.0, "score_min": 88, "score_max": 117, "score_cv": 6.7, "best_5": [{"score": 88, "campo": "MARINA GOLF", "fecha": "2025-11-16"}, {"score": 89, "campo": "MARINA GOLF", "fecha": "2025-08-21"}, {"score": 89, "campo": "NUEVO PORTIL", "fecha": "2025-08-16"}, {"score": 89, "campo": "VALLE DEL ESTE", "fecha": "2025-08-24"}, {"score": 90, "campo": "VALLE DEL ESTE", "fecha": "2025-11-15"}], "worst_5": [{"score": 110, "campo": "REAL CLUB LAS ROZAS MADRID", "fecha": "2024-05-27"}, {"score": 110, "campo": "REAL CLUB LAS ROZAS MADRID", "fecha": "2024-11-22"}, {"score": 111, "campo": "LA DEHESA", "fecha": "2025-04-02"}, {"score": 112, "campo": "VALLE DEL ESTE", "fecha": "2024-08-18"}, {"score": 117, "campo": "LA DEHESA", "fecha": "2024-04-19"}], "diff_mean": 28.8, "diff_std": 7.6, "diff_min": 4, "diff_max": 45, "trend_first_half_avg": 104.3, "trend_second_half_avg": 96.8, "trend_delta": -7.5, "trend_direction": "improving"}, "score_vs_benchmark": -0.4, "std_vs_benchmark": -0.7, "player_hole_rates": {"birdie": 1.4, "par": 12.9, "bogey": 32.4, "double_plus": 53.3}, "benchmark_hole_rates": {"birdie": 0.5, "par": 8, "bogey": 30, "double_plus": 61.5}, "assessment": "playing_at_hcp", "next_level": {"bracket": "hcp_20", "benchmark_score": 96, "gap": 4.6, "shots_to_cut": 5.0}}, "round_comparison": {"earlier": {"period": "2024-04-15 - 2024-05-23", "n_rounds": 5, "avg_score": 107.4, "std_score": 4.9, "best": 104, "hole_rates": {"total_holes": 90, "birdie_pct": 1.1, "par_pct": 3.3, "bogey_pct": 31.1, "double_plus_pct": 64.4, "par_or_better_pct": 4.4}}, "recent": {"period": "2025-11-15 - 2025-12-07", "n_rounds": 5, "avg_score": 92.8, "std_score": 3.4, "best": 88, "hole_rates": {"total_holes": 90, "birdie_pct": 2.2, "par_pct": 22.2, "bogey_pct": 40.0, "double_plus_pct": 35.6, "par_or_better_pct": 24.4}}, "improvement": {"avg_score_delta": -14.6, "std_delta": -1.5, "best_delta": -16, "par_rate_delta": 20.0, "double_rate_delta": -28.8}}, "trends": {}, "recommendations": [{"type": "big_numbers", "priority": "high", "message": "Double bogey+ rate at 53%. Reducing doubles is the fastest path to lower HCP."}, {"type": "positive_trend", "priority": "info", "message": "Recent scoring improved by 14.6 shots. Keep the momentum going."}]}, "metadata": {"version": "5.0.0", "sprint": 12, "changes": ["SPRINT 1: Dispersion scatter data generada (11 palos)", "SPRINT 1: Club data merged (basic + launch + dispersion)", "SPRINT 1: Club gaps calculados", "SPRINT 1: Temporal evolution extendido a 11 palos", "SPRINT 3: Score history con milestones", "SPRINT 3: Percentiles de distancia y scores", "SPRINT 3: Distribución direccional (left/center/right)", "SPRINT 3: Bubble chart data (consistencia vs distancia)", "SPRINT 5: Player profile radar (8 dimensiones)", "SPRINT 5: Trajectory data por palo", "SPRINT 5: Best/worst rounds analysis", "SPRINT 5: Quarterly scoring trends", "SPRINT 6: Monthly volatility (variabilidad mensual)", "SPRINT 6: Momentum indicators (moving averages, trends)", "SPRINT 6: Milestone achievements (broke_90/80, personal bests, streaks)", "SPRINT 6: Learning curve (mejora por categoría de shot)", "SPRINT 9: Current form chart (últimas 20 rondas con tendencia)", "SPRINT 9: Percentile gauges (4 gauges: short_game, ball_speed, consistency, attack_angle)", "SPRINT 9: HCP trajectory (histórico + proyección 6 meses con regresión lineal)", "SPRINT 9: Temporal long game (evolución mensual Driver, 3W, Hybrid)", "SPRINT 9: Irons evolution (evolución mensual 5i-9i)", "SPRINT 9: Wedges evolution (evolución mensual PW, GW, SW)", "SPRINT 9: Attack angle evolution (evolución mensual ángulo de ataque Driver)", "SPRINT 9: Smash factor evolution (evolución mensual eficiencia 4 categorías)", "SPRINT 10: Campo performance (mejor/promedio/peor score por campo)", "SPRINT 10: HCP evolution RFEG (handicap oficial estimado mensual)", "SPRINT 10: Scoring zones by course (distribución birdie/par/bogey por campo)", "SPRINT 10: Volatility index (índice de variabilidad por quarter)", "SPRINT 10: Estado forma (estado forma últimos 12 meses)", "SPRINT 10: HCP curve position (distribución scores vs curva normal)", "SPRINT 10: Differential distribution (distribución de differentials)", "SPRINT 10: Prediction model (predicción próximo score con regresión)", "SPRINT 10: ROI practice (ROI frecuencia de práctica vs mejora)", "SPRINT 11: Shot zones heatmap (heat map zonas de caída de shots)", "SPRINT 11: Scoring probability (probabilidad birdie/par/bogey por distancia)", "SPRINT 11: Swing DNA (fingerprint 12 dimensiones vs benchmarks)", "SPRINT 11: Quick wins matrix (matriz dificultad vs impacto para priorización)", "SPRINT 11: Club distance comparison (comparación distancias vs benchmarks PGA/HCP)", "SPRINT 11: Comfort zones (análisis zonas de confort por distancia)", "SPRINT 11: Tempo analysis (análisis tempo backswing/downswing vs PGA)", "SPRINT 11: Strokes gained (análisis por categoría vs HCP 15 benchmark)", "SPRINT 12: Six month projection (proyección HCP y scores 6 meses)", "SPRINT 12: SWOT matrix (análisis SWOT automático)", "SPRINT 12: Benchmark radar (comparación multidimensional vs benchmarks)", "SPRINT 12: ROI plan (plan de mejora con análisis ROI y milestones)"], "data_sources": {"flightscope": "data\\raw\\FlightScope-AP-Prov1.Next.xlsx", "tarjetas": "C:\\Users\\alvar\\OneDrive\\Documentos\\ALV\\GOLF\\IA GOLF MANAGER\\FUENTES PRIMARIAS\\TARJETAS RECORRIDOS.xlsx"}, "phase_5_enabled": true, "total_clubs": 11, "total_dispersion_charts": 11, "total_club_gaps": 10, "total_rounds": 52, "total_bubbles": 11}, "scoring_profile": {"player_hcp": 23.2, "overall_score": 6.79, "tee_to_green": 6.71, "scoring_game": 6.72, "data_completeness": 0.88, "dimensions": {"long_game": {"score": 5.52, "percentile": 55.2, "zone": "developing", "confidence": "high", "notes": ["Driver carry: 213m (benchmark HCP23: 193m, diferencia: +20m)", "SG Off the Tee: -2.50 (benchmark HCP23: -1.88)", "Ball speed driver: 236 km/h (benchmark: 212 km/h)", "Fairways hit: 48% (benchmark: 39%)"]}, "mid_game": {"score": 7.25, "percentile": 72.5, "zone": "strong", "confidence": "high", "notes": ["SG Approach: -1.80 (benchmark HCP23: -2.75)", "7 Hierro carry: 137m (benchmark: 124m, +12m)", "Smash factor 7i: 1.400 (benchmark: 1.297)"]}, "short_game": {"score": 9.17, "percentile": 91.7, "zone": "elite", "confidence": "medium", "notes": ["SG Around the Green: +1.80 (benchmark: -1.56)", "Scrambling: 45% (benchmark: 26%)"]}, "putting": {"score": 6.64, "percentile": 66.4, "zone": "strong", "confidence": "high", "notes": ["SG Putting: -0.50 (benchmark HCP23: -0.93)", "Putts/ronda: 33.2 (benchmark: 34.7, -1.5)", "3-putt %: 12% (benchmark: 17%)"]}, "consistency": {"score": 6.96, "percentile": 69.6, "zone": "strong", "confidence": "high", "notes": ["Varianza scores: std=6.8, CV=6.8% (benchmark: 11.6%)", "Driver carry CV: 6.7% (benchmark: 7.5%)"]}, "mental": {"score": 6.63, "percentile": 66.3, "zone": "strong", "confidence": "medium", "notes": ["Bounce-back rate: 28% (benchmark: 13%)", "Delta F9/B9: 2.0 golpes (benchmark: 3.7)", "Par 3 sobre-par relativo: +1.45 (benchmark: +1.29)", "Hoyos explosivos (+3): 10% (benchmark: 9%)"]}, "power": {"score": 6.94, "percentile": 69.4, "zone": "strong", "confidence": "none", "notes": ["Ball speed driver: 236 km/h (benchmark: 212 km/h)"]}, "accuracy": {"score": 3.88, "percentile": 38.8, "zone": "focus_area", "confidence": "high", "notes": ["Dispersión lateral driver: 29.9m (benchmark: 14.6m, +15.3m)", "|Face-to-path|: 4.5° (slice, benchmark: 5.1°)", "GIR: 46% (benchmark: 21%, +25pp)"]}}, "ranking": [["short_game", 9.17], ["mid_game", 7.25], ["consistency", 6.96], ["power", 6.94], ["putting", 6.64], ["mental", 6.63], ["long_game", 5.52], ["accuracy", 3.88]], "top_strength": ["short_game", 9.17], "top_gap": ["accuracy", 3.88]}, "golf_identity": {"archetype_id": "B3", "archetype_name": "El Artista Completo", "archetype_tagline": "Short game + putting como ventaja real", "archetype_description": "Has construido algo valioso: una combinación de short game sólido Y putting por encima del promedio. Esto significa que cada vez que llegas razonablemente cerca del green, tienes una alta probabilidad de hacer el hoyo bien. Tu scrambling es un seguro de vida en rondas difíciles. Lo que te falta para dar el siguiente salto es llegar más y mejor: si el largo mejora, la zona donde más brillas (50m hacia el hole) se activará con más frecuencia. Eres el jugador ideal para competición en formato stableford o matchplay —tu gestión del daño es excelente y rara vez anotas grandes números. Con trabajo en el largo, HCP <15 es un objetivo real.", "archetype_strategy": "Zona de confort actual: bien. Siguiente nivel: el largo. No necesitas ser un bombardero. Necesitas ser consistente desde tee. Objetivo realista: 55% fairways (desde tu nivel actual) en 10 semanas. Drill principal: eje de rotación en driver —face-to-path de ±1° a ±2°, no más. Cada fairway que ganes activa tu zona fuerte antes en el hoyo. El ROI de este cambio en tu perfil es el más alto posible.", "fit_score": 0.67, "primary_strength": {"dimension": "short_game", "score": 9.17}, "primary_gap": {"dimension": "accuracy", "score": 3.88}, "similar_archetypes": [{"id": "B1", "name": "El Mago del Short Game", "similarity": 0.5}, {"id": "B2", "name": "El Maestro del Green", "similarity": 0.5}], "evolution_target": {"id": "D3", "name": "El Amateur Completo"}, "personalized_insight": "Eres 'El Artista Completo' con un juego corto de élite absoluta (9.2/10) que define tu identidad en el campo. Tu precisión es el área con más margen de mejora (3.9/10) y concentra el mayor ROI de mejora en tu caso específico. Con HCP 23.2, el camino más directo hacia tu siguiente nivel es trabajar el precisión mientras consolidas tu ventaja en juego corto.", "pro_references": ["Corey Pavin", "Zach Johnson"], "defining_strengths": ["short_game", "putting"], "defining_gaps": ["long_game", "power"]}};
+</script>
                 <!-- Análisis del Perfil de Jugador -->
                 <div style="margin-top: 40px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); padding: 35px; border-radius: 15px; border: 2px solid rgba(90,191,143,0.3);">
                     <h3 style="color: #5ABF8F; margin-bottom: 25px; text-align: center; font-size: 1.5em; font-weight: 900;">
@@ -3414,15 +4106,15 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
             </div>
-            
+
         </div>
-        
-        
+
+
         <!-- TAB: EVOLUCIÓN -->
         <div id="evolution" class="tab-content">
             
@@ -9719,9 +10411,9 @@
 
         </div>
 
-        
-        
-        
+
+
+
     <script>
         // Tab switching
         function showTab(tabName) {
@@ -17687,7 +18379,13 @@
     }
 
     // Inicializar hardcoded charts cuando los datos estén listos (modificado Sprint 13A)
+    // NOTE: With lazy loading enabled, this is handled by optimization script
     document.addEventListener('dashboardDataReady', function() {
+        // Skip if lazy loading is enabled (optimization script handles it)
+        if (window.OPTIMIZATION_CONFIG && window.OPTIMIZATION_CONFIG.ENABLE_LAZY_LOADING) {
+            console.log('⏭️ Skipping bulk initialization (lazy loading enabled)');
+            return;
+        }
         console.log('🔧 Inicializando hardcoded charts...');
         initializeHardcodedCharts();
     });
@@ -18124,5 +18822,6 @@
         }
 
     </script>
+
 </body>
 </html>
