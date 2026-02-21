@@ -10,6 +10,7 @@ cacheable system prompt for cost optimization (90% savings via prompt caching).
 """
 
 from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import HumanMessage, SystemMessage
 from app.config import settings
 from typing import Dict, Any
 import json
@@ -607,12 +608,14 @@ class AgentCoach:
 {team2_analysis.get('estratega', 'Not available')}
 """
 
-        # Build full prompt
-        full_prompt = f"""{self.skill_prompt}
-
----
-
-## PLAYER DATA
+        # Build structured messages with cache_control on skill prompt
+        messages = [
+            SystemMessage(content=[{
+                "type": "text",
+                "text": self.skill_prompt,
+                "cache_control": {"type": "ephemeral"}
+            }]),
+            HumanMessage(content=f"""## PLAYER DATA
 
 User ID: {user_id}
 
@@ -622,13 +625,13 @@ User ID: {user_id}
 
 ---
 
-Generate a comprehensive coaching report following the output structure. Return as clean Markdown.
-"""
+Generate a comprehensive coaching report following the output structure. Return as clean Markdown.""")
+        ]
 
-        # Invoke Claude
-        print("[AgentCoach] Invoking Claude Sonnet 4.5...")
+        # Invoke Claude with cached system prompt
+        print("[AgentCoach] Invoking Claude Sonnet 4.6 (with prompt caching)...")
         try:
-            response = self.llm.invoke(full_prompt)
+            response = self.llm.invoke(messages)
 
             # Extract metadata
             metadata = {

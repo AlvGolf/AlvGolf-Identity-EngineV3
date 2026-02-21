@@ -8,6 +8,7 @@ Output: 3 secciones motivacionales (DNA, PROGRESS, ACTION)
 """
 
 from langchain_anthropic import ChatAnthropic
+from langchain_core.messages import HumanMessage, SystemMessage
 import os
 import json
 from loguru import logger
@@ -16,7 +17,10 @@ llm = ChatAnthropic(
     model="claude-sonnet-4-6",
     anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
     temperature=0.3,  # Más creatividad que Analytics Pro
-    max_tokens=1500
+    max_tokens=1500,
+    default_headers={
+        "anthropic-beta": "prompt-caching-2024-07-31"
+    }
 )
 
 SYSTEM_PROMPT = """
@@ -89,10 +93,13 @@ async def dashboard_writer_agent(technical_analysis: str) -> dict:
 
     logger.info("Dashboard Writer Agent: Starting conversion...")
 
-    prompt = f"""
-{SYSTEM_PROMPT}
-
-ANÁLISIS TÉCNICO (input):
+    messages = [
+        SystemMessage(content=[{
+            "type": "text",
+            "text": SYSTEM_PROMPT,
+            "cache_control": {"type": "ephemeral"}
+        }]),
+        HumanMessage(content=f"""ANÁLISIS TÉCNICO (input):
 {technical_analysis}
 
 GENERA LAS 3 SECCIONES MOTIVACIONALES en formato JSON:
@@ -102,11 +109,11 @@ GENERA LAS 3 SECCIONES MOTIVACIONALES en formato JSON:
     "action": "texto sección 3..."
 }}
 
-IMPORTANTE: Responde SOLO con el JSON, sin explicaciones adicionales.
-""".strip()
+IMPORTANTE: Responde SOLO con el JSON, sin explicaciones adicionales.""")
+    ]
 
     try:
-        response = llm.invoke(prompt)
+        response = llm.invoke(messages)
         content = response.content.strip()
 
         logger.info(f"Dashboard Writer: Received response ({len(content)} chars)")
