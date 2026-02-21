@@ -46,7 +46,7 @@ index = pc.Index(index_name)
 # ============ Initialize Claude ============
 
 llm = ChatAnthropic(
-    model="claude-sonnet-4-20250514",
+    model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.1,
     max_tokens=2000

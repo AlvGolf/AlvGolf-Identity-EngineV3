@@ -18,7 +18,7 @@ import json
 # ============ Initialize Claude ============
 
 llm = ChatAnthropic(
-    model="claude-sonnet-4-20250514",
+    model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.2,  # Slightly more creative for program design
     max_tokens=3500,  # Practice programs typically detailed
@@ -533,7 +533,7 @@ Execute the complete Practice Design Framework and generate a comprehensive 12-w
 
             # Extract metadata if available
             metadata = {
-                "model": "claude-sonnet-4-20250514",
+                "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "program_length": len(response.content),
                 "agent_type": "estratega"

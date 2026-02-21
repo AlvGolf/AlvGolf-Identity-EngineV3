@@ -13,7 +13,7 @@ from app.rag import rag_answer
 # ============ Initialize Claude ============
 
 llm = ChatAnthropic(
-    model="claude-sonnet-4-20250514",
+    model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.1,  # Precise for technical analysis
     max_tokens=2000,

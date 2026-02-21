@@ -18,7 +18,7 @@ import json
 # ============ Initialize Claude ============
 
 llm = ChatAnthropic(
-    model="claude-sonnet-4-20250514",
+    model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.3,  # Slightly creative for engaging content
     max_tokens=4000,  # Dashboard content can be extensive
@@ -596,7 +596,7 @@ Generate comprehensive UX content for all dashboard sections. Return as JSON fol
 
             # Extract metadata if available
             metadata = {
-                "model": "claude-sonnet-4-20250514",
+                "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "content_length": len(response.content),
                 "agent_type": "ux_writer"

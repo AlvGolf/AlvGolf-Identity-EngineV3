@@ -18,7 +18,7 @@ import json
 # ============ Initialize Claude ============
 
 llm = ChatAnthropic(
-    model="claude-sonnet-4-20250514",
+    model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.1,  # Precise technical analysis
     max_tokens=4000,  # Allow longer detailed analysis
@@ -475,7 +475,7 @@ Execute the complete AlvGolf Analysis Framework and generate your comprehensive 
 
             # Extract metadata if available
             metadata = {
-                "model": "claude-sonnet-4-20250514",
+                "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "analysis_length": len(response.content),
                 # Token usage would be in response metadata if available
