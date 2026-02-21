@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.1 - Multi-Agent System + UXWriter Dashboard Integration
+**Version:** v3.0.2 - Prompt Caching + Model Update (claude-sonnet-4-6)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -159,6 +159,29 @@ AgentUXWriter generates 10 content sections in Spanish that are dynamically inse
 - Prompt caching saves 90% on skill tokens
 - 0 RAG queries (eliminated bottleneck)
 
+### Prompt Caching Implementation (v3.0.2)
+
+All 6 agents use explicit `cache_control` markers via structured LangChain messages:
+
+```python
+from langchain_core.messages import HumanMessage, SystemMessage
+
+messages = [
+    SystemMessage(content=[{
+        "type": "text",
+        "text": self.skill_prompt,           # Static skill (2,100-2,800 tokens)
+        "cache_control": {"type": "ephemeral"}  # Cached by Anthropic (~5 min TTL)
+    }]),
+    HumanMessage(content=f"{data_context}\n---\nExecute...")  # Dynamic data (not cached)
+]
+response = self.llm.invoke(messages)
+```
+
+- **Requires:** `default_headers: {"anthropic-beta": "prompt-caching-2024-07-31"}` in ChatAnthropic
+- **What's cached:** Skill prompts only (static, same every call)
+- **What's NOT cached:** dashboard_data.json (~30K tokens, changes daily)
+- **Savings:** -90% input token cost on skill prompts per call
+
 ### Key Design Decisions
 
 1. **0 RAG queries:** Replaced Analytics Pro bottleneck with direct JSON loading
@@ -166,6 +189,7 @@ AgentUXWriter generates 10 content sections in Spanish that are dynamically inse
 3. **Progressive enhancement:** Dashboard loads charts first, AI content loads async
 4. **Graceful degradation:** Dashboard fully functional without backend
 5. **Spanish-only:** All AI-generated content in Spanish, motivational tone
+6. **Structured messages for caching:** `SystemMessage`+`HumanMessage` with `cache_control` (not plain string invoke)
 
 ## Application Architecture
 
@@ -685,6 +709,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.2 | 2026-02-21 | Prompt caching (cache_control) + model update to claude-sonnet-4-6 |
 | v3.0.1 | 2026-02-17 | UXWriter dashboard integration + documentation consolidation |
 | v3.0.0 | 2026-02-16 | Multi-Agent System complete (5 agents, architecture optimization) |
 | v5.1.1 | 2026-02-13 | Heatmap + Mobile optimization |
