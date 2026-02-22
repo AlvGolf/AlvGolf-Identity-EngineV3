@@ -1,4 +1,16 @@
 {
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd C:\\Users\\alvar\\Documents\\AlvGolf && python -m py_compile app/scoring_engine.py app/scoring_integration.py app/archetype_classifier.py app/main.py app/rag.py app/agents/orchestrator.py app/agents/analista.py app/agents/tecnico.py app/agents/estratega.py app/agents/ux_writer.py app/agents/coach.py 2>&1 && echo OK: py_compile passed"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(python:*)",

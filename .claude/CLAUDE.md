@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.2 - Prompt Caching + Model Update (claude-sonnet-4-6)
+**Version:** v3.0.3 - Static AI Cache + UXWriter 6-Section Fix (2026-02-22)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -117,29 +117,34 @@ END (Total: 41,701 chars, 5.3 minutes)
 | AgentAnalista | 2 | Performance analysis | Technical analysis text | 650 |
 | AgentTecnico | 2 | Biomechanics patterns | Biomech analysis text | 550 |
 | AgentEstratega | 2 | Practice program design | Weekly program | 600 |
-| AgentUXWriter | 3 | Dashboard UI content | JSON (10 sections) | 752 |
+| AgentUXWriter | 3 | Dashboard UI content | JSON (6 sections) | 752 |
 | AgentCoach | 3 | Coaching reports | Markdown (PDF-ready) | 807 |
 
-### UXWriter Dashboard Integration (v3.0.1)
+### UXWriter Dashboard Integration (v3.0.3)
 
-AgentUXWriter generates 10 content sections in Spanish that are dynamically inserted into the dashboard:
+AgentUXWriter generates **6 content sections** in Spanish inserted into the dashboard.
+(Previously described as 10 sections — stat_cards, trend_narratives, course_cards, club_cards
+were removed from the skill prompt in v3.0.3 to fix JSON truncation bug.)
 
 1. **hero_statement** (50-80 words) --> Tab 1: Mi Identidad
 2. **dna_profile** (30-50 words) --> Tab 1: Mi Identidad
-3. **stat_cards** (array) --> Stats overview
-4. **chart_titles** (object) --> All charts across all tabs
-5. **trend_narratives** (array) --> Temporal evolution
-6. **course_cards** (array) --> Course performance
-7. **club_cards** (array) --> Equipment section
-8. **insight_boxes** (array) --> Tab 5: Analisis Profundo
-9. **quick_wins** (array) --> Tab 6: Estrategia
-10. **roi_cards** (array) --> Tab 6: Estrategia
+3. **chart_titles** (object) --> All charts across all tabs
+4. **insight_boxes** (array) --> Tab 5: Analisis Profundo
+5. **quick_wins** (array) --> Tab 6: Estrategia
+6. **roi_cards** (array) --> Tab 6: Estrategia
 
-**Frontend Integration Pattern:**
-- `loadUXContent()` -- async POST to `/generate-content` (non-blocking)
+**Frontend Integration Pattern (v3.0.3 - Static Cache):**
+- `loadUXContent()` -- cascading sources: ai_content.json → localStorage → /generate-content
+- Priority 1: `output/ai_content.json` (pre-generated, loads in <100ms, **instantaneo**)
+- Priority 2: localStorage cache (TTL 24h)
+- Priority 3: async POST to `/generate-content` (non-blocking, ~70s)
 - `insertUXContent(content)` -- DOM manipulation for 6 content mappings
 - Graceful degradation if backend unavailable (dashboard works without AI content)
-- Progressive enhancement: charts render immediately, AI content appears ~70s later
+
+**Auto-save of ai_content.json:**
+- `/generate-content` endpoint saves ai_content.json after each successful call
+- `/analyze` orchestrator also saves ai_content.json at end of full workflow
+- File committed to repo so GitHub Pages serves it statically with zero latency
 
 ### API Endpoints
 
@@ -186,10 +191,12 @@ response = self.llm.invoke(messages)
 
 1. **0 RAG queries:** Replaced Analytics Pro bottleneck with direct JSON loading
 2. **Separate /generate-content endpoint:** UXWriter runs standalone (~70s) vs full workflow (~5.3 min)
-3. **Progressive enhancement:** Dashboard loads charts first, AI content loads async
-4. **Graceful degradation:** Dashboard fully functional without backend
-5. **Spanish-only:** All AI-generated content in Spanish, motivational tone
-6. **Structured messages for caching:** `SystemMessage`+`HumanMessage` with `cache_control` (not plain string invoke)
+3. **Static ai_content.json cache:** Pre-generated JSON committed to repo → AI content loads in <100ms (v3.0.3)
+4. **Progressive enhancement:** Dashboard loads charts first, AI content loads async (or instant from file)
+5. **Graceful degradation:** Dashboard fully functional without backend
+6. **Spanish-only:** All AI-generated content in Spanish, motivational tone
+7. **Structured messages for caching:** `SystemMessage`+`HumanMessage` with `cache_control` (not plain string invoke)
+8. **UXWriter skill prompt = 6 sections only:** Removed descriptions of unused sections to prevent JSON truncation (v3.0.3)
 
 ## Application Architecture
 
@@ -709,6 +716,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.3 | 2026-02-22 | Static ai_content.json cache + UXWriter 6-section fix + Windows encoding fix |
 | v3.0.2 | 2026-02-21 | Prompt caching (cache_control) + model update to claude-sonnet-4-6 |
 | v3.0.1 | 2026-02-17 | UXWriter dashboard integration + documentation consolidation |
 | v3.0.0 | 2026-02-16 | Multi-Agent System complete (5 agents, architecture optimization) |
