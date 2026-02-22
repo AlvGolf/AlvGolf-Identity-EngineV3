@@ -168,6 +168,29 @@ class ContentGenerateResponse(BaseModel):
     generated_at: datetime = Field(default_factory=datetime.now)
 
 
+# ============ Coach Report ============
+
+class CoachReportRequest(BaseModel):
+    """Request for POST /generate-coach endpoint"""
+    user_id: str = Field(..., description="User ID")
+    force_refresh: bool = Field(False, description="Force fresh report generation")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "user_id": "alvaro",
+                "force_refresh": False
+            }
+        }
+
+
+class CoachReportResponse(BaseModel):
+    """Response for POST /generate-coach endpoint (AgentCoach standalone)"""
+    report: str = Field(..., description="Coaching report in Markdown format")
+    metadata: dict = Field(..., description="Generation metadata")
+    generated_at: datetime = Field(default_factory=datetime.now)
+
+
 # ============ Error ============
 
 class ErrorResponse(BaseModel):

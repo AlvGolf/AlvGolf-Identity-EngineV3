@@ -21,12 +21,14 @@ from app.models import (
     QueryRequest, QueryResponse,
     AnalyzeRequest, AnalyzeResponse,
     ContentGenerateRequest, ContentGenerateResponse,  # Team 3
+    CoachReportRequest, CoachReportResponse,           # Coach standalone
     ErrorResponse
 )
 from app.rag import ingest_shots, rag_answer
 from app.agents.analytics_pro import analytics_agent
 from app.agents.orchestrator import run_multi_agent_analysis  # TIER 2
 from app.agents.ux_writer import AgentUXWriter  # Team 3
+from app.agents.coach import AgentCoach          # Coach standalone
 
 
 # ============ Logging Configuration ============
@@ -288,6 +290,70 @@ async def generate_dashboard_content(request: ContentGenerateRequest):
         raise
     except Exception as e:
         logger.error(f"Content generation error: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/generate-coach", response_model=CoachReportResponse)
+async def generate_coach_report(request: CoachReportRequest):
+    """
+    Generate a comprehensive coaching report with AgentCoach (standalone).
+
+    Runs AgentCoach independently (no Team 2 context) with the full
+    dashboard_data.json. Produces a professional 6-section Markdown report
+    in Spanish (~1,500-1,700 words) covering:
+    1. Resumen Ejecutivo
+    2. Identidad & Fortalezas
+    3. Analisis Tecnico Integrado
+    4. Plan de Desarrollo (12 Semanas)
+    5. Juego Mental & Estrategia
+    6. Tracking & Accountability
+
+    Args:
+        request: CoachReportRequest with user_id
+
+    Returns:
+        CoachReportResponse with Markdown report + metadata (~60-70s)
+    """
+    try:
+        logger.info(f"[Coach] Report generation request from user {request.user_id}")
+
+        from pathlib import Path
+        import json
+
+        json_path = Path(__file__).parent.parent / "output" / "dashboard_data.json"
+
+        if not json_path.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="dashboard_data.json not found. Run generate_dashboard_data.py first."
+            )
+
+        with open(json_path, "r", encoding="utf-8") as f:
+            dashboard_data = json.load(f)
+
+        logger.info(f"[Coach] Loaded dashboard_data.json ({json_path.stat().st_size / 1024:.1f} KB)")
+
+        agent = AgentCoach()
+        result = await agent.coach(
+            request.user_id,
+            dashboard_data=dashboard_data,
+            team2_analysis={}   # Standalone: no Team 2 context
+        )
+
+        logger.success(f"[Coach] Report generated ({result['metadata']['report_length']} chars)")
+
+        return CoachReportResponse(
+            report=result["report"],
+            metadata=result["metadata"],
+            generated_at=datetime.now()
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Coach report error: {e}")
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))

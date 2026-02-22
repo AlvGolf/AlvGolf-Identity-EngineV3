@@ -71,57 +71,114 @@
         // Initialize chartInstances global object
         window.chartInstances = window.chartInstances || {};
 
+        // ── LAZY LOADING SYSTEM ───────────────────────────────────
+        window.OPTIMIZATION_CONFIG = { ENABLE_LAZY_LOADING: true };
+        window.tabChartQueue  = { overview:[], evolution:[], campos:[], performance:[], 'deep-analysis':[], strategy:[] };
+        window.tabsInitialized = new Set(['overview']); // overview always first
+
+        /**
+         * Registra una función de inicialización de chart para un tab concreto.
+         * Si el tab ya está activo cuando se dispara dashboardDataReady, la ejecuta
+         * inmediatamente. Si no, la encola para ejecutarla cuando el tab se active.
+         */
+        function registerTabChart(tabId, initFn) {
+            window.tabChartQueue[tabId] = window.tabChartQueue[tabId] || [];
+            window.tabChartQueue[tabId].push(initFn);
+            document.addEventListener('dashboardDataReady', function() {
+                const activeId = document.querySelector('.tab-content.active')?.id;
+                if (activeId === tabId) {
+                    try { initFn(); } catch(e) { console.warn('Chart init error:', e); }
+                }
+            }, { once: true });
+        }
+
+        /** Ejecuta los charts pendientes de un tab (llamado desde showTab). */
+        function flushTabCharts(tabId) {
+            if (window.tabsInitialized.has(tabId)) return;
+            if (!window.dashboardData) return; // datos no cargados aún
+            window.tabsInitialized.add(tabId);
+            const queue = window.tabChartQueue[tabId] || [];
+            queue.forEach(fn => { try { fn(); } catch(e) { console.warn('Lazy chart error:', e); } });
+            console.log('⚡ Lazy init', tabId, '(' + queue.length + ' charts)');
+        }
+        // ── FIN LAZY LOADING SYSTEM ───────────────────────────────
+
         // ============================================================
         // CARGA DEL JSON AL INICIAR
         // ============================================================
 
-        // Cargar dashboard_data.json al inicio (intenta raíz primero, luego output/)
-        fetch('dashboard_data.json')
-            .catch(() => {
-                // Fallback: intentar desde output/
-                console.warn('⚠️ Intentando cargar desde output/dashboard_data.json');
-                return fetch('output/dashboard_data.json');
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        // ── localStorage cache keys ─────────────────────────────
+        const LS_JSON_KEY  = 'alvgolf_dashboard_data';
+        const LS_JSON_VER  = 'alvgolf_json_version';
+        const LS_UX_KEY    = 'alvgolf_ux_content';
+        const LS_UX_VER    = 'alvgolf_ux_version';
+        const LS_UX_TS     = 'alvgolf_ux_timestamp';
+        const UX_TTL_MS    = 24 * 60 * 60 * 1000; // 24 horas
+
+        function dispatchDashboardReady(data) {
+            window.dashboardData = data;
+            window.clubData      = data.club_statistics ? Object.values(data.club_statistics) : [];
+            window.playerStats   = data.player_stats || {};
+            window.courseStats   = data.course_statistics ? Object.values(data.course_statistics) : [];
+            const event = new CustomEvent('dashboardDataReady', {
+                detail: {
+                    version:  data.metadata?.version,
+                    timestamp: data.generated_at,
+                    sections: Object.keys(data).length
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('✅ dashboard_data.json cargado exitosamente');
-                console.log('📊 Versión:', data.metadata?.version || 'N/A');
-                console.log('📅 Generado:', data.generated_at || 'N/A');
-
-                // Asignar datos a window.dashboardData
-                window.dashboardData = data;
-
-                // Para compatibilidad con código antiguo
-                window.clubData = data.club_statistics ? Object.values(data.club_statistics) : [];
-                window.playerStats = data.player_stats || {};
-                window.courseStats = data.course_statistics ? Object.values(data.course_statistics) : [];
-
-                // Disparar evento cuando los datos están listos
-                const event = new CustomEvent('dashboardDataReady', {
-                    detail: {
-                        version: data.metadata?.version,
-                        timestamp: data.generated_at,
-                        sections: Object.keys(data).length
-                    }
-                });
-                document.dispatchEvent(event);
-
-                console.log('🎉 Evento dashboardDataReady disparado - Todas las visualizaciones se inicializarán ahora');
-            })
-            .catch(error => {
-                console.error('❌ Error cargando dashboard_data.json:', error);
-                console.error('   Asegúrate de que el archivo dashboard_data.json está en la carpeta output/');
-
-                // Mostrar alerta al usuario
-                alert('Error: No se pudo cargar dashboard_data.json\n\n' +
-                      'Asegúrate de que el archivo está en la carpeta output/ del proyecto\n\n' +
-                      'Error técnico: ' + error.message);
             });
+            document.dispatchEvent(event);
+        }
+
+        // Cargar dashboard_data.json con caché localStorage
+        (async function loadDashboardJSON() {
+            try {
+                const cachedVer  = localStorage.getItem(LS_JSON_VER);
+                const cachedData = localStorage.getItem(LS_JSON_KEY);
+
+                // Si hay caché, usarla INMEDIATAMENTE para render instantáneo
+                if (cachedData && cachedVer) {
+                    const parsed = JSON.parse(cachedData);
+                    console.log('⚡ Dashboard cargado desde caché localStorage (versión', cachedVer, ')');
+                    dispatchDashboardReady(parsed);
+                }
+
+                // Siempre fetch en background para detectar actualizaciones
+                const response = await fetch('dashboard_data.json')
+                    .catch(() => fetch('output/dashboard_data.json'));
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const fresh = await response.json();
+                const freshVer = fresh.metadata?.version || 'unknown';
+
+                if (freshVer !== cachedVer) {
+                    // Versión nueva: actualizar caché y (re)disparar evento si no había caché
+                    try {
+                        localStorage.setItem(LS_JSON_KEY, JSON.stringify(fresh));
+                        localStorage.setItem(LS_JSON_VER, freshVer);
+                    } catch(e) { /* localStorage lleno — ignorar */ }
+
+                    if (!cachedData) {
+                        // Primera visita: disparar ahora
+                        console.log('✅ dashboard_data.json cargado (v' + freshVer + '). Caché guardada.');
+                        dispatchDashboardReady(fresh);
+                    } else {
+                        // Versión nueva encontrada: el usuario verá los datos actualizados en la próxima recarga
+                        console.log('🔄 Nueva versión detectada (' + freshVer + '). Se aplicará en la próxima recarga.');
+                        localStorage.setItem(LS_JSON_KEY, JSON.stringify(fresh));
+                        localStorage.setItem(LS_JSON_VER, freshVer);
+                    }
+                } else {
+                    console.log('✅ Caché válida (v' + cachedVer + ')');
+                }
+
+            } catch(error) {
+                console.error('❌ Error cargando dashboard_data.json:', error);
+                if (!window.dashboardData) {
+                    alert('Error: No se pudo cargar dashboard_data.json\n\nError: ' + error.message);
+                }
+            }
+        })();
 
         // ============================================================
         // LOAD UX CONTENT FROM AGENTUXWRITER (TEAM 3)
@@ -129,53 +186,63 @@
 
         async function loadUXContent() {
             try {
+                // ── Comprobar caché localStorage ──────────────────────
+                const cachedContent = localStorage.getItem(LS_UX_KEY);
+                const cachedUXVer   = localStorage.getItem(LS_UX_VER);
+                const cachedUXTs    = parseInt(localStorage.getItem(LS_UX_TS) || '0');
+                const currentVer    = window.dashboardData?.metadata?.version || 'unknown';
+                const now           = Date.now();
+                const isExpired     = (now - cachedUXTs) > UX_TTL_MS;
+                const isStale       = cachedUXVer !== currentVer;
+
+                if (cachedContent && !isExpired && !isStale) {
+                    console.log('⚡ Contenido AI cargado desde caché localStorage (sin llamada al backend)');
+                    insertUXContent(JSON.parse(cachedContent));
+                    return;
+                }
+
+                // ── Fetch fresco desde el backend ─────────────────────
                 console.log('📝 Loading UX content from AgentUXWriter...');
 
                 const response = await fetch('http://localhost:8000/generate-content', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: 'alvaro',
-                        force_refresh: false
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
                 const data = await response.json();
                 let content = data.content;
 
-                // Handle raw_content wrapper (if AgentUXWriter returns markdown-wrapped JSON)
+                // Handle raw_content wrapper
                 if (content.raw_content && !content.hero_statement) {
                     console.log('📦 Parsing raw_content wrapper...');
                     try {
-                        // Remove markdown code fence if present
                         let rawContent = content.raw_content;
                         if (rawContent.startsWith('```json')) {
                             rawContent = rawContent.replace(/```json\n/, '').replace(/\n```$/, '');
                         }
                         content = JSON.parse(rawContent);
-                        console.log('✅ Successfully parsed wrapped content');
                     } catch (parseError) {
-                        console.error('❌ Failed to parse raw_content:', parseError);
                         throw new Error('Content parsing failed');
                     }
                 }
 
-                console.log('✅ UX content loaded successfully');
-                console.log('📊 Content sections:', Object.keys(content));
+                // ── Guardar en caché ──────────────────────────────────
+                try {
+                    localStorage.setItem(LS_UX_KEY, JSON.stringify(content));
+                    localStorage.setItem(LS_UX_VER, currentVer);
+                    localStorage.setItem(LS_UX_TS,  now.toString());
+                    console.log('✅ UX content cacheado en localStorage (TTL 24h)');
+                } catch(e) { /* localStorage lleno */ }
 
-                // Insert content into dashboard sections
+                console.log('✅ UX content loaded. Sections:', Object.keys(content));
                 insertUXContent(content);
 
             } catch (error) {
                 console.warn('⚠️ Could not load UX content from backend:', error.message);
                 console.warn('   Dashboard will use default content.');
-                // Don't show alert - this is optional enhancement
             }
         }
 
@@ -1870,6 +1937,250 @@
            MODO CLARO PARA PDF
            ======================================== */
         
+        /* =====================================================
+           INFORME DE COACHING IA — CONTENEDOR PDF PROFESIONAL
+           ===================================================== */
+        #coach-report-pdf {
+            display: none;
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 794px; /* A4 width at 96dpi */
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
+        }
+        .cr-page {
+            width: 794px;
+            min-height: 1123px; /* A4 height at 96dpi */
+            background: #ffffff;
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+        /* Cover page */
+        .cr-cover {
+            background: linear-gradient(145deg, #0f2027 0%, #203a43 50%, #1a1a2e 100%);
+            padding: 60px 50px 50px;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+        }
+        .cr-cover::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(74,159,216,0.25) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cr-cover-logo {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #4a9fd8;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            opacity: 0.9;
+        }
+        .cr-cover-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+            line-height: 1.2;
+        }
+        .cr-cover-subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 28px;
+            letter-spacing: 0.5px;
+        }
+        .cr-cover-player {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .cr-cover-avatar {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #4a9fd8, #5abf8f);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+        }
+        .cr-cover-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .cr-cover-meta {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 3px;
+        }
+        .cr-cover-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .cr-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .cr-badge-gold {
+            background: linear-gradient(135deg, #d4b55a, #f0c040);
+            color: #1a1a00;
+        }
+        .cr-badge-blue {
+            background: rgba(74,159,216,0.25);
+            border: 1px solid #4a9fd8;
+            color: #4a9fd8;
+        }
+        .cr-badge-green {
+            background: rgba(90,191,143,0.2);
+            border: 1px solid #5abf8f;
+            color: #5abf8f;
+        }
+        /* Score summary strip */
+        .cr-score-strip {
+            display: flex;
+            background: #f8f9ff;
+            border-bottom: 3px solid #4a9fd8;
+        }
+        .cr-score-cell {
+            flex: 1;
+            padding: 16px 10px;
+            text-align: center;
+            border-right: 1px solid #e5e7eb;
+        }
+        .cr-score-cell:last-child { border-right: none; }
+        .cr-score-num {
+            font-size: 22px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+        }
+        .cr-score-num.elite { color: #d4b55a; }
+        .cr-score-num.strong { color: #4a9fd8; }
+        .cr-score-num.developing { color: #7c9bbf; }
+        .cr-score-num.focus { color: #e88b7a; }
+        .cr-score-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .cr-score-zone {
+            font-size: 8px;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            font-weight: 600;
+        }
+        .cr-score-zone.elite { color: #d4b55a; }
+        .cr-score-zone.strong { color: #4a9fd8; }
+        .cr-score-zone.developing { color: #7c9bbf; }
+        .cr-score-zone.focus { color: #e88b7a; }
+        /* Body content */
+        .cr-body {
+            padding: 32px 42px;
+        }
+        .cr-section {
+            margin-bottom: 28px;
+            page-break-inside: avoid;
+        }
+        .cr-section-title {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4a9fd8;
+            border-bottom: 2px solid #4a9fd8;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+        }
+        .cr-section-title.gold { color: #d4b55a; border-color: #d4b55a; }
+        .cr-section-title.green { color: #5abf8f; border-color: #5abf8f; }
+        .cr-section-title.red { color: #e88b7a; border-color: #e88b7a; }
+        .cr-prose {
+            font-size: 12px;
+            line-height: 1.75;
+            color: #2d3748;
+        }
+        .cr-prose h1, .cr-prose h2, .cr-prose h3 {
+            color: #1a1a2e;
+            font-weight: 700;
+            margin: 16px 0 8px;
+        }
+        .cr-prose h1 { font-size: 16px; }
+        .cr-prose h2 { font-size: 14px; color: #4a9fd8; }
+        .cr-prose h3 { font-size: 12px; color: #5abf8f; }
+        .cr-prose strong { color: #1a1a2e; font-weight: 700; }
+        .cr-prose ul, .cr-prose ol {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+        .cr-prose li { margin-bottom: 4px; }
+        .cr-prose p { margin: 8px 0; }
+        /* Footer */
+        .cr-footer {
+            background: #f8f9ff;
+            border-top: 2px solid #e5e7eb;
+            padding: 14px 42px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: #9ca3af;
+        }
+        .cr-footer-brand {
+            font-weight: 700;
+            color: #4a9fd8;
+            letter-spacing: 1px;
+        }
+        /* Loading toast */
+        #coach-pdf-toast {
+            display: none;
+            position: fixed;
+            bottom: 30px; right: 30px;
+            background: linear-gradient(135deg, #0f2027, #203a43);
+            color: #ffffff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border-left: 4px solid #4a9fd8;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            z-index: 10000;
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 320px;
+            animation: slideInToast 0.3s ease;
+        }
+        @keyframes slideInToast {
+            from { transform: translateX(100px); opacity: 0; }
+            to   { transform: translateX(0); opacity: 1; }
+        }
+        .cr-toast-icon { font-size: 20px; margin-right: 10px; vertical-align: middle; }
+        .cr-toast-spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #4a9fd8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         /* Cuando se activa .pdf-light-mode, cambia todo a modo claro */
         .pdf-light-mode {
             background: #ffffff !important;
@@ -2621,18 +2932,23 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')" id="coachPdfMenuBtn">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- GRUPO A.1: EXECUTIVE SUMMARY - HERO STATS -->
             <div style="background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(90,191,143,0.1)); padding: 40px; border-radius: 20px; margin-bottom: 30px; border: 3px solid rgba(74,159,216,0.5);">
                 <h1 style="text-align: center; color: #E8E8E8; font-size: 2.5em; margin-bottom: 40px; text-shadow: 0 0 20px rgba(74,159,216,0.5);">
@@ -4151,20 +4467,25 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(74,159,216,0.08) 0%, rgba(90,191,143,0.08) 100%); 
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(74,159,216,0.08) 0%, rgba(90,191,143,0.08) 100%);
                         border: 2px solid rgba(74,159,216,0.25); 
                         border-radius: 15px; 
                         padding: 30px; 
@@ -4925,18 +5246,23 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
             <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(90,191,143,0.08) 0%, rgba(74,159,216,0.08) 100%);
                         border: 2px solid rgba(90,191,143,0.25);
@@ -5884,20 +6210,25 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(255,165,0,0.08) 0%, rgba(212,181,90,0.08) 100%); 
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(255,165,0,0.08) 0%, rgba(212,181,90,0.08) 100%);
                         border: 2px solid rgba(255,165,0,0.25); 
                         border-radius: 15px; 
                         padding: 30px; 
@@ -7079,20 +7410,25 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(45,62,80,0.08) 0%, rgba(232,139,122,0.08) 100%); 
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(45,62,80,0.08) 0%, rgba(232,139,122,0.08) 100%);
                         border: 2px solid rgba(45,62,80,0.25); 
                         border-radius: 15px; 
                         padding: 30px; 
@@ -8454,20 +8790,25 @@
             
                 <button class="downloads-menu-item" onclick="handleMenuAction('pdf')">
 
-            
+
                     <span class="icon">📄</span>
 
-            
+
                     <span class="text">Descargar PDF</span>
 
-            
+
                 </button>
 
-            
+                <button class="downloads-menu-item" onclick="handleMenuAction('coach-pdf')">
+                    <span class="icon">🏆</span>
+                    <span class="text">Informe Coach IA</span>
+                </button>
+
+
             </div>
-            
+
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(232,139,122,0.08) 0%, rgba(45,62,80,0.08) 100%); 
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(232,139,122,0.08) 0%, rgba(45,62,80,0.08) 100%);
                         border: 2px solid rgba(232,139,122,0.25); 
                         border-radius: 15px; 
                         padding: 30px; 
@@ -10419,13 +10760,16 @@
         function showTab(tabName) {
             const tabs = document.querySelectorAll('.tab-content');
             const buttons = document.querySelectorAll('.tab-button');
-            
+
             tabs.forEach(tab => tab.classList.remove('active'));
             buttons.forEach(btn => btn.classList.remove('active'));
-            
+
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
-            
+
+            // Lazy init charts for this tab on first visit
+            flushTabCharts(tabName);
+
             // Force chart resize on tab change (mobile fix)
             setTimeout(() => {
                 window.dispatchEvent(new Event('resize'));
@@ -10509,6 +10853,8 @@
                 openYouTubeVideo();
             } else if (action === 'pdf') {
                 downloadTabAsPDF();
+            } else if (action === 'coach-pdf') {
+                generateCoachPDF();
             }
         }
         
@@ -11161,7 +11507,7 @@
         }
 
         // Escuchar evento de datos listos
-        document.addEventListener('dashboardDataReady', initializeTemporalLongGameChart);
+        registerTabChart('evolution', initializeTemporalLongGameChart);
         
         // 2A. Smash Factor Evolution Chart - DINÁMICO ✅
         // NOTE: Uses optional chaining to avoid errors if dashboardData not loaded yet
@@ -11320,7 +11666,7 @@
         }
 
         // Escuchar evento de datos listos
-        document.addEventListener('dashboardDataReady', initializeAttackAngleEvolutionChart);
+        registerTabChart('evolution', initializeAttackAngleEvolutionChart);
         
         // 2C. Projection Chart (Updated to 18 months: 12 historical + 6 projected)
         const projectionCtx = document.getElementById('projectionChart').getContext('2d');
@@ -11550,7 +11896,7 @@
         }
 
         // Escuchar evento de datos listos
-        document.addEventListener('dashboardDataReady', initializeIronsEvolutionChart);
+        registerTabChart('evolution', initializeIronsEvolutionChart);
         
         // 2C. Wedges Evolution Chart - DINÁMICO ✅
         function initializeWedgesEvolutionChart() {
@@ -11656,7 +12002,7 @@
         }
 
         // Escuchar evento de datos listos
-        document.addEventListener('dashboardDataReady', initializeWedgesEvolutionChart);
+        registerTabChart('evolution', initializeWedgesEvolutionChart);
         
         // 2D. Category Improvement Chart
         const categoryImprovementCtx = document.getElementById('categoryImprovementChart').getContext('2d');
@@ -12962,8 +13308,7 @@
             console.log(`✅ Club performance cards: ${clubData.length} clubs`);
         }
 
-        document.addEventListener('dashboardDataReady', initializeClubPerformanceCards);
-        setTimeout(initializeClubPerformanceCards, 500);
+        registerTabChart('performance', initializeClubPerformanceCards);
 
         // Comparison Radar Chart (compact alternative to detailed metrics)
         // DINÁMICO: 10 Dimensiones desde JSON - EJECUTA DESPUÉS DE CARGAR DATOS
@@ -13082,8 +13427,7 @@
         } // End initializeComparisonRadarChart
 
         // Execute after data loads
-        document.addEventListener('dashboardDataReady', initializeComparisonRadarChart);
-        setTimeout(initializeComparisonRadarChart, 500);
+        registerTabChart('deep-analysis', initializeComparisonRadarChart);
 
         // Identity Radar Chart (Mi Identidad tab) - 10 Dimensiones Dinámico
         function initializeIdentityRadarChart() {
@@ -13369,8 +13713,7 @@
         }
 
         // Initialize waterfall chart
-        document.addEventListener('dashboardDataReady', initializeWaterfallChart);
-        setTimeout(initializeWaterfallChart, 500);
+        registerTabChart('deep-analysis', initializeWaterfallChart);
 
         // 9. Launch Angle Analysis Chart - DINÁMICO ✅
         if (document.getElementById('launchAngleChart')) {
@@ -14314,7 +14657,7 @@
         }
 
         // Inicializar charts cuando los datos estén listos
-        document.addEventListener('dashboardDataReady', initializeDispersionCharts);
+        registerTabChart('performance', initializeDispersionCharts);
 
         // ============================================
         // SCORE HISTORY CHART (SPRINT 3)
@@ -14571,7 +14914,7 @@
         }
 
         // Escuchar evento de datos listos
-        document.addEventListener('dashboardDataReady', initializeScoreHistory);
+        registerTabChart('evolution', initializeScoreHistory);
 
         // ============================================
         // DIRECTIONAL DISTRIBUTION (SPRINT 3)
@@ -14786,7 +15129,7 @@
             console.log('✅ Directional Distribution inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeDirectionalDistribution);
+        registerTabChart('performance', initializeDirectionalDistribution);
 
         // ============================================
         // PERCENTILES (SPRINT 3)
@@ -14998,7 +15341,7 @@
             console.log('✅ Percentiles inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializePercentiles);
+        registerTabChart('performance', initializePercentiles);
 
         // ============================================
         // BUBBLE CHART (SPRINT 3)
@@ -15158,7 +15501,7 @@
             console.log('✅ Bubble Chart inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeBubbleChart);
+        registerTabChart('performance', initializeBubbleChart);
 
         // ============================================
         // PLAYER PROFILE RADAR (SPRINT 5) - OBSOLETO
@@ -15526,7 +15869,7 @@
             console.log('✅ Trajectory Data inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeTrajectoryData);
+        registerTabChart('performance', initializeTrajectoryData);
 
         // ============================================
         // BEST/WORST ROUNDS (SPRINT 5)
@@ -15641,7 +15984,7 @@
             console.log('✅ Best/Worst Rounds inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeBestWorstRounds);
+        registerTabChart('deep-analysis', initializeBestWorstRounds);
 
         // ============================================
         // 8. QUARTERLY SCORING (Sprint 5)
@@ -15894,7 +16237,7 @@
             console.log('✅ Quarterly Scoring inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeQuarterlyScoring);
+        registerTabChart('evolution', initializeQuarterlyScoring);
 
         // ============================================
         // SPRINT 6: ADVANCED METRICS
@@ -16068,7 +16411,7 @@
             console.log('✅ Monthly Volatility inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeMonthlyVolatility);
+        registerTabChart('evolution', initializeMonthlyVolatility);
 
         // 10. MOMENTUM INDICATORS
         function initializeMomentumIndicators() {
@@ -16221,7 +16564,7 @@
             console.log('✅ Momentum Indicators inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeMomentumIndicators);
+        registerTabChart('evolution', initializeMomentumIndicators);
 
         // 11. MILESTONE ACHIEVEMENTS
         function initializeMilestoneAchievements() {
@@ -16401,16 +16744,13 @@
             console.log('✅ Learning Curve inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeLearningCurve);
+        registerTabChart('deep-analysis', initializeLearningCurve);
 
         // ============================================
         // FASE 5 VISUALIZATIONS (Legacy code)
         // ============================================
 
-        document.addEventListener('dashboardDataReady', function() {
-            console.log('⚡ Inicializando Fase 5...');
-            initPhase5Visualizations();
-        });
+        registerTabChart('deep-analysis', initPhase5Visualizations);
 
         // ============================================
         // ADVANCED ANALYSIS CHARTS (CÓDIGO LEGACY)
@@ -16674,8 +17014,7 @@
         }
 
         // Inicializar al cargar datos
-        document.addEventListener('dashboardDataReady', initializeShotZones);
-        setTimeout(initializeShotZones, 500);
+        registerTabChart('deep-analysis', initializeShotZones);
 
         // ============================================
         // PERFORMANCE POR CAMPO - TARJETAS DINÁMICAS
@@ -16881,7 +17220,7 @@
         }
 
         // Inicializar tarjetas
-        document.addEventListener('dashboardDataReady', initializeCourseCards);
+        registerTabChart('campos', initializeCourseCards);
         setTimeout(initializeCourseCards, 500);
 
         // Inicializar tabla de datos completa
@@ -16938,7 +17277,7 @@
             console.log('✅ Course table generated:', Object.keys(campoPerfData).length, 'courses');
         }
 
-        document.addEventListener('dashboardDataReady', initializeCourseTable);
+        registerTabChart('campos', initializeCourseTable);
         setTimeout(initializeCourseTable, 500);
 
         // 2. Scoring Probability - DINÁMICO ✅
@@ -17333,7 +17672,7 @@
         } // End initializeCampoPerfChart
 
         // Inicializar gráfico cuando los datos estén listos
-        document.addEventListener('dashboardDataReady', initializeCampoPerfChart);
+        registerTabChart('campos', initializeCampoPerfChart);
 
         // 3. Quarterly Trend
         const quarterlyTrendCtx = document.getElementById('quarterlyTrendChart').getContext('2d');
@@ -18821,6 +19160,192 @@
             }
         }
 
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         INFORME DE COACHING IA — CONTAINER PDF (oculto, generado dinámicamente)
+         ═══════════════════════════════════════════════════════════ -->
+    <div id="coach-report-pdf"></div>
+
+    <!-- Toast de carga -->
+    <div id="coach-pdf-toast">
+        <span class="cr-toast-spinner"></span>
+        <span id="coach-pdf-toast-msg">Generando informe de coaching...</span>
+    </div>
+
+    <script>
+    // ══════════════════════════════════════════════════════════════
+    // INFORME DE COACHING IA — GENERACIÓN PDF PROFESIONAL
+    // ══════════════════════════════════════════════════════════════
+
+    function showCoachToast(msg, done) {
+        const toast = document.getElementById('coach-pdf-toast');
+        const msgEl = document.getElementById('coach-pdf-toast-msg');
+        const spinner = toast.querySelector('.cr-toast-spinner');
+        msgEl.textContent = msg;
+        spinner.style.display = done ? 'none' : 'inline-block';
+        toast.style.display = 'block';
+        if (done) setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    }
+
+    /** Convierte Markdown básico a HTML para el informe */
+    function markdownToCoachHTML(md) {
+        if (!md) return '';
+        return md
+            // Encabezados
+            .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+            .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+            .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+            // Negrita e itálica
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>')
+            // Listas con guión o asterisco
+            .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+            .replace(/(<li>[\s\S]*?<\/li>)/g, (m) => '<ul>' + m + '</ul>')
+            // Listas numeradas
+            .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+            // Separadores
+            .replace(/^---+$/gm, '<hr style="border:1px solid #e5e7eb; margin:12px 0;">')
+            // Párrafos (líneas no vacías que no son ya etiquetas HTML)
+            .split('\n')
+            .map(line => {
+                line = line.trim();
+                if (!line) return '';
+                if (/^<[h1-6|li|ul|hr]/.test(line)) return line;
+                return `<p>${line}</p>`;
+            })
+            .join('\n');
+    }
+
+    /** Construye el HTML completo del informe con diseño profesional */
+    function buildCoachReportHTML(report, sp, gi) {
+        const hcp    = sp ? sp.player_hcp   : 23.2;
+        const overall= sp ? sp.overall_score : '—';
+        const arch   = gi ? gi.archetype_name : '—';
+        const archId = gi ? gi.archetype_id   : '—';
+        const today  = new Date().toLocaleDateString('es-ES', {year:'numeric',month:'long',day:'numeric'});
+
+        // Scores para la strip
+        const dims = sp ? sp.dimensions : {};
+        const dimLabels = {
+            long_game:'Juego Largo', mid_game:'Juego Medio', short_game:'Juego Corto',
+            putting:'Putting', consistency:'Consistencia', mental:'Mental',
+            power:'Potencia', accuracy:'Precisión'
+        };
+
+        const scoreCells = Object.entries(dimLabels).map(([key, label]) => {
+            const d = dims[key] || {};
+            const zone = d.zone || 'developing';
+            return `<div class="cr-score-cell">
+                <div class="cr-score-num ${zone}">${d.score ? d.score.toFixed(1) : '—'}</div>
+                <div class="cr-score-label">${label}</div>
+                <div class="cr-score-zone ${zone}">${zone.replace('_',' ').toUpperCase()}</div>
+            </div>`;
+        }).join('');
+
+        const topStrength = sp && sp.top_strength ? sp.top_strength[0].replace('_',' ') : '—';
+        const topGap      = sp && sp.top_gap      ? sp.top_gap[0].replace('_',' ')      : '—';
+
+        return `
+<div class="cr-page">
+  <!-- PORTADA -->
+  <div class="cr-cover">
+    <div class="cr-cover-logo">AlvGolf · Golf Intelligence Engine</div>
+    <div class="cr-cover-title">Informe de Coaching Personalizado</div>
+    <div class="cr-cover-subtitle">Análisis completo 360° · Plan de desarrollo 12 semanas</div>
+    <div class="cr-cover-player">
+      <div class="cr-cover-avatar">⛳</div>
+      <div>
+        <div class="cr-cover-name">Álvaro Peralta</div>
+        <div class="cr-cover-meta">HCP ${hcp} · ${today} · Generado por Claude Sonnet 4.6</div>
+      </div>
+    </div>
+    <div class="cr-cover-badges">
+      <span class="cr-badge cr-badge-gold">Overall ${overall}/10</span>
+      <span class="cr-badge cr-badge-blue">${archId} · ${arch}</span>
+      <span class="cr-badge cr-badge-green">Fortaleza: ${topStrength}</span>
+      <span class="cr-badge" style="background:rgba(232,139,122,0.2);border:1px solid #e88b7a;color:#e88b7a;">Gap: ${topGap}</span>
+    </div>
+  </div>
+
+  <!-- STRIP DE SCORES -->
+  <div class="cr-score-strip">${scoreCells}</div>
+
+  <!-- CUERPO DEL INFORME -->
+  <div class="cr-body">
+    <div class="cr-prose">${markdownToCoachHTML(report)}</div>
+  </div>
+
+  <!-- PIE DE PÁGINA -->
+  <div class="cr-footer">
+    <span class="cr-footer-brand">ALVGOLF INTELLIGENCE</span>
+    <span>Informe generado con IA · ${today}</span>
+    <span>HCP ${hcp} · Confidencial</span>
+  </div>
+</div>`;
+    }
+
+    async function generateCoachPDF() {
+        showCoachToast('Conectando con el coach IA... (~60s)');
+
+        try {
+            // 1. Llamar al endpoint /generate-coach
+            const res = await fetch('http://localhost:8000/generate-coach', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
+            });
+
+            if (!res.ok) throw new Error(`Backend error: ${res.status}`);
+            const data = await res.json();
+            const report = data.report;
+
+            showCoachToast('Diseñando informe PDF profesional...');
+
+            // 2. Leer scoring_profile y golf_identity si están disponibles
+            const sp = window.dashboardData?.scoring_profile || null;
+            const gi = window.dashboardData?.golf_identity   || null;
+
+            // 3. Construir HTML del informe
+            const html = buildCoachReportHTML(report, sp, gi);
+            const container = document.getElementById('coach-report-pdf');
+            container.innerHTML = html;
+            container.style.display = 'block';
+
+            // 4. Esperar render
+            await new Promise(r => setTimeout(r, 600));
+
+            // 5. Generar PDF con html2pdf
+            const today = new Date().toISOString().slice(0,10);
+            const opt = {
+                margin: 0,
+                filename: `InformeCoaching_AlvaroPeralta_${today}.pdf`,
+                image: { type: 'jpeg', quality: 0.97 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: false,
+                    allowTaint: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    windowWidth: 794
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+                pagebreak: { mode: ['css', 'legacy'] }
+            };
+
+            await html2pdf().set(opt).from(container).save();
+
+            // 6. Limpiar y notificar
+            container.style.display = 'none';
+            container.innerHTML = '';
+            showCoachToast('✓ Informe de coaching descargado', true);
+
+        } catch (err) {
+            console.error('Error generating coach PDF:', err);
+            document.getElementById('coach-report-pdf').style.display = 'none';
+            showCoachToast('Error: ' + (err.message || 'No se pudo generar el informe'), true);
+        }
+    }
     </script>
 
 </body>
