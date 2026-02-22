@@ -16699,7 +16699,7 @@
             console.log('✅ Milestone Achievements inicializado correctamente');
         }
 
-        document.addEventListener('dashboardDataReady', initializeMilestoneAchievements);
+        registerTabChart('overview', initializeMilestoneAchievements);
 
         // 12. LEARNING CURVE
         function initializeLearningCurve() {
@@ -17881,7 +17881,14 @@
             }
 
             // 2. Current Form Chart (últimas 20 rondas) - DINÁMICO Sprint 9
-            const currentFormCtx = document.getElementById('currentFormChart').getContext('2d');
+            // Destruir chart previo si existe (evita "Canvas already in use")
+            window.chartInstances = window.chartInstances || {};
+            if (window.chartInstances.currentFormChart) {
+                window.chartInstances.currentFormChart.destroy();
+                window.chartInstances.currentFormChart = null;
+            }
+            const currentFormCtx = document.getElementById('currentFormChart')?.getContext('2d');
+            if (!currentFormCtx) { console.warn('⚠️ currentFormChart canvas not found'); return; }
 
             // Obtener datos dinámicos de current_form
             const currentFormData = window.dashboardData.current_form || {};
@@ -17915,7 +17922,7 @@
             ? (formScores.slice(-5).reduce((a, b) => a + b, 0) / 5).toFixed(1)
             : formAverage.toFixed(1);
 
-        new Chart(currentFormCtx, {
+        window.chartInstances.currentFormChart = new Chart(currentFormCtx, {
             type: 'line',
             data: {
                 labels: formLabels,
@@ -18145,6 +18152,12 @@
             return;
         }
 
+        // Destruir chart previo si existe
+        window.chartInstances = window.chartInstances || {};
+        if (window.chartInstances.hcpTrajectoryChart) {
+            window.chartInstances.hcpTrajectoryChart.destroy();
+            window.chartInstances.hcpTrajectoryChart = null;
+        }
         const hcpTrajectoryCtx = document.getElementById('hcpTrajectoryChart')?.getContext('2d');
         if (!hcpTrajectoryCtx) {
             console.warn('⚠️ hcpTrajectoryChart canvas not found');
@@ -18173,7 +18186,7 @@
         // Calcular mejora total
         const improvement = (hcpData.historical.values[0] - hcpData.current).toFixed(1);
 
-        new Chart(hcpTrajectoryCtx, {
+        window.chartInstances.hcpTrajectoryChart = new Chart(hcpTrajectoryCtx, {
             type: 'line',
             data: {
                 labels: allLabels,
@@ -18259,15 +18272,18 @@
         console.log('✅ HCP Trajectory Chart inicializado con datos reales');
     }
 
-    // Escuchar evento de datos listos
-    document.addEventListener('dashboardDataReady', initializeCurrentFormAndGauges);
-    document.addEventListener('dashboardDataReady', initializeHCPTrajectory);
+    // Registrar en lazy-loading de overview (Tab 1)
+    registerTabChart('overview', initializeCurrentFormAndGauges);
+    registerTabChart('overview', initializeHCPTrajectory);
 
         // ============================================
         // HARDCODED CHARTS (Tab 1 Overview)
         // ============================================
         function initializeHardcodedCharts() {
-            console.log('📊 Inicializando gráficos hardcodeados (Tab 1 Overview)...');
+            // Evitar doble inicialización (Tab 3 lazy-loading)
+            if (window._hardcodedChartsInitialized) return;
+            window._hardcodedChartsInitialized = true;
+            console.log('📊 Inicializando gráficos hardcodeados (Tab 3 Campos)...');
 
         // 7. HCP Trajectory Chart - AHORA DINÁMICO (movido a initializeHCPTrajectory)
         // (Este chart ahora se inicializa con datos reales del JSON en TASK 9.3)
@@ -18758,11 +18774,9 @@
         console.log('✅ Gráficos hardcodeados inicializados correctamente (9 charts)');
     }
 
-    // Inicializar hardcoded charts siempre que los datos estén listos
-    document.addEventListener('dashboardDataReady', function() {
-        console.log('🔧 Inicializando hardcoded charts...');
-        initializeHardcodedCharts();
-    });
+    // Registrar hardcoded charts en lazy-loading de campos (Tab 3)
+    // Estos 8 charts están en Tab 3 y se inicializan al abrir el tab
+    registerTabChart('campos', initializeHardcodedCharts);
 
     // ============================================================
     // SPRINT 13A - INICIALIZAR CHARTS DINÁMICOS
@@ -19339,7 +19353,6 @@
         // Si el informe no está listo todavía, esperar
         if (!window.coachReportMd) {
             showCoachToast('El informe se está preparando... espera unos segundos');
-            // Reintentar en 5s si el backend tarda
             setTimeout(() => {
                 if (window.coachReportMd) generateCoachPDF();
                 else showCoachToast('Backend no disponible. Arranca el servidor.', true);
@@ -19347,52 +19360,49 @@
             return;
         }
 
-        showCoachToast('Generando PDF...');
+        showCoachToast('Preparando informe...');
 
         try {
-            // 1. Leer scoring_profile y golf_identity
             const sp = window.dashboardData?.scoring_profile || null;
             const gi = window.dashboardData?.golf_identity   || null;
-
-            // 2. Construir HTML del informe
             const html = buildCoachReportHTML(window.coachReportMd, sp, gi);
-
-            // 3. Crear elemento VISIBLE off-screen (evita PDF en blanco)
-            const el = document.createElement('div');
-            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;background:#fff;z-index:-1;';
-            el.innerHTML = html;
-            document.body.appendChild(el);
-
-            // 4. Esperar render completo
-            await new Promise(r => setTimeout(r, 800));
-
-            // 5. Generar PDF con html2pdf
             const today = new Date().toISOString().slice(0, 10);
-            const opt = {
-                margin: [10, 10, 10, 10],
-                filename: `InformeCoaching_AlvaroPeralta_${today}.pdf`,
-                image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: false,
-                    allowTaint: true,
-                    logging: false,
-                    backgroundColor: '#ffffff',
-                    scrollX: 0,
-                    scrollY: 0
-                },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
 
-            await html2pdf().set(opt).from(el).save();
+            // Abrir en nueva ventana e imprimir (Guardar como PDF en el diálogo)
+            const fullDoc = `<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informe Coach AlvGolf ${today}</title>
+<style>
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4; margin: 0; }
+    body { margin: 0; }
+  }
+  body { margin: 0; padding: 0; background: #fff; }
+</style>
+</head><body>${html}</body></html>`;
 
-            // 6. Limpiar DOM
-            document.body.removeChild(el);
-            showCoachToast('Informe descargado', true);
+            const win = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+            if (!win) {
+                showCoachToast('⚠️ Activa ventanas emergentes en tu navegador', true);
+                return;
+            }
+            win.document.open();
+            win.document.write(fullDoc);
+            win.document.close();
+
+            // Esperar render y abrir diálogo de impresión
+            setTimeout(() => {
+                win.focus();
+                win.print();
+            }, 700);
+
+            showCoachToast('📄 En el diálogo: Guardar como PDF', true);
 
         } catch (err) {
             console.error('Error generating coach PDF:', err);
-            showCoachToast('Error al generar PDF: ' + (err.message || 'desconocido'), true);
+            showCoachToast('Error al generar informe: ' + (err.message || 'desconocido'), true);
         }
     }
     </script>
