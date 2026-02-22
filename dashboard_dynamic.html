@@ -174,11 +174,14 @@
                 const cachedVer  = localStorage.getItem(LS_JSON_VER);
                 const cachedData = localStorage.getItem(LS_JSON_KEY);
 
-                // Si hay caché, usarla INMEDIATAMENTE para render instantáneo
+                // Si hay caché, usarla para render rápido — pero deferir con setTimeout(0)
+                // para que todos los listeners estén registrados antes de que el evento dispare
                 if (cachedData && cachedVer) {
                     const parsed = JSON.parse(cachedData);
-                    console.log('⚡ Dashboard cargado desde caché localStorage (versión', cachedVer, ')');
-                    dispatchDashboardReady(parsed);
+                    setTimeout(() => {
+                        console.log('⚡ Dashboard cargado desde caché localStorage (versión', cachedVer, ')');
+                        dispatchDashboardReady(parsed);
+                    }, 0);
                 }
 
                 // Siempre fetch en background para detectar actualizaciones
@@ -19249,7 +19252,7 @@
             .join('\n');
     }
 
-    /** Construye el HTML completo del informe con diseño profesional */
+    /** Construye el HTML completo del informe — CSS embebido para html2canvas */
     function buildCoachReportHTML(report, sp, gi) {
         const hcp    = sp ? sp.player_hcp   : 23.2;
         const overall= sp ? sp.overall_score : '—';
@@ -19257,63 +19260,78 @@
         const archId = gi ? gi.archetype_id   : '—';
         const today  = new Date().toLocaleDateString('es-ES', {year:'numeric',month:'long',day:'numeric'});
 
-        // Scores para la strip
         const dims = sp ? sp.dimensions : {};
         const dimLabels = {
             long_game:'Juego Largo', mid_game:'Juego Medio', short_game:'Juego Corto',
             putting:'Putting', consistency:'Consistencia', mental:'Mental',
             power:'Potencia', accuracy:'Precisión'
         };
+        const zoneColor = { elite:'#d4b55a', strong:'#4a9fd8', developing:'#7c9bbf', focus_area:'#e88b7a', focus:'#e88b7a' };
 
         const scoreCells = Object.entries(dimLabels).map(([key, label]) => {
             const d = dims[key] || {};
-            const zone = d.zone || 'developing';
-            return `<div class="cr-score-cell">
-                <div class="cr-score-num ${zone}">${d.score ? d.score.toFixed(1) : '—'}</div>
-                <div class="cr-score-label">${label}</div>
-                <div class="cr-score-zone ${zone}">${zone.replace('_',' ').toUpperCase()}</div>
+            const zone = (d.zone || 'developing').replace(' ','_');
+            const c = zoneColor[zone] || '#7c9bbf';
+            return `<div style="flex:1;padding:14px 8px;text-align:center;border-right:1px solid #e5e7eb;">
+                <div style="font-size:20px;font-weight:900;color:${c};line-height:1;">${d.score ? d.score.toFixed(1) : '—'}</div>
+                <div style="font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#6b7280;margin-top:4px;">${label}</div>
+                <div style="font-size:7px;letter-spacing:0.5px;margin-top:2px;font-weight:600;color:${c};">${zone.replace('_',' ').toUpperCase()}</div>
             </div>`;
         }).join('');
 
         const topStrength = sp && sp.top_strength ? sp.top_strength[0].replace('_',' ') : '—';
         const topGap      = sp && sp.top_gap      ? sp.top_gap[0].replace('_',' ')      : '—';
 
-        return `
-<div class="cr-page">
-  <!-- PORTADA -->
-  <div class="cr-cover">
-    <div class="cr-cover-logo">AlvGolf · Golf Intelligence Engine</div>
-    <div class="cr-cover-title">Informe de Coaching Personalizado</div>
-    <div class="cr-cover-subtitle">Análisis completo 360° · Plan de desarrollo 12 semanas</div>
-    <div class="cr-cover-player">
-      <div class="cr-cover-avatar">⛳</div>
-      <div>
-        <div class="cr-cover-name">Álvaro Peralta</div>
-        <div class="cr-cover-meta">HCP ${hcp} · ${today} · Generado por Claude Sonnet 4.6</div>
-      </div>
+        // CSS embebido — así html2canvas lo renderiza aunque el elemento esté off-screen
+        const css = `
+            body,*{box-sizing:border-box;margin:0;padding:0;}
+            .cr-prose h1{font-size:15px;font-weight:700;color:#1a1a2e;margin:16px 0 8px;}
+            .cr-prose h2{font-size:13px;font-weight:700;color:#4a9fd8;margin:14px 0 6px;}
+            .cr-prose h3{font-size:12px;font-weight:700;color:#5abf8f;margin:12px 0 5px;}
+            .cr-prose p{font-size:11px;line-height:1.7;color:#2d3748;margin:6px 0;}
+            .cr-prose strong{color:#1a1a2e;font-weight:700;}
+            .cr-prose ul,.cr-prose ol{padding-left:18px;margin:6px 0;}
+            .cr-prose li{font-size:11px;line-height:1.65;color:#2d3748;margin-bottom:3px;}
+            .cr-prose hr{border:1px solid #e5e7eb;margin:10px 0;}
+        `;
+
+        return `<div style="font-family:'Helvetica Neue',Arial,sans-serif;background:#ffffff;width:794px;color:#1a1a2e;">
+<style>${css}</style>
+
+<!-- PORTADA -->
+<div style="background:linear-gradient(145deg,#0f2027 0%,#203a43 50%,#1a1a2e 100%);padding:56px 48px 44px;color:#fff;min-height:270px;position:relative;overflow:hidden;">
+  <div style="font-size:12px;font-weight:700;letter-spacing:3px;color:#4a9fd8;text-transform:uppercase;margin-bottom:26px;opacity:0.9;">AlvGolf · Golf Intelligence Engine</div>
+  <div style="font-size:28px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.2;">Informe de Coaching Personalizado</div>
+  <div style="font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:26px;letter-spacing:0.5px;">Análisis completo 360° · Plan de desarrollo 12 semanas</div>
+  <div style="display:flex;align-items:center;gap:16px;margin-top:22px;padding-top:22px;border-top:1px solid rgba(255,255,255,0.15);">
+    <div style="width:50px;height:50px;background:linear-gradient(135deg,#4a9fd8,#5abf8f);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">⛳</div>
+    <div>
+      <div style="font-size:17px;font-weight:700;color:#fff;">Álvaro Peralta</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:3px;">HCP ${hcp} · ${today} · Generado por Claude Sonnet 4.6</div>
     </div>
-    <div class="cr-cover-badges">
-      <span class="cr-badge cr-badge-gold">Overall ${overall}/10</span>
-      <span class="cr-badge cr-badge-blue">${archId} · ${arch}</span>
-      <span class="cr-badge cr-badge-green">Fortaleza: ${topStrength}</span>
-      <span class="cr-badge" style="background:rgba(232,139,122,0.2);border:1px solid #e88b7a;color:#e88b7a;">Gap: ${topGap}</span>
-    </div>
   </div>
-
-  <!-- STRIP DE SCORES -->
-  <div class="cr-score-strip">${scoreCells}</div>
-
-  <!-- CUERPO DEL INFORME -->
-  <div class="cr-body">
-    <div class="cr-prose">${markdownToCoachHTML(report)}</div>
+  <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;">
+    <span style="padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;background:linear-gradient(135deg,#d4b55a,#f0c040);color:#1a1a00;">Overall ${overall}/10</span>
+    <span style="padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(74,159,216,0.25);border:1px solid #4a9fd8;color:#4a9fd8;">${archId} · ${arch}</span>
+    <span style="padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(90,191,143,0.2);border:1px solid #5abf8f;color:#5abf8f;">Fortaleza: ${topStrength}</span>
+    <span style="padding:5px 13px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(232,139,122,0.2);border:1px solid #e88b7a;color:#e88b7a;">Gap: ${topGap}</span>
   </div>
+</div>
 
-  <!-- PIE DE PÁGINA -->
-  <div class="cr-footer">
-    <span class="cr-footer-brand">ALVGOLF INTELLIGENCE</span>
-    <span>Informe generado con IA · ${today}</span>
-    <span>HCP ${hcp} · Confidencial</span>
-  </div>
+<!-- STRIP DE SCORES -->
+<div style="display:flex;background:#f8f9ff;border-bottom:3px solid #4a9fd8;">${scoreCells}</div>
+
+<!-- CUERPO -->
+<div style="padding:30px 42px;">
+  <div class="cr-prose">${markdownToCoachHTML(report)}</div>
+</div>
+
+<!-- PIE -->
+<div style="background:#f8f9ff;border-top:2px solid #e5e7eb;padding:13px 42px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:#9ca3af;">
+  <span style="font-weight:700;color:#4a9fd8;letter-spacing:1px;">ALVGOLF INTELLIGENCE</span>
+  <span>Informe generado con IA · ${today}</span>
+  <span>HCP ${hcp} · Confidencial</span>
+</div>
 </div>`;
     }
 
