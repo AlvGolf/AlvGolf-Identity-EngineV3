@@ -39,7 +39,11 @@
       "Bash(curl:*)",
       "Bash(taskkill:*)",
       "Bash(netstat:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(del \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\auth-flow.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\dashboard-views.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\sequence-upload-round.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\identity-engine-pipeline.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\data-model-erd.md\")",
+      "Bash(start https://github.com/AlvGolf/AlvGolf-Identity-EngineV3/blob/main/VISUAL_DIAGRAMS_REFERENCE.md)",
+      "Bash(xargs sed:*)",
+      "Bash(tasklist:*)"
     ]
   }
 }

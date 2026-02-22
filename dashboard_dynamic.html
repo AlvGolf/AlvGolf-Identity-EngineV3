@@ -16699,7 +16699,10 @@
             console.log('✅ Milestone Achievements inicializado correctamente');
         }
 
-        registerTabChart('overview', initializeMilestoneAchievements);
+        // Tab 1 (overview) es el tab por defecto — se inicializa directamente
+        // al disparar dashboardDataReady, sin restricción de tab activo.
+        document.addEventListener('dashboardDataReady', initializeMilestoneAchievements, { once: true });
+        setTimeout(initializeMilestoneAchievements, 500);
 
         // 12. LEARNING CURVE
         function initializeLearningCurve() {
@@ -18061,8 +18064,16 @@
         const percentileGauges = window.dashboardData.percentile_gauges || {};
 
         const percentileConfig = (canvasId, value, color) => {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            new Chart(ctx, {
+            const el = document.getElementById(canvasId);
+            if (!el) { console.warn('⚠️ percentile canvas not found:', canvasId); return; }
+            // Destruir chart previo si existe (evita "Canvas already in use")
+            window.chartInstances = window.chartInstances || {};
+            if (window.chartInstances[canvasId]) {
+                window.chartInstances[canvasId].destroy();
+                window.chartInstances[canvasId] = null;
+            }
+            const ctx = el.getContext('2d');
+            window.chartInstances[canvasId] = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     datasets: [{
@@ -18272,9 +18283,12 @@
         console.log('✅ HCP Trajectory Chart inicializado con datos reales');
     }
 
-    // Registrar en lazy-loading de overview (Tab 1)
-    registerTabChart('overview', initializeCurrentFormAndGauges);
-    registerTabChart('overview', initializeHCPTrajectory);
+    // Tab 1 (overview) es el tab por defecto — se inicializa directamente
+    // al disparar dashboardDataReady, sin restricción de tab activo.
+    document.addEventListener('dashboardDataReady', initializeCurrentFormAndGauges, { once: true });
+    document.addEventListener('dashboardDataReady', initializeHCPTrajectory, { once: true });
+    setTimeout(initializeCurrentFormAndGauges, 500);
+    setTimeout(initializeHCPTrajectory, 500);
 
         // ============================================
         // HARDCODED CHARTS (Tab 1 Overview)
@@ -18385,8 +18399,14 @@
         try {
         
         // 5. Scoring Zones por Campo
-        const scoringZonesCtx = document.getElementById('scoringZonesChart').getContext('2d');
-        new Chart(scoringZonesCtx, {
+        if (window.chartInstances.scoringZonesChart) {
+            window.chartInstances.scoringZonesChart.destroy();
+            window.chartInstances.scoringZonesChart = null;
+        }
+        const scoringZonesEl = document.getElementById('scoringZonesChart');
+        if (!scoringZonesEl) { console.warn('⚠️ scoringZonesChart canvas not found'); }
+        const scoringZonesCtx = scoringZonesEl?.getContext('2d');
+        if (scoringZonesCtx) window.chartInstances.scoringZonesChart = new Chart(scoringZonesCtx, {
             type: 'bar',
             data: {
                 labels: ['LA DEHESA', 'MARINA GOLF', 'LAS ROZAS', 'VALLE DEL ESTE'],
@@ -18420,8 +18440,8 @@
                     y: { stacked: true, title: { display: true, text: 'Número de Rondas', color: '#4A9FD8' }, ticks: { color: '#fff' }}
                 }
             }
-        });
-        
+        }); // End scoringZonesChart
+
         // 6. Volatility Index - DINÁMICO ✅
         if (document.getElementById('volatilityChart')) {
         const volatilityCtx = document.getElementById('volatilityChart').getContext('2d');
