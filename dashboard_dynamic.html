@@ -114,6 +114,9 @@
         const LS_UX_VER    = 'alvgolf_ux_version';
         const LS_UX_TS     = 'alvgolf_ux_timestamp';
         const UX_TTL_MS    = 24 * 60 * 60 * 1000; // 24 horas
+        const LS_COACH_KEY = 'alvgolf_coach_report';
+        const LS_COACH_TS  = 'alvgolf_coach_ts';
+        const COACH_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
 
         function dispatchDashboardReady(data) {
             window.dashboardData = data;
@@ -128,6 +131,41 @@
                 }
             });
             document.dispatchEvent(event);
+            // Pre-cargar informe del coach en background (cacheado 24h)
+            preloadCoachReport();
+        }
+
+        async function preloadCoachReport() {
+            // 1. Intentar cache local primero (instantáneo)
+            try {
+                const cached = localStorage.getItem(LS_COACH_KEY);
+                const ts = parseInt(localStorage.getItem(LS_COACH_TS) || '0');
+                if (cached && (Date.now() - ts) < COACH_TTL_MS) {
+                    window.coachReportMd = cached;
+                    console.log('📋 Informe coach cargado desde caché');
+                    return;
+                }
+            } catch(e) {}
+
+            // 2. Fetch al backend (background, no bloquea UI)
+            try {
+                const res = await fetch('http://localhost:8000/generate-coach', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    window.coachReportMd = data.report;
+                    try {
+                        localStorage.setItem(LS_COACH_KEY, data.report);
+                        localStorage.setItem(LS_COACH_TS, String(Date.now()));
+                    } catch(e) {}
+                    console.log('📋 Informe coach generado y cacheado');
+                }
+            } catch(e) {
+                console.warn('Backend offline — informe coach no disponible:', e.message);
+            }
         }
 
         // Cargar dashboard_data.json con caché localStorage
@@ -18717,14 +18755,8 @@
         console.log('✅ Gráficos hardcodeados inicializados correctamente (9 charts)');
     }
 
-    // Inicializar hardcoded charts cuando los datos estén listos (modificado Sprint 13A)
-    // NOTE: With lazy loading enabled, this is handled by optimization script
+    // Inicializar hardcoded charts siempre que los datos estén listos
     document.addEventListener('dashboardDataReady', function() {
-        // Skip if lazy loading is enabled (optimization script handles it)
-        if (window.OPTIMIZATION_CONFIG && window.OPTIMIZATION_CONFIG.ENABLE_LAZY_LOADING) {
-            console.log('⏭️ Skipping bulk initialization (lazy loading enabled)');
-            return;
-        }
         console.log('🔧 Inicializando hardcoded charts...');
         initializeHardcodedCharts();
     });
@@ -19286,64 +19318,63 @@
     }
 
     async function generateCoachPDF() {
-        showCoachToast('Conectando con el coach IA... (~60s)');
+        // Si el informe no está listo todavía, esperar
+        if (!window.coachReportMd) {
+            showCoachToast('El informe se está preparando... espera unos segundos');
+            // Reintentar en 5s si el backend tarda
+            setTimeout(() => {
+                if (window.coachReportMd) generateCoachPDF();
+                else showCoachToast('Backend no disponible. Arranca el servidor.', true);
+            }, 5000);
+            return;
+        }
+
+        showCoachToast('Generando PDF...');
 
         try {
-            // 1. Llamar al endpoint /generate-coach
-            const res = await fetch('http://localhost:8000/generate-coach', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
-            });
-
-            if (!res.ok) throw new Error(`Backend error: ${res.status}`);
-            const data = await res.json();
-            const report = data.report;
-
-            showCoachToast('Diseñando informe PDF profesional...');
-
-            // 2. Leer scoring_profile y golf_identity si están disponibles
+            // 1. Leer scoring_profile y golf_identity
             const sp = window.dashboardData?.scoring_profile || null;
             const gi = window.dashboardData?.golf_identity   || null;
 
-            // 3. Construir HTML del informe
-            const html = buildCoachReportHTML(report, sp, gi);
-            const container = document.getElementById('coach-report-pdf');
-            container.innerHTML = html;
-            container.style.display = 'block';
+            // 2. Construir HTML del informe
+            const html = buildCoachReportHTML(window.coachReportMd, sp, gi);
 
-            // 4. Esperar render
-            await new Promise(r => setTimeout(r, 600));
+            // 3. Crear elemento VISIBLE off-screen (evita PDF en blanco)
+            const el = document.createElement('div');
+            el.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;background:#fff;z-index:-1;';
+            el.innerHTML = html;
+            document.body.appendChild(el);
+
+            // 4. Esperar render completo
+            await new Promise(r => setTimeout(r, 800));
 
             // 5. Generar PDF con html2pdf
-            const today = new Date().toISOString().slice(0,10);
+            const today = new Date().toISOString().slice(0, 10);
             const opt = {
-                margin: 0,
+                margin: [10, 10, 10, 10],
                 filename: `InformeCoaching_AlvaroPeralta_${today}.pdf`,
-                image: { type: 'jpeg', quality: 0.97 },
+                image: { type: 'jpeg', quality: 0.95 },
                 html2canvas: {
                     scale: 2,
                     useCORS: false,
                     allowTaint: true,
                     logging: false,
                     backgroundColor: '#ffffff',
-                    windowWidth: 794
+                    scrollX: 0,
+                    scrollY: 0
                 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-                pagebreak: { mode: ['css', 'legacy'] }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            await html2pdf().set(opt).from(container).save();
+            await html2pdf().set(opt).from(el).save();
 
-            // 6. Limpiar y notificar
-            container.style.display = 'none';
-            container.innerHTML = '';
-            showCoachToast('✓ Informe de coaching descargado', true);
+            // 6. Limpiar DOM
+            document.body.removeChild(el);
+            showCoachToast('Informe descargado', true);
 
         } catch (err) {
             console.error('Error generating coach PDF:', err);
-            document.getElementById('coach-report-pdf').style.display = 'none';
-            showCoachToast('Error: ' + (err.message || 'No se pudo generar el informe'), true);
+            showCoachToast('Error al generar PDF: ' + (err.message || 'desconocido'), true);
         }
     }
     </script>
