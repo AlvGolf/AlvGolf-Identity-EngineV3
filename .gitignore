@@ -76,3 +76,7 @@ nul
 ~$*
 backend.pid
 backend.log
+
+# Generated agent outputs (PDFs, temp JSON)
+app/agents/Informes Agent Coach/
+output/ux_*.json

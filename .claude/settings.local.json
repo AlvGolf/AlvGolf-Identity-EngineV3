@@ -1,16 +1,4 @@
 {
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "cd C:\\Users\\alvar\\Documents\\AlvGolf && python -m py_compile app/scoring_engine.py app/scoring_integration.py app/archetype_classifier.py app/main.py app/rag.py app/agents/orchestrator.py app/agents/analista.py app/agents/tecnico.py app/agents/estratega.py app/agents/ux_writer.py app/agents/coach.py 2>&1 && echo OK: py_compile passed"
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(python:*)",
@@ -55,7 +43,20 @@
       "Bash(del \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\auth-flow.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\dashboard-views.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\sequence-upload-round.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\identity-engine-pipeline.md\" \"C:\\\\Users\\\\alvar\\\\Documents\\\\AlvGolf\\\\memory\\\\ai\\\\diagrams\\\\data-model-erd.md\")",
       "Bash(start https://github.com/AlvGolf/AlvGolf-Identity-EngineV3/blob/main/VISUAL_DIAGRAMS_REFERENCE.md)",
       "Bash(xargs sed:*)",
-      "Bash(tasklist:*)"
+      "Bash(tasklist:*)",
+      "Bash(cd:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /c/Users/alvar/Documents/AlvGolf && python -m py_compile app/scoring_engine.py app/scoring_integration.py app/archetype_classifier.py app/main.py app/rag.py app/agents/orchestrator.py app/agents/analista.py app/agents/tecnico.py app/agents/estratega.py app/agents/ux_writer.py app/agents/coach.py 2>&1 && echo OK: py_compile passed"
+          }
+        ]
+      }
     ]
   }
 }

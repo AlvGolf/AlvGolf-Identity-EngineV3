@@ -1,0 +1,26 @@
+Flujo de trabajo: Imponer la calidad del código con ganchos de detención automatizados
+Una IA puede generar código que parece correcto, pero que no pasa una comprobación de TypeScript o infringe una regla de linting. En lugar de buscar y corregir manualmente estos errores, usa los ganchos de Claude Code para crear un control de calidad automatizado.
+
+Paso 1: Definir la lógica en un script de gancho
+crear un stopgancho, un script que se ejecuta automáticamente cada vez que Claude finaliza una tarea. El script, escrito en TypeScript con el SDK de Claude Agent, implementa un flujo lógico claro:
+
+Verificar cambios en los archivos. Si no se ha modificado ningún archivo, el gancho no hace nada.
+Ejecutar comprobaciones de calidad. Si se modificaron los archivos, el script se ejecuta bun typecheck.
+Gestionar errores. Si la comprobación de tipo falla, el gancho envía el informe de errores a Claude con una nueva instrucción: {"prompt": "Please fix the TypeScript errors. Here is the report: ..."}. Esta instrucción se envía a Claude como console.logsalida del script.
+Confirmar el trabajo correctamente. Si las comprobaciones son satisfactorias, el gancho instruye a un agente en segundo plano a generar un mensaje de confirmación y confirmar el trabajo.
+ 
+Paso 2: Configurar el Hook en Claude Code
+Configuró este gancho para que se ejecutara en su proyecto añadiéndolo a su settings.local.jsonarchivo. La configuración simplemente apunta al script que debe ejecutarse:
+
+{
+  "claude.hooks.stop": [
+    {
+      "command": "bun run claude-hooks/index.ts"
+    }
+  ]
+}
+
+El resultado: un ciclo automatizado de "reparación y confirmación"
+En su demostración, John le pidió a Claude que creara un archivo con un error de sintaxis. Claude creó el archivo y se habría detenido. Pero el gancho de parada se activó, ejecutó la comprobación de tipos y encontró el error. Automáticamente, le pidió a Claude que lo corrigiera. Claude realizó la corrección. El gancho se ejecutó de nuevo, confirmó que las pruebas eran correctas y activó una confirmación automática. Todo este ciclo (comprobar, fallar, corregir, volver a comprobar, aprobar, confirmar) se realizó sin intervención manual.
+
+Así es como se obtiene un apalancamiento escalable. Al invertir en configuraciones compartidas como esta, todo un equipo de ingeniería puede beneficiarse de una base de calidad y eficiencia.
