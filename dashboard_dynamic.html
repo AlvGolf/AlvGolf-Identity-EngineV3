@@ -107,16 +107,9 @@
         // CARGA DEL JSON AL INICIAR
         // ============================================================
 
-        // ── localStorage cache keys ─────────────────────────────
+        // ── localStorage cache keys (dashboard_data.json) ────────
         const LS_JSON_KEY  = 'alvgolf_dashboard_data';
         const LS_JSON_VER  = 'alvgolf_json_version';
-        const LS_UX_KEY    = 'alvgolf_ux_content';
-        const LS_UX_VER    = 'alvgolf_ux_version';
-        const LS_UX_TS     = 'alvgolf_ux_timestamp';
-        const UX_TTL_MS    = 24 * 60 * 60 * 1000; // 24 horas
-        const LS_COACH_KEY = 'alvgolf_coach_report';
-        const LS_COACH_TS  = 'alvgolf_coach_ts';
-        const COACH_TTL_MS = 24 * 60 * 60 * 1000; // 24 horas
 
         function dispatchDashboardReady(data) {
             window.dashboardData = data;
@@ -131,41 +124,6 @@
                 }
             });
             document.dispatchEvent(event);
-            // Pre-cargar informe del coach en background (cacheado 24h)
-            preloadCoachReport();
-        }
-
-        async function preloadCoachReport() {
-            // 1. Intentar cache local primero (instantáneo)
-            try {
-                const cached = localStorage.getItem(LS_COACH_KEY);
-                const ts = parseInt(localStorage.getItem(LS_COACH_TS) || '0');
-                if (cached && (Date.now() - ts) < COACH_TTL_MS) {
-                    window.coachReportMd = cached;
-                    console.log('📋 Informe coach cargado desde caché');
-                    return;
-                }
-            } catch(e) {}
-
-            // 2. Fetch al backend (background, no bloquea UI)
-            try {
-                const res = await fetch('http://localhost:8000/generate-coach', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    window.coachReportMd = data.report;
-                    try {
-                        localStorage.setItem(LS_COACH_KEY, data.report);
-                        localStorage.setItem(LS_COACH_TS, String(Date.now()));
-                    } catch(e) {}
-                    console.log('📋 Informe coach generado y cacheado');
-                }
-            } catch(e) {
-                console.warn('Backend offline — informe coach no disponible:', e.message);
-            }
         }
 
         // Cargar dashboard_data.json con caché localStorage
@@ -226,82 +184,16 @@
         // ============================================================
 
         async function loadUXContent() {
+            // Carga ai_content.json (pre-generado por run_pipeline_ai.py).
+            // Sin fallbacks a backend — el dashboard es 100% estático.
             try {
-                // ── 1. ai_content.json (caché estática en disco, instantánea) ──
-                try {
-                    const fileRes = await fetch('output/ai_content.json');
-                    if (fileRes.ok) {
-                        const content = await fileRes.json();
-                        const currentVer = window.dashboardData?.metadata?.version || 'unknown';
-                        const now = Date.now();
-                        try {
-                            localStorage.setItem(LS_UX_KEY, JSON.stringify(content));
-                            localStorage.setItem(LS_UX_VER, currentVer);
-                            localStorage.setItem(LS_UX_TS, now.toString());
-                        } catch(e) { /* localStorage lleno */ }
-                        console.log('⚡ Contenido AI cargado desde ai_content.json (instantáneo)');
-                        insertUXContent(content);
-                        return;
-                    }
-                } catch(e) { /* ai_content.json no disponible — continuar con fallbacks */ }
-
-                // ── 2. Comprobar caché localStorage ──────────────────────
-                const cachedContent = localStorage.getItem(LS_UX_KEY);
-                const cachedUXVer   = localStorage.getItem(LS_UX_VER);
-                const cachedUXTs    = parseInt(localStorage.getItem(LS_UX_TS) || '0');
-                const currentVer    = window.dashboardData?.metadata?.version || 'unknown';
-                const now           = Date.now();
-                const isExpired     = (now - cachedUXTs) > UX_TTL_MS;
-                const isStale       = cachedUXVer !== currentVer;
-
-                if (cachedContent && !isExpired && !isStale) {
-                    console.log('⚡ Contenido AI cargado desde caché localStorage (sin llamada al backend)');
-                    insertUXContent(JSON.parse(cachedContent));
-                    return;
-                }
-
-                // ── Fetch fresco desde el backend ─────────────────────
-                console.log('📝 Loading UX content from AgentUXWriter...');
-
-                const response = await fetch('http://localhost:8000/generate-content', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: 'alvaro', force_refresh: false })
-                });
-
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                const data = await response.json();
-                let content = data.content;
-
-                // Handle raw_content wrapper
-                if (content.raw_content && !content.hero_statement) {
-                    console.log('📦 Parsing raw_content wrapper...');
-                    try {
-                        let rawContent = content.raw_content;
-                        if (rawContent.startsWith('```json')) {
-                            rawContent = rawContent.replace(/```json\n/, '').replace(/\n```$/, '');
-                        }
-                        content = JSON.parse(rawContent);
-                    } catch (parseError) {
-                        throw new Error('Content parsing failed');
-                    }
-                }
-
-                // ── Guardar en caché ──────────────────────────────────
-                try {
-                    localStorage.setItem(LS_UX_KEY, JSON.stringify(content));
-                    localStorage.setItem(LS_UX_VER, currentVer);
-                    localStorage.setItem(LS_UX_TS,  now.toString());
-                    console.log('✅ UX content cacheado en localStorage (TTL 24h)');
-                } catch(e) { /* localStorage lleno */ }
-
-                console.log('✅ UX content loaded. Sections:', Object.keys(content));
+                const res = await fetch('output/ai_content.json');
+                if (!res.ok) return; // archivo no disponible → degradación silenciosa
+                const content = await res.json();
+                console.log('⚡ Contenido AI cargado desde ai_content.json');
                 insertUXContent(content);
-
-            } catch (error) {
-                console.warn('⚠️ Could not load UX content from backend:', error.message);
-                console.warn('   Dashboard will use default content.');
+            } catch (e) {
+                console.warn('⚠️ ai_content.json no disponible — dashboard sin contenido IA:', e.message);
             }
         }
 
@@ -469,6 +361,12 @@
                 }
             }
 
+            // Coach report — disponible para generateCoachPDF() sin llamada al backend
+            if (content.coach_report) {
+                window.coachReportMd = content.coach_report;
+                console.log('  ✓ Coach report listo para PDF');
+            }
+
             console.log('✅ UX content integration complete');
         }
 
@@ -476,17 +374,10 @@
         // LOAD UX CONTENT AFTER DASHBOARD IS READY
         // ============================================================
 
-        // Listen for dashboardDataReady and load UX content after delay
+        // Cargar contenido IA cuando los datos del dashboard estén listos
         document.addEventListener('dashboardDataReady', function() {
-            console.log('🎯 dashboardDataReady detected - scheduling UX content load');
-
-            setTimeout(() => {
-                console.log('⏰ Starting UX content load now...');
-                loadUXContent().catch(err => {
-                    console.warn('⚠️ UX content loading failed (non-critical):', err.message);
-                });
-            }, 1000);  // 1s — suficiente para charts; ai_content.json carga en <100ms
-        }, { once: true });  // Only execute once
+            loadUXContent();
+        }, { once: true });
 
         // ============================================================
 
