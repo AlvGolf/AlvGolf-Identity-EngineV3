@@ -533,6 +533,20 @@ async def run_multi_agent_analysis(user_id: str) -> dict:
             logger.info(f"   AgentUXWriter:  {len(json.dumps(final_state.get('ux_writer_output', {}).get('content', {})))} chars")
             logger.info(f"   AgentCoach:     {len(final_state.get('coach_output', {}).get('report', ''))} chars")
 
+        # ── Guardar contenido UXWriter en disco (caché estática) ────────────
+        try:
+            ux_content = final_state.get("ux_writer_output", {}).get("content", {})
+            if ux_content:
+                output_path = Path(__file__).parent.parent.parent / "output" / "ai_content.json"
+                with open(output_path, 'w', encoding='utf-8') as f:
+                    json.dump(ux_content, f, ensure_ascii=False, indent=2)
+                logger.info(f"[Orchestrator] ai_content.json guardado en {output_path}")
+            else:
+                logger.warning("[Orchestrator] ux_writer_output vacío — ai_content.json no guardado")
+        except Exception as e:
+            logger.warning(f"[Orchestrator] No se pudo guardar ai_content.json: {e}")
+        # ─────────────────────────────────────────────────────────────────────
+
         return {
             "dashboard_data":       final_state.get("dashboard_data", {}),
             "scoring_result":       final_state.get("scoring_result"),

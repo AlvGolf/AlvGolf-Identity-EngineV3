@@ -227,7 +227,25 @@
 
         async function loadUXContent() {
             try {
-                // ── Comprobar caché localStorage ──────────────────────
+                // ── 1. ai_content.json (caché estática en disco, instantánea) ──
+                try {
+                    const fileRes = await fetch('output/ai_content.json');
+                    if (fileRes.ok) {
+                        const content = await fileRes.json();
+                        const currentVer = window.dashboardData?.metadata?.version || 'unknown';
+                        const now = Date.now();
+                        try {
+                            localStorage.setItem(LS_UX_KEY, JSON.stringify(content));
+                            localStorage.setItem(LS_UX_VER, currentVer);
+                            localStorage.setItem(LS_UX_TS, now.toString());
+                        } catch(e) { /* localStorage lleno */ }
+                        console.log('⚡ Contenido AI cargado desde ai_content.json (instantáneo)');
+                        insertUXContent(content);
+                        return;
+                    }
+                } catch(e) { /* ai_content.json no disponible — continuar con fallbacks */ }
+
+                // ── 2. Comprobar caché localStorage ──────────────────────
                 const cachedContent = localStorage.getItem(LS_UX_KEY);
                 const cachedUXVer   = localStorage.getItem(LS_UX_VER);
                 const cachedUXTs    = parseInt(localStorage.getItem(LS_UX_TS) || '0');
@@ -467,7 +485,7 @@
                 loadUXContent().catch(err => {
                     console.warn('⚠️ UX content loading failed (non-critical):', err.message);
                 });
-            }, 5000);  // Wait 5 seconds for all charts to initialize
+            }, 1000);  // 1s — suficiente para charts; ai_content.json carga en <100ms
         }, { once: true });  // Only execute once
 
         // ============================================================
