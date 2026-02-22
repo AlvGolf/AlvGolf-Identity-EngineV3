@@ -280,6 +280,23 @@ async def generate_dashboard_content(request: ContentGenerateRequest):
 
         logger.success(f"[Team 3] Content generation completed ({len(str(result['content']))} chars)")
 
+        # Auto-save ai_content.json (static cache for dashboard)
+        try:
+            ux_content = result["content"]
+            # Deswrap raw_content if needed
+            if isinstance(ux_content, dict) and ux_content.get("raw_content") and not ux_content.get("hero_statement"):
+                raw = ux_content["raw_content"]
+                if raw.startswith("```"):
+                    raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+                ux_content = json.loads(raw)
+            if ux_content and ux_content.get("hero_statement"):
+                ai_path = Path(__file__).parent.parent / "output" / "ai_content.json"
+                with open(ai_path, 'w', encoding='utf-8') as f:
+                    json.dump(ux_content, f, ensure_ascii=False, indent=2)
+                logger.info(f"[Team 3] ai_content.json saved ({len(ux_content)} sections)")
+        except Exception as e:
+            logger.warning(f"[Team 3] Could not save ai_content.json: {e}")
+
         return ContentGenerateResponse(
             content=result["content"],
             metadata=result["metadata"],

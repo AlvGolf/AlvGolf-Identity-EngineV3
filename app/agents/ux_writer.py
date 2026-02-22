@@ -22,7 +22,7 @@ llm = ChatAnthropic(
     model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.3,  # Slightly creative for engaging content
-    max_tokens=4000,  # Dashboard content can be extensive
+    max_tokens=4000,  # Dashboard content: 6 secciones JSON
     # Enable prompt caching (critical for cost savings)
     default_headers={
         "anthropic-beta": "prompt-caching-2024-07-31"
@@ -96,28 +96,7 @@ handicap sub-20."
 
 ---
 
-#### SECTION 2: PERFORMANCE METRICS (Estadísticas)
-
-**Content Types:**
-
-**Stat Cards** (15-25 words each):
-- Metric name + value + context
-- Comparison to benchmark
-- Trend indicator
-- Quick interpretation
-
-**Example Stat Cards:**
-```
-📊 Promedio Score: 95.3
-Mejorando consistentemente. -5.3 golpes vs hace 6 meses.
-Proyección: Sub-93 en 8 semanas.
-
-🎯 Fairways Hit: 52%
-Ligeramente bajo vs HCP 23 (58%). Ganar 6% = ahorrar 1.5 golpes/ronda.
-
-⛳ GIR: 28%
-¡Mejora del 18%! Tendencia excelente. Mantén el foco en hierros.
-```
+#### SECTION 2: CHART TITLES (Métricas y Gráficos)
 
 **Chart Titles & Subtitles:**
 - Clear, descriptive titles
@@ -138,95 +117,7 @@ Subtítulo: "¿Desde dónde haces más birdies y bogeys?"
 
 ---
 
-#### SECTION 3: TEMPORAL EVOLUTION (Evolución Temporal)
-
-**Content Types:**
-
-**Trend Narratives** (40-60 words):
-- What the trend shows
-- Why it matters
-- What it predicts
-- Action suggestion
-
-**Example:**
-"Tus últimas 10 rondas muestran mejora acelerada: promedio **93.8** vs **98.4** previas
-(diferencia de 4.6 golpes). El **momentum es fuerte**—mejor racha en 12 meses. Mantén
-frecuencia de práctica actual (2-3x/semana) y enfoca próximas 2 semanas en approach shots
-para consolidar ganancia."
-
-**Milestone Cards** (20-30 words):
-- Achievement unlocked or upcoming
-- Progress toward goal
-- Motivational message
-
-**Examples:**
-```
-🎉 LOGRO DESBLOQUEADO
-Primera ronda sub-90: 88 en Marina Golf
-¡Top 5% de tu histórico!
-
-🎯 PRÓXIMO HITO
-Break HCP 20: Faltan 3.2 puntos
-Estimado: Abril 2026 (12 semanas)
-```
-
----
-
-#### SECTION 4: COURSE PERFORMANCE (Mis Campos)
-
-**Content Types:**
-
-**Course Cards** (30-40 words each):
-- Best/avg/worst scores
-- Course personality assessment
-- Specific strength/weakness on course
-- Strategy tip
-
-**Example Course Card:**
-```
-🏌️ MARINA GOLF
-Mejor: 88 | Promedio: 96.8 | Peor: 105
-Rondas: 11
-
-Tu mejor campo—greens rápidos favorecen tu putting. Drives en
-fairway = scoring bajo. Evita rough en hoyos 5, 12, 15 (penalizan).
-```
-
----
-
-#### SECTION 5: EQUIPMENT ANALYSIS (Bolsa de Palos)
-
-**Content Types:**
-
-**Club Performance Cards** (25-35 words):
-- Avg distance + dispersion rating
-- Confidence level (high/medium/low)
-- Comparison to benchmark
-- Usage recommendation
-
-**Example:**
-```
-⛳ 7 HIERRO
-Distancia: 145m (vs 142m HCP 23: +3m ✓)
-Dispersión: 11m lateral (Buena)
-Confianza: ALTA
-
-Tu palo más fiable. Úsalo en 140-150m. Siguiente paso:
-Replicar esta consistencia en hierros largos.
-```
-
-**Gap Analysis Note** (40-50 words):
-- Distance gaps between clubs
-- Problem gaps identified
-- Recommendation
-
-**Example:**
-"**Gap crítico detectado:** 7i (145m) → 5i (165m) = 20m. Rango 150-160m sin cobertura.
-Considera: añadir híbrido 4 o ajustar 6i. Este gap te cuesta ~2 golpes/ronda en pares 4 largos."
-
----
-
-#### SECTION 6: DEEP ANALYSIS (Análisis Profundo)
+#### SECTION 3: DEEP ANALYSIS (Análisis Profundo)
 
 **Content Types:**
 
@@ -265,7 +156,7 @@ DEBILIDADES:
 
 ---
 
-#### SECTION 7: STRATEGY & ACTION (Estrategia & Acción)
+#### SECTION 4: STRATEGY & ACTION (Estrategia & Acción)
 
 **Content Types:**
 
@@ -424,67 +315,39 @@ Tiempo: [X semanas]
 
 ## OUTPUT STRUCTURE
 
-Your output MUST be a JSON object with content for multiple dashboard sections:
+Your output MUST be a valid JSON object with EXACTLY these 6 sections (no more, no less):
 
 ```json
 {
   "hero_statement": "50-80 words hero text",
   "dna_profile": "30-50 words DNA text",
-  "stat_cards": [
-    {
-      "metric": "Promedio Score",
-      "content": "15-25 words"
-    },
-    // ... more stat cards
-  ],
   "chart_titles": {
     "hcp_evolution": {
       "title": "Título del chart",
       "subtitle": "Subtítulo explicativo"
     }
-    // ... more charts
+    // ... more charts (5-8 key charts only)
   },
-  "trend_narratives": [
-    {
-      "section": "temporal_evolution",
-      "content": "40-60 words"
-    }
-    // ... more narratives
-  ],
-  "course_cards": [
-    {
-      "course_name": "Marina Golf",
-      "content": "30-40 words"
-    }
-    // ... more courses
-  ],
-  "club_cards": [
-    {
-      "club": "7 Iron",
-      "content": "25-35 words"
-    }
-    // ... more clubs
-  ],
   "insight_boxes": [
     {
       "title": "Face-to-Path",
       "content": "50-70 words"
     }
-    // ... more insights
+    // ... 3-4 insights total
   ],
   "quick_wins": [
     {
       "title": "Control distancia wedges",
       "content": "30-40 words"
     }
-    // ... more quick wins
+    // ... 3-4 quick wins total
   ],
   "roi_cards": [
     {
       "action": "Mejorar ángulo ataque driver",
       "content": "40-50 words"
     }
-    // ... more ROI cards
+    // ... 3-4 ROI cards total
   ]
 }
 ```
@@ -517,8 +380,9 @@ Your output MUST be a JSON object with content for multiple dashboard sections:
 
 ## YOUR TASK
 
-When provided with dashboard_data, extract key metrics and generate comprehensive UX content
-for all dashboard sections following the templates and guidelines above.
+When provided with dashboard_data, extract key metrics and generate the EXACT 6 sections
+listed in OUTPUT STRUCTURE. DO NOT generate stat_cards, trend_narratives, course_cards,
+or club_cards — those sections are not used and must be omitted entirely.
 
 Transform technical data into motivational, clear, actionable Spanish content that helps
 golfers understand their game and improve with confidence.
@@ -560,10 +424,20 @@ class AgentUXWriter:
         if dashboard_data is None:
             raise ValueError("dashboard_data is required - pass from orchestrator")
 
-        # Format dashboard data as readable context
-        print(f"[AgentUXWriter] Processing dashboard_data ({len(json.dumps(dashboard_data)) / 1024:.1f} KB)...")
+        # Extraer solo las métricas clave — evita enviar 111KB innecesarios
+        print(f"[AgentUXWriter] Processing dashboard_data ({len(json.dumps(dashboard_data)) / 1024:.1f} KB -> extracting key metrics)...")
 
-        data_context = json.dumps(dashboard_data, indent=2, ensure_ascii=False)
+        def _compact(d):
+            """Extrae un resumen compacto con las métricas que necesitan las 6 secciones."""
+            keys = [
+                "metadata", "player_stats", "scoring_profile", "golf_identity",
+                "benchmark_radar", "strokes_gained", "quick_wins_matrix", "roi_plan",
+                "swing_dna", "swot_matrix", "hcp_trajectory", "current_form_chart",
+                "scoring_probability", "consistency_benchmarks",
+            ]
+            return {k: d[k] for k in keys if k in d}
+
+        data_context = json.dumps(_compact(dashboard_data), ensure_ascii=False)
 
         # Build structured messages with cache_control on skill prompt
         messages = [
@@ -576,12 +450,13 @@ class AgentUXWriter:
 
 User ID: {user_id}
 
-Complete Dashboard Data (JSON):
+Key Metrics (JSON):
 {data_context}
 
 ---
 
-Generate comprehensive UX content for all dashboard sections. Return as JSON following the output structure.""")
+Generate ONLY these 6 JSON sections (no others): hero_statement, dna_profile, chart_titles, insight_boxes, quick_wins, roi_cards.
+Return a single valid JSON object with exactly those 6 keys. Do not include stat_cards, trend_narratives, course_cards, or club_cards.""")
         ]
 
         # Invoke Claude with cached system prompt

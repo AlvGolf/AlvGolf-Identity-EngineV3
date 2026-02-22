@@ -536,13 +536,20 @@ async def run_multi_agent_analysis(user_id: str) -> dict:
         # ── Guardar contenido UXWriter en disco (caché estática) ────────────
         try:
             ux_content = final_state.get("ux_writer_output", {}).get("content", {})
-            if ux_content:
+            # Deswrappear raw_content si AgentUXWriter devolvió markdown fences
+            if ux_content and ux_content.get("raw_content") and not ux_content.get("hero_statement"):
+                raw = ux_content["raw_content"]
+                if raw.startswith("```"):
+                    raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+                ux_content = json.loads(raw)
+                logger.info("[Orchestrator] raw_content deswrappeado correctamente")
+            if ux_content and ux_content.get("hero_statement"):
                 output_path = Path(__file__).parent.parent.parent / "output" / "ai_content.json"
                 with open(output_path, 'w', encoding='utf-8') as f:
                     json.dump(ux_content, f, ensure_ascii=False, indent=2)
-                logger.info(f"[Orchestrator] ai_content.json guardado en {output_path}")
+                logger.info(f"[Orchestrator] ai_content.json guardado ({len(ux_content)} secciones)")
             else:
-                logger.warning("[Orchestrator] ux_writer_output vacío — ai_content.json no guardado")
+                logger.warning("[Orchestrator] ux_writer_output vacío o sin hero_statement — ai_content.json no guardado")
         except Exception as e:
             logger.warning(f"[Orchestrator] No se pudo guardar ai_content.json: {e}")
         # ─────────────────────────────────────────────────────────────────────
