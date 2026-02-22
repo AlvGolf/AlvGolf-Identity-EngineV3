@@ -310,8 +310,8 @@ def add_scoring_to_dashboard(data: dict) -> dict:
             'defining_gaps':        arch.defining_gaps,
         }
         
-        print(f"[ScoringIntegration] ✓ scoring_profile: overall={scoring_result.overall_score}/10")
-        print(f"[ScoringIntegration] ✓ golf_identity: {arch.id} — {arch.name_es} (fit={archetype_result.fit_score:.0%})")
+        print(f"[ScoringIntegration] OK scoring_profile: overall={scoring_result.overall_score}/10")
+        print(f"[ScoringIntegration] OK golf_identity: {arch.id} - {arch.name_es} (fit={archetype_result.fit_score:.0%})")
         
     except Exception as e:
         print(f"[ScoringIntegration] ERROR: {e} — añadiendo datos de fallback")

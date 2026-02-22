@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-16T00:35:59.991167",
+  "generated_at": "2026-02-22T00:46:22.972907",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -9601,5 +9601,187 @@
     "total_club_gaps": 10,
     "total_rounds": 52,
     "total_bubbles": 11
+  },
+  "scoring_profile": {
+    "player_hcp": 23.2,
+    "overall_score": 6.79,
+    "tee_to_green": 6.71,
+    "scoring_game": 6.72,
+    "data_completeness": 0.88,
+    "dimensions": {
+      "long_game": {
+        "score": 5.52,
+        "percentile": 55.2,
+        "zone": "developing",
+        "confidence": "high",
+        "notes": [
+          "Driver carry: 213m (benchmark HCP23: 193m, diferencia: +20m)",
+          "SG Off the Tee: -2.50 (benchmark HCP23: -1.88)",
+          "Ball speed driver: 236 km/h (benchmark: 212 km/h)",
+          "Fairways hit: 48% (benchmark: 39%)"
+        ]
+      },
+      "mid_game": {
+        "score": 7.26,
+        "percentile": 72.6,
+        "zone": "strong",
+        "confidence": "high",
+        "notes": [
+          "SG Approach: -1.80 (benchmark HCP23: -2.75)",
+          "7 Hierro carry: 137m (benchmark: 124m, +13m)",
+          "Smash factor 7i: 1.400 (benchmark: 1.297)"
+        ]
+      },
+      "short_game": {
+        "score": 9.17,
+        "percentile": 91.7,
+        "zone": "elite",
+        "confidence": "medium",
+        "notes": [
+          "SG Around the Green: +1.80 (benchmark: -1.56)",
+          "Scrambling: 45% (benchmark: 26%)"
+        ]
+      },
+      "putting": {
+        "score": 6.64,
+        "percentile": 66.4,
+        "zone": "strong",
+        "confidence": "high",
+        "notes": [
+          "SG Putting: -0.50 (benchmark HCP23: -0.93)",
+          "Putts/ronda: 33.2 (benchmark: 34.7, -1.5)",
+          "3-putt %: 12% (benchmark: 17%)"
+        ]
+      },
+      "consistency": {
+        "score": 6.96,
+        "percentile": 69.6,
+        "zone": "strong",
+        "confidence": "high",
+        "notes": [
+          "Varianza scores: std=6.8, CV=6.8% (benchmark: 11.6%)",
+          "Driver carry CV: 6.7% (benchmark: 7.5%)"
+        ]
+      },
+      "mental": {
+        "score": 6.63,
+        "percentile": 66.3,
+        "zone": "strong",
+        "confidence": "medium",
+        "notes": [
+          "Bounce-back rate: 28% (benchmark: 13%)",
+          "Delta F9/B9: 2.0 golpes (benchmark: 3.7)",
+          "Par 3 sobre-par relativo: +1.45 (benchmark: +1.29)",
+          "Hoyos explosivos (+3): 10% (benchmark: 9%)"
+        ]
+      },
+      "power": {
+        "score": 6.94,
+        "percentile": 69.4,
+        "zone": "strong",
+        "confidence": "none",
+        "notes": [
+          "Ball speed driver: 236 km/h (benchmark: 212 km/h)"
+        ]
+      },
+      "accuracy": {
+        "score": 3.88,
+        "percentile": 38.8,
+        "zone": "focus_area",
+        "confidence": "high",
+        "notes": [
+          "Dispersión lateral driver: 29.9m (benchmark: 14.6m, +15.3m)",
+          "|Face-to-path|: 4.5° (slice, benchmark: 5.1°)",
+          "GIR: 46% (benchmark: 21%, +25pp)"
+        ]
+      }
+    },
+    "ranking": [
+      [
+        "short_game",
+        9.17
+      ],
+      [
+        "mid_game",
+        7.26
+      ],
+      [
+        "consistency",
+        6.96
+      ],
+      [
+        "power",
+        6.94
+      ],
+      [
+        "putting",
+        6.64
+      ],
+      [
+        "mental",
+        6.63
+      ],
+      [
+        "long_game",
+        5.52
+      ],
+      [
+        "accuracy",
+        3.88
+      ]
+    ],
+    "top_strength": [
+      "short_game",
+      9.17
+    ],
+    "top_gap": [
+      "accuracy",
+      3.88
+    ]
+  },
+  "golf_identity": {
+    "archetype_id": "B3",
+    "archetype_name": "El Artista Completo",
+    "archetype_tagline": "Short game + putting como ventaja real",
+    "archetype_description": "Has construido algo valioso: una combinación de short game sólido Y putting por encima del promedio. Esto significa que cada vez que llegas razonablemente cerca del green, tienes una alta probabilidad de hacer el hoyo bien. Tu scrambling es un seguro de vida en rondas difíciles. Lo que te falta para dar el siguiente salto es llegar más y mejor: si el largo mejora, la zona donde más brillas (50m hacia el hole) se activará con más frecuencia. Eres el jugador ideal para competición en formato stableford o matchplay —tu gestión del daño es excelente y rara vez anotas grandes números. Con trabajo en el largo, HCP <15 es un objetivo real.",
+    "archetype_strategy": "Zona de confort actual: bien. Siguiente nivel: el largo. No necesitas ser un bombardero. Necesitas ser consistente desde tee. Objetivo realista: 55% fairways (desde tu nivel actual) en 10 semanas. Drill principal: eje de rotación en driver —face-to-path de ±1° a ±2°, no más. Cada fairway que ganes activa tu zona fuerte antes en el hoyo. El ROI de este cambio en tu perfil es el más alto posible.",
+    "fit_score": 0.67,
+    "primary_strength": {
+      "dimension": "short_game",
+      "score": 9.17
+    },
+    "primary_gap": {
+      "dimension": "accuracy",
+      "score": 3.88
+    },
+    "similar_archetypes": [
+      {
+        "id": "B1",
+        "name": "El Mago del Short Game",
+        "similarity": 0.5
+      },
+      {
+        "id": "B2",
+        "name": "El Maestro del Green",
+        "similarity": 0.5
+      }
+    ],
+    "evolution_target": {
+      "id": "D3",
+      "name": "El Amateur Completo"
+    },
+    "personalized_insight": "Eres 'El Artista Completo' con un juego corto de élite absoluta (9.2/10) que define tu identidad en el campo. Tu precisión es el área con más margen de mejora (3.9/10) y concentra el mayor ROI de mejora en tu caso específico. Con HCP 23.2, el camino más directo hacia tu siguiente nivel es trabajar el precisión mientras consolidas tu ventaja en juego corto.",
+    "pro_references": [
+      "Corey Pavin",
+      "Zach Johnson"
+    ],
+    "defining_strengths": [
+      "short_game",
+      "putting"
+    ],
+    "defining_gaps": [
+      "long_game",
+      "power"
+    ]
   }
 }
