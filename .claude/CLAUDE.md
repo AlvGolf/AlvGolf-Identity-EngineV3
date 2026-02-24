@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.3 - Static AI Cache + UXWriter 6-Section Fix (2026-02-22)
+**Version:** v3.0.4 - Orchestrator v4.1 asyncio.to_thread() + Static Architecture (2026-02-24)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -93,21 +93,21 @@ The system runs 5 specialized AI agents organized in 2 parallel teams, orchestra
 data_loader_node (106.9 KB JSON, 0 RAG queries)
   |
   v
-TEAM 2 PARALLEL (~148s)
-  ├── AgentAnalista   (Performance analysis, 6,154 chars)
-  ├── AgentTecnico    (Biomechanics analysis, 5,389 chars)
-  └── AgentEstratega  (Practice program, 8,857 chars)
+TEAM 2 PARALLEL (~89s — asyncio.to_thread() v4.1)
+  ├── AgentAnalista   (Performance analysis, 11,919 chars)
+  ├── AgentTecnico    (Biomechanics analysis, 9,884 chars)
+  └── AgentEstratega  (Practice program, 8,818 chars)
   |
   v
-TEAM 3 PARALLEL (~156s)
-  ├── AgentUXWriter   (Dashboard content, 10,223 chars)
-  └── AgentCoach      (Coaching reports, 9,842 chars)
+TEAM 3 PARALLEL (~112s — asyncio.to_thread() v4.1)
+  ├── AgentUXWriter   (Dashboard content, 9,754 chars)
+  └── AgentCoach      (Coaching reports, 14,443 chars)
   |
   v
-writer_node (Motivational sections, 1,236 chars)
+writer_node (Motivational sections, ~1,200 chars)
   |
   v
-END (Total: 41,701 chars, 5.3 minutes)
+END (Total: ~56,000 chars, ~3.6 min — was 5.3 min before v4.1)
 ```
 
 ### Agent Specifications
@@ -133,13 +133,12 @@ were removed from the skill prompt in v3.0.3 to fix JSON truncation bug.)
 5. **quick_wins** (array) --> Tab 6: Estrategia
 6. **roi_cards** (array) --> Tab 6: Estrategia
 
-**Frontend Integration Pattern (v3.0.3 - Static Cache):**
-- `loadUXContent()` -- cascading sources: ai_content.json → localStorage → /generate-content
-- Priority 1: `output/ai_content.json` (pre-generated, loads in <100ms, **instantaneo**)
-- Priority 2: localStorage cache (TTL 24h)
-- Priority 3: async POST to `/generate-content` (non-blocking, ~70s)
-- `insertUXContent(content)` -- DOM manipulation for 6 content mappings
-- Graceful degradation if backend unavailable (dashboard works without AI content)
+**Frontend Integration Pattern (v3.0.4 - Static Only):**
+- `loadUXContent()` -- single source: `output/ai_content.json` (11 lines, zero fallbacks)
+- Priority 1 (only): `output/ai_content.json` (pre-generated, loads in <100ms, **instantaneo**)
+- `insertUXContent(content)` -- DOM manipulation for 6 content sections + sets `window.coachReportMd`
+- Graceful degradation if file unavailable (dashboard works without AI content)
+- **CERO llamadas live a localhost:8000** — dashboard 100% estático, GitHub Pages native
 
 **Auto-save of ai_content.json:**
 - `/generate-content` endpoint saves ai_content.json after each successful call
@@ -153,7 +152,7 @@ were removed from the skill prompt in v3.0.3 to fix JSON truncation bug.)
 | GET | `/` | Health check | <100ms |
 | POST | `/ingest` | Data ingestion to Pinecone | ~2s |
 | POST | `/query` | RAG query | 10-15s |
-| POST | `/analyze` | Full multi-agent workflow (5 agents) | ~5.3 min |
+| POST | `/analyze` | Full multi-agent workflow (5 agents) | ~3.6 min |
 | POST | `/generate-content` | UXWriter content only | ~60-70s |
 
 ### Cost Analysis
@@ -190,7 +189,7 @@ response = self.llm.invoke(messages)
 ### Key Design Decisions
 
 1. **0 RAG queries:** Replaced Analytics Pro bottleneck with direct JSON loading
-2. **Separate /generate-content endpoint:** UXWriter runs standalone (~70s) vs full workflow (~5.3 min)
+2. **Separate /generate-content endpoint:** UXWriter runs standalone (~70s) vs full workflow (~3.6 min)
 3. **Static ai_content.json cache:** Pre-generated JSON committed to repo → AI content loads in <100ms (v3.0.3)
 4. **Progressive enhancement:** Dashboard loads charts first, AI content loads async (or instant from file)
 5. **Graceful degradation:** Dashboard fully functional without backend
@@ -716,6 +715,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.4 | 2026-02-24 | Orchestrator v4.1 asyncio.to_thread() (-33% tiempo) + arquitectura estática completa (cero live calls) |
 | v3.0.3 | 2026-02-22 | Static ai_content.json cache + UXWriter 6-section fix + Windows encoding fix |
 | v3.0.2 | 2026-02-21 | Prompt caching (cache_control) + model update to claude-sonnet-4-6 |
 | v3.0.1 | 2026-02-17 | UXWriter dashboard integration + documentation consolidation |
