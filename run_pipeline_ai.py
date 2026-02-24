@@ -59,6 +59,15 @@ DASHBOARD_JSON  = PROJECT_ROOT / "output" / "dashboard_data.json"
 AI_CONTENT_JSON = PROJECT_ROOT / "output" / "ai_content.json"
 USER_ID         = "alvaro"
 
+# ── Blacklist: claves de pura visualización UI, sin valor analítico para LLMs ─
+UI_ONLY_KEYS = frozenset({
+    'shot_zones_heatmap',      # 21.4 KB — grid de coords XY crudas para Chart.js heatmap
+    'dispersion_by_club',      # 11.8 KB — scatter plots crudos por palo (Chart.js)
+    'metadata',                #  3.6 KB — versión, timestamps, config del generador
+    'generated_at',            #  0.0 KB — timestamp de generación
+    'scoring_zones_by_course', #  0.0 KB — datos vacíos de zonas por campo
+})
+
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -113,10 +122,12 @@ def _coach_sync(dashboard_data: dict) -> dict:
     loop = _asyncio.new_event_loop()
     _asyncio.set_event_loop(loop)
     try:
+        # Filtrar claves UI antes de pasar a Coach (~36.8 KB menos)
+        agent_data = {k: v for k, v in dashboard_data.items() if k not in UI_ONLY_KEYS}
         agent = AgentCoach()
         return loop.run_until_complete(agent.coach(
             USER_ID,
-            dashboard_data=dashboard_data,
+            dashboard_data=agent_data,
             team2_analysis={}   # Standalone: sin contexto de Team 2
         ))
     finally:
