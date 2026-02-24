@@ -151,22 +151,14 @@
                 const freshVer = fresh.metadata?.version || 'unknown';
 
                 if (freshVer !== cachedVer) {
-                    // Versión nueva: actualizar caché y (re)disparar evento si no había caché
+                    // Versión nueva: actualizar caché y re-disparar con datos frescos
                     try {
                         localStorage.setItem(LS_JSON_KEY, JSON.stringify(fresh));
                         localStorage.setItem(LS_JSON_VER, freshVer);
                     } catch(e) { /* localStorage lleno — ignorar */ }
 
-                    if (!cachedData) {
-                        // Primera visita: disparar ahora
-                        console.log('✅ dashboard_data.json cargado (v' + freshVer + '). Caché guardada.');
-                        dispatchDashboardReady(fresh);
-                    } else {
-                        // Versión nueva encontrada: el usuario verá los datos actualizados en la próxima recarga
-                        console.log('🔄 Nueva versión detectada (' + freshVer + '). Se aplicará en la próxima recarga.');
-                        localStorage.setItem(LS_JSON_KEY, JSON.stringify(fresh));
-                        localStorage.setItem(LS_JSON_VER, freshVer);
-                    }
+                    console.log('✅ dashboard_data.json actualizado (v' + freshVer + '). Caché guardada.');
+                    dispatchDashboardReady(fresh);
                 } else {
                     console.log('✅ Caché válida (v' + cachedVer + ')');
                 }
@@ -2772,6 +2764,78 @@
             border-left: 3px solid #D4B55A;
         }
 
+        /* ═══ IDENTITY TIMELINE ═══ */
+        .it-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            flex-shrink: 0;
+            min-width: 70px;
+        }
+        .it-node:hover { transform: translateY(-4px); }
+        .it-node.active { transform: translateY(-6px); }
+
+        .it-circle {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.75em;
+            color: #fff;
+            transition: box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .it-node:hover .it-circle { box-shadow: 0 0 18px currentColor; }
+        .it-circle.low-conf { opacity: 0.6; border-style: dashed !important; }
+        .it-circle.current-period { animation: itPulse 2s infinite; }
+
+        @keyframes itPulse {
+            0%, 100% { box-shadow: 0 0 8px currentColor; }
+            50% { box-shadow: 0 0 22px currentColor, 0 0 40px currentColor; }
+        }
+
+        .it-label {
+            font-size: 0.72em;
+            color: rgba(255,255,255,0.55);
+            margin-top: 8px;
+            white-space: nowrap;
+        }
+        .it-archetype-label {
+            font-size: 0.68em;
+            color: rgba(255,255,255,0.4);
+            margin-top: 3px;
+            max-width: 80px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .it-connector {
+            flex-grow: 1;
+            height: 2px;
+            background: rgba(255,255,255,0.12);
+            min-width: 20px;
+            align-self: center;
+            margin: 0 -2px;
+            position: relative;
+            top: -18px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            #identity-timeline-track { padding: 15px 5px; }
+            .it-node { min-width: 55px; }
+            .it-label { font-size: 0.65em; }
+            .it-archetype-label { display: none; }
+        }
+        @media (max-width: 480px) {
+            .it-node { min-width: 45px; }
+            .it-circle { font-size: 0.65em; }
+        }
 
     </style>
     <!-- Dashboard Data Loader - COMENTADO: Ahora se carga inline -->
@@ -3026,6 +3090,60 @@
                 </div>
             </div>
 
+                <!-- ═══ IDENTITY TIMELINE ═══ -->
+                <div id="identity-timeline-container" style="
+                    margin: 30px 0;
+                    padding: 30px;
+                    background: linear-gradient(135deg, rgba(74,159,216,0.06), rgba(212,181,90,0.04));
+                    border-radius: 15px;
+                    border: 1px solid rgba(74,159,216,0.2);
+                    display: none;">
+
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <h3 style="color: #4A9FD8; font-size: 1.6em; margin: 0 0 8px 0; font-weight: 900;">
+                            EVOLUCIÓN DE TU GOLF IDENTITY
+                        </h3>
+                        <p style="margin: 0; color: rgba(255,255,255,0.6); font-size: 0.9em;">
+                            Últimos 18 meses — Ventana deslizante 90 días
+                        </p>
+                    </div>
+
+                    <!-- Timeline track -->
+                    <div id="identity-timeline-track" style="
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 20px 10px;
+                        min-height: 120px;
+                        overflow-x: auto;">
+                        <!-- Dynamic content injected by JS -->
+                    </div>
+
+                    <!-- Detail card (shown on click) -->
+                    <div id="identity-timeline-detail" style="
+                        display: none;
+                        margin-top: 20px;
+                        padding: 20px;
+                        background: rgba(255,255,255,0.04);
+                        border-radius: 12px;
+                        border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+
+                    <!-- Narrative insight -->
+                    <div id="identity-timeline-insight" style="
+                        margin-top: 18px;
+                        padding: 15px 20px;
+                        background: rgba(90,191,143,0.08);
+                        border-radius: 10px;
+                        border-left: 3px solid #5ABF8F;
+                        color: rgba(255,255,255,0.85);
+                        font-size: 0.95em;
+                        line-height: 1.6;
+                        display: none;">
+                    </div>
+                </div>
 
                 <!-- Título Análisis 360° - Fusionado y Optimizado -->
                 <div style="text-align: center; margin-bottom: 30px; padding: 30px; background: rgba(74,159,216,0.08); border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
@@ -19137,6 +19255,203 @@
                 ).join('');
             }
         }
+
+    // ═══════════════════════════════════════════════════════════
+    // IDENTITY TIMELINE — Evolución del Arquetipo
+    // ═══════════════════════════════════════════════════════════
+
+    const IT_FAMILY_COLORS = {
+        A: '#E88B7A',  // Power  — Rojo
+        B: '#5ABF8F',  // Short Game — Verde
+        C: '#4A9FD8',  // Mental — Azul
+        D: '#D4B55A',  // Desarrollo — Dorado
+    };
+
+    const IT_FAMILY_LABELS = {
+        A: 'Potencia',
+        B: 'Short Game',
+        C: 'Mental',
+        D: 'Desarrollo',
+    };
+
+    const IT_DIM_LABELS = {
+        long_game: 'Long Game',
+        mid_game: 'Mid Game',
+        short_game: 'Short Game',
+        putting: 'Putting',
+        consistency: 'Consistencia',
+        mental: 'Mental',
+        power: 'Potencia',
+        accuracy: 'Precisión',
+    };
+
+    function renderIdentityTimeline(timeline) {
+        if (!timeline || timeline.length === 0) return;
+
+        const container = document.getElementById('identity-timeline-container');
+        const track = document.getElementById('identity-timeline-track');
+        if (!container || !track) return;
+
+        container.style.display = 'block';
+        track.innerHTML = '';
+
+        // Build nodes + connectors
+        timeline.forEach((period, idx) => {
+            // Node
+            const color = IT_FAMILY_COLORS[period.archetype_family] || '#888';
+            const size = Math.max(36, Math.min(56, 28 + period.overall_score * 3));
+            const isLow = period.confidence === 'LOW';
+            const isCurrent = period.is_current;
+
+            const node = document.createElement('div');
+            node.className = 'it-node';
+            node.dataset.idx = idx;
+            node.onclick = () => showTimelineDetail(timeline, idx);
+
+            node.innerHTML = `
+                <div class="it-circle ${isLow ? 'low-conf' : ''} ${isCurrent ? 'current-period' : ''}"
+                     style="width:${size}px; height:${size}px; background:${color}22;
+                            border:2.5px solid ${color}; color:${color};">
+                    ${period.archetype_id}
+                </div>
+                <div class="it-label">${period.period_label}</div>
+                <div class="it-archetype-label">${period.archetype_name.replace('El ', '').replace('La ', '')}</div>
+            `;
+            track.appendChild(node);
+
+            // Connector (except after last)
+            if (idx < timeline.length - 1) {
+                const conn = document.createElement('div');
+                conn.className = 'it-connector';
+                // Color transition between families
+                const nextColor = IT_FAMILY_COLORS[timeline[idx + 1].archetype_family] || '#888';
+                if (color !== nextColor) {
+                    conn.style.background = `linear-gradient(to right, ${color}40, ${nextColor}40)`;
+                }
+                track.appendChild(conn);
+            }
+        });
+
+        // Auto-show insight
+        generateTimelineInsight(timeline);
+
+        // Auto-select current period
+        const currentIdx = timeline.findIndex(p => p.is_current);
+        if (currentIdx >= 0) showTimelineDetail(timeline, currentIdx);
+    }
+
+    function showTimelineDetail(timeline, idx) {
+        const detail = document.getElementById('identity-timeline-detail');
+        if (!detail) return;
+
+        const p = timeline[idx];
+        const color = IT_FAMILY_COLORS[p.archetype_family] || '#888';
+
+        // Highlight active node
+        document.querySelectorAll('.it-node').forEach((n, i) => {
+            n.classList.toggle('active', i === idx);
+        });
+
+        // Dimension bars
+        const dimEntries = Object.entries(p.dimensions || {}).sort((a, b) => b[1] - a[1]);
+        const dimBars = dimEntries.map(([dim, score]) => {
+            const pct = Math.round(score * 10);
+            const dimColor = dim === p.top_strength ? '#5ABF8F' : dim === p.top_gap ? '#E88B7A' : 'rgba(255,255,255,0.3)';
+            return `<div style="display:flex; align-items:center; gap:8px; margin:3px 0;">
+                <span style="min-width:90px; font-size:0.78em; color:rgba(255,255,255,0.65);">${IT_DIM_LABELS[dim] || dim}</span>
+                <div style="flex:1; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden;">
+                    <div style="width:${pct}%; height:100%; background:${dimColor}; border-radius:3px;"></div>
+                </div>
+                <span style="min-width:30px; font-size:0.75em; color:rgba(255,255,255,0.5); text-align:right;">${score.toFixed(1)}</span>
+            </div>`;
+        }).join('');
+
+        detail.style.display = 'block';
+        detail.style.borderColor = color + '40';
+        detail.innerHTML = `
+            <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start;">
+                <div style="flex:1; min-width:200px;">
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                        <span style="font-size:1.8em; font-weight:900; color:${color};">${p.archetype_id}</span>
+                        <div>
+                            <div style="font-size:1.1em; font-weight:700; color:#fff;">${p.archetype_name}</div>
+                            <div style="font-size:0.82em; color:rgba(255,255,255,0.5);">
+                                ${p.period_label} · HCP ${p.hcp_estimated} · Score ${p.overall_score}/10
+                                ${p.is_current ? ' · <span style="color:#5ABF8F;">Actual</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
+                        <div style="padding:5px 10px; background:rgba(90,191,143,0.12); border-radius:6px; font-size:0.78em;">
+                            <span style="color:rgba(255,255,255,0.5);">Fortaleza:</span>
+                            <strong style="color:#5ABF8F;"> ${IT_DIM_LABELS[p.top_strength] || p.top_strength}</strong>
+                        </div>
+                        <div style="padding:5px 10px; background:rgba(232,139,122,0.12); border-radius:6px; font-size:0.78em;">
+                            <span style="color:rgba(255,255,255,0.5);">Brecha:</span>
+                            <strong style="color:#E88B7A;"> ${IT_DIM_LABELS[p.top_gap] || p.top_gap}</strong>
+                        </div>
+                        <div style="padding:5px 10px; background:rgba(255,255,255,0.05); border-radius:6px; font-size:0.78em; color:rgba(255,255,255,0.5);">
+                            ${p.shots_count} golpes · ${p.rounds_count} rondas · Conf: ${p.confidence}
+                        </div>
+                    </div>
+                </div>
+                <div style="flex:1; min-width:250px;">${dimBars}</div>
+            </div>
+        `;
+    }
+
+    function generateTimelineInsight(timeline) {
+        const insightEl = document.getElementById('identity-timeline-insight');
+        if (!insightEl || timeline.length < 2) return;
+
+        // Find most significant transition
+        let biggestChange = null;
+        let biggestDelta = 0;
+        for (let i = 1; i < timeline.length; i++) {
+            const delta = Math.abs(timeline[i].overall_score - timeline[i - 1].overall_score);
+            if (delta > biggestDelta) {
+                biggestDelta = delta;
+                biggestChange = { from: timeline[i - 1], to: timeline[i], delta };
+            }
+        }
+
+        // Check for family change
+        const families = timeline.map(p => p.archetype_family);
+        const uniqueFamilies = [...new Set(families)];
+        const first = timeline[0];
+        const last = timeline[timeline.length - 1];
+
+        let insight = '';
+        if (uniqueFamilies.length === 1) {
+            insight = `Tu identidad golfística se ha mantenido consistente en la familia <strong style="color:${IT_FAMILY_COLORS[first.archetype_family]}">${IT_FAMILY_LABELS[first.archetype_family]}</strong> durante todo el período. `;
+            if (last.overall_score > first.overall_score) {
+                insight += `Tu score general mejoró de <strong>${first.overall_score}</strong> a <strong>${last.overall_score}</strong>/10.`;
+            }
+        } else {
+            insight = `Has evolucionado de <strong style="color:${IT_FAMILY_COLORS[first.archetype_family]}">${first.archetype_name}</strong> `;
+            insight += `(${first.period_label}) a <strong style="color:${IT_FAMILY_COLORS[last.archetype_family]}">${last.archetype_name}</strong> (${last.period_label}). `;
+            if (biggestChange) {
+                const dir = biggestChange.to.overall_score > biggestChange.from.overall_score ? 'mayor salto positivo' : 'mayor cambio';
+                insight += `El ${dir} fue entre ${biggestChange.from.period_label} y ${biggestChange.to.period_label} (${biggestDelta.toFixed(1)} pts).`;
+            }
+        }
+
+        const hcpDrop = first.hcp_estimated - last.hcp_estimated;
+        if (hcpDrop > 2) {
+            insight += ` Tu HCP bajó <strong>${hcpDrop.toFixed(1)} puntos</strong> en este período.`;
+        }
+
+        insightEl.innerHTML = insight;
+        insightEl.style.display = 'block';
+    }
+
+    // Initialize on data ready
+    document.addEventListener('dashboardDataReady', function() {
+        if (window.dashboardData?.identity_timeline?.length > 0) {
+            renderIdentityTimeline(window.dashboardData.identity_timeline);
+            console.log('✅ Identity Timeline rendered:', window.dashboardData.identity_timeline.length, 'periods');
+        }
+    });
 
     </script>
 

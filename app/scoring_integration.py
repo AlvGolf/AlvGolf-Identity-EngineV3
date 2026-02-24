@@ -312,12 +312,21 @@ def add_scoring_to_dashboard(data: dict) -> dict:
         
         print(f"[ScoringIntegration] OK scoring_profile: overall={scoring_result.overall_score}/10")
         print(f"[ScoringIntegration] OK golf_identity: {arch.id} - {arch.name_es} (fit={archetype_result.fit_score:.0%})")
-        
+
     except Exception as e:
         print(f"[ScoringIntegration] ERROR: {e} — añadiendo datos de fallback")
         data['scoring_profile'] = {'error': str(e)}
         data['golf_identity']   = {'error': str(e)}
-    
+
+    # ── Identity Timeline (evolución temporal del arquetipo) ──
+    try:
+        from app.temporal_analysis import calculate_identity_timeline
+        data['identity_timeline'] = calculate_identity_timeline(data)
+        print(f"[ScoringIntegration] OK identity_timeline: {len(data['identity_timeline'])} períodos")
+    except Exception as e:
+        print(f"[ScoringIntegration] WARNING temporal analysis omitida: {e}")
+        data['identity_timeline'] = []
+
     return data
 
 
