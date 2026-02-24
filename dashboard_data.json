@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-25T00:18:39.129455",
+  "generated_at": "2026-02-25T00:35:05.623098",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -13543,24 +13543,24 @@
       "date_end": "2026-02-04",
       "shots_count": 188,
       "rounds_count": 6,
-      "hcp_estimated": 23.0,
-      "archetype_id": "D1",
-      "archetype_name": "El Jugador en Transición",
-      "archetype_family": "D",
-      "overall_score": 6.08,
+      "hcp_estimated": 23.2,
+      "archetype_id": "B3",
+      "archetype_name": "El Artista Completo",
+      "archetype_family": "B",
+      "overall_score": 6.79,
       "dimensions": {
-        "long_game": 6.55,
-        "mid_game": 7.48,
-        "short_game": 5.0,
-        "putting": 5.0,
-        "consistency": 7.34,
-        "mental": 5.0,
-        "power": 6.97,
-        "accuracy": 5.0
+        "long_game": 5.52,
+        "mid_game": 7.26,
+        "short_game": 9.17,
+        "putting": 6.64,
+        "consistency": 6.96,
+        "mental": 6.63,
+        "power": 6.94,
+        "accuracy": 3.88
       },
-      "top_strength": "mid_game",
+      "top_strength": "short_game",
       "top_gap": "accuracy",
-      "confidence": "MEDIUM",
+      "confidence": "HIGH",
       "is_current": true
     }
   ]

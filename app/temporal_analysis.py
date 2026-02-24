@@ -341,9 +341,30 @@ def calculate_identity_timeline(
             "is_current": False,  # Will set last one below
         })
 
-    # Mark the last period as current
+    # Mark the last period as current — and override with full scoring data
     if timeline:
         timeline[-1]["is_current"] = True
+
+        # Use full golf_identity + scoring_profile for current period
+        # (window-only data is too partial — missing strokes gained, putting, mental, etc.)
+        gi = dashboard_data.get("golf_identity", {})
+        sp = dashboard_data.get("scoring_profile", {})
+        if gi.get("archetype_id") and sp.get("dimensions"):
+            last = timeline[-1]
+            last["archetype_id"] = gi["archetype_id"]
+            last["archetype_name"] = gi["archetype_name"]
+            last["archetype_family"] = gi["archetype_id"][0]
+            last["overall_score"] = sp.get("overall_score", last["overall_score"])
+            last["hcp_estimated"] = sp.get("player_hcp", last["hcp_estimated"])
+            last["confidence"] = "HIGH"
+            # Full dimensions from scoring_profile
+            last["dimensions"] = {
+                dim: info["score"]
+                for dim, info in sp["dimensions"].items()
+            }
+            ranking = sorted(last["dimensions"].items(), key=lambda x: x[1], reverse=True)
+            last["top_strength"] = ranking[0][0] if ranking else last["top_strength"]
+            last["top_gap"] = ranking[-1][0] if ranking else last["top_gap"]
 
     # Clean up temporary _dt fields
     for s in shots_with_dates:
