@@ -1,12 +1,18 @@
 """
 run_pipeline_ai.py — Generador de contenido IA para AlvGolf Dashboard
 
-Ejecuta AgentUXWriter + AgentCoach en PARALELO y guarda el resultado en
+Ejecuta AgentUXWriter + AgentCoach en PARALELO REAL y guarda el resultado en
 output/ai_content.json para carga instantánea desde el dashboard (GitHub Pages).
+
+Paralelismo real con asyncio.to_thread():
+    Los agentes usan llm.invoke() síncrono internamente. asyncio.gather() solo
+    no basta — se necesita asyncio.to_thread() para mover cada agente a su propio
+    thread del pool del SO, permitiendo verdadero paralelismo I/O.
+    Resultado: max(t_uxwriter, t_coach) en lugar de t_uxwriter + t_coach.
 
 Flujo completo recomendado:
     1. python generate_dashboard_data.py   → output/dashboard_data.json  (~3s)
-    2. python run_pipeline_ai.py           → output/ai_content.json      (~2-3 min)
+    2. python run_pipeline_ai.py           → output/ai_content.json      (~2 min)
     3. git add output/ && git commit && git push
 
 El dashboard carga ambos archivos estáticamente. Sin servidor. Sin esperas.
@@ -83,36 +89,61 @@ def deswrap_ux_content(raw: dict) -> dict:
     return raw
 
 
-# ── Agentes ───────────────────────────────────────────────────────────────────
+# ── Wrappers síncronos para asyncio.to_thread() ───────────────────────────────
+# llm.invoke() es bloqueante. Cada wrapper corre en su propio thread con
+# un event loop dedicado, liberando el event loop principal para paralelizar.
+
+def _ux_writer_sync(dashboard_data: dict) -> dict:
+    """Wrapper síncrono de AgentUXWriter — se ejecuta en thread del pool."""
+    import asyncio as _asyncio
+    from app.agents.ux_writer import AgentUXWriter
+    loop = _asyncio.new_event_loop()
+    _asyncio.set_event_loop(loop)
+    try:
+        agent = AgentUXWriter()
+        return loop.run_until_complete(agent.write(USER_ID, dashboard_data=dashboard_data))
+    finally:
+        loop.close()
+
+
+def _coach_sync(dashboard_data: dict) -> dict:
+    """Wrapper síncrono de AgentCoach — se ejecuta en thread del pool."""
+    import asyncio as _asyncio
+    from app.agents.coach import AgentCoach
+    loop = _asyncio.new_event_loop()
+    _asyncio.set_event_loop(loop)
+    try:
+        agent = AgentCoach()
+        return loop.run_until_complete(agent.coach(
+            USER_ID,
+            dashboard_data=dashboard_data,
+            team2_analysis={}   # Standalone: sin contexto de Team 2
+        ))
+    finally:
+        loop.close()
+
+
+# ── Agentes (async — delegan al thread pool) ──────────────────────────────────
 
 async def run_ux_writer(dashboard_data: dict) -> dict:
-    """Ejecuta AgentUXWriter y devuelve el contenido JSON (6 secciones)."""
-    from app.agents.ux_writer import AgentUXWriter
-    logger.info("AgentUXWriter iniciado...")
+    """Ejecuta AgentUXWriter en un thread dedicado y devuelve 6 secciones JSON."""
+    logger.info("AgentUXWriter iniciado (thread)...")
     t0 = datetime.now()
 
-    agent = AgentUXWriter()
-    result = await agent.write(USER_ID, dashboard_data=dashboard_data)
+    result = await asyncio.to_thread(_ux_writer_sync, dashboard_data)
 
     content = deswrap_ux_content(result["content"])
     elapsed = (datetime.now() - t0).seconds
-    secciones = list(content.keys())
-    logger.success(f"AgentUXWriter completado en {elapsed}s ({len(secciones)} secciones)")
+    logger.success(f"AgentUXWriter completado en {elapsed}s ({len(content)} secciones)")
     return content
 
 
 async def run_coach(dashboard_data: dict) -> str:
-    """Ejecuta AgentCoach standalone y devuelve el informe Markdown."""
-    from app.agents.coach import AgentCoach
-    logger.info("AgentCoach iniciado...")
+    """Ejecuta AgentCoach en un thread dedicado y devuelve el informe Markdown."""
+    logger.info("AgentCoach iniciado (thread)...")
     t0 = datetime.now()
 
-    agent = AgentCoach()
-    result = await agent.coach(
-        USER_ID,
-        dashboard_data=dashboard_data,
-        team2_analysis={}   # Standalone: sin contexto de Team 2
-    )
+    result = await asyncio.to_thread(_coach_sync, dashboard_data)
 
     report = result["report"]
     elapsed = (datetime.now() - t0).seconds
