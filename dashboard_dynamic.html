@@ -19463,13 +19463,23 @@
         insightEl.style.display = 'block';
     }
 
-    // Initialize on data ready
-    document.addEventListener('dashboardDataReady', function() {
-        if (window.dashboardData?.identity_timeline?.length > 0) {
-            renderIdentityTimeline(window.dashboardData.identity_timeline);
-            console.log('✅ Identity Timeline rendered:', window.dashboardData.identity_timeline.length, 'periods');
+    // Initialize: event listener + polling fallback (bulletproof)
+    function tryInitTimeline() {
+        const tl = window.dashboardData?.identity_timeline;
+        if (tl && tl.length > 0) {
+            renderIdentityTimeline(tl);
+            console.log('✅ Identity Timeline rendered:', tl.length, 'periods');
+            return true;
         }
-    });
+        return false;
+    }
+    document.addEventListener('dashboardDataReady', tryInitTimeline);
+    // Polling fallback — igual que Golf Identity block
+    (function waitForTimeline(attempts) {
+        if (!tryInitTimeline() && attempts > 0) {
+            setTimeout(() => waitForTimeline(attempts - 1), 300);
+        }
+    })(20);
 
     </script>
 
