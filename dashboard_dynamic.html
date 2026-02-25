@@ -196,20 +196,13 @@
         function insertUXContent(content) {
             console.log('🎨 Inserting UX content into dashboard...');
 
-            // 1. Hero statement (tab overview)
+            // 1. Hero statement (dentro de "Análisis de Tu Perfil")
             if (content.hero_statement) {
-                const heroElement = document.querySelector('#overview h1');
-                if (heroElement) {
-                    // Create or update hero statement section
-                    let heroSection = document.getElementById('hero-statement-section');
-                    if (!heroSection) {
-                        heroSection = document.createElement('div');
-                        heroSection.id = 'hero-statement-section';
-                        heroSection.style.cssText = 'background: rgba(74,159,216,0.1); padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #4A9FD8;';
-                        heroElement.parentElement.insertBefore(heroSection, heroElement.nextSibling);
-                    }
-                    heroSection.innerHTML = `<p style="font-size: 1.1em; line-height: 1.6; color: #E8E8E8; margin: 0;">${content.hero_statement}</p>`;
-                    console.log('  ✓ Hero statement inserted');
+                const heroSection = document.getElementById('hero-statement-section');
+                if (heroSection) {
+                    heroSection.innerHTML = `<p style="font-size: 1.05em; line-height: 1.8; color: rgba(255,255,255,0.9); margin: 0;">${content.hero_statement}</p>`;
+                    heroSection.style.display = 'block';
+                    console.log('  ✓ Hero statement inserted in Análisis de Tu Perfil');
                 }
             }
 
@@ -3897,6 +3890,10 @@
                         <p style="margin: 0 auto; font-size: 1.05em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 700px;">
                             Jugador de <strong style="color: #D4B55A;">potencia media-alta (8.5/10)</strong> con <strong style="color: #5ABF8F;">short game élite (9.0/10)</strong> que compensa debilidades en accuracy direccional. Tu scoring depende de <strong style="color: #5ABF8F;">scrambling excepcional</strong> desde 100m y adentro.
                         </p>
+                    </div>
+
+                    <!-- Hero statement (inyectado por AI) -->
+                    <div id="hero-statement-section" style="display: none; margin-bottom: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8; text-align: left;">
                     </div>
 
                     <!-- Análisis por Dimensiones -->
