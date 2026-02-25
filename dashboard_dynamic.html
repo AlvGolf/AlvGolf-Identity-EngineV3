@@ -152,17 +152,19 @@
                 const fresh = await response.json();
                 const freshVer = fresh.metadata?.version || 'unknown';
 
+                // Siempre actualizar window.dashboardData con datos frescos del servidor
+                // (el cache de localStorage puede estar incompleto)
+                window.dashboardData = fresh;
+
                 if (freshVer !== cachedVer) {
-                    // Versión nueva: actualizar caché y re-disparar con datos frescos
                     try {
                         localStorage.setItem(LS_JSON_KEY, JSON.stringify(fresh));
                         localStorage.setItem(LS_JSON_VER, freshVer);
                     } catch(e) { /* localStorage lleno — ignorar */ }
-
                     console.log('✅ dashboard_data.json actualizado (v' + freshVer + '). Caché guardada.');
                     dispatchDashboardReady(fresh);
                 } else {
-                    console.log('✅ Caché válida (v' + cachedVer + ')');
+                    console.log('✅ Caché válida (v' + cachedVer + ') — datos frescos aplicados');
                 }
 
             } catch(error) {
