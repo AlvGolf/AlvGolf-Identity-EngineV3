@@ -143,8 +143,10 @@
                 }
 
                 // Siempre fetch en background para detectar actualizaciones
-                const response = await fetch('dashboard_data.json')
-                    .catch(() => fetch('output/dashboard_data.json'));
+                // Cache-bust: añadir timestamp para evitar HTTP cache del navegador
+                const cacheBust = '?t=' + Date.now();
+                const response = await fetch('dashboard_data.json' + cacheBust)
+                    .catch(() => fetch('output/dashboard_data.json' + cacheBust));
 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const fresh = await response.json();
