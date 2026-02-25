@@ -143,10 +143,10 @@
                 }
 
                 // Siempre fetch en background para detectar actualizaciones
-                // Cache-bust: añadir timestamp para evitar HTTP cache del navegador
-                const cacheBust = '?t=' + Date.now();
-                const response = await fetch('dashboard_data.json' + cacheBust)
-                    .catch(() => fetch('output/dashboard_data.json' + cacheBust));
+                // cache: 'no-store' evita HTTP cache — siempre pide al servidor
+                const fetchOpts = { cache: 'no-store' };
+                const response = await fetch('dashboard_data.json', fetchOpts)
+                    .catch(() => fetch('output/dashboard_data.json', fetchOpts));
 
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const fresh = await response.json();
