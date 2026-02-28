@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.4 - Orchestrator v4.1 asyncio.to_thread() + Static Architecture (2026-02-24)
+**Version:** v3.0.5 - Identity Timeline + Temporal Archetype Evolution (2026-02-25)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -36,17 +36,22 @@ AlvGolf/
 │   ├── test_dashboard_integration.py # E2E tests (4/4)
 │   └── ingest_full_data.py           # Data ingestion (120 vectors)
 │
+│   ├── scoring_engine.py              # Deterministic scoring (0-10, 8 dimensions)
+│   ├── archetype_classifier.py       # 12 archetypes across 4 families
+│   ├── scoring_integration.py        # Scoring + archetype + timeline integration
+│   └── temporal_analysis.py          # Sliding window identity analysis (~375 lines)
+│
 ├── output/
-│   └── dashboard_data.json           # Generated data (106.9 KB, 52 keys)
+│   └── dashboard_data.json           # Generated data (266.4 KB, 54 keys)
 │
 ├── data/                             # Raw data sources
 │   ├── flightscope/                  # 493 shots, 11 clubs
 │   └── tarjetas/                     # 52 rounds, 11 courses
 │
-├── dashboard_dynamic.html            # Main dashboard (v5.1.1, ~17,000 lines)
+├── dashboard_dynamic.html            # Main dashboard (v5.3.0, ~17,500 lines)
 ├── dashboard_agentic.html            # AI Insights dashboard
 ├── index.html                        # Landing page
-├── generate_dashboard_data.py        # Backend generator (52 functions)
+├── generate_dashboard_data.py        # Backend generator (53 functions)
 │
 ├── .env                              # API keys (NOT committed)
 ├── .env.example                      # Template for .env
@@ -196,6 +201,43 @@ response = self.llm.invoke(messages)
 6. **Spanish-only:** All AI-generated content in Spanish, motivational tone
 7. **Structured messages for caching:** `SystemMessage`+`HumanMessage` with `cache_control` (not plain string invoke)
 8. **UXWriter skill prompt = 6 sections only:** Removed descriptions of unused sections to prevent JSON truncation (v3.0.3)
+9. **Identity Timeline (v3.0.5):** Sliding window analysis (90d/60d) runs ScoringEngine + ArchetypeClassifier per period. Last period uses full `scoring_profile` + `golf_identity` (not partial window data). Cache fix: always set `window.dashboardData = fresh` from server.
+10. **Template vs Data (2026-02-28):** 106 dynamic IDs (`<span id="xx-*">fallback</span>`) + 7 injection functions + 7 dynamic containers. Dashboard reusable with different player data. Hardcodes remain as visual fallback.
+
+### Template vs Data System (Dynamic Dashboard Injection)
+
+Pattern for separating template from player data across all 6 tabs + header:
+
+```
+<span id="hd-player-name">Álvaro Peralta</span>   ← HTML fallback
+         ↓
+injectHeaderStats() {                                ← JS injection
+    set('hd-player-name', ps.player_name);           ← from JSON
+}
+         ↓
+document.addEventListener('dashboardDataReady', injectHeaderStats, { once: true });
+```
+
+**ID Convention:** `{prefix}-{descriptive-name}` where prefix = tab zone:
+| Prefix | Zone | Function | IDs |
+|--------|------|----------|-----|
+| `ps-` | Tab 1 Mi Identidad | `injectPlayerStats()` | 22 |
+| `hd-` | Header + Score Summary | `injectHeaderStats()` | 12 |
+| `ev-` | Tab 2 Evolución | `injectEvolutionStats()` | 24 |
+| `cs-` | Tab 3 Campos | `injectCourseStats()` | 17 + 3 containers |
+| `cl-` | Tab 4 Palos | `injectClubStats()` | 14 + 4 containers |
+| `an-` | Tab 5 Análisis | `injectAnalysisStats()` | 4 |
+| `st-` | Tab 6 Estrategia | `injectStrategyStats()` | 9 |
+
+**Dynamic Containers** (JS generates full HTML from JSON):
+- `cs-best-rounds-container` → `score_history.rounds` (top 6)
+- `cs-quarterly-container` → `quarterly_scoring` (7 quarters)
+- `cs-timeline-container` → `milestone_achievements` (9 milestones)
+- `cl-carry-long/mid/short` → `launch_metrics.clubs` (carry/roll/total)
+- `cl-matrix-body` → `launch_metrics.clubs` (11 rows)
+
+**Backend fields** in `player_stats` (21 total):
+`total_rondas`, `mejor_score`, `peor_score`, `promedio_score`, `handicap_actual`, `mejora_handicap`, `primera_ronda`, `ultima_ronda`, `campos_jugados`, `golpes_flightscope`, `player_name`, `best_round_course`, `best_round_date`, `best_round_differential`, `best_hcp`, `best_hcp_date`, `hcp_date`, `player_id`, `location`, `handicap_inicial`, `months_tracked`
 
 ## Application Architecture
 
@@ -225,6 +267,14 @@ response = self.llm.invoke(messages)
 | `scrollToSection(sectionId)` | Smooth scroll with highlight effect |
 | `toggleDownloadsMenu()` | Download menu toggle |
 | `createDispersionChart()` | Club-specific scatter plot generation |
+| `formatPlayerDate(dateStr, style)` | Date formatting (short/month-year/full) |
+| `injectPlayerStats()` | Tab 1: 22 values from player_stats |
+| `injectHeaderStats()` | Header: 12 values from player_stats + scoring_profile |
+| `injectEvolutionStats()` | Tab 2: 24 values from launch_metrics + learning_curve |
+| `injectCourseStats()` | Tab 3: 17 values + 3 dynamic containers |
+| `injectClubStats()` | Tab 4: 14 values + 4 dynamic containers |
+| `injectAnalysisStats()` | Tab 5: 4 values from strokes_gained |
+| `injectStrategyStats()` | Tab 6: 9 values from player_stats + launch_metrics |
 
 ## Code Conventions
 
@@ -715,6 +765,8 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.5+ | 2026-02-28 | Template vs Data — 106 IDs dinámicos + 7 funciones inyección + 7 containers (dashboard reutilizable) |
+| v3.0.5 | 2026-02-25 | Identity Timeline — evolución temporal del arquetipo (11 períodos, ventana 90d/60d, colores por zona) |
 | v3.0.4 | 2026-02-24 | Orchestrator v4.1 asyncio.to_thread() (-33% tiempo) + arquitectura estática completa (cero live calls) |
 | v3.0.3 | 2026-02-22 | Static ai_content.json cache + UXWriter 6-section fix + Windows encoding fix |
 | v3.0.2 | 2026-02-21 | Prompt caching (cache_control) + model update to claude-sonnet-4-6 |
