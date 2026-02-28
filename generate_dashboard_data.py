@@ -263,6 +263,14 @@ class DashboardDataGenerator:
 
         return sorted(course_stats, key=lambda x: x['rondas_jugadas'], reverse=True)
 
+    @staticmethod
+    def _months_between(date_str1, date_str2):
+        """Calcula meses entre dos fechas YYYY-MM-DD."""
+        from datetime import datetime
+        d1 = datetime.strptime(date_str1, '%Y-%m-%d')
+        d2 = datetime.strptime(date_str2, '%Y-%m-%d')
+        return (d2.year - d1.year) * 12 + (d2.month - d1.month)
+
     def calculate_player_stats(self):
         """Calcula estadísticas generales del jugador."""
         logger.info("Calculando estadísticas del jugador")
@@ -305,7 +313,12 @@ class DashboardDataGenerator:
             'best_round_differential': best.get('diferencia_par', 0),
             'best_hcp': 21.9,            # Mejor HCP alcanzado (dato RFEG)
             'best_hcp_date': 'Mayo 2025', # Fecha del mejor HCP (dato RFEG)
-            'hcp_date': 'Septiembre 2025' # Fecha del HCP actual (dato RFEG)
+            'hcp_date': 'Septiembre 2025', # Fecha del HCP actual (dato RFEG)
+            # Campos nuevos para Header dinámico (Fase 2)
+            'player_id': 'AMF 8472456',     # Licencia RFEG
+            'location': 'Madrid, España',
+            'handicap_inicial': 32.0,        # HCP al inicio (dato RFEG)
+            'months_tracked': self._months_between(todas_rondas[0]['fecha'], todas_rondas[-1]['fecha']),
         }
 
     def calculate_launch_metrics(self):

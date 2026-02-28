@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T01:08:59.086131",
+  "generated_at": "2026-02-28T02:14:44.181205",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -17,7 +17,11 @@
     "best_round_differential": 17,
     "best_hcp": 21.9,
     "best_hcp_date": "Mayo 2025",
-    "hcp_date": "Septiembre 2025"
+    "hcp_date": "Septiembre 2025",
+    "player_id": "AMF 8472456",
+    "location": "Madrid, España",
+    "handicap_inicial": 32.0,
+    "months_tracked": 20
   },
   "club_statistics": [
     {
