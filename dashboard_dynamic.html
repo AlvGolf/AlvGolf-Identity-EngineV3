@@ -360,6 +360,72 @@
         }
 
         // ============================================================
+        // PLAYER STATS INJECTION (Tab 1 dinámico)
+        // ============================================================
+
+        function formatPlayerDate(dateStr, style) {
+            if (!dateStr) return '';
+            // Si ya es texto legible (e.g. "Mayo 2025"), devolver tal cual
+            if (!/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr;
+            const d = new Date(dateStr + 'T00:00:00');
+            const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+            const monthsFull = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            if (style === 'short') {
+                return d.getDate() + ' ' + months[d.getMonth()].toUpperCase() + ' ' + d.getFullYear();
+            }
+            if (style === 'month-year') {
+                return months[d.getMonth()] + ' ' + d.getFullYear();
+            }
+            if (style === 'full') {
+                return d.getDate() + ' ' + monthsFull[d.getMonth()] + ' ' + d.getFullYear();
+            }
+            // Default: "16 Nov 2025"
+            return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        function injectPlayerStats() {
+            const ps = window.dashboardData?.player_stats;
+            if (!ps) return;
+
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && val != null) el.textContent = val;
+            };
+
+            // Hero Stats
+            set('ps-hcp', ps.handicap_actual);
+            set('ps-hcp-date', ps.hcp_date);
+            set('ps-improvement', ps.mejora_handicap);
+            set('ps-best-score', ps.mejor_score);
+            set('ps-best-course', ps.best_round_course);
+            set('ps-best-date', formatPlayerDate(ps.best_round_date));
+            set('ps-best-diff', ps.best_round_differential);
+            set('ps-total-rounds', ps.total_rondas);
+            set('ps-first-date', formatPlayerDate(ps.primera_ronda, 'month-year'));
+            set('ps-last-date', formatPlayerDate(ps.ultima_ronda, 'month-year'));
+
+            // HCP Trajectory
+            set('ps-start-hcp', 32.0);
+            set('ps-start-date', formatPlayerDate(ps.primera_ronda, 'full').replace(/^\d+\s/, ''));
+            set('ps-best-hcp', ps.best_hcp);
+            set('ps-best-hcp-date', ps.best_hcp_date);
+            set('ps-hcp-current', ps.handicap_actual);
+            set('ps-hcp-current-date', ps.hcp_date);
+
+            // Best Round Details (repeated in multiple cards)
+            set('ps-best-date-detail', formatPlayerDate(ps.best_round_date, 'short'));
+            set('ps-best-course-detail', ps.best_round_course);
+            set('ps-best-score-detail', ps.mejor_score);
+            set('ps-best-score-hero', ps.mejor_score);
+            set('ps-best-round-title', ps.best_round_course + ' - ' + formatPlayerDate(ps.best_round_date, 'full'));
+            set('ps-best-diff-hero', ps.best_round_differential);
+
+            console.log('✅ Player stats inyectados en Tab 1');
+        }
+
+        document.addEventListener('dashboardDataReady', injectPlayerStats, { once: true });
+
+        // ============================================================
         // LOAD UX CONTENT AFTER DASHBOARD IS READY
         // ============================================================
 
@@ -2971,10 +3037,10 @@
                     <div style="background: linear-gradient(135deg, rgba(90,191,143,0.25), rgba(90,191,143,0.1)); padding: 30px; border-radius: 15px; text-align: center; border: 3px solid rgba(90,191,143,0.6); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: -20px; right: -20px; font-size: 8em; opacity: 0.1;">📊</div>
                         <div style="color: #5ABF8F; font-size: 1em; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px;">HANDICAP OFICIAL</div>
-                        <div style="font-size: 4.5em; font-weight: 900; color: #5ABF8F; margin: 15px 0; text-shadow: 0 0 30px rgba(90,191,143,0.5);">23.2</div>
-                        <div style="color: rgba(255,255,255,0.8); font-size: 1em; margin-bottom: 8px;">RFEG - Sept 2025</div>
+                        <div style="font-size: 4.5em; font-weight: 900; color: #5ABF8F; margin: 15px 0; text-shadow: 0 0 30px rgba(90,191,143,0.5);"><span id="ps-hcp">23.2</span></div>
+                        <div style="color: rgba(255,255,255,0.8); font-size: 1em; margin-bottom: 8px;">RFEG - <span id="ps-hcp-date">Sept 2025</span></div>
                         <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 15px;">
-                            <strong style="color: #5ABF8F;">-8.8 puntos</strong> en 18 meses
+                            <strong style="color: #5ABF8F;"><span id="ps-improvement">-8.8</span> puntos</strong> en 18 meses
                         </div>
                     </div>
                     
@@ -2982,10 +3048,10 @@
                     <div style="background: linear-gradient(135deg, rgba(212,181,90,0.25), rgba(212,181,90,0.1)); padding: 30px; border-radius: 15px; text-align: center; border: 3px solid rgba(212,181,90,0.6); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: -20px; right: -20px; font-size: 8em; opacity: 0.1;">🏆</div>
                         <div style="color: #D4B55A; font-size: 1em; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px;">RÉCORD PERSONAL</div>
-                        <div style="font-size: 4.5em; font-weight: 900; color: #D4B55A; margin: 15px 0; text-shadow: 0 0 30px rgba(212,181,90,0.5);">88</div>
-                        <div style="color: rgba(255,255,255,0.8); font-size: 1em; margin-bottom: 8px;">Marina Golf</div>
+                        <div style="font-size: 4.5em; font-weight: 900; color: #D4B55A; margin: 15px 0; text-shadow: 0 0 30px rgba(212,181,90,0.5);"><span id="ps-best-score">88</span></div>
+                        <div style="color: rgba(255,255,255,0.8); font-size: 1em; margin-bottom: 8px;"><span id="ps-best-course">Marina Golf</span></div>
                         <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 15px;">
-                            <strong style="color: #D4B55A;">16 Nov 2025</strong> - Differential 17
+                            <strong style="color: #D4B55A;"><span id="ps-best-date">16 Nov 2025</span></strong> - Differential <span id="ps-best-diff">17</span>
                         </div>
                     </div>
                     
@@ -2993,10 +3059,10 @@
                     <div style="background: linear-gradient(135deg, rgba(74,159,216,0.25), rgba(74,159,216,0.1)); padding: 30px; border-radius: 15px; text-align: center; border: 3px solid rgba(74,159,216,0.6); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: -20px; right: -20px; font-size: 8em; opacity: 0.1;">📈</div>
                         <div style="color: #4A9FD8; font-size: 1em; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px;">EXPERIENCIA</div>
-                        <div style="font-size: 4.5em; font-weight: 900; color: #4A9FD8; margin: 15px 0; text-shadow: 0 0 30px rgba(74,159,216,0.5);">52</div>
+                        <div style="font-size: 4.5em; font-weight: 900; color: #4A9FD8; margin: 15px 0; text-shadow: 0 0 30px rgba(74,159,216,0.5);"><span id="ps-total-rounds">52</span></div>
                         <div style="color: rgba(255,255,255,0.8); font-size: 1em; margin-bottom: 8px;">Rondas Registradas</div>
                         <div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 15px;">
-                            <strong style="color: #4A9FD8;">Mar 2024</strong> - Dic 2025
+                            <strong style="color: #4A9FD8;"><span id="ps-first-date">Mar 2024</span></strong> - <span id="ps-last-date">Dic 2025</span>
                         </div>
                     </div>
                     
@@ -3115,14 +3181,6 @@
   background: linear-gradient(90deg, var(--gi-gold), var(--gi-teal), transparent);
 }
 .gi-header-left { flex: 1; min-width: 200px; }
-.gi-archetype-id {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--gi-gold);
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  font-family: 'Courier New', monospace;
-}
 .gi-archetype-name {
   font-size: 26px;
   font-weight: 700;
@@ -3216,6 +3274,16 @@
   gap: 5px;
   font-size: 10px;
   color: var(--gi-text);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.25s;
+}
+.gi-legend-item.inactive {
+  opacity: 0.35;
+}
+.gi-legend-item.inactive .gi-legend-swatch {
+  background: rgba(255,255,255,0.2) !important;
+  border-color: rgba(255,255,255,0.2) !important;
 }
 .gi-legend-swatch {
   width: 18px;
@@ -3487,7 +3555,6 @@
   <!-- Cabecera arquetipo + score -->
   <div class="gi-header">
     <div class="gi-header-left">
-      <div class="gi-archetype-id" id="gi-arch-id">B3</div>
       <div class="gi-archetype-name" id="gi-arch-name">El Artista Completo</div>
       <div class="gi-archetype-tagline" id="gi-arch-tagline">Short game + putting como ventaja real</div>
       <div class="gi-header-meta">
@@ -3509,15 +3576,15 @@
     <div class="gi-radar-main">
       <div class="gi-panel-title" style="width:100%">Radar · Scoring Engine</div>
       <div class="gi-radar-legend">
-        <div class="gi-legend-item">
+        <div class="gi-legend-item" data-layer="player">
           <div class="gi-legend-swatch" style="background:#4fc3a1;"></div>
           <span>Tú</span>
         </div>
-        <div class="gi-legend-item">
+        <div class="gi-legend-item" data-layer="pga">
           <div class="gi-legend-swatch dashed" style="border-color:#E88B7A;"></div>
           <span>PGA Tour</span>
         </div>
-        <div class="gi-legend-item">
+        <div class="gi-legend-item" data-layer="hcp20">
           <div class="gi-legend-swatch dashed" style="border-color:#D4B55A;"></div>
           <span>HCP 20</span>
         </div>
@@ -3527,19 +3594,19 @@
       </svg>
     </div>
     <div class="gi-radar-cards">
-      <div class="gi-radar-card">
+      <div class="gi-radar-card" data-layer="player">
         <div class="gi-radar-card-dot" style="background:#4fc3a1;"></div>
         <div class="gi-radar-card-label">Tú</div>
         <div class="gi-radar-card-val" style="color:#4fc3a1;" id="gi-card-player">—</div>
         <div class="gi-radar-card-sub">Promedio</div>
       </div>
-      <div class="gi-radar-card">
+      <div class="gi-radar-card" data-layer="pga">
         <div class="gi-radar-card-dot" style="background:#E88B7A;"></div>
         <div class="gi-radar-card-label">PGA Tour</div>
         <div class="gi-radar-card-val" style="color:#E88B7A;" id="gi-card-pga">10.0</div>
         <div class="gi-radar-card-sub">Elite</div>
       </div>
-      <div class="gi-radar-card">
+      <div class="gi-radar-card" data-layer="hcp20">
         <div class="gi-radar-card-dot" style="background:#D4B55A;"></div>
         <div class="gi-radar-card-label">HCP 20</div>
         <div class="gi-radar-card-val" style="color:#D4B55A;" id="gi-card-hcp20">—</div>
@@ -3622,14 +3689,19 @@
   const DIM_ORDER = ['long_game','mid_game','short_game','putting','consistency','mental','power','accuracy'];
 
   // Benchmarks comparativos (escala 0-10 del ScoringEngine)
-  const BENCH_PGA = {
-    long_game: 9.8, mid_game: 9.5, short_game: 9.7, putting: 9.5,
-    consistency: 9.3, mental: 9.5, power: 9.8, accuracy: 9.5
+  // Fuentes: PGA Tour ShotLink, Broadie "Every Shot Counts", USGA 2023,
+  //          Shot Scope 870K rounds, Arccos 750M+ shots, TrackMan averages
+  const BENCHMARKS = {
+    pga:   { long_game: 9.8, mid_game: 9.5, short_game: 9.7, putting: 9.5, consistency: 9.3, mental: 9.5, power: 9.8, accuracy: 9.5 }, // avg 9.6
+    hcp5:  { long_game: 8.2, mid_game: 7.8, short_game: 7.6, putting: 7.8, consistency: 7.8, mental: 7.5, power: 7.5, accuracy: 8.0 }, // avg 7.8
+    hcp10: { long_game: 7.0, mid_game: 6.5, short_game: 6.5, putting: 6.8, consistency: 6.6, mental: 6.3, power: 6.5, accuracy: 6.8 }, // avg 6.6
+    hcp15: { long_game: 6.0, mid_game: 5.5, short_game: 5.5, putting: 6.0, consistency: 5.5, mental: 5.5, power: 5.8, accuracy: 5.8 }, // avg 5.7
+    hcp20: { long_game: 5.3, mid_game: 5.0, short_game: 5.2, putting: 5.5, consistency: 5.0, mental: 5.0, power: 5.3, accuracy: 5.0 }, // avg 5.2
+    hcp25: { long_game: 4.0, mid_game: 3.5, short_game: 3.8, putting: 4.0, consistency: 3.5, mental: 3.5, power: 4.0, accuracy: 3.8 }, // avg 3.8
+    hcp30: { long_game: 3.0, mid_game: 2.5, short_game: 2.8, putting: 3.0, consistency: 2.5, mental: 2.5, power: 3.0, accuracy: 2.8 }, // avg 2.8
   };
-  const BENCH_HCP20 = {
-    long_game: 5.2, mid_game: 5.0, short_game: 4.8, putting: 5.0,
-    consistency: 4.5, mental: 4.8, power: 5.5, accuracy: 4.5
-  };
+  const BENCH_PGA   = BENCHMARKS.pga;
+  const BENCH_HCP20 = BENCHMARKS.hcp20;
 
   function initGolfIdentity() {
     // Leer datos del JSON global (ajusta el nombre de la variable si es distinto)
@@ -3649,7 +3721,6 @@
     }
 
     // ── Cabecera ────────────────────────────────────────────
-    document.getElementById('gi-arch-id').textContent       = gi.archetype_id;
     document.getElementById('gi-arch-name').textContent     = gi.archetype_name;
     document.getElementById('gi-arch-tagline').textContent  = gi.archetype_tagline;
     document.getElementById('gi-fit-pct').textContent       = Math.round(gi.fit_score * 100) + '%';
@@ -3801,6 +3872,7 @@
       return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
     });
     const pgaArea = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    pgaArea.setAttribute('id', 'gi-layer-pga');
     pgaArea.setAttribute('points', pgaPts.map(p => p.join(',')).join(' '));
     pgaArea.setAttribute('fill',           'rgba(232,139,122,0.06)');
     pgaArea.setAttribute('stroke',         '#E88B7A');
@@ -3816,6 +3888,7 @@
       return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
     });
     const hcp20Area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    hcp20Area.setAttribute('id', 'gi-layer-hcp20');
     hcp20Area.setAttribute('points', hcp20Pts.map(p => p.join(',')).join(' '));
     hcp20Area.setAttribute('fill',           'rgba(212,181,90,0.06)');
     hcp20Area.setAttribute('stroke',         '#D4B55A');
@@ -3823,7 +3896,10 @@
     hcp20Area.setAttribute('stroke-dasharray','6,4');
     svg.appendChild(hcp20Area);
 
-    // Área del jugador (sólida, teal)
+    // Grupo del jugador (polígono + puntos + labels)
+    const playerGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    playerGroup.setAttribute('id', 'gi-layer-player');
+
     const playerPts = keys.map((key, i) => {
       const dim   = dimensions[key];
       const score = dim ? dim.score : 5;
@@ -3836,21 +3912,9 @@
     area.setAttribute('fill',         'rgba(79,195,161,0.15)');
     area.setAttribute('stroke',       '#4fc3a1');
     area.setAttribute('stroke-width', '1.5');
-    svg.appendChild(area);
+    playerGroup.appendChild(area);
 
-    // Actualizar cards de promedio
-    const playerScores = keys.map(k => dimensions[k] ? dimensions[k].score : 5);
-    const playerAvg = (playerScores.reduce((a, b) => a + b, 0) / playerScores.length).toFixed(1);
-    const pgaAvg = (keys.map(k => BENCH_PGA[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
-    const hcp20Avg = (keys.map(k => BENCH_HCP20[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
-    const cardPlayer = document.getElementById('gi-card-player');
-    const cardPga = document.getElementById('gi-card-pga');
-    const cardHcp20 = document.getElementById('gi-card-hcp20');
-    if (cardPlayer) cardPlayer.textContent = playerAvg + '/10';
-    if (cardPga) cardPga.textContent = pgaAvg + '/10';
-    if (cardHcp20) cardHcp20.textContent = hcp20Avg + '/10';
-
-    // Puntos + labels
+    // Puntos + labels (dentro del grupo del jugador)
     keys.forEach((key, i) => {
       const dim   = dimensions[key];
       const score = dim ? dim.score : 5;
@@ -3858,15 +3922,13 @@
       const [px, py] = playerPts[i];
       const angle    = (i / n) * 2 * Math.PI - Math.PI / 2;
 
-      // Punto
       const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       dot.setAttribute('cx', px); dot.setAttribute('cy', py);
       dot.setAttribute('r', '5');
       dot.setAttribute('fill', zoneColors[zone] || '#4fc3a1');
       dot.setAttribute('stroke', '#0a120c'); dot.setAttribute('stroke-width', '1.5');
-      svg.appendChild(dot);
+      playerGroup.appendChild(dot);
 
-      // Label
       const lx = cx + (R + 24) * Math.cos(angle);
       const ly = cy + (R + 24) * Math.sin(angle);
       const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -3876,9 +3938,45 @@
       label.setAttribute('font-size', '10');
       label.setAttribute('fill', zoneColors[zone] || 'rgba(255,255,255,0.5)');
       label.textContent = DIM_LABELS[key].split(' ')[0];
-      svg.appendChild(label);
+      playerGroup.appendChild(label);
     });
+
+    svg.appendChild(playerGroup);
+
+    // Actualizar cards de promedio (usar overall_score del backend para consistencia)
+    const dd = window.dashboardData || window.dashboard_data;
+    const overallScore = dd?.scoring_profile?.overall_score;
+    const playerAvg = overallScore != null ? overallScore.toFixed(1) : (keys.map(k => dimensions[k] ? dimensions[k].score : 5).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
+    const pgaAvg = (keys.map(k => BENCH_PGA[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
+    const hcp20Avg = (keys.map(k => BENCH_HCP20[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
+    const cardPlayer = document.getElementById('gi-card-player');
+    const cardPga = document.getElementById('gi-card-pga');
+    const cardHcp20 = document.getElementById('gi-card-hcp20');
+    if (cardPlayer) cardPlayer.textContent = playerAvg + '/10';
+    if (cardPga) cardPga.textContent = pgaAvg + '/10';
+    if (cardHcp20) cardHcp20.textContent = hcp20Avg + '/10';
   }
+
+  // ── Radar legend interactivity (toggle layers) ──────────────
+  (function initRadarLegendToggle() {
+    document.querySelectorAll('.gi-radar-legend .gi-legend-item[data-layer]').forEach(item => {
+      item.addEventListener('click', function() {
+        const layer = this.dataset.layer;
+        const svgEl = document.getElementById('gi-layer-' + layer);
+        const card  = document.querySelector('.gi-radar-card[data-layer="' + layer + '"]');
+        const isActive = !this.classList.contains('inactive');
+
+        // Toggle legend item
+        this.classList.toggle('inactive');
+
+        // Toggle SVG polygon/group
+        if (svgEl) svgEl.style.display = isActive ? 'none' : '';
+
+        // Toggle card
+        if (card) card.style.opacity = isActive ? '0.25' : '1';
+      });
+    });
+  })();
 
   // ── Helper: etiqueta zona ────────────────────────────────────
   function zoneLabel(zone) {
@@ -4227,9 +4325,9 @@
                         </div>
                         
                         <div style="display: grid; grid-template-columns: 120px 200px 80px 100px 1fr; gap: 15px; padding: 18px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 10px; border-left: 5px solid #D4B55A; align-items: center;">
-                            <div style="font-weight: 700; color: #D4B55A;">16 NOV 2025</div>
-                            <div style="font-weight: 700; color: #D4B55A;">Marina Golf</div>
-                            <div style="font-size: 2em; font-weight: 900; color: #D4B55A;">88</div>
+                            <div style="font-weight: 700; color: #D4B55A;"><span id="ps-best-date-detail">16 NOV 2025</span></div>
+                            <div style="font-weight: 700; color: #D4B55A;"><span id="ps-best-course-detail">Marina Golf</span></div>
+                            <div style="font-size: 2em; font-weight: 900; color: #D4B55A;"><span id="ps-best-score-detail">88</span></div>
                             <div style="background: linear-gradient(135deg, rgba(90,191,143,0.3), rgba(61,212,124,0.3)); padding: 5px 12px; border-radius: 20px; text-align: center; font-size: 0.85em; font-weight: 700; color: #000;">Diff: 17</div>
                             <div style="font-size: 0.9em; opacity: 0.9;">🏆 RÉCORD PERSONAL - Marca histórica</div>
                         </div>
@@ -4452,20 +4550,20 @@
                 <div style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
                     <div style="padding: 25px; background: rgba(232,139,122,0.1); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center;">
                         <div style="font-size: 0.9em; color: #E88B7A; margin-bottom: 8px; font-weight: 700;">PUNTO DE PARTIDA</div>
-                        <div style="font-size: 3em; font-weight: 900; color: #E88B7A; margin: 10px 0;">32.0</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Marzo 2024</div>
+                        <div style="font-size: 3em; font-weight: 900; color: #E88B7A; margin: 10px 0;"><span id="ps-start-hcp">32.0</span></div>
+                        <div style="font-size: 0.9em; opacity: 0.8;"><span id="ps-start-date">Marzo 2024</span></div>
                     </div>
                     
                     <div style="padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
                         <div style="font-size: 0.9em; color: #5ABF8F; margin-bottom: 8px; font-weight: 700;">MEJOR MARCA</div>
-                        <div style="font-size: 3em; font-weight: 900; color: #5ABF8F; margin: 10px 0;">21.9</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Mayo 2025</div>
+                        <div style="font-size: 3em; font-weight: 900; color: #5ABF8F; margin: 10px 0;"><span id="ps-best-hcp">21.9</span></div>
+                        <div style="font-size: 0.9em; opacity: 0.8;"><span id="ps-best-hcp-date">Mayo 2025</span></div>
                     </div>
                     
                     <div style="padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border: 2px solid rgba(74,159,216,0.4); text-align: center;">
                         <div style="font-size: 0.9em; color: #4A9FD8; margin-bottom: 8px; font-weight: 700;">ACTUAL</div>
-                        <div style="font-size: 3em; font-weight: 900; color: #4A9FD8; margin: 10px 0;">23.2</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Septiembre 2025</div>
+                        <div style="font-size: 3em; font-weight: 900; color: #4A9FD8; margin: 10px 0;"><span id="ps-hcp-current">23.2</span></div>
+                        <div style="font-size: 0.9em; opacity: 0.8;"><span id="ps-hcp-current-date">Septiembre 2025</span></div>
                     </div>
                     
                     <div style="padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
@@ -4494,9 +4592,9 @@
                     
                     <div style="text-align: center; position: relative; z-index: 1;">
                         <div style="font-size: 1.3em; color: #D4B55A; margin-bottom: 15px; font-weight: 700; letter-spacing: 2px;">RÉCORD PERSONAL</div>
-                        <div style="font-size: 6em; font-weight: 900; color: #D4B55A; margin: 20px 0; text-shadow: 0 0 40px rgba(212,181,90,0.6);">88</div>
-                        <div style="font-size: 1.5em; color: #E8E8E8; margin-bottom: 10px; font-weight: 700;">Marina Golf - 16 Noviembre 2025</div>
-                        <div style="font-size: 1.1em; color: rgba(255,255,255,0.8); margin-bottom: 25px;">Differential: 17 | HCP de Juego: 28</div>
+                        <div style="font-size: 6em; font-weight: 900; color: #D4B55A; margin: 20px 0; text-shadow: 0 0 40px rgba(212,181,90,0.6);"><span id="ps-best-score-hero">88</span></div>
+                        <div style="font-size: 1.5em; color: #E8E8E8; margin-bottom: 10px; font-weight: 700;"><span id="ps-best-round-title">Marina Golf - 16 Noviembre 2025</span></div>
+                        <div style="font-size: 1.1em; color: rgba(255,255,255,0.8); margin-bottom: 25px;">Differential: <span id="ps-best-diff-hero">17</span> | HCP de Juego: 28</div>
                         
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
                             <div style="padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px;">

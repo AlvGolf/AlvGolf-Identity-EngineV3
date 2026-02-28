@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-25T01:33:20.470977",
+  "generated_at": "2026-02-28T01:08:59.086131",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -10,7 +10,14 @@
     "primera_ronda": "2024-04-15",
     "ultima_ronda": "2025-12-07",
     "campos_jugados": 11,
-    "golpes_flightscope": 497
+    "golpes_flightscope": 497,
+    "player_name": "Álvaro Peralta",
+    "best_round_course": "Marina Golf",
+    "best_round_date": "2025-11-16",
+    "best_round_differential": 17,
+    "best_hcp": 21.9,
+    "best_hcp_date": "Mayo 2025",
+    "hcp_date": "Septiembre 2025"
   },
   "club_statistics": [
     {
