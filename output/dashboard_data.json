@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-28T02:14:44.181205",
+  "generated_at": "2026-03-01T11:11:29.844341",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -8590,6 +8590,80 @@
         "target": "Total improvement: ~10 strokes (HCP -5 to -6 points)"
       }
     ]
+  },
+  "form_summary": {
+    "average": 92.8,
+    "best": 88,
+    "rounds": [
+      {
+        "date": "2025-11-15",
+        "course": "VALLE DEL ESTE",
+        "score": 90,
+        "differential": 19
+      },
+      {
+        "date": "2025-11-16",
+        "course": "MARINA GOLF",
+        "score": 88,
+        "differential": 17
+      },
+      {
+        "date": "2025-11-30",
+        "course": "LA DEHESA",
+        "score": 97,
+        "differential": 25
+      },
+      {
+        "date": "2025-12-03",
+        "course": "LA DEHESA",
+        "score": 96,
+        "differential": 24
+      },
+      {
+        "date": "2025-12-07",
+        "course": "LA DEHESA",
+        "score": 93,
+        "differential": 21
+      }
+    ],
+    "count": 5,
+    "streak_text": "EN RACHA",
+    "trend": "improving"
+  },
+  "scoring_streaks": {
+    "best": 4,
+    "total": 3,
+    "current": 1
+  },
+  "goals_progress": {
+    "hcp_20": {
+      "start": 32.0,
+      "current": 23.2,
+      "target": 20.0,
+      "gap": 3.2,
+      "pct": 73
+    },
+    "avg_90": {
+      "start": 102.0,
+      "current": 95.7,
+      "target": 90.0,
+      "gap": 5.7,
+      "pct": 52
+    },
+    "sub_85": {
+      "start": 105,
+      "current": 88,
+      "target": 85,
+      "gap": 3,
+      "pct": 85
+    },
+    "hcp_15": {
+      "start": 32.0,
+      "current": 23.2,
+      "target": 15.0,
+      "gap": 8.2,
+      "pct": 52
+    }
   },
   "launch_metrics": {
     "summary": {

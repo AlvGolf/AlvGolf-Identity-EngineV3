@@ -4856,6 +4856,121 @@ class DashboardDataGenerator:
             'milestones': milestones
         }
 
+    def calculate_form_summary(self, score_history):
+        """Calcula resumen de forma actual (últimas 5 rondas)."""
+        logger.info("Calculando form summary")
+        rounds = score_history.get('rounds', [])
+        if len(rounds) < 2:
+            return {'average': 0, 'best': 0, 'rounds': [], 'count': 0, 'streak_text': 'SIN DATOS', 'trend': 'no_data'}
+
+        last5 = rounds[-5:]
+        avg = round(sum(r['score'] for r in last5) / len(last5), 1)
+        best = min(r['score'] for r in last5)
+
+        # Trend: compare last 5 avg vs previous 5 avg
+        if len(rounds) >= 10:
+            prev5 = rounds[-10:-5]
+            prev_avg = sum(r['score'] for r in prev5) / len(prev5)
+            if avg < prev_avg - 2:
+                trend = 'improving'
+                streak_text = 'EN RACHA'
+            elif avg > prev_avg + 2:
+                trend = 'declining'
+                streak_text = 'EN BACHE'
+            else:
+                trend = 'stable'
+                streak_text = 'ESTABLE'
+        else:
+            trend = 'stable'
+            streak_text = 'ESTABLE'
+
+        result = {
+            'average': avg,
+            'best': best,
+            'rounds': [{'date': r['date'], 'course': r['course'], 'score': r['score'], 'differential': r.get('differential')} for r in last5],
+            'count': len(last5),
+            'streak_text': streak_text,
+            'trend': trend
+        }
+        logger.success(f"Form summary: avg={avg}, best={best}, trend={trend}")
+        return result
+
+    def calculate_scoring_streaks(self, score_history, player_stats):
+        """Calcula rachas de rondas consecutivas bajo score esperado (par + hcp)."""
+        logger.info("Calculando scoring streaks")
+        rounds = score_history.get('rounds', [])
+        hcp = player_stats.get('handicap_actual', 23.2)
+
+        best_streak = 0
+        current_streak = 0
+        total_streaks = 0
+        in_streak = False
+
+        for r in rounds:
+            par = r.get('par', 72)
+            expected = par + hcp
+            if r['score'] <= expected:
+                current_streak += 1
+                if current_streak >= 2 and not in_streak:
+                    in_streak = True
+                if current_streak > best_streak:
+                    best_streak = current_streak
+            else:
+                if in_streak:
+                    total_streaks += 1
+                    in_streak = False
+                current_streak = 0
+
+        if in_streak:
+            total_streaks += 1
+
+        result = {'best': best_streak, 'total': total_streaks, 'current': current_streak}
+        logger.success(f"Scoring streaks: best={best_streak}, total={total_streaks}, current={current_streak}")
+        return result
+
+    def calculate_goals_progress(self, player_stats, quarterly_scoring):
+        """Calcula progreso hacia metas del jugador."""
+        logger.info("Calculando goals progress")
+        hcp_actual = player_stats.get('handicap_actual', 23.2)
+        hcp_inicial = player_stats.get('handicap_inicial', 32.0)
+        mejor_score = player_stats.get('mejor_score', 88)
+
+        # Best quarter avg
+        quarters = list(quarterly_scoring.values()) if quarterly_scoring else []
+        all_avgs = [q['avg_score'] for q in quarters if q.get('avg_score')]
+        current_avg = quarters[-1]['avg_score'] if quarters else 100
+        first_avg = quarters[0]['avg_score'] if quarters else 107.6
+
+        # Goal 1: HCP 20
+        hcp20_total = hcp_inicial - 20.0
+        hcp20_done = hcp_inicial - hcp_actual
+        hcp20_pct = min(100, round(hcp20_done / hcp20_total * 100)) if hcp20_total > 0 else 0
+
+        # Goal 2: Avg < 90
+        avg90_total = first_avg - 90.0
+        avg90_done = first_avg - current_avg
+        avg90_pct = min(100, round(avg90_done / avg90_total * 100)) if avg90_total > 0 else 0
+
+        # Goal 3: Sub-85 (best score)
+        sub85_start = 105
+        sub85_total = sub85_start - 85
+        sub85_done = sub85_start - mejor_score
+        sub85_pct = min(100, round(sub85_done / sub85_total * 100)) if sub85_total > 0 else 0
+
+        # Goal 4: HCP 15
+        hcp15_total = hcp_inicial - 15.0
+        hcp15_done = hcp_inicial - hcp_actual
+        hcp15_pct = min(100, round(hcp15_done / hcp15_total * 100)) if hcp15_total > 0 else 0
+
+        result = {
+            'hcp_20': {'start': hcp_inicial, 'current': hcp_actual, 'target': 20.0, 'gap': round(hcp_actual - 20.0, 1), 'pct': hcp20_pct},
+            'avg_90': {'start': round(first_avg, 1), 'current': round(current_avg, 1), 'target': 90.0, 'gap': round(current_avg - 90.0, 1), 'pct': avg90_pct},
+            'sub_85': {'start': sub85_start, 'current': mejor_score, 'target': 85, 'gap': mejor_score - 85, 'pct': sub85_pct},
+            'hcp_15': {'start': hcp_inicial, 'current': hcp_actual, 'target': 15.0, 'gap': round(hcp_actual - 15.0, 1), 'pct': hcp15_pct}
+        }
+        logger.success(f"Goals progress: hcp20={hcp20_pct}%, avg90={avg90_pct}%, sub85={sub85_pct}%, hcp15={hcp15_pct}%")
+        return result
+
     def calculate_flightscope_shots_timeline(self):
         """Exporta golpes FlightScope con fechas para análisis temporal.
         Campos mínimos: fecha, palo, vuelo_act, velocidad_bola, lateral_vuelo.
@@ -5124,6 +5239,16 @@ class DashboardDataGenerator:
         logger.info(f"  ✓ ROI plan: {len(roi_plan['plan'])} actions, time={roi_plan['summary']['total_time']}h/week, "
                     f"improvement={roi_plan['summary']['total_improvement']} strokes, feasibility={roi_plan['summary']['feasibility']}")
 
+        # SPRINT 14: Form Summary, Scoring Streaks, Goals Progress
+        form_summary = self.calculate_form_summary(score_history)
+        logger.info(f"  ✓ Form summary: avg={form_summary['average']}, trend={form_summary['trend']}")
+
+        scoring_streaks = self.calculate_scoring_streaks(score_history, player_stats)
+        logger.info(f"  ✓ Scoring streaks: best={scoring_streaks['best']}, total={scoring_streaks['total']}")
+
+        goals_progress = self.calculate_goals_progress(player_stats, quarterly)
+        logger.info(f"  ✓ Goals progress: hcp20={goals_progress['hcp_20']['pct']}%, avg90={goals_progress['avg_90']['pct']}%")
+
         # ========== ESTRUCTURA JSON FINAL ==========
         self.dashboard_data = {
             'generated_at': datetime.now().isoformat(),
@@ -5198,6 +5323,11 @@ class DashboardDataGenerator:
             'swot_matrix': swot_matrix,
             'benchmark_radar': benchmark_radar,
             'roi_plan': roi_plan,
+
+            # SPRINT 14: Form + Streaks + Goals
+            'form_summary': form_summary,
+            'scoring_streaks': scoring_streaks,
+            'goals_progress': goals_progress,
 
             # Fase 5 Original (para referencia/debugging)
             'launch_metrics': launch_data,
