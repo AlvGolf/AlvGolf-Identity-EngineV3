@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.5 - Identity Timeline + Temporal Archetype Evolution (2026-02-25)
+**Version:** v3.0.7 - 100% Dynamic Dashboard (~176 editorial hardcodes migrated, 62 JSON keys)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -42,7 +42,7 @@ AlvGolf/
 │   └── temporal_analysis.py          # Sliding window identity analysis (~375 lines)
 │
 ├── output/
-│   └── dashboard_data.json           # Generated data (266.4 KB, 54 keys)
+│   └── dashboard_data.json           # Generated data (273 KB, 62 keys)
 │
 ├── data/                             # Raw data sources
 │   ├── flightscope/                  # 493 shots, 11 clubs
@@ -51,7 +51,7 @@ AlvGolf/
 ├── dashboard_dynamic.html            # Main dashboard (v5.3.0, ~17,500 lines)
 ├── dashboard_agentic.html            # AI Insights dashboard
 ├── index.html                        # Landing page
-├── generate_dashboard_data.py        # Backend generator (53 functions)
+├── generate_dashboard_data.py        # Backend generator (59 functions)
 │
 ├── .env                              # API keys (NOT committed)
 ├── .env.example                      # Template for .env
@@ -221,13 +221,13 @@ document.addEventListener('dashboardDataReady', injectHeaderStats, { once: true 
 **ID Convention:** `{prefix}-{descriptive-name}` where prefix = tab zone:
 | Prefix | Zone | Function | IDs |
 |--------|------|----------|-----|
-| `ps-` | Tab 1 Mi Identidad | `injectPlayerStats()` | 22 + 3 containers + ~21 DNA + ~23 form/last5 + ~25 zones |
+| `ps-` | Tab 1 Mi Identidad | `injectPlayerStats()` | 22 + 3 containers + ~21 DNA + ~23 form/last5 + ~25 zones + ~15 archetype/form narratives + ~15 recommendations |
 | `hd-` | Header + Score Summary | `injectHeaderStats()` | 12 |
 | `ev-` | Tab 2 Evolución | `injectEvolutionStats()` | 24 |
-| `cs-` | Tab 3 Campos | `injectCourseStats()` | 17 + 22 narratives + 1 goals container + 3 containers |
-| `cl-` | Tab 4 Palos | `injectClubStats()` | 14 + 4 containers |
-| `an-` | Tab 5 Análisis | `injectAnalysisStats()` | 4 + 14 metrics |
-| `st-` | Tab 6 Estrategia | `injectStrategyStats()` | 9 |
+| `cs-` | Tab 3 Campos | `injectCourseStats()` | 17 + 22 narratives + 1 goals container + 3 containers + ~15 course dates/insights |
+| `cl-` | Tab 4 Palos | `injectClubStats()` | 14 + 4 containers + 11 dispersion stats + 2 summary/conclusion + 2 bubble containers |
+| `an-` | Tab 5 Análisis | `injectAnalysisStats()` | 4 + 14 metrics + 7 diagnostic/synthesis/profile |
+| `st-` | Tab 6 Estrategia | `injectStrategyStats()` | 9 + 3 improvement plan containers |
 
 **Dynamic Containers** (JS generates full HTML from JSON):
 - `ps-dna-compact-container` → `scoring_profile.dimensions` (4 zone groups)
@@ -240,6 +240,13 @@ document.addEventListener('dashboardDataReady', injectHeaderStats, { once: true 
 - `cs-goals-container` → `goals_progress` (4 goals with progress bars)
 - `cl-carry-long/mid/short` → `launch_metrics.clubs` (carry/roll/total)
 - `cl-matrix-body` → `launch_metrics.clubs` (11 rows)
+- `cl-disp-summary` → `dispersion_analysis.clubs` (Long/Mid/Short group averages)
+- `cl-disp-conclusion` → `golf_identity.archetype_name` (strategic conclusion)
+- `cl-bubble-cards` → `bubble_analysis` (4 zone cards: wedges/driver/woods/irons)
+- `cl-bubble-strategy` → `bubble_analysis.strategy` (prioritized strategy)
+- `st-plan-metrics` → `improvement_plan.metrics` (baseline→target cards)
+- `st-plan-weeks` → `improvement_plan.weeks` (4-week timeline)
+- `st-plan-success` → `improvement_plan.success_criteria` (success criteria list)
 
 **Backend fields** in `player_stats` (21 total):
 `total_rondas`, `mejor_score`, `peor_score`, `promedio_score`, `handicap_actual`, `mejora_handicap`, `primera_ronda`, `ultima_ronda`, `campos_jugados`, `golpes_flightscope`, `player_name`, `best_round_course`, `best_round_date`, `best_round_differential`, `best_hcp`, `best_hcp_date`, `hcp_date`, `player_id`, `location`, `handicap_inicial`, `months_tracked`
@@ -273,13 +280,13 @@ document.addEventListener('dashboardDataReady', injectHeaderStats, { once: true 
 | `toggleDownloadsMenu()` | Download menu toggle |
 | `createDispersionChart()` | Club-specific scatter plot generation |
 | `formatPlayerDate(dateStr, style)` | Date formatting (short/month-year/full) |
-| `injectPlayerStats()` | Tab 1: 22 values from player_stats |
+| `injectPlayerStats()` | Tab 1: ~100 values + narratives + recommendations from player_stats, scoring_profile, golf_identity, form_summary, monthly_recommendations |
 | `injectHeaderStats()` | Header: 12 values from player_stats + scoring_profile |
 | `injectEvolutionStats()` | Tab 2: 24 values from launch_metrics + learning_curve |
-| `injectCourseStats()` | Tab 3: 17 values + 3 dynamic containers |
-| `injectClubStats()` | Tab 4: 14 values + 4 dynamic containers |
-| `injectAnalysisStats()` | Tab 5: 4 values from strokes_gained |
-| `injectStrategyStats()` | Tab 6: 9 values from player_stats + launch_metrics |
+| `injectCourseStats()` | Tab 3: ~55 values + containers from course_statistics, score_history, hcp_trajectory |
+| `injectClubStats()` | Tab 4: ~80 values + containers from launch_metrics, dispersion_analysis, bubble_analysis |
+| `injectAnalysisStats()` | Tab 5: ~25 values + diagnostics from strokes_gained, scoring_profile, golf_identity |
+| `injectStrategyStats()` | Tab 6: ~40 values + plan containers from player_stats, launch_metrics, improvement_plan |
 
 ## Code Conventions
 
@@ -770,6 +777,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.7 | 2026-03-02 | 100% Dynamic Dashboard — ~176 editorial hardcodes migrated (9 LOTES) + 3 new backend functions (monthly_recommendations, bubble_analysis, improvement_plan) + 62 JSON keys |
 | v3.0.6 | 2026-03-01 | Template vs Data Phase 2 — ~216 IDs dinámicos + 12 containers + 3 backend functions (form_summary, scoring_streaks, goals_progress) + DOMContentLoaded fix |
 | v3.0.5+ | 2026-02-28 | Template vs Data Phase 1 — 106 IDs dinámicos + 7 funciones inyección + 7 containers (dashboard reutilizable) |
 | v3.0.5 | 2026-02-25 | Identity Timeline — evolución temporal del arquetipo (11 períodos, ventana 90d/60d, colores por zona) |

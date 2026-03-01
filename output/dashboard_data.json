@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-01T11:11:29.844341",
+  "generated_at": "2026-03-02T00:35:09.528811",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -8664,6 +8664,160 @@
       "gap": 8.2,
       "pct": 52
     }
+  },
+  "monthly_recommendations": {
+    "focus_title": "Accuracy Training",
+    "focus_description": "Tu prioridad #1 es corregir attack angle de 4.1° a -5.0°.",
+    "drill": "Tee alto + palo por debajo de bola + swing ascendente",
+    "session_goal": "50 drives con attack angle -5.0° o menor",
+    "roi_estimate": "+17m inmediato si logras corrección",
+    "suggested_course": "NUEVO PORTIL",
+    "suggested_course_avg": 90.5,
+    "suggested_course_reason": "Tu mejor campo (avg 90.5). Juega aquí cuando quieras romper récords.",
+    "timing_tip": "Mantén un ritmo regular de juego para consolidar mejoras.",
+    "quick_win_item": "5-Wood o Hybrid",
+    "quick_win_cost": "$300-500",
+    "quick_win_gap": 42.0,
+    "quick_win_impact": "Cierra gap crítico 42m. Impacto inmediato."
+  },
+  "bubble_analysis": {
+    "wedges": {
+      "title": "Wedges",
+      "icon": "🎯",
+      "color": "#5ABF8F",
+      "position": "85.5% consistencia, ~108.0m",
+      "diagnosis": "Bien pero puede mejorar",
+      "diagnosis_icon": "🔵",
+      "bullets": [
+        "Consistencia: 85.5%",
+        "Distancia media: 108.0m",
+        "Dispersión: 15.6m lateral",
+        "Golpes analizados: 60"
+      ],
+      "action": "Subir consistencia a 96%+",
+      "avg_consistency": 85.5,
+      "avg_distance": 108.0
+    },
+    "driver": {
+      "title": "Driver",
+      "icon": "🏌️",
+      "color": "#E88B7A",
+      "position": "93.4% consistencia, ~213.0m",
+      "diagnosis": "SWEET SPOT",
+      "diagnosis_icon": "✅",
+      "bullets": [
+        "Consistencia: 93.4%",
+        "Distancia media: 213.0m",
+        "Dispersión: 26.8m lateral",
+        "Golpes analizados: 101"
+      ],
+      "action": "No requiere mejora - MANTENER",
+      "avg_consistency": 93.4,
+      "avg_distance": 213.0
+    },
+    "woods": {
+      "title": "3W / Hybrid",
+      "icon": "🪵",
+      "color": "#D4B55A",
+      "position": "93.5% consistencia, ~181.0m",
+      "diagnosis": "SWEET SPOT",
+      "diagnosis_icon": "✅",
+      "bullets": [
+        "Consistencia: 93.5%",
+        "Distancia media: 181.0m",
+        "Dispersión: 20.2m lateral",
+        "Golpes analizados: 65"
+      ],
+      "action": "No requiere mejora - MANTENER",
+      "avg_consistency": 93.5,
+      "avg_distance": 181.0
+    },
+    "irons": {
+      "title": "Irons (5-9)",
+      "icon": "⛳",
+      "color": "#4A9FD8",
+      "position": "93.0% consistencia, ~131.0m",
+      "diagnosis": "SWEET SPOT",
+      "diagnosis_icon": "✅",
+      "bullets": [
+        "Consistencia: 93.0%",
+        "Distancia media: 131.0m",
+        "Dispersión: 12.4m lateral",
+        "Golpes analizados: 214"
+      ],
+      "action": "No requiere mejora - MANTENER",
+      "avg_consistency": 93.0,
+      "avg_distance": 131.0
+    },
+    "strategy": [
+      {
+        "priority": 1,
+        "group": "Wedges",
+        "action": "Subir consistencia a 96%+",
+        "color": "#5ABF8F"
+      }
+    ]
+  },
+  "improvement_plan": {
+    "metrics": [
+      {
+        "name": "ATTACK ANGLE",
+        "baseline": "4.1°",
+        "target": "-4° a -6°",
+        "detail": "Target: -4° to -6°",
+        "color": "#E88B7A"
+      },
+      {
+        "name": "CARRY DISTANCE",
+        "baseline": "213m",
+        "target": "230m",
+        "detail": "Ganancia: +17m (+8%)",
+        "color": "#5ABF8F"
+      },
+      {
+        "name": "PULL/HOOK %",
+        "baseline": "52%",
+        "target": "<40%",
+        "detail": "Mejora accuracy +12%",
+        "color": "#D4B55A"
+      },
+      {
+        "name": "EQUIPMENT GAP",
+        "baseline": "42m",
+        "target": "21m",
+        "detail": "Con palo adicional (3W-Hybrid)",
+        "color": "#4A9FD8"
+      }
+    ],
+    "weeks": [
+      {
+        "title": "Semana 1-2: Fundación",
+        "color": "#5ABF8F",
+        "focus": "Attack Angle & Setup básico",
+        "schedule": "Lun-Vie: 30 min drills | Sáb: 1h sesión larga | Dom: 9 hoyos",
+        "key_metric": "Attack angle promedio -3° en 30 golpes"
+      },
+      {
+        "title": "Semana 3: Implementación",
+        "color": "#4A9FD8",
+        "focus": "Integración Attack + Swing Path",
+        "schedule": "Lun-Vie: 45 min combining | Sáb: Nuevo equipo | Dom: 18 hoyos",
+        "key_metric": "Pull/hook <55%"
+      },
+      {
+        "title": "Semana 4: Optimización",
+        "color": "#D4B55A",
+        "focus": "Consolidación & Refinamiento",
+        "schedule": "Lun-Vie: 30 min mant. + 15 opt. | Mié: Pro | Dom: Competitiva",
+        "key_metric": "Score, distancia, pull/hook %, consistencia"
+      }
+    ],
+    "success_criteria": [
+      "Semana 2: Attack angle promedio -3° o menor en 70% de golpes",
+      "Semana 3: Carry consistente 221m+, pull/hook <55%",
+      "Semana 4: Attack -4° a -6° automatizado, 230m carry promedio"
+    ],
+    "final_projection": "Long game de 5.5/10 → 7.0/10, combinado con short game 9.2/10."
   },
   "launch_metrics": {
     "summary": {

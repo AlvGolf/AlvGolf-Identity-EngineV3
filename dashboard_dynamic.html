@@ -667,6 +667,58 @@
                 });
             }
 
+            // Monthly recommendations
+            const mr = window.dashboardData?.monthly_recommendations;
+            if (mr) {
+                set('ps-rec-focus-title', mr.focus_title);
+                const descEl = document.getElementById('ps-rec-focus-desc');
+                if (descEl && mr.focus_description) {
+                    descEl.innerHTML = mr.focus_description + (mr.roi_estimate ? ' <strong style="color: #5ABF8F;">ROI: ' + mr.roi_estimate + '</strong>' : '');
+                }
+                set('ps-rec-drill', mr.drill);
+                set('ps-rec-session', mr.session_goal);
+                const courseEl = document.getElementById('ps-rec-course');
+                if (courseEl && mr.suggested_course) {
+                    courseEl.innerHTML = '<strong>' + mr.suggested_course + '</strong> - ' + mr.suggested_course_reason;
+                }
+                const timingEl = document.getElementById('ps-rec-timing');
+                if (timingEl) timingEl.textContent = mr.timing_tip;
+                const qwEl = document.getElementById('ps-rec-quickwin');
+                if (qwEl && mr.quick_win_item) {
+                    qwEl.innerHTML = 'Compra <strong>' + mr.quick_win_item + '</strong> (inversión ' + mr.quick_win_cost + '). ' + mr.quick_win_impact;
+                }
+            }
+
+            // Archetype narrative (dynamic from scoring_profile + golf_identity)
+            if (sp?.dimensions && gi) {
+                const ranking = sp.ranking || Object.entries(sp.dimensions).map(([k,v]) => [k, v.score]).sort((a,b) => b[1] - a[1]);
+                const topDim = ranking[0]; // [name, score]
+                const botDim = ranking[ranking.length - 1];
+                const dimLabelsNarr = {
+                    short_game:'short game', power:'potencia', consistency:'consistencia',
+                    mid_game:'mid game', long_game:'long game', mental:'mentalidad',
+                    putting:'putting', accuracy:'accuracy'
+                };
+                const zoneLabels = { elite:'élite', strong:'fuerte', developing:'en desarrollo', focus_area:'crítico' };
+                const topLabel = dimLabelsNarr[topDim[0]] || topDim[0];
+                const topZone = zoneLabels[sp.dimensions[topDim[0]]?.zone] || '';
+                const botLabel = dimLabelsNarr[botDim[0]] || botDim[0];
+                const narEl = document.getElementById('ps-archetype-narrative');
+                if (narEl) {
+                    narEl.innerHTML = 'Jugador con <strong style="color: #5ABF8F;">' + topLabel + ' ' + topZone + ' (' + topDim[1].toFixed(1) + '/10)</strong> que compensa debilidades en ' + botLabel + ' (' + botDim[1].toFixed(1) + '/10). ' + (gi.archetype_tagline || '');
+                }
+            }
+
+            // Form narrative (dynamic from form_summary)
+            if (fs) {
+                set('ps-form-status', fs.streak_text || 'CALCULANDO');
+                const formNarEl = document.getElementById('ps-form-narrative');
+                if (formNarEl) {
+                    const strengthLabel = gi?.primary_strength?.dimension ? (dimLabels[gi.primary_strength.dimension] || gi.primary_strength.dimension) : 'tu juego';
+                    formNarEl.innerHTML = 'Tu fortaleza en ' + strengthLabel + ' te ha llevado a estar <strong style="color: #5ABF8F;">"' + (fs.streak_text || '').toLowerCase() + '"</strong> con un promedio de <strong style="color: #5ABF8F; font-size: 1.3em;">' + fs.average + ' golpes</strong> en los últimos ' + fs.count + ' partidos registrados.';
+                }
+            }
+
             console.log('✅ Player stats inyectados en Tab 1');
         }
 
@@ -920,7 +972,12 @@
             set('cs-months-tracked', ps.months_tracked);
             set('cs-insight-record', ps.mejor_score);
 
-            // Course insights — best/hardest course
+            // HCP dates
+            set('cs-hcp-start-date', formatPlayerDate(ps.primera_ronda, 'month-year'));
+            set('cs-hcp-best-date', ps.best_hcp_date ? formatPlayerDate(ps.best_hcp_date, 'month-year') : null);
+            set('cs-hcp-current-date', ps.hcp_date);
+
+            // Course insights — best/hardest/most-played/most-consistent course
             const courseStats = window.dashboardData?.course_statistics;
             if (courseStats?.length) {
                 const sorted = [...courseStats].sort((a, b) => a.promedio - b.promedio);
@@ -930,6 +987,62 @@
                 set('cs-insight-best-avg', best.promedio.toFixed(1));
                 set('cs-insight-hardest-name', hardest.nombre);
                 set('cs-insight-hardest-avg', hardest.promedio.toFixed(1));
+
+                // Most played course
+                const byRounds = [...courseStats].sort((a, b) => b.rondas_jugadas - a.rondas_jugadas);
+                set('cs-insight-most-played', byRounds[0].nombre);
+                set('cs-insight-most-played-n', byRounds[0].rondas_jugadas);
+
+                // Best record course
+                set('cs-insight-record-course', ps.best_round_course);
+
+                // Most consistent (smallest range) — only courses with 3+ rounds
+                const multi = courseStats.filter(c => c.rondas_jugadas >= 3);
+                if (multi.length) {
+                    const byRange = [...multi].sort((a, b) => (a.peor_score - a.mejor_score) - (b.peor_score - b.mejor_score));
+                    set('cs-insight-most-consistent', byRange[0].nombre);
+                    set('cs-insight-consistent-range', byRange[0].peor_score - byRange[0].mejor_score);
+                }
+            }
+
+            // Best rounds pattern (dynamic)
+            if (sh?.rounds) {
+                const patternEl = document.getElementById('cs-best-pattern-list');
+                if (patternEl) {
+                    const top10 = [...sh.rounds].sort((a, b) => a.score - b.score).slice(0, 10);
+                    // Group by month
+                    const byMonth = {};
+                    top10.forEach(r => {
+                        const d = new Date(r.date);
+                        const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+                        if (!byMonth[key]) byMonth[key] = [];
+                        byMonth[key].push(r);
+                    });
+                    // Best month streak
+                    const monthEntries = Object.entries(byMonth).sort((a, b) => b[1].length - a[1].length);
+                    const bestMonth = monthEntries[0];
+                    // Favorite courses in top 10
+                    const courseCount = {};
+                    top10.forEach(r => { courseCount[r.course] = (courseCount[r.course] || 0) + 1; });
+                    const favCourses = Object.entries(courseCount).sort((a, b) => b[1] - a[1]).slice(0, 2).map(e => e[0]);
+                    // Record round
+                    const record = top10[0];
+
+                    const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                    const items = [];
+                    if (bestMonth && bestMonth[1].length >= 2) {
+                        const [y, m] = bestMonth[0].split('-');
+                        const scores = bestMonth[1].map(r => r.score).join(', ');
+                        items.push('<li><strong>' + months[parseInt(m)-1] + ' ' + y + ':</strong> ' + bestMonth[1].length + ' rondas en top 10 (' + scores + ')</li>');
+                    }
+                    if (record) {
+                        items.push('<li><strong>Récord personal:</strong> ' + record.score + ' en ' + record.course + ' (' + formatPlayerDate(record.date, 'short') + ')</li>');
+                    }
+                    if (favCourses.length) {
+                        items.push('<li><strong>Campos favoritos:</strong> ' + favCourses.join(' y ') + ' aparecen en tus mejores rondas</li>');
+                    }
+                    patternEl.innerHTML = items.join('');
+                }
             }
 
             // Quarterly narratives
@@ -1087,6 +1200,113 @@
             set('cl-cs-3w', byName['3 Wood']?.club_speed_est?.toFixed(1));
             set('cl-cs-7i', byName['7 Iron']?.club_speed_est?.toFixed(1));
 
+            // Bubble analysis cards
+            const ba = window.dashboardData?.bubble_analysis;
+            if (ba) {
+                const cardsEl = document.getElementById('cl-bubble-cards');
+                if (cardsEl) {
+                    const order = ['wedges', 'driver', 'woods', 'irons'];
+                    const rgbMap = { '#5ABF8F': '90,191,143', '#E88B7A': '232,139,122', '#D4B55A': '255,165,0', '#4A9FD8': '100,149,237' };
+                    cardsEl.innerHTML = order.map(key => {
+                        const g = ba[key]; if (!g) return '';
+                        const rgb = rgbMap[g.color] || '74,159,216';
+                        return '<div style="background: rgba(' + rgb + ',0.12); padding: 25px; border-radius: 12px; border-left: 4px solid ' + g.color + ';">' +
+                            '<div style="display: flex; align-items: center; margin-bottom: 15px;">' +
+                            '<div style="width: 40px; height: 40px; background: ' + g.color + '; border-radius: 50%; margin-right: 15px;"></div>' +
+                            '<h4 style="color: ' + g.color + '; margin: 0; font-size: 1.2em;">' + g.title + '</h4></div>' +
+                            '<div style="margin-bottom: 12px;"><strong>Posición:</strong> ' + g.position + '</div>' +
+                            '<div style="padding: 15px; background: rgba(' + rgb + ',0.2); border-radius: 8px; margin-bottom: 12px;">' +
+                            '<strong style="color: ' + g.color + '; font-size: 1.1em;">' + g.diagnosis_icon + ' ' + g.diagnosis + '</strong></div>' +
+                            '<ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">' +
+                            g.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>' +
+                            '<div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">' +
+                            '<strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: ' + g.color + ';">' + g.action + '</span></div></div>';
+                    }).join('');
+                }
+
+                // Strategy summary
+                const stratEl = document.getElementById('cl-bubble-strategy');
+                if (stratEl && ba.strategy) {
+                    const items = ba.strategy.map((p, i) => '<li><strong style="color: ' + p.color + ';">Prioridad ' + p.priority + ':</strong> ' + p.group + ' — ' + p.action + '</li>').join('');
+                    stratEl.innerHTML = '<h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">💡 Estrategia Priorizada</h4>' +
+                        '<div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid #D4B55A;">' +
+                        '<ol style="margin: 10px 0 0 20px; line-height: 2;">' + items + '</ol></div>';
+                }
+            }
+
+            // Dispersion summary (Long/Mid/Short) + conclusion
+            if (da?.clubs) {
+                const longClubs = da.clubs.filter(c => ['Dr','3W','Hyb'].includes(c.club));
+                const midClubs = da.clubs.filter(c => ['5i','6i','7i','8i','9i'].includes(c.club));
+                const shortClubs = da.clubs.filter(c => ['PW','GW 52','SW 58'].includes(c.club));
+
+                const avgStd = (arr) => arr.length ? (arr.reduce((s,c) => s + (c.lateral_std || 0), 0) / arr.length).toFixed(1) : '-';
+                const bestClub = (arr) => arr.length ? arr.reduce((a,b) => (a.lateral_std || 99) < (b.lateral_std || 99) ? a : b) : null;
+                const worstClub = (arr) => arr.length ? arr.reduce((a,b) => (a.lateral_std || 0) > (b.lateral_std || 0) ? a : b) : null;
+                const dominantBias = (arr) => {
+                    const leftCount = arr.filter(c => c.bias_direction === 'left').length;
+                    return leftCount > arr.length / 2 ? 'Pull/Hook' : leftCount < arr.length / 2 ? 'Push/Fade' : 'Mixto';
+                };
+
+                const summaryEl = document.getElementById('cl-disp-summary');
+                if (summaryEl) {
+                    const renderBox = (title, icon, clubs, color, rgb) => {
+                        const avg = avgStd(clubs);
+                        const best = bestClub(clubs);
+                        const worst = worstClub(clubs);
+                        const bias = dominantBias(clubs);
+                        return '<div style="padding: 20px; background: rgba(' + rgb + ',0.1); border-radius: 10px; border-left: 3px solid ' + color + ';">' +
+                            '<h4 style="color: ' + color + '; margin-bottom: 12px;">' + icon + ' ' + title + '</h4>' +
+                            '<ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">' +
+                            '<li><strong>Dispersión promedio:</strong> ' + avg + 'm lateral</li>' +
+                            '<li><strong>Sesgo dominante:</strong> ' + bias + '</li>' +
+                            (best ? '<li><strong>Mejor palo:</strong> ' + best.club + ' (' + (best.lateral_std?.toFixed(1) || '-') + 'm std)</li>' : '') +
+                            (worst && clubs.length > 1 ? '<li><strong>Peor palo:</strong> ' + worst.club + ' (' + (worst.lateral_std?.toFixed(1) || '-') + 'm std)</li>' : '') +
+                            '</ul></div>';
+                    };
+                    summaryEl.innerHTML =
+                        renderBox('Long Game', '🪵', longClubs, '#E88B7A', '232,139,122') +
+                        renderBox('Mid Game', '⛳', midClubs, '#D4B55A', '212,181,90') +
+                        renderBox('Short Game', '🎯', shortClubs, '#5ABF8F', '90,191,143');
+                }
+
+                // Conclusion
+                const concEl = document.getElementById('cl-disp-conclusion');
+                if (concEl) {
+                    const gi = window.dashboardData?.golf_identity;
+                    const archName = gi?.archetype_name || 'tu perfil';
+                    const longAvg = avgStd(longClubs);
+                    const shortAvg = avgStd(shortClubs);
+                    const driverData = da.clubs.find(c => c.club === 'Dr');
+                    const driverStd = driverData?.lateral_std?.toFixed(1) || '-';
+                    const ratio = (parseFloat(longAvg) / parseFloat(shortAvg)).toFixed(0);
+                    concEl.innerHTML = '<strong style="color: #4A9FD8; font-size: 1.1em;">💡 Conclusión Estratégica del Patrón de Dispersión:</strong>' +
+                        '<p style="margin-top: 12px; line-height: 1.8;">Tu patrón de dispersión confirma el diagnóstico de <strong>"' + archName + '"</strong>: dispersión <strong>' + ratio + 'x menor en wedges vs long game</strong> (' + shortAvg + 'm vs ' + longAvg + 'm).</p>' +
+                        '<p style="margin-top: 10px; line-height: 1.8;"><strong style="color: #5ABF8F;">Fortaleza:</strong> Dispersión en wedges (' + shortAvg + 'm) indica control excepcional en juego corto.</p>' +
+                        '<p style="margin-top: 10px; line-height: 1.8;"><strong style="color: #E88B7A;">Área de mejora:</strong> Driver dispersión ' + driverStd + 'm — mayor área de oportunidad para reducir scores.</p>';
+                }
+            }
+
+            // Dispersion stats per club
+            if (da?.clubs) {
+                const biasLabel = (lat, bias) => {
+                    if (Math.abs(lat) < 1.5) return Math.abs(lat).toFixed(1) + 'm (Neutral)';
+                    return Math.abs(lat).toFixed(1) + 'm ' + (lat < 0 ? 'Izq' : 'Der');
+                };
+                const clubMap = { Dr:'Dr', '3W':'3W', Hyb:'Hyb', '5i':'5i', '6i':'6i', '7i':'7i', '8i':'8i', '9i':'9i', PW:'PW', 'GW 52':'GW', 'SW 58':'SW' };
+                da.clubs.forEach(c => {
+                    const elId = clubMap[c.club] || c.club;
+                    const el = document.getElementById('cl-disp-' + elId);
+                    if (!el) return;
+                    const isLong = ['Dr','3W'].includes(elId);
+                    if (isLong) {
+                        el.innerHTML = '<strong>Distancia Media:</strong> ' + (c.carry_mean?.toFixed(0) || '-') + 'm | <strong>Sesgo:</strong> ' + biasLabel(c.lateral_mean) + ' | <strong>Desv. Std:</strong> ' + (c.lateral_std?.toFixed(1) || '-') + 'm | <strong>Golpes:</strong> ' + (c.n || '-');
+                    } else {
+                        el.innerHTML = '<strong>Dist:</strong> ' + (c.carry_mean?.toFixed(0) || '-') + 'm | <strong>Sesgo:</strong> ' + biasLabel(c.lateral_mean) + ' | <strong>Std:</strong> ' + (c.lateral_std?.toFixed(1) || '-') + 'm | <strong>N:</strong> ' + (c.n || '-');
+                    }
+                });
+            }
+
             console.log('✅ Club stats inyectados en Tab 4');
         }
 
@@ -1182,6 +1402,71 @@
                 set('an-bias-target', bias);
             }
 
+            // Diagnostic prose from scoring_profile dimensions notes
+            const spProfile = window.dashboardData?.scoring_profile;
+            if (spProfile?.dimensions) {
+                const dims = spProfile.dimensions;
+                // Long Game diagnostic
+                const diagLong = document.getElementById('an-diag-long');
+                if (diagLong) {
+                    const lgNotes = dims.long_game?.notes || [];
+                    const accNotes = dims.accuracy?.notes || [];
+                    const lgScore = dims.long_game?.score?.toFixed(1) || '-';
+                    const accScore = dims.accuracy?.score?.toFixed(1) || '-';
+                    diagLong.innerHTML = '<strong>Long Game (' + lgScore + '/10) + Accuracy (' + accScore + '/10):</strong> ' +
+                        lgNotes.concat(accNotes).slice(0, 3).join('. ') + '.';
+                }
+                // Mid Game diagnostic
+                const diagMid = document.getElementById('an-diag-mid');
+                if (diagMid) {
+                    const midNotes = dims.mid_game?.notes || [];
+                    const midScore = dims.mid_game?.score?.toFixed(1) || '-';
+                    diagMid.innerHTML = '<strong>Mid Game (' + midScore + '/10):</strong> ' +
+                        midNotes.slice(0, 3).join('. ') + '.';
+                }
+                // Short Game diagnostic
+                const diagShort = document.getElementById('an-diag-short');
+                if (diagShort) {
+                    const sgNotes = dims.short_game?.notes || [];
+                    const sgScore = dims.short_game?.score?.toFixed(1) || '-';
+                    diagShort.innerHTML = '<strong>Short Game (' + sgScore + '/10):</strong> ' +
+                        sgNotes.slice(0, 3).join('. ') + '.';
+                }
+
+                // Synthesis boxes — notes from dimensions
+                const synthCategories = [
+                    { id: 'an-synth-long', dims: ['long_game','accuracy'], icon: '🪵', title: 'Long Game', color: '#E88B7A', rgb: '232,139,122', action: 'Prioridad máxima en plan' },
+                    { id: 'an-synth-mid', dims: ['mid_game'], icon: '⛳', title: 'Mid Game', color: '#D4B55A', rgb: '212,181,90', action: 'Mantener y refinar' },
+                    { id: 'an-synth-short', dims: ['short_game'], icon: '🎯', title: 'Short Game', color: '#5ABF8F', rgb: '90,191,143', action: 'Preservar excelencia' }
+                ];
+                synthCategories.forEach(cat => {
+                    const el = document.getElementById(cat.id);
+                    if (!el) return;
+                    const scores = cat.dims.map(d => dims[d]?.score || 0);
+                    const avg = (scores.reduce((a,b) => a + b, 0) / scores.length).toFixed(1);
+                    const notes = cat.dims.flatMap(d => dims[d]?.notes || []).slice(0, 3);
+                    el.innerHTML = '<strong style="color: ' + cat.color + ';">' + cat.icon + ' ' + cat.title + ' - Promedio: ' + avg + '/10</strong>' +
+                        '<ul style="margin: 10px 0 0 15px; line-height: 1.8; font-size: 0.9em;">' +
+                        notes.map(n => '<li>' + n + '</li>').join('') +
+                        '<li><strong>Acción:</strong> ' + cat.action + '</li></ul>';
+                });
+            }
+
+            // Player profile narrative
+            const giProfile = window.dashboardData?.golf_identity;
+            if (giProfile && spProfile?.dimensions) {
+                const profEl = document.getElementById('an-player-profile');
+                if (profEl) {
+                    const archName = giProfile.archetype_name || 'Tu Perfil';
+                    const desc = giProfile.archetype_description || '';
+                    const strategy = giProfile.archetype_strategy || '';
+                    const insight = giProfile.personalized_insight || '';
+                    profEl.innerHTML = '<strong style="color: #4A9FD8; font-size: 1.05em;">🎯 Perfil de Jugador Identificado:</strong>' +
+                        '<p style="margin-top: 12px; line-height: 1.8;"><strong style="color: #5ABF8F;">"' + archName + '"</strong> — ' + (insight || desc.substring(0, 200)) + '</p>' +
+                        (strategy ? '<p style="margin-top: 10px; line-height: 1.8;"><strong style="color: #D4B55A;">Estrategia:</strong> ' + strategy.substring(0, 300) + '</p>' : '');
+                }
+            }
+
             console.log('✅ Analysis stats inyectados en Tab 5');
         }
 
@@ -1209,6 +1494,52 @@
                     set('st-driver-aa', dr.attack_angle_est?.toFixed(1));
                     set('st-driver-la', dr.launch_angle_mean?.toFixed(1));
                     set('st-driver-height', dr.height_mean?.toFixed(0));
+                }
+            }
+
+            // Improvement plan
+            const ip = window.dashboardData?.improvement_plan;
+            if (ip) {
+                // Metrics
+                const metricsEl = document.getElementById('st-plan-metrics');
+                if (metricsEl && ip.metrics?.length) {
+                    const rgbMap = { '#E88B7A': '232,139,122', '#5ABF8F': '90,191,143', '#D4B55A': '255,140,0', '#4A9FD8': '74,159,216' };
+                    metricsEl.innerHTML = ip.metrics.map(m => {
+                        const rgb = rgbMap[m.color] || '74,159,216';
+                        return '<div style="padding: 15px; background: rgba(' + rgb + ',0.1); border-radius: 8px; text-align: center;">' +
+                            '<div style="color: ' + m.color + '; font-size: 0.9em; margin-bottom: 5px;">' + m.name + '</div>' +
+                            '<div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">' + m.baseline + ' → ' + m.target + '</div>' +
+                            '<div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">' + m.detail + '</div></div>';
+                    }).join('');
+                }
+
+                // Weeks
+                const weeksEl = document.getElementById('st-plan-weeks');
+                if (weeksEl && ip.weeks?.length) {
+                    weeksEl.innerHTML = ip.weeks.map(w => {
+                        const rgb = w.color === '#5ABF8F' ? '90,191,143' : w.color === '#4A9FD8' ? '74,159,216' : '212,181,90';
+                        return '<div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 20px; border-left: 4px solid ' + w.color + ';">' +
+                            '<h4 style="color: ' + w.color + '; margin-bottom: 15px; font-size: 1.2em;">📆 ' + w.title + '</h4>' +
+                            '<div style="padding: 15px; background: rgba(' + rgb + ',0.08); border-radius: 10px;">' +
+                            '<div style="margin-bottom: 10px;"><strong style="color: #4A9FD8;">Enfoque:</strong> ' + w.focus + '</div>' +
+                            '<div style="font-size: 0.95em; margin: 10px 0;">' + w.schedule + '</div>' +
+                            '<div style="margin-top: 12px; padding: 10px; background: rgba(74,159,216,0.1); border-radius: 6px;">' +
+                            '<strong style="color: #4A9FD8;">Métrica clave:</strong> ' + w.key_metric + '</div></div></div>';
+                    }).join('');
+                }
+
+                // Success criteria
+                const successEl = document.getElementById('st-plan-success');
+                if (successEl && ip.success_criteria?.length) {
+                    successEl.innerHTML = '<h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.2em;">🎯 Criterios de Éxito</h4>' +
+                        '<div style="display: grid; gap: 12px;">' +
+                        ip.success_criteria.map(c => '<div style="padding: 12px; background: rgba(255,255,255,0.08); border-radius: 8px; display: flex; align-items: start;">' +
+                            '<span style="color: #5ABF8F; font-size: 1.3em; margin-right: 12px;">✅</span>' +
+                            '<div>' + c + '</div></div>').join('') +
+                        '</div>' +
+                        (ip.final_projection ? '<div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.15); border-radius: 10px;">' +
+                            '<strong style="color: #4A9FD8;">📈 Resultado Proyectado:</strong>' +
+                            '<p style="margin-top: 12px; line-height: 1.8;">' + ip.final_projection + '</p></div>' : '');
                 }
             }
 
@@ -4946,7 +5277,7 @@
                         <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.3em; font-weight: 800;">
                             🎯 <span id="ps-archetype-title">SHORT GAME SPECIALIST</span>
                         </h4>
-                        <p style="margin: 0 auto; font-size: 1.05em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 700px;">
+                        <p id="ps-archetype-narrative" style="margin: 0 auto; font-size: 1.05em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 700px;">
                             Jugador de <strong style="color: #D4B55A;">potencia media-alta (8.5/10)</strong> con <strong style="color: #5ABF8F;">short game élite (9.0/10)</strong> que compensa debilidades en accuracy direccional. Tu scoring depende de <strong style="color: #5ABF8F;">scrambling excepcional</strong> desde 100m y adentro.
                         </p>
                     </div>
@@ -5006,9 +5337,9 @@
                     <!-- Estado Actual -->
                     <div style="padding: 30px; background: rgba(74,159,216,0.1); border-radius: 12px; text-align: center; border: 2px solid rgba(74,159,216,0.4);">
                         <h5 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.2em; font-weight: 800;">
-                            🔥 ESTADO ACTUAL: EN RACHA
+                            🔥 ESTADO ACTUAL: <span id="ps-form-status">EN RACHA</span>
                         </h5>
-                        <p style="margin: 0 auto; font-size: 1.1em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 650px;">
+                        <p id="ps-form-narrative" style="margin: 0 auto; font-size: 1.1em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 650px;">
                             Tu fortaleza en la zona crítica (100m y adentro) te ha llevado a estar <strong style="color: #5ABF8F;">"en racha"</strong> en el campo con un promedio de <strong style="color: #5ABF8F; font-size: 1.3em;">92.8 golpes</strong> en los últimos 5 partidos registrados.
                         </p>
                     </div>
@@ -5276,22 +5607,19 @@
                     <div style="display: grid; grid-template-columns: auto 1fr; gap: 30px; align-items: center;">
                         <div style="font-size: 6em;">🎯</div>
                         <div>
-                            <h3 style="color: #3A8FC8; margin: 0 0 15px 0; font-size: 1.6em;">ESTE MES Enfócate En: Launch Angle Training</h3>
-                            <p style="margin: 0 0 20px 0; font-size: 1.15em; line-height: 1.9; color: rgba(255,255,255,0.9);">
-                                Tu prioridad #1 es <strong style="color: #D4B55A;">corregir attack angle de -0.9° a -4°/-6°</strong>. 
-                                En el range hoy, enfócate en hacer <strong>swings con tee alto</strong> (al menos 7cm) 
-                                y siente como golpeas la bola en <strong>upswing</strong>. 
-                                <strong style="color: #5ABF8F;">ROI: +17-22m inmediato</strong> si logras corrección.
+                            <h3 style="color: #3A8FC8; margin: 0 0 15px 0; font-size: 1.6em;">ESTE MES Enfócate En: <span id="ps-rec-focus-title">Launch Angle Training</span></h3>
+                            <p id="ps-rec-focus-desc" style="margin: 0 0 20px 0; font-size: 1.15em; line-height: 1.9; color: rgba(255,255,255,0.9);">
+                                Tu prioridad #1 es mejorar tu área más débil. <span id="ps-rec-roi" style="color: #5ABF8F; font-weight: bold;"></span>
                             </p>
-                            
+
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                                 <div style="padding: 15px; background: rgba(90,191,143,0.15); border-radius: 10px; border-left: 4px solid #5ABF8F;">
                                     <strong style="color: #5ABF8F;">✅ Drill recomendado:</strong>
-                                    <p style="margin: 8px 0 0 0; font-size: 0.95em;">Tee alto + palo por debajo de bola + swing ascendente</p>
+                                    <p id="ps-rec-drill" style="margin: 8px 0 0 0; font-size: 0.95em;">Tee alto + palo por debajo de bola + swing ascendente</p>
                                 </div>
                                 <div style="padding: 15px; background: rgba(74,159,216,0.15); border-radius: 10px; border-left: 4px solid #4A9FD8;">
                                     <strong style="color: #4A9FD8;">📊 Objetivo de sesión:</strong>
-                                    <p style="margin: 8px 0 0 0; font-size: 0.95em;">50 drives con attack angle -3° o menor</p>
+                                    <p id="ps-rec-session" style="margin: 8px 0 0 0; font-size: 0.95em;">50 drives con attack angle -3° o menor</p>
                                 </div>
                             </div>
                         </div>
@@ -5299,28 +5627,25 @@
                 </div>
                 
                 <!-- Recomendaciones adicionales rotativas -->
-                <div style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                <div id="ps-rec-cards" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
                     <div style="padding: 20px; background: rgba(212,181,90,0.1); border-radius: 12px; border-left: 4px solid #D4B55A;">
                         <strong style="color: #D4B55A;">🏌️ Campo sugerido:</strong>
-                        <p style="margin: 8px 0 0 0; line-height: 1.7;">
-                            <strong>Marina Golf</strong> - Tu mejor campo (avg 96.8, récord 88). 
-                            Juega aquí cuando quieras romper récords.
+                        <p id="ps-rec-course" style="margin: 8px 0 0 0; line-height: 1.7;">
+                            Tu mejor campo para romper récords.
                         </p>
                     </div>
-                    
+
                     <div style="padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
                         <strong style="color: #4A9FD8;">📅 Timing óptimo:</strong>
-                        <p style="margin: 8px 0 0 0; line-height: 1.7;">
-                            Tus mejores rondas han sido con <strong>2-3 días de descanso</strong> previo. 
-                            Evita jugar días consecutivos.
+                        <p id="ps-rec-timing" style="margin: 8px 0 0 0; line-height: 1.7;">
+                            Mantén un ritmo regular de juego para consolidar mejoras.
                         </p>
                     </div>
-                    
+
                     <div style="padding: 20px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
                         <strong style="color: #5ABF8F;">⚡ Quick Win:</strong>
-                        <p style="margin: 8px 0 0 0; line-height: 1.7;">
-                            Compra <strong>5-Wood</strong> esta semana (inversión $300-500). 
-                            Cierra gap crítico 43m. Impacto inmediato.
+                        <p id="ps-rec-quickwin" style="margin: 8px 0 0 0; line-height: 1.7;">
+                            Inversión de alto impacto en equipamiento.
                         </p>
                     </div>
                 </div>
@@ -6344,9 +6669,9 @@
                 <div style="margin-top: 25px; padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
                     <h3 style="color: #5ABF8F; margin-bottom: 15px;">🎯 Logro Principal: Bajada de 10 puntos</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
-                        <strong>Marzo 2024:</strong> Iniciaste con HCP <span id="cs-hcp-initial">32.0</span><br>
-                        <strong>Mayo 2025:</strong> Bajaste a HCP <span id="cs-hcp-best-val">21.9</span> (mejor marca histórica)<br>
-                        <strong>Actual (Sep 2025):</strong> HCP <span id="cs-hcp-current-val">23.2</span> (ligera subida estacional normal)<br>
+                        <strong><span id="cs-hcp-start-date">Marzo 2024</span>:</strong> Iniciaste con HCP <span id="cs-hcp-initial">32.0</span><br>
+                        <strong><span id="cs-hcp-best-date">Mayo 2025</span>:</strong> Bajaste a HCP <span id="cs-hcp-best-val">21.9</span> (mejor marca histórica)<br>
+                        <strong>Actual (<span id="cs-hcp-current-date">Sep 2025</span>):</strong> HCP <span id="cs-hcp-current-val">23.2</span><br>
                         <strong>Mejora total:</strong> <span style="color: #5ABF8F; font-size: 1.3em; font-weight: 800;"><span id="cs-hcp-mejora">-8.8</span> puntos en <span id="cs-months-tracked">18</span> meses</span>
                     </p>
                 </div>
@@ -6402,14 +6727,12 @@
                 <!-- INSIGHT -->
                 <div style="margin-top: 30px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
                     <strong style="color: #4A9FD8; font-size: 1.2em;">💡 Insights Clave:</strong>
-                    <ul style="margin: 15px 0 0 20px; line-height: 2; font-size: 1.05em;">
+                    <ul id="cs-insights-list" style="margin: 15px 0 0 20px; line-height: 2; font-size: 1.05em;">
                         <li><strong style="color: #D4B55A;">🏆 <span id="cs-insight-best-course">Nuevo Portil</span></strong> es tu mejor campo (promedio <span id="cs-insight-best-avg">90.5</span>) - ¡diferencia significativa vs tu promedio general!</li>
-                        <li><strong style="color: #4A9FD8;">La Dehesa</strong> es tu campo con más rondas y mayor conocimiento del recorrido</li>
-                        <li>Tu mejor ronda absoluta fue en <strong style="color: #5ABF8F;">Marina Golf (<span id="cs-insight-record">88</span>)</strong>, indicando que te adaptas bien a campos nuevos cuando estás en forma</li>
-                        <li><strong style="color: #40e0d0;">Golf El Rompido Norte</strong> muestra tu menor rango, demostrando máxima consistencia</li>
-                        <li><strong style="color: #E88B7A;"><span id="cs-insight-hardest-name">Palomarejos Golf</span></strong> ha sido tu campo más difícil (promedio <span id="cs-insight-hardest-avg">108.0</span>) - requiere estrategia específica</li>
-                        <li>En <strong style="color: #4A9FD8;">La Dehesa</strong> tu mejor ronda es 93 (Par 72), con promedio de 102.9 - margen de mejora de 9.9 golpes</li>
-                        <li><strong style="color: #3A8FC8;">Centro Nacional (RFEG)</strong> muestra alta consistencia (rango de solo 3 golpes en 3 rondas)</li>
+                        <li><strong style="color: #4A9FD8;"><span id="cs-insight-most-played">La Dehesa</span></strong> es tu campo con más rondas (<span id="cs-insight-most-played-n">16</span>) y mayor conocimiento del recorrido</li>
+                        <li>Tu mejor ronda absoluta fue en <strong style="color: #5ABF8F;"><span id="cs-insight-record-course">Marina Golf</span> (<span id="cs-insight-record">88</span>)</strong></li>
+                        <li><strong style="color: #40e0d0;"><span id="cs-insight-most-consistent">Golf El Rompido Norte</span></strong> muestra tu menor rango (<span id="cs-insight-consistent-range">--</span> golpes), demostrando máxima consistencia</li>
+                        <li><strong style="color: #E88B7A;"><span id="cs-insight-hardest-name">Palomarejos Golf</span></strong> ha sido tu campo más difícil (promedio <span id="cs-insight-hardest-avg">108.0</span>)</li>
                     </ul>
                 </div>
             </div>
@@ -6474,11 +6797,10 @@
                 
                 <div style="margin-top: 25px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border-left: 4px solid #D4B55A;">
                     <h3 style="color: #D4B55A; margin-bottom: 15px;">📊 Patrón de Mejores Rondas</h3>
-                    <ul style="margin: 0; padding-left: 20px; line-height: 2;">
+                    <ul id="cs-best-pattern-list" style="margin: 0; padding-left: 20px; line-height: 2;">
                         <li><strong>Agosto 2025:</strong> Racha excepcional con 3 rondas bajo 90 (89, 89, 89)</li>
                         <li><strong>Noviembre 2025:</strong> Récord personal de 88 en Marina Golf</li>
                         <li><strong>Campos favoritos:</strong> Marina Golf y Valle del Este aparecen múltiples veces</li>
-                        <li><strong>Consistencia:</strong> 6 de tus top 10 fueron en Q3-Q4 2025 (forma ascendente)</li>
                     </ul>
                 </div>
             </div>
@@ -7483,14 +7805,14 @@
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Driver</h4>
                             <canvas id="dispersionDriver"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(232,139,122,0.1); border-radius: 8px; font-size: 0.9em;">
+                            <div id="cl-disp-Dr" style="margin-top: 15px; padding: 12px; background: rgba(232,139,122,0.1); border-radius: 8px; font-size: 0.9em;">
                                 <strong>Distancia Media:</strong> 231m | <strong>Sesgo:</strong> 17.6m Izq | <strong>Desv. Std:</strong> 26.3m | <strong>Golpes:</strong> 32
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">3 Wood</h4>
                             <canvas id="dispersion3W"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(232,139,122,0.1); border-radius: 8px; font-size: 0.9em;">
+                            <div id="cl-disp-3W" style="margin-top: 15px; padding: 12px; background: rgba(232,139,122,0.1); border-radius: 8px; font-size: 0.9em;">
                                 <strong>Distancia Media:</strong> 198m | <strong>Sesgo:</strong> 8.2m Izq | <strong>Desv. Std:</strong> 18.5m | <strong>Golpes:</strong> 19
                             </div>
                         </div>
@@ -7498,7 +7820,7 @@
                     <div style="margin-top: 20px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto;">
                         <h4 style="margin-bottom: 15px; color: #4A9FD8; text-align: center;">Hybrid</h4>
                         <canvas id="dispersionHybrid"></canvas>
-                        <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.9em;">
+                        <div id="cl-disp-Hyb" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.9em;">
                             <strong>Distancia Media:</strong> 162m | <strong>Sesgo:</strong> 0m (Neutral) | <strong>Desv. Std:</strong> 15.8m | <strong>Golpes:</strong> 25
                         </div>
                     </div>
@@ -7511,21 +7833,21 @@
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">5 Iron</h4>
                             <canvas id="dispersion5i"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-5i" style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 142m | <strong>Sesgo:</strong> 5.3m Izq | <strong>Std:</strong> 6.2m | <strong>N:</strong> 18
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">6 Iron</h4>
                             <canvas id="dispersion6i"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-6i" style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 135m | <strong>Sesgo:</strong> 6.8m Izq | <strong>Std:</strong> 5.1m | <strong>N:</strong> 23
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">7 Iron</h4>
                             <canvas id="dispersion7i"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-7i" style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 131m | <strong>Sesgo:</strong> 5.1m Izq | <strong>Std:</strong> 4.8m | <strong>N:</strong> 31
                             </div>
                         </div>
@@ -7534,14 +7856,14 @@
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">8 Iron</h4>
                             <canvas id="dispersion8i"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-8i" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 126m | <strong>Sesgo:</strong> 4.7m Derecha | <strong>Std:</strong> 4.7m | <strong>N:</strong> 29
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">9 Iron</h4>
                             <canvas id="dispersion9i"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-9i" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 114m | <strong>Sesgo:</strong> 2.1m Derecha | <strong>Std:</strong> 3.9m | <strong>N:</strong> 27
                             </div>
                         </div>
@@ -7555,21 +7877,21 @@
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Pitching Wedge</h4>
                             <canvas id="dispersionPW"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-PW" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 92m | <strong>Sesgo:</strong> 1.2m Der | <strong>Std:</strong> 2.4m | <strong>N:</strong> 22
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Gap Wedge (52°)</h4>
                             <canvas id="dispersionGW"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-GW" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 78m | <strong>Sesgo:</strong> 0.8m Der | <strong>Std:</strong> 1.8m | <strong>N:</strong> 18
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Sand Wedge (58°)</h4>
                             <canvas id="dispersionSW"></canvas>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
+                            <div id="cl-disp-SW" style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; font-size: 0.85em;">
                                 <strong>Dist:</strong> 62m | <strong>Sesgo:</strong> 0.3m Neutral | <strong>Std:</strong> 1.4m | <strong>N:</strong> 14
                             </div>
                         </div>
@@ -7579,7 +7901,7 @@
                 <!-- Summary Analysis -->
                 <div style="background: linear-gradient(135deg, rgba(74,159,216,0.1), rgba(90,191,143,0.1)); padding: 30px; border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
                     <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📊 Resumen del Análisis de Dispersión</h3>
-                    <div class="grid-3">
+                    <div id="cl-disp-summary" class="grid-3">
                         <div style="padding: 20px; background: rgba(232,139,122,0.1); border-radius: 10px; border-left: 3px solid #E88B7A;">
                             <h4 style="color: #E88B7A; margin-bottom: 12px;">🪵 Long Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
@@ -7587,50 +7909,30 @@
                                 <li><strong>Sesgo dominante:</strong> Pull/Hook severo</li>
                                 <li><strong>Mejor palo:</strong> Hybrid (neutral, 15.8m std)</li>
                                 <li><strong>Peor palo:</strong> Driver (26.3m std)</li>
-                                <li><strong>vs PGA Tour:</strong> +75% dispersión</li>
-                                <li><strong>Estado:</strong> Requiere corrección urgente</li>
                             </ul>
                         </div>
                         <div style="padding: 20px; background: rgba(212,181,90,0.1); border-radius: 10px; border-left: 3px solid #D4B55A;">
                             <h4 style="color: #D4B55A; margin-bottom: 12px;">⛳ Mid Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Dispersión promedio:</strong> 4.9m lateral</li>
-                                <li><strong>Sesgo:</strong> Pull moderado (5-7m izq)</li>
+                                <li><strong>Sesgo:</strong> Pull moderado</li>
                                 <li><strong>Mejor palo:</strong> 9i (3.9m std)</li>
-                                <li><strong>Transición:</strong> 8i/9i neutral a derecha</li>
-                                <li><strong>vs HCP15:</strong> -30% dispersión</li>
-                                <li><strong>Estado:</strong> Amateur avanzado sólido</li>
                             </ul>
                         </div>
                         <div style="padding: 20px; background: rgba(90,191,143,0.1); border-radius: 10px; border-left: 3px solid #5ABF8F;">
                             <h4 style="color: #5ABF8F; margin-bottom: 12px;">🎯 Short Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Dispersión promedio:</strong> 1.9m lateral</li>
-                                <li><strong>Sesgo:</strong> Casi neutral (0-1.2m)</li>
-                                <li><strong>Mejor palo:</strong> SW (1.4m std) ⭐</li>
-                                <li><strong>Control:</strong> Tour-level precision</li>
-                                <li><strong>vs PGA Tour:</strong> -24% dispersión</li>
-                                <li><strong>Estado:</strong> Élite mundial 🏆</li>
+                                <li><strong>Sesgo:</strong> Casi neutral</li>
+                                <li><strong>Mejor palo:</strong> SW (1.4m std)</li>
                             </ul>
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+
+                    <div id="cl-disp-conclusion" style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
                         <strong style="color: #4A9FD8; font-size: 1.1em;">💡 Conclusión Estratégica del Patrón de Dispersión:</strong>
                         <p style="margin-top: 12px; line-height: 1.8;">
-                            Tu patrón de dispersión confirma el diagnóstico de <strong>"Short Game Specialist"</strong>: 
-                            dispersión <strong>10x menor en wedges vs driver</strong> (1.9m vs 20.2m). El sesgo pull/hook en long game 
-                            (-17.6m driver) que progresivamente se neutraliza hacia wedges (+0.3m SW) indica un 
-                            <strong>path issue corregible</strong> que se manifiesta más en swing largo. 
-                        </p>
-                        <p style="margin-top: 10px; line-height: 1.8;">
-                            <strong style="color: #5ABF8F;">Fortaleza única:</strong> Tu dispersión en wedges (1.4-2.4m) está 
-                            <strong>24% mejor que PGA Tour</strong> (4.5m promedio), confirmando nivel tour genuino en short game.
-                        </p>
-                        <p style="margin-top: 10px; line-height: 1.8;">
-                            <strong style="color: #E88B7A;">Debilidad crítica:</strong> Driver dispersión 26.3m es 
-                            <strong>75% peor que PGA</strong> (15m) y <strong>20% peor que HCP15</strong> (22m), 
-                            explicando por qué long game está en bottom 30% amateurs a pesar de short game top 1%.
+                            Tu patrón de dispersión confirma el diagnóstico — dispersión significativamente menor en wedges vs driver.
                         </p>
                     </div>
                 </div>
@@ -7649,116 +7951,17 @@
                 <!-- Interpretación del Gráfico -->
                 <div style="background: linear-gradient(135deg, rgba(74,159,216,0.1), rgba(90,191,143,0.05)); padding: 30px; border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
                     <h3 style="color: #4A9FD8; margin-bottom: 25px; font-size: 1.4em;">📊 Interpretación del Análisis de Burbujas</h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                        <!-- Wedges - Sweet Spot -->
-                        <div style="background: rgba(90,191,143,0.12); padding: 25px; border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                                <div style="width: 40px; height: 40px; background: #5ABF8F; border-radius: 50%; margin-right: 15px;"></div>
-                                <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">Wedges</h4>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong>Posición:</strong> Arriba-derecha (90% consistencia, ~95m)
-                            </div>
-                            <div style="padding: 15px; background: rgba(90,191,143,0.15); border-radius: 8px; margin-bottom: 12px;">
-                                <strong style="color: #5ABF8F; font-size: 1.1em;">✅ SWEET SPOT</strong>
-                            </div>
-                            <ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
-                                <li>Alta consistencia + distancia controlada</li>
-                                <li>Ball speed apropiado para el palo</li>
-                                <li>Control tour-level confirmado</li>
-                            </ul>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                                <strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: #5ABF8F;">No requiere mejora - MANTENER</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Driver - Problem Zone -->
-                        <div style="background: rgba(232,139,122,0.12); padding: 25px; border-radius: 12px; border-left: 4px solid #E88B7A;">
-                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                                <div style="width: 50px; height: 50px; background: #E88B7A; border-radius: 50%; margin-right: 15px;"></div>
-                                <h4 style="color: #E88B7A; margin: 0; font-size: 1.2em;">Driver</h4>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong>Posición:</strong> Abajo-izquierda (60% consistencia, ~250m)
-                            </div>
-                            <div style="padding: 15px; background: rgba(232,139,122,0.2); border-radius: 8px; margin-bottom: 12px;">
-                                <strong style="color: #E88B7A; font-size: 1.1em;">❌ PROBLEMA DOBLE</strong>
-                            </div>
-                            <ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
-                                <li><strong>Baja consistencia:</strong> Solo 6.6 golpes consistentes</li>
-                                <li><strong>Distancia por debajo del potencial:</strong> 212.8m carry</li>
-                                <li>Ball speed alto (235.5 km/h) pero mal aprovechado</li>
-                                <li>Pérdida estimada: 17-22m por trayectoria</li>
-                            </ul>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                                <strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: #E88B7A;">PRIORIDAD 1: Attack angle + strike consistency</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Long Irons - Improvement Needed -->
-                        <div style="background: rgba(255,165,0,0.12); padding: 25px; border-radius: 12px; border-left: 4px solid #D4B55A;">
-                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                                <div style="width: 45px; height: 45px; background: #D4B55A; border-radius: 50%; margin-right: 15px;"></div>
-                                <h4 style="color: #D4B55A; margin: 0; font-size: 1.2em;">3W / Hybrid</h4>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong>Posición:</strong> Centro-izquierda (68-72% consistencia, 185-215m)
-                            </div>
-                            <div style="padding: 15px; background: rgba(255,165,0,0.2); border-radius: 8px; margin-bottom: 12px;">
-                                <strong style="color: #D4B55A; font-size: 1.1em;">⚠️ MEJORA NECESARIA</strong>
-                            </div>
-                            <ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
-                                <li>Consistencia media (7.6-8.5 golpes)</li>
-                                <li>Smash factor excelente (1.48) pero inconsistente</li>
-                                <li>Potencial de +10-15m con mejor strike</li>
-                                <li>Attack angle también necesita ajuste</li>
-                            </ul>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                                <strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: #D4B55A;">PRIORIDAD 2: Strike quality</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Irons - Center Zone -->
-                        <div style="background: rgba(100,149,237,0.12); padding: 25px; border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                                <div style="width: 43px; height: 43px; background: #4A9FD8; border-radius: 50%; margin-right: 15px;"></div>
-                                <h4 style="color: #4A9FD8; margin: 0; font-size: 1.2em;">Irons (5-9)</h4>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <strong>Posición:</strong> Centro (77% consistencia promedio, ~155m)
-                            </div>
-                            <div style="padding: 15px; background: rgba(100,149,237,0.2); border-radius: 8px; margin-bottom: 12px;">
-                                <strong style="color: #4A9FD8; font-size: 1.1em;">🔵 CENTRO - Bien pero puede mejorar</strong>
-                            </div>
-                            <ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
-                                <li>Zona de transición (pull → push)</li>
-                                <li>Consistencia variable: 1.1 (5i) a 10.6 (9i) golpes</li>
-                                <li>Smash factor bajo (0.98-1.24) vs tour (1.28-1.42)</li>
-                                <li>Ganancia potencial: +5-8 yardas por hierro</li>
-                            </ul>
-                            <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
-                                <strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: #4A9FD8;">OBJETIVO: Subir consistencia a 82%+ y mejorar smash</span>
-                            </div>
-                        </div>
+
+                    <div id="cl-bubble-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- Dynamic: injected from bubble_analysis -->
+                        <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando análisis...</p>
                     </div>
-                    
+
                     <!-- Summary Box -->
-                    <div style="margin-top: 30px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4);">
+                    <div id="cl-bubble-strategy" style="margin-top: 30px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4);">
                         <h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">💡 Conclusión del Análisis</h4>
                         <div style="line-height: 1.9; font-size: 1.05em;">
-                            <p style="margin-bottom: 15px;">
-                                El gráfico de burbujas revela un <strong>perfil invertido</strong>: excelencia en short game (wedges) pero problemas severos en long game (driver, maderas).
-                            </p>
-                            <div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid #D4B55A;">
-                                <strong>Estrategia recomendada:</strong>
-                                <ol style="margin: 10px 0 0 20px; line-height: 2;">
-                                    <li><strong style="color: #E88B7A;">Prioridad máxima:</strong> Driver (attack angle + strike consistency) = +17-22m inmediatos</li>
-                                    <li><strong style="color: #D4B55A;">Prioridad media:</strong> 3W/Hybrid (strike quality) = +10-15m</li>
-                                    <li><strong style="color: #4A9FD8;">Prioridad baja:</strong> Irons (smash factor) = +5-8 yardas por palo</li>
-                                    <li><strong style="color: #5ABF8F;">Mantener:</strong> Wedges = Ya en nivel tour</li>
-                                </ol>
-                            </div>
+                            <p>Cargando estrategia...</p>
                         </div>
                     </div>
                 </div>
@@ -9272,10 +9475,9 @@
                         <canvas id="radarChartLongGame"></canvas>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(232,139,122,0.1); border-radius: 8px; border-left: 3px solid #E88B7A;">
                             <strong style="color: #E88B7A;">Diagnóstico:</strong>
-                            <p style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
-                                <strong>Debilidades críticas:</strong> Launch Angle (3.0) y Accuracy (4.0) por debajo de HCP15. 
-                                <strong>Club Speed</strong> (6.0) limitado físicamente. 
-                                <strong>Prioridad:</strong> Corregir attack angle inmediatamente (+150% mejora potencial).
+                            <p id="an-diag-long" style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
+                                <strong>Debilidades críticas:</strong> Launch Angle (3.0) y Accuracy (4.0) por debajo de HCP15.
+                                <strong>Prioridad:</strong> Corregir attack angle inmediatamente.
                             </p>
                         </div>
                     </div>
@@ -9285,10 +9487,8 @@
                         <canvas id="radarChartMidGame"></canvas>
                         <div style="margin-top: 15px; padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
                             <strong style="color: #D4B55A;">Diagnóstico:</strong>
-                            <p style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
-                                <strong>Nivel competitivo:</strong> Consistencia (7.0) y Smash Factor (7.5) entre HCP15 y PGA. 
-                                <strong>Tendencia positiva</strong> (7.0) mejor que PGA. 
-                                <strong>Estado:</strong> Amateur avanzado con fundamentos sólidos.
+                            <p id="an-diag-mid" style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
+                                <strong>Nivel competitivo:</strong> Mid Game sólido con fundamentos consistentes.
                             </p>
                         </div>
                     </div>
@@ -9299,10 +9499,8 @@
                     <canvas id="radarChartShortGame"></canvas>
                     <div style="margin-top: 15px; padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
                         <strong style="color: #5ABF8F;">Diagnóstico:</strong>
-                        <p style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
-                            <strong>Nivel élite mundial:</strong> Short Game (9.0) SUPERIOR a PGA Tour (8.5). 
-                            <strong>Smash Factor</strong> (7.5) y <strong>Accuracy</strong> (9.5) excepcionales. 
-                            <strong>Ventaja competitiva:</strong> Top 1% en precisión de wedges - tu arma definitiva.
+                        <p id="an-diag-short" style="margin-top: 8px; line-height: 1.7; font-size: 0.9em;">
+                            <strong>Nivel élite:</strong> Short Game excepcional — tu arma definitiva.
                         </p>
                     </div>
                 </div>
@@ -9311,54 +9509,35 @@
                     <h4 style="color: #4A9FD8; margin-bottom: 15px;">📊 Síntesis Comparativa por Categoría:</h4>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 15px; background: rgba(232,139,122,0.1); border-radius: 8px; border-left: 3px solid #E88B7A;">
+                        <div id="an-synth-long" style="padding: 15px; background: rgba(232,139,122,0.1); border-radius: 8px; border-left: 3px solid #E88B7A;">
                             <strong style="color: #E88B7A;">🪵 Long Game - Promedio: <span id="an-cat-long">4.4</span>/10</strong>
                             <ul style="margin: 10px 0 0 15px; line-height: 1.8; font-size: 0.9em;">
-                                <li>Por debajo HCP15 en 3/5 métricas</li>
-                                <li>Gap crítico vs PGA: -4.1 puntos promedio</li>
-                                <li><strong>Posición:</strong> Bottom 30% amateurs</li>
+                                <li>Área con mayor margen de mejora</li>
                                 <li><strong>Acción:</strong> Prioridad máxima en plan</li>
                             </ul>
                         </div>
-                        
-                        <div style="padding: 15px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
+
+                        <div id="an-synth-mid" style="padding: 15px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
                             <strong style="color: #D4B55A;">⛳ Mid Game - Promedio: <span id="an-cat-mid">7.2</span>/10</strong>
                             <ul style="margin: 10px 0 0 15px; line-height: 1.8; font-size: 0.9em;">
-                                <li>Superior a HCP15 en todas las métricas</li>
-                                <li>Gap vs PGA: -1.3 puntos promedio</li>
-                                <li><strong>Posición:</strong> Top 15% amateurs (HCP 5-10)</li>
+                                <li>Nivel competitivo sólido</li>
                                 <li><strong>Acción:</strong> Mantener y refinar</li>
                             </ul>
                         </div>
-                        
-                        <div style="padding: 15px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
+
+                        <div id="an-synth-short" style="padding: 15px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
                             <strong style="color: #5ABF8F;">🎯 Short Game - Promedio: <span id="an-cat-short">8.7</span>/10</strong>
                             <ul style="margin: 10px 0 0 15px; line-height: 1.8; font-size: 0.9em;">
-                                <li>Superior a PGA en 1/3 métricas clave</li>
-                                <li>Gap vs PGA: +0.2 puntos promedio</li>
-                                <li><strong>Posición:</strong> Top 1% mundial</li>
+                                <li>Nivel excepcional</li>
                                 <li><strong>Acción:</strong> Preservar excelencia</li>
                             </ul>
                         </div>
                     </div>
                     
-                    <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <div id="an-player-profile" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
                         <strong style="color: #4A9FD8; font-size: 1.05em;">🎯 Perfil de Jugador Identificado:</strong>
                         <p style="margin-top: 12px; line-height: 1.8;">
-                            <strong style="color: #5ABF8F;">"Short Game Specialist con Long Game Amateur"</strong> - Un perfil 
-                            extremadamente raro (<<5% de golfistas). La asimetría entre categorías indica que tus habilidades 
-                            de <strong>touch, feel y control fino</strong> son élite, mientras que tus habilidades de 
-                            <strong>potencia y mecánica de swing completo</strong> son amateur. 
-                        </p>
-                        <p style="margin-top: 10px; line-height: 1.8;">
-                            <strong style="color: #D4B55A;">Ventaja táctica:</strong> Puedes "scramble" mejor que 95% de jugadores 
-                            (short game élite), pero tienes dificultad para alcanzar greens en regulación (long game limitado). 
-                            Tu scoring depende más de <strong>up & downs</strong> que de <strong>birdies directos</strong>.
-                        </p>
-                        <p style="margin-top: 10px; line-height: 1.8;">
-                            <strong style="color: #4A9FD8;">Potencial de transformación:</strong> Normalizando tu long game al nivel 
-                            de tu mid game (7.2/10), tu scoring potential salta de <strong>HCP 12-15 → HCP 3-5</strong>. 
-                            Con short game tour-level ya consolidado, solo necesitas <strong>alcanzar greens</strong> para competir a scratch level.
+                            <strong style="color: #5ABF8F;">"Short Game Specialist"</strong> — Perfil con asimetría entre categorías.
                         </p>
                     </div>
                 </div>
@@ -10890,27 +11069,8 @@
                     
                     <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 12px; margin-bottom: 20px;">
                         <h4 style="color: #4A9FD8; margin-bottom: 20px;">📏 Métricas a Monitorear</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                            <div style="padding: 15px; background: rgba(232,139,122,0.1); border-radius: 8px; text-align: center;">
-                                <div style="color: #E88B7A; font-size: 0.9em; margin-bottom: 5px;">ATTACK ANGLE</div>
-                                <div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">-0.9° → -5°</div>
-                                <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">Target: -4° to -6°</div>
-                            </div>
-                            <div style="padding: 15px; background: rgba(90,191,143,0.1); border-radius: 8px; text-align: center;">
-                                <div style="color: #5ABF8F; font-size: 0.9em; margin-bottom: 5px;">CARRY DISTANCE</div>
-                                <div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">231m → 250m</div>
-                                <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">Ganancia: +19m (+8.2%)</div>
-                            </div>
-                            <div style="padding: 15px; background: rgba(255,140,0,0.1); border-radius: 8px; text-align: center;">
-                                <div style="color: #D4B55A; font-size: 0.9em; margin-bottom: 5px;">PULL/HOOK %</div>
-                                <div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">68% → <40%</div>
-                                <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">Mejora accuracy +40%</div>
-                            </div>
-                            <div style="padding: 15px; background: rgba(74,159,216,0.1); border-radius: 8px; text-align: center;">
-                                <div style="color: #4A9FD8; font-size: 0.9em; margin-bottom: 5px;">EQUIPMENT GAP</div>
-                                <div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">40m → 20m</div>
-                                <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">Con 5W añadido</div>
-                            </div>
+                        <div id="st-plan-metrics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando métricas...</p>
                         </div>
                     </div>
                     
@@ -10957,127 +11117,15 @@
                         5. Timeline de Implementación - Plan 28 Días
                     </h3>
                     
-                    <div style="margin-bottom: 30px;">
-                        <div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #5ABF8F;">
-                            <h4 style="color: #5ABF8F; margin-bottom: 15px; font-size: 1.2em;">📆 Semana 1-2: Fundación (Días 1-14)</h4>
-                            <div style="padding: 15px; background: rgba(90,191,143,0.08); border-radius: 10px;">
-                                <div style="margin-bottom: 10px;"><strong style="color: #4A9FD8;">Enfoque:</strong> Attack Angle & Setup básico</div>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px;">
-                                    <div>
-                                        <strong style="color: #D4B55A;">Lun-Vie:</strong> 30 min práctica attack angle drills<br>
-                                        <strong style="color: #D4B55A;">Mar/Jue:</strong> +15 min alignment stick path work
-                                    </div>
-                                    <div>
-                                        <strong style="color: #D4B55A;">Sábado:</strong> Sesión larga 1h (15 driver, 15 hybrid, 15 irons)<br>
-                                        <strong style="color: #D4B55A;">Domingo:</strong> Descanso activo 9 hoyos
-                                    </div>
-                                </div>
-                                <div style="margin-top: 12px; padding: 10px; background: rgba(74,159,216,0.1); border-radius: 6px;">
-                                    <strong style="color: #4A9FD8;">Métrica clave:</strong> Capturar 30 golpes con TrackMan - Objetivo: Attack -3° promedio
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #4A9FD8;">
-                            <h4 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">📆 Semana 3: Implementación (Días 15-21)</h4>
-                            <div style="padding: 15px; background: rgba(74,159,216,0.08); border-radius: 10px;">
-                                <div style="margin-bottom: 10px;"><strong style="color: #4A9FD8;">Enfoque:</strong> Integración Attack + Swing Path</div>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px;">
-                                    <div>
-                                        <strong style="color: #D4B55A;">Lun-Vie:</strong> 45 min combining drills<br>
-                                        <strong style="color: #D4B55A;">Mar/Jue:</strong> +15 min swing path sticks
-                                    </div>
-                                    <div>
-                                        <strong style="color: #D4B55A;">Sábado:</strong> Práctica con 5W<br>
-                                        <strong style="color: #D4B55A;">Domingo:</strong> Ronda 18 hoyos validación
-                                    </div>
-                                </div>
-                                <div style="margin-top: 12px; padding: 10px; background: rgba(74,159,216,0.1); border-radius: 6px;">
-                                    <strong style="color: #4A9FD8;">Métrica clave:</strong> 50 golpes comparativos - Pull/hook <55%
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #D4B55A;">
-                            <h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">📆 Semana 4: Optimización (Días 22-28)</h4>
-                            <div style="padding: 15px; background: rgba(212,181,90,0.08); border-radius: 10px;">
-                                <div style="margin-bottom: 10px;"><strong style="color: #4A9FD8;">Enfoque:</strong> Consolidación & Refinamiento</div>
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px;">
-                                    <div>
-                                        <strong style="color: #D4B55A;">Lun-Vie:</strong> 30 min mantenimiento + 15 min optimización<br>
-                                        <strong style="color: #D4B55A;">Miércoles:</strong> Sesión pro (validación)
-                                    </div>
-                                    <div>
-                                        <strong style="color: #D4B55A;">Sábado:</strong> Práctica intensiva 1.5h<br>
-                                        <strong style="color: #D4B55A;">Domingo:</strong> Ronda competitiva 18 hoyos
-                                    </div>
-                                </div>
-                                <div style="margin-top: 12px; padding: 10px; background: rgba(74,159,216,0.1); border-radius: 6px;">
-                                    <strong style="color: #4A9FD8;">Métrica final:</strong> Score, distancia, pull/hook %, consistencia
-                                </div>
-                            </div>
-                        </div>
+                    <div id="st-plan-weeks" style="margin-bottom: 30px;">
+                        <!-- Dynamic: injected from improvement_plan.weeks -->
+                        <p style="text-align: center; color: rgba(255,255,255,0.5);">Cargando timeline semanal...</p>
                     </div>
                     
-                    <!-- Success Metrics Week 4 -->
-                    <div style="padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border: 2px solid rgba(90,191,143,0.3);">
-                        <h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.2em;">🎯 Métricas de Éxito - Evaluación Semana 4</h4>
-                        
-                        <div style="display: grid; gap: 15px;">
-                            <div style="padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <strong>Attack Angle</strong>
-                                    <span style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Objetivo: -4° a -6°</span>
-                                </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <div style="flex: 1; background: rgba(232,139,122,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Baseline</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;">-0.9°</div>
-                                    </div>
-                                    <div style="font-size: 1.5em; color: #5ABF8F;">→</div>
-                                    <div style="flex: 1; background: rgba(90,191,143,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Semana 4</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;">-4° a -6°</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div style="padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <strong>Driver Distance</strong>
-                                    <span style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Objetivo: +9-15m</span>
-                                </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <div style="flex: 1; background: rgba(232,139,122,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Baseline</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;">231m</div>
-                                    </div>
-                                    <div style="font-size: 1.5em; color: #5ABF8F;">→</div>
-                                    <div style="flex: 1; background: rgba(90,191,143,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Semana 4</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;">240-246m</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div style="padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                    <strong>Pull/Hook %</strong>
-                                    <span style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Objetivo: <55%</span>
-                                </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <div style="flex: 1; background: rgba(232,139,122,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Baseline</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;">68%</div>
-                                    </div>
-                                    <div style="font-size: 1.5em; color: #5ABF8F;">→</div>
-                                    <div style="flex: 1; background: rgba(90,191,143,0.3); padding: 10px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.85em;">Semana 4</div>
-                                        <div style="font-size: 1.3em; font-weight: bold;"><55%</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Success Criteria -->
+                    <div id="st-plan-success" style="padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border: 2px solid rgba(90,191,143,0.3);">
+                        <h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.2em;">🎯 Criterios de Éxito</h4>
+                        <p style="text-align: center; color: rgba(255,255,255,0.5);">Cargando criterios...</p>
                     </div>
                 </div>
                 
@@ -11861,7 +11909,8 @@
                 'strategy': 'Plan_Mejora'
             };
             const tabName = tabNames[tabId] || 'Dashboard';
-            const fileName = `Golf_Dashboard_${tabName}_Alvaro_Peralta.pdf`;
+            const playerName = (window.dashboardData?.player_stats?.player_name || 'Alvaro_Peralta').replace(/\s+/g, '_');
+            const fileName = `Golf_Dashboard_${tabName}_${playerName}.pdf`;
             
             console.log('📁 Nombre del archivo:', fileName);
             

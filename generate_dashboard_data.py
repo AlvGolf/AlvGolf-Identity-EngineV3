@@ -4996,6 +4996,267 @@ class DashboardDataGenerator:
             })
         return sorted(shots, key=lambda s: s['f'])
 
+    def calculate_monthly_recommendations(self, scoring_profile, launch_data, course_stats, club_gaps):
+        """Genera recomendaciones mensuales dinámicas basadas en scoring_profile, launch_metrics, course_statistics y club_gaps."""
+        recs = {
+            'focus_title': 'Mejora General',
+            'focus_description': 'Trabaja en tu área con mayor margen de mejora.',
+            'drill': 'Práctica variada de todos los aspectos del juego.',
+            'session_goal': 'Sesión equilibrada de práctica.',
+            'roi_estimate': '',
+            'suggested_course': None,
+            'suggested_course_avg': None,
+            'suggested_course_reason': '',
+            'timing_tip': 'Mantén un ritmo regular de juego para consolidar mejoras.',
+            'quick_win_item': None,
+            'quick_win_cost': '',
+            'quick_win_gap': None,
+            'quick_win_impact': ''
+        }
+
+        # Focus from top_gap
+        if scoring_profile and 'top_gap' in scoring_profile:
+            gap_dim, gap_score = scoring_profile['top_gap']
+            dim_names = {
+                'accuracy': 'Accuracy Training',
+                'long_game': 'Launch Angle Training',
+                'mid_game': 'Iron Precision',
+                'short_game': 'Wedge Control',
+                'putting': 'Putting Practice',
+                'consistency': 'Consistency Drills',
+                'mental': 'Mental Game',
+                'power': 'Speed Training'
+            }
+            recs['focus_title'] = dim_names.get(gap_dim, 'Mejora General')
+
+            # Driver-specific advice if long_game or accuracy is the gap
+            if gap_dim in ('long_game', 'accuracy') and launch_data and 'clubs' in launch_data:
+                driver = next((c for c in launch_data['clubs'] if c['club'] == 'Dr'), None)
+                if driver:
+                    aa = driver.get('attack_angle_est', 0)
+                    carry = driver.get('carry_mean', 0)
+                    target_aa = -5.0
+                    gain = round((carry * 0.08), 0)  # ~8% gain estimate
+                    recs['focus_description'] = f'Tu prioridad #1 es corregir attack angle de {aa:.1f}° a {target_aa}°.'
+                    recs['drill'] = 'Tee alto + palo por debajo de bola + swing ascendente'
+                    recs['session_goal'] = f'50 drives con attack angle {target_aa}° o menor'
+                    recs['roi_estimate'] = f'+{gain:.0f}m inmediato si logras corrección'
+            elif gap_dim == 'short_game':
+                recs['focus_description'] = 'Mejora tu control de distancia en wedges parciales (30-80m).'
+                recs['drill'] = 'Distancias parciales: 30m, 50m, 70m con cada wedge'
+                recs['session_goal'] = '30 golpes parciales con dispersión <5m'
+            elif gap_dim == 'putting':
+                recs['focus_description'] = 'Reduce 3-putts trabajando lag putting y putts de 1-2m.'
+                recs['drill'] = 'Lag putting (10-15m) + gate drill (1m)'
+                recs['session_goal'] = '50 putts: 25 lag + 25 cortos'
+
+        # Suggested course (best average)
+        if course_stats:
+            sorted_courses = sorted(course_stats, key=lambda c: c['promedio'])
+            best = sorted_courses[0]
+            recs['suggested_course'] = best['nombre']
+            recs['suggested_course_avg'] = round(best['promedio'], 1)
+            recs['suggested_course_reason'] = f'Tu mejor campo (avg {recs["suggested_course_avg"]}). Juega aquí cuando quieras romper récords.'
+
+        # Quick win equipment from club_gaps
+        if club_gaps:
+            max_gap_key = max(club_gaps, key=lambda k: club_gaps[k])
+            max_gap_val = round(club_gaps[max_gap_key], 0)
+            if max_gap_val > 25:
+                gap_clubs = max_gap_key.split('-')
+                recs['quick_win_item'] = f'5-Wood o {gap_clubs[1]}' if '3W' in gap_clubs[0] else f'Nuevo {gap_clubs[1]}'
+                recs['quick_win_cost'] = '$300-500'
+                recs['quick_win_gap'] = max_gap_val
+                recs['quick_win_impact'] = f'Cierra gap crítico {max_gap_val:.0f}m. Impacto inmediato.'
+
+        return recs
+
+    def calculate_bubble_analysis(self, bubble_data, dispersion_data, scoring_profile):
+        """Genera análisis interpretativo de las 4 zonas del gráfico de burbujas."""
+        groups = {
+            'wedges': {'clubs': ['PW', 'GW', 'SW'], 'title': 'Wedges', 'icon': '🎯', 'color': '#5ABF8F'},
+            'driver': {'clubs': ['Dr'], 'title': 'Driver', 'icon': '🏌️', 'color': '#E88B7A'},
+            'woods': {'clubs': ['3W', 'Hyb'], 'title': '3W / Hybrid', 'icon': '🪵', 'color': '#D4B55A'},
+            'irons': {'clubs': ['5i', '6i', '7i', '8i', '9i'], 'title': 'Irons (5-9)', 'icon': '⛳', 'color': '#4A9FD8'}
+        }
+
+        bubbles_by_code = {}
+        if bubble_data and 'bubbles' in bubble_data:
+            for b in bubble_data['bubbles']:
+                bubbles_by_code[b['club_code']] = b
+
+        disp_by_club = {}
+        if dispersion_data and 'clubs' in dispersion_data:
+            for c in dispersion_data['clubs']:
+                disp_by_club[c['club']] = c
+
+        result = {}
+        for gkey, gcfg in groups.items():
+            gb = [bubbles_by_code.get(c, {}) for c in gcfg['clubs'] if c in bubbles_by_code]
+            gd = [disp_by_club.get(c, {}) for c in gcfg['clubs'] if c in disp_by_club]
+
+            avg_consistency = round(sum(b.get('y', 0) for b in gb) / len(gb), 1) if gb else 0
+            avg_distance = round(sum(b.get('x', 0) for b in gb) / len(gb), 0) if gb else 0
+            avg_std = round(sum(d.get('lateral_std', 0) for d in gd) / len(gd), 1) if gd else 0
+            total_n = sum(d.get('n', 0) for d in gd)
+
+            # Determine diagnosis
+            if avg_consistency >= 90:
+                diagnosis = 'SWEET SPOT'
+                diagnosis_icon = '✅'
+                action = 'No requiere mejora - MANTENER'
+            elif avg_consistency >= 75:
+                diagnosis = 'Bien pero puede mejorar'
+                diagnosis_icon = '🔵'
+                action = f'Subir consistencia a {round(avg_consistency + 10)}%+'
+            elif avg_consistency >= 60:
+                diagnosis = 'MEJORA NECESARIA'
+                diagnosis_icon = '⚠️'
+                action = 'Strike quality + consistencia'
+            else:
+                diagnosis = 'PROBLEMA DOBLE'
+                diagnosis_icon = '❌'
+                action = 'PRIORIDAD: Attack angle + strike consistency'
+
+            bullets = []
+            if avg_consistency:
+                bullets.append(f'Consistencia: {avg_consistency}%')
+            if avg_distance:
+                bullets.append(f'Distancia media: {avg_distance}m')
+            if avg_std:
+                bullets.append(f'Dispersión: {avg_std}m lateral')
+            if total_n:
+                bullets.append(f'Golpes analizados: {total_n}')
+
+            result[gkey] = {
+                'title': gcfg['title'],
+                'icon': gcfg['icon'],
+                'color': gcfg['color'],
+                'position': f'{avg_consistency}% consistencia, ~{avg_distance}m',
+                'diagnosis': diagnosis,
+                'diagnosis_icon': diagnosis_icon,
+                'bullets': bullets,
+                'action': action,
+                'avg_consistency': avg_consistency,
+                'avg_distance': avg_distance
+            }
+
+        # Priority strategy
+        sorted_groups = sorted(result.items(), key=lambda x: x[1]['avg_consistency'])
+        priorities = []
+        for i, (k, v) in enumerate(sorted_groups):
+            if v['avg_consistency'] < 90:
+                priorities.append({
+                    'priority': i + 1,
+                    'group': v['title'],
+                    'action': v['action'],
+                    'color': v['color']
+                })
+
+        result['strategy'] = priorities
+        return result
+
+    def calculate_improvement_plan(self, launch_data, directional_dist, club_gaps, scoring_profile, six_month_proj):
+        """Genera plan de mejora con métricas baseline→target y timeline semanal."""
+        plan = {
+            'metrics': [],
+            'weeks': [],
+            'success_criteria': [],
+            'final_projection': ''
+        }
+
+        # Metrics from launch data
+        driver = None
+        if launch_data and 'clubs' in launch_data:
+            driver = next((c for c in launch_data['clubs'] if c['club'] == 'Dr'), None)
+
+        if driver:
+            aa = driver.get('attack_angle_est', 0)
+            carry = driver.get('carry_mean', 0)
+            target_carry = round(carry * 1.08)  # +8% target
+            plan['metrics'].append({
+                'name': 'ATTACK ANGLE',
+                'baseline': f'{aa:.1f}°',
+                'target': '-4° a -6°',
+                'detail': 'Target: -4° to -6°',
+                'color': '#E88B7A'
+            })
+            plan['metrics'].append({
+                'name': 'CARRY DISTANCE',
+                'baseline': f'{carry:.0f}m',
+                'target': f'{target_carry}m',
+                'detail': f'Ganancia: +{target_carry - carry:.0f}m (+8%)',
+                'color': '#5ABF8F'
+            })
+
+        # Pull/hook from directional distribution
+        dr_dist = directional_dist.get('Dr', {})
+        pull_pct = dr_dist.get('left_pct', 0)
+        if pull_pct > 0:
+            plan['metrics'].append({
+                'name': 'PULL/HOOK %',
+                'baseline': f'{pull_pct:.0f}%',
+                'target': '<40%',
+                'detail': f'Mejora accuracy +{pull_pct - 40:.0f}%' if pull_pct > 40 else 'Mantener',
+                'color': '#D4B55A'
+            })
+
+        # Equipment gap
+        if club_gaps:
+            max_gap_key = max(club_gaps, key=lambda k: club_gaps[k])
+            max_gap_val = club_gaps[max_gap_key]
+            if max_gap_val > 25:
+                plan['metrics'].append({
+                    'name': 'EQUIPMENT GAP',
+                    'baseline': f'{max_gap_val:.0f}m',
+                    'target': f'{max_gap_val/2:.0f}m',
+                    'detail': f'Con palo adicional ({max_gap_key})',
+                    'color': '#4A9FD8'
+                })
+
+        # Weeks
+        plan['weeks'] = [
+            {
+                'title': 'Semana 1-2: Fundación',
+                'color': '#5ABF8F',
+                'focus': 'Attack Angle & Setup básico',
+                'schedule': 'Lun-Vie: 30 min drills | Sáb: 1h sesión larga | Dom: 9 hoyos',
+                'key_metric': f'Attack angle promedio -3° en 30 golpes' if driver else 'Métricas base capturadas'
+            },
+            {
+                'title': 'Semana 3: Implementación',
+                'color': '#4A9FD8',
+                'focus': 'Integración Attack + Swing Path',
+                'schedule': 'Lun-Vie: 45 min combining | Sáb: Nuevo equipo | Dom: 18 hoyos',
+                'key_metric': f'Pull/hook <55%' if pull_pct > 0 else 'Consistencia mejorada'
+            },
+            {
+                'title': 'Semana 4: Optimización',
+                'color': '#D4B55A',
+                'focus': 'Consolidación & Refinamiento',
+                'schedule': 'Lun-Vie: 30 min mant. + 15 opt. | Mié: Pro | Dom: Competitiva',
+                'key_metric': 'Score, distancia, pull/hook %, consistencia'
+            }
+        ]
+
+        # Success criteria
+        if driver:
+            aa = driver.get('attack_angle_est', 0)
+            carry = driver.get('carry_mean', 0)
+            plan['success_criteria'] = [
+                f'Semana 2: Attack angle promedio -3° o menor en 70% de golpes',
+                f'Semana 3: Carry consistente {round(carry * 1.04)}m+, pull/hook <55%',
+                f'Semana 4: Attack -4° a -6° automatizado, {round(carry * 1.08)}m carry promedio'
+            ]
+
+        # Final projection from scoring_profile
+        if scoring_profile:
+            lg_score = scoring_profile.get('dimensions', {}).get('long_game', {}).get('score', 0)
+            sg_score = scoring_profile.get('dimensions', {}).get('short_game', {}).get('score', 0)
+            plan['final_projection'] = f'Long game de {lg_score:.1f}/10 → 7.0/10, combinado con short game {sg_score:.1f}/10.'
+
+        return plan
+
     def generate_dashboard_data(self):
         """Genera el objeto completo de datos para el dashboard (versión 5.0.0 - PROJECT COMPLETE!)."""
         logger.info("=" * 60)
@@ -5249,6 +5510,16 @@ class DashboardDataGenerator:
         goals_progress = self.calculate_goals_progress(player_stats, quarterly)
         logger.info(f"  ✓ Goals progress: hcp20={goals_progress['hcp_20']['pct']}%, avg90={goals_progress['avg_90']['pct']}%")
 
+        # SPRINT 15: Monthly Recommendations, Bubble Analysis, Improvement Plan
+        monthly_recommendations = self.calculate_monthly_recommendations(None, launch_data, course_stats, club_gaps)
+        logger.info(f"  ✓ Monthly recommendations: focus={monthly_recommendations['focus_title']}")
+
+        bubble_analysis = self.calculate_bubble_analysis(bubble_data, dispersion_data, None)
+        logger.info(f"  ✓ Bubble analysis: {len(bubble_analysis) - 1} groups + strategy")
+
+        improvement_plan = self.calculate_improvement_plan(launch_data, directional_dist, club_gaps, None, six_month_projection)
+        logger.info(f"  ✓ Improvement plan: {len(improvement_plan['metrics'])} metrics, {len(improvement_plan['weeks'])} weeks")
+
         # ========== ESTRUCTURA JSON FINAL ==========
         self.dashboard_data = {
             'generated_at': datetime.now().isoformat(),
@@ -5328,6 +5599,11 @@ class DashboardDataGenerator:
             'form_summary': form_summary,
             'scoring_streaks': scoring_streaks,
             'goals_progress': goals_progress,
+
+            # SPRINT 15: Monthly Recommendations, Bubble Analysis, Improvement Plan
+            'monthly_recommendations': monthly_recommendations,
+            'bubble_analysis': bubble_analysis,
+            'improvement_plan': improvement_plan,
 
             # Fase 5 Original (para referencia/debugging)
             'launch_metrics': launch_data,
@@ -5433,6 +5709,22 @@ class DashboardDataGenerator:
             from app.scoring_integration import add_scoring_to_dashboard
             self.dashboard_data = add_scoring_to_dashboard(self.dashboard_data)
             logger.success("Scoring profile y Golf Identity añadidos al JSON")
+
+            # Re-compute scoring-dependent functions now that scoring_profile exists
+            sp = self.dashboard_data.get('scoring_profile')
+            if sp:
+                self.dashboard_data['monthly_recommendations'] = self.calculate_monthly_recommendations(
+                    sp, self.dashboard_data.get('launch_metrics'),
+                    self.dashboard_data.get('course_statistics'), self.dashboard_data.get('club_gaps'))
+                self.dashboard_data['bubble_analysis'] = self.calculate_bubble_analysis(
+                    self.dashboard_data.get('bubble_chart_data'),
+                    self.dashboard_data.get('dispersion_analysis'), sp)
+                self.dashboard_data['improvement_plan'] = self.calculate_improvement_plan(
+                    self.dashboard_data.get('launch_metrics'),
+                    self.dashboard_data.get('directional_distribution'),
+                    self.dashboard_data.get('club_gaps'), sp,
+                    self.dashboard_data.get('six_month_projection'))
+                logger.success("Monthly recommendations, bubble analysis, improvement plan recalculados con scoring_profile")
         except Exception as e:
             logger.warning(f"Scoring integration omitida: {e}")
         # ──────────────────────────────────────────────────────────
