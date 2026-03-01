@@ -202,7 +202,7 @@ response = self.llm.invoke(messages)
 7. **Structured messages for caching:** `SystemMessage`+`HumanMessage` with `cache_control` (not plain string invoke)
 8. **UXWriter skill prompt = 6 sections only:** Removed descriptions of unused sections to prevent JSON truncation (v3.0.3)
 9. **Identity Timeline (v3.0.5):** Sliding window analysis (90d/60d) runs ScoringEngine + ArchetypeClassifier per period. Last period uses full `scoring_profile` + `golf_identity` (not partial window data). Cache fix: always set `window.dashboardData = fresh` from server.
-10. **Template vs Data (2026-02-28):** 106 dynamic IDs (`<span id="xx-*">fallback</span>`) + 7 injection functions + 7 dynamic containers. Dashboard reusable with different player data. Hardcodes remain as visual fallback.
+10. **Template vs Data (2026-02-28 → 2026-03-01):** ~216 dynamic IDs (`<span id="xx-*">fallback</span>`) + 7 injection functions + 12 dynamic containers. Dashboard reusable with different player data. Hardcodes remain as visual fallback. `dispatchDashboardReady` waits for `DOMContentLoaded` to ensure all containers exist before injecting.
 
 ### Template vs Data System (Dynamic Dashboard Injection)
 
@@ -221,18 +221,23 @@ document.addEventListener('dashboardDataReady', injectHeaderStats, { once: true 
 **ID Convention:** `{prefix}-{descriptive-name}` where prefix = tab zone:
 | Prefix | Zone | Function | IDs |
 |--------|------|----------|-----|
-| `ps-` | Tab 1 Mi Identidad | `injectPlayerStats()` | 22 |
+| `ps-` | Tab 1 Mi Identidad | `injectPlayerStats()` | 22 + 3 containers + ~21 DNA + ~23 form/last5 + ~25 zones |
 | `hd-` | Header + Score Summary | `injectHeaderStats()` | 12 |
 | `ev-` | Tab 2 Evolución | `injectEvolutionStats()` | 24 |
-| `cs-` | Tab 3 Campos | `injectCourseStats()` | 17 + 3 containers |
+| `cs-` | Tab 3 Campos | `injectCourseStats()` | 17 + 22 narratives + 1 goals container + 3 containers |
 | `cl-` | Tab 4 Palos | `injectClubStats()` | 14 + 4 containers |
-| `an-` | Tab 5 Análisis | `injectAnalysisStats()` | 4 |
+| `an-` | Tab 5 Análisis | `injectAnalysisStats()` | 4 + 14 metrics |
 | `st-` | Tab 6 Estrategia | `injectStrategyStats()` | 9 |
 
 **Dynamic Containers** (JS generates full HTML from JSON):
+- `ps-dna-compact-container` → `scoring_profile.dimensions` (4 zone groups)
+- `ps-dna-expanded-container` → `scoring_profile.dimensions` (8 dims with rich descriptions)
+- `ps-last5-container` → `score_history.rounds` (last 5 rounds)
+- `ps-zones-container` → `launch_metrics` + `dispersion_analysis` + `comfort_zones` (4 distance zones)
 - `cs-best-rounds-container` → `score_history.rounds` (top 6)
 - `cs-quarterly-container` → `quarterly_scoring` (7 quarters)
 - `cs-timeline-container` → `milestone_achievements` (9 milestones)
+- `cs-goals-container` → `goals_progress` (4 goals with progress bars)
 - `cl-carry-long/mid/short` → `launch_metrics.clubs` (carry/roll/total)
 - `cl-matrix-body` → `launch_metrics.clubs` (11 rows)
 
@@ -765,7 +770,8 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
-| v3.0.5+ | 2026-02-28 | Template vs Data — 106 IDs dinámicos + 7 funciones inyección + 7 containers (dashboard reutilizable) |
+| v3.0.6 | 2026-03-01 | Template vs Data Phase 2 — ~216 IDs dinámicos + 12 containers + 3 backend functions (form_summary, scoring_streaks, goals_progress) + DOMContentLoaded fix |
+| v3.0.5+ | 2026-02-28 | Template vs Data Phase 1 — 106 IDs dinámicos + 7 funciones inyección + 7 containers (dashboard reutilizable) |
 | v3.0.5 | 2026-02-25 | Identity Timeline — evolución temporal del arquetipo (11 períodos, ventana 90d/60d, colores por zona) |
 | v3.0.4 | 2026-02-24 | Orchestrator v4.1 asyncio.to_thread() (-33% tiempo) + arquitectura estática completa (cero live calls) |
 | v3.0.3 | 2026-02-22 | Static ai_content.json cache + UXWriter 6-section fix + Windows encoding fix |
