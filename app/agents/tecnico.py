@@ -12,6 +12,7 @@ cacheable system prompt for cost optimization (90% savings via prompt caching).
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from app.config import settings
+from app.agents import extract_cache_usage
 from typing import Dict, Any
 import json
 
@@ -487,13 +488,14 @@ Execute the complete Biomechanical Analysis Framework and generate your comprehe
         print("[AgentTecnico] Invoking Claude Sonnet 4.6 (with prompt caching)...")
         try:
             response = self.llm.invoke(messages)
+            cache_usage = extract_cache_usage(response, "AgentTecnico")
 
-            # Extract metadata if available
             metadata = {
                 "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "analysis_length": len(response.content),
-                "agent_type": "tecnico"
+                "agent_type": "tecnico",
+                **cache_usage
             }
 
             print(f"[AgentTecnico] [OK] Biomechanics analysis complete ({len(response.content)} chars)")

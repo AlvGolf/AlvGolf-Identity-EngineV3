@@ -285,7 +285,7 @@
                         <h2>⚡ Victorias Rápidas</h2>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
                             ${content.quick_wins.map(win => `
-                                <div style="background: rgba(90,191,143,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                                <div class="card-detail accent-green">
                                     <h3 style="color: #5ABF8F; margin-bottom: 10px;">${win.title || 'Oportunidad'}</h3>
                                     <p style="color: #E8E8E8; margin-bottom: 15px;">${win.description || win.text || ''}</p>
                                     ${win.impact ? `<p style="color: #D4B55A; font-weight: bold;">💡 Impacto: ${win.impact}</p>` : ''}
@@ -315,7 +315,7 @@
                         <h2>📈 Plan de Acción ROI</h2>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
                             ${content.roi_cards.map((card, index) => `
-                                <div style="background: rgba(74,159,216,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #4A9FD8;">
+                                <div class="card-detail accent-blue">
                                     <h3 style="color: #4A9FD8; margin-bottom: 10px;">${index + 1}. ${card.title || 'Acción'}</h3>
                                     <p style="color: #E8E8E8; margin-bottom: 15px;">${card.description || card.action || ''}</p>
                                     ${card.expected_improvement ? `<p style="color: #5ABF8F; font-weight: bold;">📊 Mejora esperada: ${card.expected_improvement}</p>` : ''}
@@ -346,7 +346,7 @@
                         <h2>💡 Insights Clave</h2>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
                             ${content.insight_boxes.map(insight => `
-                                <div style="background: rgba(212,181,90,0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #D4B55A;">
+                                <div class="card-detail accent-gold">
                                     <h3 style="color: #D4B55A; margin-bottom: 10px;">${insight.title || 'Insight'}</h3>
                                     <p style="color: #E8E8E8; margin-bottom: 15px;">${insight.description || insight.text || ''}</p>
                                     ${insight.recommendation ? `<p style="color: #5ABF8F; font-style: italic;">→ ${insight.recommendation}</p>` : ''}
@@ -465,19 +465,19 @@
                                 if (!lc) return '';
                                 var dist = lc.total_mean ? lc.total_mean.toFixed(0) : '-';
                                 var disp = dc && dc.lateral_std ? dc.lateral_std.toFixed(1) : '-';
-                                return '<div style="padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; border-left: 3px solid ' + z.color + ';">' +
+                                return '<div class="card-nested" style="border-left: 3px solid ' + z.color + '; background: rgba(0,0,0,0.3);">' +
                                     '<div style="font-weight: 700; color: ' + z.color + ';">' + label + ' (' + dist + 'm)</div>' +
-                                    '<div style="font-size: 0.9em; margin-top: 3px;">' + disp + 'm dispersión</div></div>';
+                                    '<div class="detail-text" style="margin-top: 3px;">' + disp + 'm dispersión</div></div>';
                             }).filter(Boolean).join('');
-                            return '<div style="padding: 25px; background: linear-gradient(135deg, rgba(' + z.rgb + ',0.15), rgba(' + z.rgb + ',0.05)); border-radius: 15px; border-left: 6px solid ' + z.color + ';">' +
+                            return '<div class="card-detail" style="border-left-color: ' + z.color + '; background: linear-gradient(135deg, rgba(' + z.rgb + ',0.15), rgba(' + z.rgb + ',0.05));">' +
                                 '<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">' +
                                 '<div style="font-size: 2.5em;">' + z.icon + '</div>' +
                                 '<div style="flex: 1;"><h3 style="color: ' + z.color + '; margin: 0; font-size: 1.4em;">' + z.name + '</h3>' +
                                 '<div style="display: inline-block; background: rgba(' + z.rgb + ',0.3); padding: 4px 12px; border-radius: 15px; font-size: 0.85em; font-weight: 700; margin-top: 5px;">' + z.level + '</div></div></div>' +
-                                '<div style="margin-bottom: 15px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;">' +
+                                '<div class="card-nested tint-dark" style="margin-bottom: 15px;">' +
                                 '<strong style="color: ' + z.color + ';">' + (gir != null ? 'GIR ' + gir + '%' : '') + (driverBias ? ' | ' + driverBias : '') + '</strong></div>' +
                                 '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 15px;">' + clubCards + '</div>' +
-                                '<div style="padding: 12px; background: rgba(' + z.rgb + ',0.15); border-radius: 8px; border-left: 3px solid ' + z.color + ';">' +
+                                '<div class="card-nested" style="background: rgba(' + z.rgb + ',0.15); border-left: 3px solid ' + z.color + ';">' +
                                 '<strong style="color: ' + z.color + ';">💡 Táctica:</strong> ' + z.tactic + '</div></div>';
                         }).join('');
                         console.log('✅ Zonas inyectadas:', zonesConfig.length);
@@ -500,12 +500,12 @@
                             var rgb = c === '#5ABF8F' ? '90,191,143' : c === '#4A9FD8' ? '74,159,216' : '212,181,90';
                             var dateStr = '';
                             try { dateStr = formatPlayerDate(r.date, 'short').toUpperCase(); } catch(e2) { dateStr = r.date; }
-                            return '<div style="display: grid; grid-template-columns: 120px 200px 80px 100px 1fr; gap: 15px; padding: 18px; background: rgba(' + rgb + ',0.08); border-radius: 10px; border-left: 5px solid ' + c + '; align-items: center;">' +
+                            return '<div class="card-detail" style="border-left-color: ' + c + '; background: rgba(' + rgb + ',0.08); display: grid; grid-template-columns: 120px 200px 80px 100px 1fr; gap: 15px; align-items: center;">' +
                                 '<div style="font-weight: 700; color: ' + c + ';">' + dateStr + '</div>' +
                                 '<div>' + r.course + '</div>' +
                                 '<div style="font-size: 2em; font-weight: 900; color: ' + c + ';">' + r.score + '</div>' +
                                 '<div style="background: rgba(' + rgb + ',0.3); padding: 5px 12px; border-radius: 20px; text-align: center; font-size: 0.85em; font-weight: 700;">Diff: ' + r.differential + '</div>' +
-                                '<div style="font-size: 0.9em; opacity: 0.9;">' + (i === 0 ? 'Última ronda registrada' : '') + '</div></div>';
+                                '<div class="detail-text">' + (i === 0 ? 'Última ronda registrada' : '') + '</div></div>';
                         }).join('');
                         console.log('✅ Last 5 inyectadas:', last5.length);
                     } else {
@@ -649,9 +649,9 @@
                         }
                         return '<strong>' + d.label + ':</strong> ' + d.score.toFixed(1) + '/10';
                     }).join('<br>');
-                    return '<div style="padding: 20px; background: linear-gradient(135deg, ' + bg + ', ' + bg2 + '); border-radius: 12px; border-left: 4px solid ' + hex + ';">' +
-                        '<' + hTag + ' style="color: ' + hex + '; margin: 0 0 ' + mb + 'px 0; font-size: 1.1em; font-weight: 700;">' + icon + ' ' + title + '</' + hTag + '>' +
-                        '<p style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">' + lines + '</p></div>';
+                    return '<div class="card-detail" style="border-left-color: ' + hex + '; background: linear-gradient(135deg, ' + bg + ', ' + bg2 + ');">' +
+                        '<' + hTag + ' class="detail-title" style="color: ' + hex + '; margin: 0 0 ' + mb + 'px 0;">' + icon + ' ' + title + '</' + hTag + '>' +
+                        '<p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">' + lines + '</p></div>';
                 }
 
                 ['ps-dna-compact-container','ps-dna-expanded-container'].forEach(id => {
@@ -714,7 +714,8 @@
                 set('ps-form-status', fs.streak_text || 'CALCULANDO');
                 const formNarEl = document.getElementById('ps-form-narrative');
                 if (formNarEl) {
-                    const strengthLabel = gi?.primary_strength?.dimension ? (dimLabels[gi.primary_strength.dimension] || gi.primary_strength.dimension) : 'tu juego';
+                    const dimMap = {short_game:'short game',power:'potencia',consistency:'consistencia',mid_game:'mid game',long_game:'long game',mental:'mentalidad',putting:'putting',accuracy:'accuracy'};
+                    const strengthLabel = gi?.primary_strength?.dimension ? (dimMap[gi.primary_strength.dimension] || gi.primary_strength.dimension) : 'tu juego';
                     formNarEl.innerHTML = 'Tu fortaleza en ' + strengthLabel + ' te ha llevado a estar <strong style="color: #5ABF8F;">"' + (fs.streak_text || '').toLowerCase() + '"</strong> con un promedio de <strong style="color: #5ABF8F; font-size: 1.3em;">' + fs.average + ' golpes</strong> en los últimos ' + fs.count + ' partidos registrados.';
                 }
             }
@@ -903,11 +904,11 @@
                     const sorted = [...sh.rounds].sort((a, b) => a.score - b.score).slice(0, 6);
                     const colors = ['#D4B55A', '#5ABF8F', '#5ABF8F', '#4A9FD8', '#4A9FD8', '#4A9FD8'];
                     container.innerHTML = sorted.map((r, i) => `
-                        <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; text-align: center; min-width: 120px; border: 1px solid ${i === 0 ? 'rgba(212,181,90,0.4)' : 'rgba(255,255,255,0.1)'};">
+                        <div class="card-nested tint-dark" style="text-align: center; min-width: 120px; ${i === 0 ? 'border: 1px solid rgba(212,181,90,0.4);' : ''}">
                             <span style="font-size: 2em; font-weight: bold; color: ${colors[i] || '#4A9FD8'};">${r.score}</span><br>
-                            <span style="font-size: 0.85em; color: rgba(255,255,255,0.6);">${formatPlayerDate(r.date, 'short')}</span>
-                            <div style="font-size: 0.9em; margin-top: 5px; color: rgba(255,255,255,0.8);">${r.course}</div>
-                            <div style="font-size: 0.8em; color: rgba(255,255,255,0.5);">Differential: ${r.differential}</div>
+                            <span class="detail-text">${formatPlayerDate(r.date, 'short')}</span>
+                            <div style="font-size: 0.9em; margin-top: 5px;">${r.course}</div>
+                            <div class="detail-text">Differential: ${r.differential}</div>
                         </div>
                     `).join('');
                 }
@@ -922,10 +923,10 @@
                         const label = q.replace('_', '-');
                         const trendIcon = d.trend === 'improving' ? '📈' : d.trend === 'declining' ? '📉' : '➡️';
                         return `
-                        <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; text-align: center; min-width: 110px; border: 1px solid rgba(255,255,255,0.1);">
+                        <div class="card-nested tint-dark" style="text-align: center; min-width: 110px;">
                             <h4 style="margin: 0 0 8px 0; color: #4A9FD8;">${label}</h4>
-                            <div style="font-size: 1.8em; font-weight: bold; color: #E8E8E8;">${d.avg_score.toFixed(1)}</div>
-                            <p style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin: 5px 0 0 0;">${d.rounds} rondas ${trendIcon}</p>
+                            <div class="nested-value" style="font-size: 1.8em;">${d.avg_score.toFixed(1)}</div>
+                            <p class="detail-text" style="margin: 5px 0 0 0;">${d.rounds} rondas ${trendIcon}</p>
                         </div>`;
                     }).join('');
                 }
@@ -937,11 +938,11 @@
                 if (container) {
                     const icons = { personal_best: '🏆', broke_100: '💯', broke_90: '🔥', consistency_streak: '🔥' };
                     container.innerHTML = ma.map(m => `
-                        <div style="display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div class="card-nested" style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <div style="font-size: 1.5em;">${icons[m.type] || '⭐'}</div>
                             <div style="flex: 1;">
-                                <div style="color: #E8E8E8; font-weight: 600;">${m.description}</div>
-                                <div style="font-size: 0.85em; color: rgba(255,255,255,0.5);">${m.course} · ${formatPlayerDate(m.date, 'short')}</div>
+                                <div style="font-weight: 600;">${m.description}</div>
+                                <div class="detail-text">${m.course} · ${formatPlayerDate(m.date, 'short')}</div>
                             </div>
                         </div>
                     `).join('');
@@ -1101,9 +1102,9 @@
                     ];
                     goalsContainer.innerHTML = goals.map(g => {
                         const d = gp[g.key]; if (!d) return '';
-                        return `<div style="padding: 25px; background: linear-gradient(135deg, rgba(${g.rgb},0.15), rgba(${g.rgb},0.05)); border-radius: 12px; border: 2px solid rgba(${g.rgb},0.4);">
+                        return `<div class="card-detail" style="border-left-color: ${g.color}; background: linear-gradient(135deg, rgba(${g.rgb},0.15), rgba(${g.rgb},0.05)); border: 2px solid rgba(${g.rgb},0.4);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                                <h4 style="color: ${g.color}; margin: 0; font-size: 1.3em;">${g.title}</h4>
+                                <h4 class="detail-title" style="color: ${g.color}; margin: 0; font-size: 1.3em;">${g.title}</h4>
                                 <span style="background: linear-gradient(135deg, ${g.color}, ${g.grad}); color: ${g.textColor}; padding: 8px 20px; border-radius: 25px; font-weight: 900; font-size: 1.1em;">${d.pct}%</span>
                             </div>
                             <div style="margin: 15px 0;">
@@ -1112,11 +1113,11 @@
                                 </div>
                             </div>
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px;">
-                                <div><strong style="color: #4A9FD8;">Inicio:</strong> ${d.start}</div>
-                                <div><strong style="color: #D4B55A;">${g.label}:</strong> ${d.current}</div>
-                                <div><strong style="color: #5ABF8F;">Objetivo:</strong> ${d.target}</div>
+                                <div><strong class="color-blue">Inicio:</strong> ${d.start}</div>
+                                <div><strong class="color-gold">${g.label}:</strong> ${d.current}</div>
+                                <div><strong class="color-green">Objetivo:</strong> ${d.target}</div>
                             </div>
-                            <p style="margin: 15px 0 0 0; font-size: 0.95em; opacity: 0.8;"><strong>Faltan:</strong> ${d.gap} ${g.key.includes('hcp') ? 'puntos' : 'golpes'}</p>
+                            <p class="detail-text" style="margin: 15px 0 0 0;"><strong>Faltan:</strong> ${d.gap} ${g.key.includes('hcp') ? 'puntos' : 'golpes'}</p>
                         </div>`;
                     }).filter(Boolean).join('');
                 }
@@ -1210,17 +1211,17 @@
                     cardsEl.innerHTML = order.map(key => {
                         const g = ba[key]; if (!g) return '';
                         const rgb = rgbMap[g.color] || '74,159,216';
-                        return '<div style="background: rgba(' + rgb + ',0.12); padding: 25px; border-radius: 12px; border-left: 4px solid ' + g.color + ';">' +
+                        return '<div class="card-detail" style="border-left-color: ' + g.color + '; background: rgba(' + rgb + ',0.12);">' +
                             '<div style="display: flex; align-items: center; margin-bottom: 15px;">' +
                             '<div style="width: 40px; height: 40px; background: ' + g.color + '; border-radius: 50%; margin-right: 15px;"></div>' +
-                            '<h4 style="color: ' + g.color + '; margin: 0; font-size: 1.2em;">' + g.title + '</h4></div>' +
+                            '<h4 class="detail-title" style="color: ' + g.color + '; margin: 0; font-size: 1.2em;">' + g.title + '</h4></div>' +
                             '<div style="margin-bottom: 12px;"><strong>Posición:</strong> ' + g.position + '</div>' +
-                            '<div style="padding: 15px; background: rgba(' + rgb + ',0.2); border-radius: 8px; margin-bottom: 12px;">' +
+                            '<div class="card-nested" style="background: rgba(' + rgb + ',0.2); margin-bottom: 12px;">' +
                             '<strong style="color: ' + g.color + '; font-size: 1.1em;">' + g.diagnosis_icon + ' ' + g.diagnosis + '</strong></div>' +
                             '<ul style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">' +
                             g.bullets.map(b => '<li>' + b + '</li>').join('') + '</ul>' +
-                            '<div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">' +
-                            '<strong style="color: #D4B55A;">🎯 Acción:</strong> <span style="color: ' + g.color + ';">' + g.action + '</span></div></div>';
+                            '<div class="card-nested tint-dark" style="margin-top: 15px;">' +
+                            '<strong class="color-gold">🎯 Acción:</strong> <span style="color: ' + g.color + ';">' + g.action + '</span></div></div>';
                     }).join('');
                 }
 
@@ -1228,8 +1229,8 @@
                 const stratEl = document.getElementById('cl-bubble-strategy');
                 if (stratEl && ba.strategy) {
                     const items = ba.strategy.map((p, i) => '<li><strong style="color: ' + p.color + ';">Prioridad ' + p.priority + ':</strong> ' + p.group + ' — ' + p.action + '</li>').join('');
-                    stratEl.innerHTML = '<h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">💡 Estrategia Priorizada</h4>' +
-                        '<div style="padding: 20px; background: rgba(0,0,0,0.2); border-radius: 10px; border-left: 4px solid #D4B55A;">' +
+                    stratEl.innerHTML = '<h4 class="detail-title" style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">💡 Estrategia Priorizada</h4>' +
+                        '<div class="card-detail accent-gold">' +
                         '<ol style="margin: 10px 0 0 20px; line-height: 2;">' + items + '</ol></div>';
                 }
             }
@@ -1255,8 +1256,8 @@
                         const best = bestClub(clubs);
                         const worst = worstClub(clubs);
                         const bias = dominantBias(clubs);
-                        return '<div style="padding: 20px; background: rgba(' + rgb + ',0.1); border-radius: 10px; border-left: 3px solid ' + color + ';">' +
-                            '<h4 style="color: ' + color + '; margin-bottom: 12px;">' + icon + ' ' + title + '</h4>' +
+                        return '<div class="card-detail" style="border-left-color: ' + color + '; background: rgba(' + rgb + ',0.1);">' +
+                            '<h4 class="detail-title" style="color: ' + color + '; margin-bottom: 12px;">' + icon + ' ' + title + '</h4>' +
                             '<ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">' +
                             '<li><strong>Dispersión promedio:</strong> ' + avg + 'm lateral</li>' +
                             '<li><strong>Sesgo dominante:</strong> ' + bias + '</li>' +
@@ -1506,10 +1507,10 @@
                     const rgbMap = { '#E88B7A': '232,139,122', '#5ABF8F': '90,191,143', '#D4B55A': '255,140,0', '#4A9FD8': '74,159,216' };
                     metricsEl.innerHTML = ip.metrics.map(m => {
                         const rgb = rgbMap[m.color] || '74,159,216';
-                        return '<div style="padding: 15px; background: rgba(' + rgb + ',0.1); border-radius: 8px; text-align: center;">' +
-                            '<div style="color: ' + m.color + '; font-size: 0.9em; margin-bottom: 5px;">' + m.name + '</div>' +
-                            '<div style="font-size: 1.5em; font-weight: bold; color: #E8E8E8;">' + m.baseline + ' → ' + m.target + '</div>' +
-                            '<div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 5px;">' + m.detail + '</div></div>';
+                        return '<div class="card-nested" style="background: rgba(' + rgb + ',0.1); text-align: center;">' +
+                            '<div class="nested-label" style="color: ' + m.color + ';">' + m.name + '</div>' +
+                            '<div class="nested-value" style="font-size: 1.5em;">' + m.baseline + ' → ' + m.target + '</div>' +
+                            '<div class="detail-text" style="margin-top: 5px;">' + m.detail + '</div></div>';
                     }).join('');
                 }
 
@@ -1518,28 +1519,28 @@
                 if (weeksEl && ip.weeks?.length) {
                     weeksEl.innerHTML = ip.weeks.map(w => {
                         const rgb = w.color === '#5ABF8F' ? '90,191,143' : w.color === '#4A9FD8' ? '74,159,216' : '212,181,90';
-                        return '<div style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 20px; border-left: 4px solid ' + w.color + ';">' +
-                            '<h4 style="color: ' + w.color + '; margin-bottom: 15px; font-size: 1.2em;">📆 ' + w.title + '</h4>' +
-                            '<div style="padding: 15px; background: rgba(' + rgb + ',0.08); border-radius: 10px;">' +
-                            '<div style="margin-bottom: 10px;"><strong style="color: #4A9FD8;">Enfoque:</strong> ' + w.focus + '</div>' +
-                            '<div style="font-size: 0.95em; margin: 10px 0;">' + w.schedule + '</div>' +
-                            '<div style="margin-top: 12px; padding: 10px; background: rgba(74,159,216,0.1); border-radius: 6px;">' +
-                            '<strong style="color: #4A9FD8;">Métrica clave:</strong> ' + w.key_metric + '</div></div></div>';
+                        return '<div class="card-detail" style="border-left-color: ' + w.color + '; margin-bottom: 20px;">' +
+                            '<h4 class="detail-title" style="color: ' + w.color + '; margin-bottom: 15px; font-size: 1.2em;">📆 ' + w.title + '</h4>' +
+                            '<div class="card-nested" style="background: rgba(' + rgb + ',0.08);">' +
+                            '<div style="margin-bottom: 10px;"><strong class="color-blue">Enfoque:</strong> ' + w.focus + '</div>' +
+                            '<div class="detail-text" style="margin: 10px 0;">' + w.schedule + '</div>' +
+                            '<div class="card-nested tint-blue" style="margin-top: 12px;">' +
+                            '<strong class="color-blue">Métrica clave:</strong> ' + w.key_metric + '</div></div></div>';
                     }).join('');
                 }
 
                 // Success criteria
                 const successEl = document.getElementById('st-plan-success');
                 if (successEl && ip.success_criteria?.length) {
-                    successEl.innerHTML = '<h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.2em;">🎯 Criterios de Éxito</h4>' +
+                    successEl.innerHTML = '<h4 class="detail-title" style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.2em;">🎯 Criterios de Éxito</h4>' +
                         '<div style="display: grid; gap: 12px;">' +
-                        ip.success_criteria.map(c => '<div style="padding: 12px; background: rgba(255,255,255,0.08); border-radius: 8px; display: flex; align-items: start;">' +
-                            '<span style="color: #5ABF8F; font-size: 1.3em; margin-right: 12px;">✅</span>' +
+                        ip.success_criteria.map(c => '<div class="card-nested" style="display: flex; align-items: start;">' +
+                            '<span class="color-green" style="font-size: 1.3em; margin-right: 12px;">✅</span>' +
                             '<div>' + c + '</div></div>').join('') +
                         '</div>' +
-                        (ip.final_projection ? '<div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.15); border-radius: 10px;">' +
-                            '<strong style="color: #4A9FD8;">📈 Resultado Proyectado:</strong>' +
-                            '<p style="margin-top: 12px; line-height: 1.8;">' + ip.final_projection + '</p></div>' : '');
+                        (ip.final_projection ? '<div class="card-nested tint-blue" style="margin-top: 20px;">' +
+                            '<strong class="color-blue">📈 Resultado Proyectado:</strong>' +
+                            '<p class="detail-text" style="margin-top: 12px; line-height: 1.8;">' + ip.final_projection + '</p></div>' : '');
                 }
             }
 
@@ -1851,17 +1852,17 @@
         }
         
         .score-card {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 25px;
-            border-radius: 15px;
+            background: var(--card-bg-1);
+            padding: var(--pad-lg);
+            border-radius: var(--radius-lg);
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .score-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(90, 191, 143,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
         
         .score-card h3 {
@@ -1929,11 +1930,11 @@
         }
         
         .chart-container {
-            background: rgba(255, 255, 255, 0.08);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg-2);
+            padding: var(--pad-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            border: 1px solid var(--card-border);
         }
         
         .chart-container h2 {
@@ -1964,10 +1965,10 @@
         }
         
         .club-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #5ABF8F;
+            background: var(--card-bg-3);
+            padding: var(--pad-md);
+            border-radius: var(--radius-md);
+            border-left: var(--accent-width) solid #5ABF8F;
             transition: all 0.3s ease;
         }
         
@@ -1999,10 +2000,10 @@
         }
         
         .priority-box {
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.1), rgba(255, 100, 0, 0.1));
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid #E88B7A;
+            background: linear-gradient(135deg, rgba(var(--rgb-red),0.12), rgba(var(--rgb-red),0.04));
+            padding: var(--pad-lg);
+            border-radius: var(--radius-md);
+            border-left: var(--accent-width) solid #E88B7A;
             margin: 20px 0;
         }
         
@@ -2049,9 +2050,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            padding: var(--pad-sm);
+            background: var(--card-bg-4);
+            border-radius: var(--radius-sm);
             margin: 10px 0;
         }
         
@@ -3811,9 +3812,9 @@
 
         .recommendations-box {
             background: linear-gradient(135deg, rgba(15, 32, 39, 0.7), rgba(45, 62, 80, 0.5));
-            border: 2px solid rgba(74, 159, 216, 0.3);
-            border-radius: 15px;
-            padding: 25px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--pad-lg);
             margin-top: 25px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
@@ -3829,11 +3830,11 @@
         }
 
         .recommendation-item {
-            padding: 18px 20px;
+            padding: var(--pad-md);
             margin: 15px 0;
-            border-left: 5px solid;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-            border-radius: 10px;
+            border-left: var(--accent-width) solid;
+            background: var(--card-bg-3);
+            border-radius: var(--radius-md);
             font-size: 1em;
             line-height: 1.7;
             transition: all 0.3s ease;
@@ -4217,14 +4218,14 @@
                     </div>
                     
                     <div id="ps-dna-compact-container" style="display: grid; gap: 15px;">
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                            <h4 style="color: #5ABF8F; margin: 0 0 10px 0; font-size: 1.1em;">🟢 ÉLITE (9-10/10)</h4>
-                            <p style="margin: 0; line-height: 1.8;"><strong>Short Game:</strong> 9.0/10 - Tour level precision</p>
+                        <div class="card-detail accent-green">
+                            <h4 class="detail-title" style="color: #5ABF8F; margin: 0 0 10px 0;">🟢 ÉLITE (9-10/10)</h4>
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);"><strong>Short Game:</strong> 9.0/10 - Tour level precision</p>
                         </div>
 
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(74,159,216,0.05)); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                            <h4 style="color: #4A9FD8; margin: 0 0 10px 0; font-size: 1.1em;">🔵 FUERTE (7-8.9/10)</h4>
-                            <p style="margin: 0; line-height: 1.8;">
+                        <div class="card-detail accent-blue">
+                            <h4 class="detail-title" style="color: #4A9FD8; margin: 0 0 10px 0;">🔵 FUERTE (7-8.9/10)</h4>
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Power:</strong> 8.5/10<br>
                                 <strong>Strategy:</strong> 8.0/10<br>
                                 <strong>Equipment:</strong> 7.5/10<br>
@@ -4232,17 +4233,17 @@
                             </p>
                         </div>
 
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                            <h4 style="color: #D4B55A; margin: 0 0 10px 0; font-size: 1.1em;">🟡 DESARROLLO (5-6.9/10)</h4>
-                            <p style="margin: 0; line-height: 1.8;">
+                        <div class="card-detail accent-gold">
+                            <h4 class="detail-title" style="color: #D4B55A; margin: 0 0 10px 0;">🟡 DESARROLLO (5-6.9/10)</h4>
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Long Game:</strong> 6.5/10<br>
                                 <strong>Mental:</strong> 7.0/10
                             </p>
                         </div>
 
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(232,139,122,0.15), rgba(232,139,122,0.05)); border-radius: 12px; border-left: 4px solid #E88B7A;">
-                            <h4 style="color: #E88B7A; margin: 0 0 10px 0; font-size: 1.1em;">🔴 CRÍTICO (<5/10)</h4>
-                            <p style="margin: 0; line-height: 1.8;"><strong>Accuracy:</strong> 4.2/10 - Prioridad de mejora</p>
+                        <div class="card-detail accent-red">
+                            <h4 class="detail-title" style="color: #E88B7A; margin: 0 0 10px 0;">🔴 CRÍTICO (<5/10)</h4>
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);"><strong>Accuracy:</strong> 4.2/10 - Prioridad de mejora</p>
                         </div>
                     </div>
                 </div>
@@ -4263,8 +4264,8 @@
   --gi-bg:        rgba(10, 18, 12, 0.85);
   --gi-card:      rgba(255,255,255,0.04);
   --gi-border:    rgba(201,168,76,0.18);
-  --gi-text:      #d4d8cc;
-  --gi-muted:     #7a8070;
+  --gi-text:      #e0e2dc;
+  --gi-muted:     #9a9e94;
   --elite:        #4fc3a1;
   --strong:       #5b9bd5;
   --developing:   #c9a84c;
@@ -4316,7 +4317,7 @@
   margin-bottom: 6px;
 }
 .gi-archetype-tagline {
-  font-size: 13px;
+  font-size: 14.5px;
   color: var(--gi-teal);
   font-style: italic;
   letter-spacing: 0.3px;
@@ -4335,7 +4336,7 @@
   line-height: 1;
 }
 .gi-header-score-denom {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--gi-muted);
 }
 /* Meta inline bajo tagline */
@@ -4344,7 +4345,7 @@
   align-items: center;
   gap: 12px;
   margin-top: 6px;
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--gi-muted);
   flex-wrap: wrap;
 }
@@ -4375,10 +4376,10 @@
   display: flex;
   align-items: stretch;
   gap: 16px;
-  background: var(--gi-card);
-  border: 1px solid var(--gi-border);
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--pad-lg);
   margin-bottom: 16px;
 }
 .gi-radar-main {
@@ -4435,10 +4436,10 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--gi-border);
-  border-radius: 10px;
+  padding: var(--pad-sm);
+  background: var(--card-bg-4);
+  border: 1px solid var(--card-border-subtle);
+  border-radius: var(--radius-sm);
   text-align: center;
 }
 .gi-radar-card-dot {
@@ -4486,14 +4487,14 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  background: var(--gi-card);
-  border: 1px solid var(--gi-border);
-  border-radius: 10px;
+  background: var(--card-bg-4);
+  border: 1px solid var(--card-border-subtle);
+  border-radius: var(--radius-sm);
   padding: 8px 16px;
   min-width: 100px;
 }
 .gi-chip-label {
-  font-size: 9px;
+  font-size: 10.5px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--gi-muted);
@@ -4514,10 +4515,10 @@
 
 /* ── Panel de scores por zona (2 columnas) ──────────────── */
 .gi-scores-panel {
-  background: var(--gi-card);
-  border: 1px solid var(--gi-border);
-  border-radius: 12px;
-  padding: 16px 20px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--pad-lg);
   margin-bottom: 16px;
 }
 .gi-dimensions-grid {
@@ -4541,7 +4542,7 @@
   gap: 8px;
 }
 .gi-dim-label {
-  font-size: 11px;
+  font-size: 12.5px;
   color: var(--gi-text);
   width: 86px;
   flex-shrink: 0;
@@ -4561,7 +4562,7 @@
   width: 0;  /* starts at 0, animated via JS */
 }
 .gi-dim-score {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   width: 34px;
   text-align: right;
@@ -4594,20 +4595,20 @@
     rgba(79,195,161,0.06) 0%,
     rgba(10,18,12,0) 100%);
   border: 1px solid rgba(79,195,161,0.2);
-  border-left: 3px solid var(--gi-teal);
-  border-radius: 0 10px 10px 0;
-  padding: 16px 20px;
+  border-left: var(--accent-width) solid var(--gi-teal);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: var(--pad-md);
   margin-bottom: 16px;
 }
 .gi-insight-label {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--gi-teal);
   margin-bottom: 8px;
 }
 .gi-insight-text {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--gi-text);
   line-height: 1.65;
 }
@@ -4625,31 +4626,31 @@
   .gi-bottom { grid-template-columns: 1fr; }
 }
 .gi-strategy {
-  background: var(--gi-card);
-  border: 1px solid var(--gi-border);
-  border-radius: 12px;
-  padding: 18px 20px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--pad-lg);
 }
 .gi-strategy-label {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--gi-gold);
   margin-bottom: 10px;
 }
 .gi-strategy-text {
-  font-size: 12.5px;
+  font-size: 15px;
   color: var(--gi-text);
   line-height: 1.7;
 }
 .gi-pros {
-  background: var(--gi-card);
-  border: 1px solid var(--gi-border);
-  border-radius: 12px;
-  padding: 18px 20px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--pad-lg);
 }
 .gi-pros-label {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--gi-muted);
@@ -4671,6 +4672,136 @@
 }
 
 /* (gi-overall eliminado — score integrado en header) */
+
+/* ═══════════════════════════════════════════════════════════════
+   CARD SYSTEM v3.1 — 4 niveles de jerarquía visual
+   Hero > Section > Detail > Nested
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+    /* Card System Tokens */
+    --card-bg-1: rgba(255,255,255, 0.08);
+    --card-bg-2: rgba(255,255,255, 0.06);
+    --card-bg-3: rgba(255,255,255, 0.04);
+    --card-bg-4: rgba(255,255,255, 0.03);
+    --card-border: rgba(255,255,255, 0.10);
+    --card-border-subtle: rgba(255,255,255, 0.06);
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --radius-sm: 8px;
+    --pad-lg: 24px;
+    --pad-md: 18px;
+    --pad-sm: 12px;
+    --accent-width: 4px;
+    --rgb-green: 90,191,143;
+    --rgb-blue: 74,159,216;
+    --rgb-gold: 212,181,90;
+    --rgb-red: 232,139,122;
+}
+
+/* ── L1: HERO CARDS — KPIs grandes ─────────────────────────── */
+.card-hero {
+    background: var(--card-bg-1);
+    padding: var(--pad-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hero:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+.card-hero .hero-label {
+    font-size: 0.65em;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(232,232,232,0.6);
+    margin-bottom: 8px;
+}
+.card-hero .hero-value {
+    font-size: 2.8em;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+.card-hero .hero-meta {
+    font-size: 0.78em;
+    color: rgba(232,232,232,0.4);
+}
+
+/* ── L2: SECTION CARDS — Contenedores de charts/paneles ───── */
+.card-section {
+    background: var(--card-bg-2);
+    padding: var(--pad-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+    margin-bottom: 24px;
+}
+
+/* ── L3: DETAIL CARDS — Items individuales con accent ──────── */
+.card-detail {
+    background: var(--card-bg-3);
+    padding: var(--pad-md);
+    border-radius: var(--radius-md);
+    border-left: var(--accent-width) solid transparent;
+    transition: background 0.2s ease;
+}
+.card-detail.accent-green {
+    border-left-color: #5ABF8F;
+    background: linear-gradient(135deg, rgba(var(--rgb-green),0.12), rgba(var(--rgb-green),0.04));
+}
+.card-detail.accent-blue {
+    border-left-color: #4A9FD8;
+    background: linear-gradient(135deg, rgba(var(--rgb-blue),0.12), rgba(var(--rgb-blue),0.04));
+}
+.card-detail.accent-gold {
+    border-left-color: #D4B55A;
+    background: linear-gradient(135deg, rgba(var(--rgb-gold),0.12), rgba(var(--rgb-gold),0.04));
+}
+.card-detail.accent-red {
+    border-left-color: #E88B7A;
+    background: linear-gradient(135deg, rgba(var(--rgb-red),0.12), rgba(var(--rgb-red),0.04));
+}
+.card-detail.accent-neutral {
+    border-left-color: transparent;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--card-border-subtle);
+}
+
+/* ── L4: NESTED CARDS — Sub-items ──────────────────────────── */
+.card-nested {
+    background: var(--card-bg-4);
+    padding: var(--pad-sm);
+    border-radius: var(--radius-sm);
+}
+.card-nested.tint-green { background: rgba(var(--rgb-green), 0.10); }
+.card-nested.tint-blue  { background: rgba(var(--rgb-blue), 0.10); }
+.card-nested.tint-gold  { background: rgba(var(--rgb-gold), 0.10); }
+.card-nested.tint-red   { background: rgba(var(--rgb-red), 0.10); }
+.card-nested.tint-dark  { background: rgba(0,0,0,0.25); }
+
+/* ── Card System: tipografía helpers ───────────────────────── */
+.detail-title { font-weight: 700; margin-bottom: 6px; }
+.detail-text  { line-height: 1.5; }
+.nested-label { font-weight: 600; margin-bottom: 4px; }
+.nested-value { font-weight: 700; }
+.color-green  { color: #5ABF8F; }
+.color-blue   { color: #4A9FD8; }
+.color-gold   { color: #D4B55A; }
+.color-red    { color: #E88B7A; }
+
+/* ── Card System: responsive ───────────────────────────────── */
+@media (max-width: 768px) {
+    .card-hero { padding: 16px 12px; }
+    .card-hero .hero-value { font-size: 2em; }
+    .card-section { padding: 18px 14px; }
+    .card-detail { padding: 14px; }
+    .card-nested { padding: 10px; }
+}
+@media (max-width: 480px) {
+    .card-section { padding: 14px 10px; }
+}
 </style>
 
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -5273,8 +5404,8 @@
                     </h3>
 
                     <!-- Perfil Principal -->
-                    <div style="margin-bottom: 30px; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 12px; border-left: 5px solid #5ABF8F; text-align: center;">
-                        <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.3em; font-weight: 800;">
+                    <div class="card-detail accent-green" style="text-align: center; margin-bottom: 30px;">
+                        <h4 class="detail-title" style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.3em; font-weight: 800;">
                             🎯 <span id="ps-archetype-title">SHORT GAME SPECIALIST</span>
                         </h4>
                         <p id="ps-archetype-narrative" style="margin: 0 auto; font-size: 1.05em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 700px;">
@@ -5283,28 +5414,28 @@
                     </div>
 
                     <!-- Hero statement (inyectado por AI) -->
-                    <div id="hero-statement-section" style="display: none; margin-bottom: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8; text-align: left;">
+                    <div id="hero-statement-section" class="card-detail accent-blue" style="display: none; margin-bottom: 25px; text-align: left;">
                     </div>
 
                     <!-- Análisis por Dimensiones -->
                     <div id="ps-dna-expanded-container" style="display: grid; gap: 15px; margin-bottom: 25px;">
                         <!-- ÉLITE -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                            <h5 style="color: #5ABF8F; margin: 0 0 12px 0; font-size: 1.1em; font-weight: 700;">
+                        <div class="card-detail accent-green">
+                            <h5 class="detail-title" style="color: #5ABF8F; margin: 0 0 12px 0;">
                                 🟢 DIMENSIONES ÉLITE (9-10/10)
                             </h5>
-                            <p style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Short Game (9.0/10):</strong> Tu gran fortaleza. Precisión de nivel Tour desde 100m. Esta habilidad excepcional es tu carta de presentación y la razón principal de tu mejora constante.<br>
                                 <strong>Consistency (7.2/10):</strong> Regularidad sólida que te permite mantener un nivel predecible ronda tras ronda.
                             </p>
                         </div>
 
                         <!-- FUERTE -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(74,159,216,0.05)); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                            <h5 style="color: #4A9FD8; margin: 0 0 12px 0; font-size: 1.1em; font-weight: 700;">
+                        <div class="card-detail accent-blue">
+                            <h5 class="detail-title" style="color: #4A9FD8; margin: 0 0 12px 0;">
                                 🔵 DIMENSIONES FUERTES (7-8.9/10)
                             </h5>
-                            <p style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Power (8.5/10):</strong> Potencia por encima de la media. Velocidades de bola competitivas que te dan ventaja en hoyos largos.<br>
                                 <strong>Strategy (8.0/10):</strong> Buena gestión del campo y toma de decisiones inteligentes.<br>
                                 <strong>Equipment (7.5/10):</strong> Material optimizado que saca el máximo de tu swing.
@@ -5312,11 +5443,11 @@
                         </div>
 
                         <!-- EN DESARROLLO -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                            <h5 style="color: #D4B55A; margin: 0 0 12px 0; font-size: 1.1em; font-weight: 700;">
+                        <div class="card-detail accent-gold">
+                            <h5 class="detail-title" style="color: #D4B55A; margin: 0 0 12px 0;">
                                 🟡 DIMENSIONES EN DESARROLLO (5-6.9/10)
                             </h5>
-                            <p style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Long Game (6.5/10):</strong> Área con margen de mejora. Trabajar ángulo de ataque y consistencia con driver.<br>
                                 <strong>Mid Game (6.8/10):</strong> Hierros medios (5-9) necesitan más precisión para atacar banderas.<br>
                                 <strong>Mental (7.0/10):</strong> Gestión emocional sólida pero con espacio para optimización bajo presión.
@@ -5324,11 +5455,11 @@
                         </div>
 
                         <!-- CRÍTICO -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(232,139,122,0.15), rgba(232,139,122,0.05)); border-radius: 12px; border-left: 4px solid #E88B7A;">
-                            <h5 style="color: #E88B7A; margin: 0 0 12px 0; font-size: 1.1em; font-weight: 700;">
+                        <div class="card-detail accent-red">
+                            <h5 class="detail-title" style="color: #E88B7A; margin: 0 0 12px 0;">
                                 🔴 DIMENSIÓN CRÍTICA - PRIORIDAD MÁXIMA (<5/10)
                             </h5>
-                            <p style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
+                            <p class="detail-text" style="margin: 0; line-height: 1.8; color: rgba(255,255,255,0.85);">
                                 <strong>Accuracy (4.2/10):</strong> Tu principal debilidad. La dispersión lateral te penaliza en tee shots. <strong style="color: #E88B7A;">Prioridad #1 de mejora.</strong> Trabajar path y face control para reducir misses direccionales.
                             </p>
                         </div>
@@ -5354,16 +5485,16 @@
 
                     <!-- Summary Stats -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
-                        <div style="background: rgba(212,181,90,0.1); border-left: 4px solid #D4B55A; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Total Logros</div>
+                        <div class="card-detail accent-gold" style="text-align: center;">
+                            <div class="nested-label">Total Logros</div>
                             <div id="totalMilestones" style="font-size: 2em; font-weight: bold; color: #D4B55A;">--</div>
                         </div>
-                        <div style="background: rgba(90,191,143,0.1); border-left: 4px solid #5ABF8F; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Primer Logro</div>
+                        <div class="card-detail accent-green" style="text-align: center;">
+                            <div class="nested-label">Primer Logro</div>
                             <div id="firstMilestone" style="font-size: 1.3em; font-weight: bold; color: #5ABF8F;">--</div>
                         </div>
-                        <div style="background: rgba(74,159,216,0.1); border-left: 4px solid #4A9FD8; padding: 15px; border-radius: 10px; text-align: center;">
-                            <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Último Logro</div>
+                        <div class="card-detail accent-blue" style="text-align: center;">
+                            <div class="nested-label">Último Logro</div>
                             <div id="lastMilestone" style="font-size: 1.3em; font-weight: bold; color: #4A9FD8;">--</div>
                         </div>
                     </div>
@@ -5390,28 +5521,28 @@
                 
                 <!-- Indicadores de forma - Horizontal (DINÁMICO Sprint 9) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 15px; border-left: 5px solid #5ABF8F; text-align: center;">
-                        <div style="font-size: 0.85em; color: #5ABF8F; margin-bottom: 8px; font-weight: 700; text-transform: uppercase;">Tendencia</div>
+                    <div class="card-detail accent-green" style="text-align: center;">
+                        <div class="nested-label" style="color: #5ABF8F;">Tendencia</div>
                         <div id="formTrendIcon" style="font-size: 3em; margin: 10px 0;">🔥</div>
                         <div id="formTrendText" style="font-size: 1.2em; font-weight: 900; color: #5ABF8F;">EN RACHA</div>
                     </div>
 
-                    <div style="padding: 25px; background: rgba(74,159,216,0.1); border-radius: 15px; border-left: 5px solid #4A9FD8; text-align: center;">
-                        <div style="font-size: 0.85em; color: #4A9FD8; margin-bottom: 8px; font-weight: 700; text-transform: uppercase;">Promedio L20</div>
+                    <div class="card-detail accent-blue" style="text-align: center;">
+                        <div class="nested-label" style="color: #4A9FD8;">Promedio L20</div>
                         <div id="formAverageValue" style="font-size: 3em; font-weight: 900; color: #4A9FD8; margin: 10px 0;">95.3</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Últimas 20 rondas</div>
+                        <div class="detail-text">Últimas 20 rondas</div>
                     </div>
 
-                    <div style="padding: 25px; background: rgba(212,181,90,0.1); border-radius: 15px; border-left: 5px solid #D4B55A; text-align: center;">
-                        <div style="font-size: 0.85em; color: #D4B55A; margin-bottom: 8px; font-weight: 700; text-transform: uppercase;">Mejor L20</div>
+                    <div class="card-detail accent-gold" style="text-align: center;">
+                        <div class="nested-label" style="color: #D4B55A;">Mejor L20</div>
                         <div id="formBestScore" style="font-size: 3em; font-weight: 900; color: #D4B55A; margin: 10px 0;">88</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">Récord personal</div>
+                        <div class="detail-text">Récord personal</div>
                     </div>
 
-                    <div style="padding: 25px; background: rgba(90,191,143,0.1); border-radius: 15px; border-left: 5px solid #5ABF8F; text-align: center;">
-                        <div style="font-size: 0.85em; color: #5ABF8F; margin-bottom: 8px; font-weight: 700; text-transform: uppercase;">Racha Actual</div>
+                    <div class="card-detail accent-green" style="text-align: center;">
+                        <div class="nested-label" style="color: #5ABF8F;">Racha Actual</div>
                         <div id="formStreakText" style="font-size: 1.8em; font-weight: 900; color: #5ABF8F; margin: 20px 0; line-height: 1.3;">EN RACHA 🔥<br>Últimas 5: 92.8</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7);">¡En tu mejor forma!</div>
+                        <div class="detail-text">¡En tu mejor forma!</div>
                     </div>
                 </div>
                 
@@ -5509,8 +5640,8 @@
                 
                 <div id="ps-zones-container" style="display: grid; gap: 20px;">
                     <!-- Zona Verde: ÉLITE (fallback) -->
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 15px; border-left: 6px solid #5ABF8F;">
-                        <h3 style="color: #5ABF8F; margin: 0; font-size: 1.4em;">ZONA VERDE: 50-100m</h3>
+                    <div class="card-detail accent-green">
+                        <h3 class="detail-title" style="color: #5ABF8F; font-size: 1.4em;">ZONA VERDE: 50-100m</h3>
                         <p style="margin: 10px 0;">Cargando datos...</p>
                     </div>
                 </div>
@@ -6221,10 +6352,10 @@
                         Gap spacing perfecto 14-16m entre wedges. Spin control 7500-9000+ rpm = dominio técnico completo. 
                         <strong style="color: #4A9FD8;">Esta es tu fortaleza #1</strong> - preservar mecánica exacta y replicar fundamentos en long/mid game para elevar juego completo.
                     </div>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 4px solid #D4B55A;">
-                        <strong style="color: #D4B55A;">💡 Insight Estratégico:</strong> 
-                        Con wedges a este nivel, tu estrategia debe ser <strong>"wedge backwards"</strong> desde green. 
-                        Prioriza colocar drive/approach en zona 60-95m donde dominas absolutamente. 
+                    <div class="card-detail accent-gold" style="margin-top: 15px;">
+                        <strong style="color: #D4B55A;">💡 Insight Estratégico:</strong>
+                        Con wedges a este nivel, tu estrategia debe ser <strong>"wedge backwards"</strong> desde green.
+                        Prioriza colocar drive/approach en zona 60-95m donde dominas absolutamente.
                         Evita distancias 100-150m donde long/mid game tienen mayor variabilidad. 
                         <strong style="color: #5ABF8F;">Juega a tus fortalezas = scoring óptimo.</strong>
                     </div>
@@ -6421,7 +6552,7 @@
                         </div>
                     </div>
                     
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(58,143,200,0.1); border-radius: 8px; border-left: 4px solid #3A8FC8;">
+                    <div class="card-detail accent-blue" style="margin-top: 15px;">
                         <strong style="color: #3A8FC8;">📊 Contexto vs PGA Tour:</strong> 
                         Tour promedio driver 1.48-1.50, maderas 1.47-1.50, irons 1.35-1.38. 
                         Tu 3W (1.48) ya está en nivel tour. Tus irons (1.30-1.35) están en rango amateur avanzado/semi-pro. 
@@ -6666,8 +6797,8 @@
                 </p>
                 <canvas id="hcpEvolutionChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                    <h3 style="color: #5ABF8F; margin-bottom: 15px;">🎯 Logro Principal: Bajada de 10 puntos</h3>
+                <div class="card-detail accent-green" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 15px;">🎯 Logro Principal: Bajada de 10 puntos</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
                         <strong><span id="cs-hcp-start-date">Marzo 2024</span>:</strong> Iniciaste con HCP <span id="cs-hcp-initial">32.0</span><br>
                         <strong><span id="cs-hcp-best-date">Mayo 2025</span>:</strong> Bajaste a HCP <span id="cs-hcp-best-val">21.9</span> (mejor marca histórica)<br>
@@ -6725,7 +6856,7 @@
                 </div>
                 
                 <!-- INSIGHT -->
-                <div style="margin-top: 30px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                <div class="card-detail accent-blue" style="margin-top: 30px;">
                     <strong style="color: #4A9FD8; font-size: 1.2em;">💡 Insights Clave:</strong>
                     <ul id="cs-insights-list" style="margin: 15px 0 0 20px; line-height: 2; font-size: 1.05em;">
                         <li><strong style="color: #D4B55A;">🏆 <span id="cs-insight-best-course">Nuevo Portil</span></strong> es tu mejor campo (promedio <span id="cs-insight-best-avg">90.5</span>) - ¡diferencia significativa vs tu promedio general!</li>
@@ -6795,8 +6926,8 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                    <h3 style="color: #D4B55A; margin-bottom: 15px;">📊 Patrón de Mejores Rondas</h3>
+                <div class="card-detail accent-gold" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #D4B55A; margin-bottom: 15px;">📊 Patrón de Mejores Rondas</h3>
                     <ul id="cs-best-pattern-list" style="margin: 0; padding-left: 20px; line-height: 2;">
                         <li><strong>Agosto 2025:</strong> Racha excepcional con 3 rondas bajo 90 (89, 89, 89)</li>
                         <li><strong>Noviembre 2025:</strong> Récord personal de 88 en Marina Golf</li>
@@ -6841,8 +6972,8 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                    <h3 style="color: #5ABF8F; margin-bottom: 15px;">🎯 Tendencia Positiva Confirmada</h3>
+                <div class="card-detail accent-green" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 15px;">🎯 Tendencia Positiva Confirmada</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
                         Tu scoring ha mejorado consistentemente desde Q2-2024. El Q3-2025 fue tu <strong style="color: #5ABF8F;">mejor trimestre histórico (<span id="cs-best-quarter-avg">95.1</span>)</strong>,
                         y lo has mantenido en Q4-2025 (<span id="cs-latest-quarter-avg">95.7</span>). Esto representa una <strong style="color: #5ABF8F;">mejora sostenida de <span id="cs-quarterly-improvement">6.4</span> golpes</strong>
@@ -6882,8 +7013,8 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 15px;">📊 Análisis de Consistencia</h3>
+                <div class="card-detail accent-blue" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #4A9FD8; margin-bottom: 15px;">📊 Análisis de Consistencia</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
                         <strong>44% de tus rondas</strong> (33/75) están en categoría "Excelente" o "Bueno" (differential ≤25), 
                         lo cual es <strong style="color: #5ABF8F;">muy positivo para HCP 23</strong>. 
@@ -6923,8 +7054,8 @@
                 </p>
                 <canvas id="volatilityChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                    <h3 style="color: #5ABF8F; margin-bottom: 15px;">📈 Tu Consistencia Ha Mejorado</h3>
+                <div class="card-detail accent-green" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 15px;">📈 Tu Consistencia Ha Mejorado</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
                         <strong>2024-Q2:</strong> σ = <span id="cs-vol-start">8.5</span> (scoring muy variable)<br>
                         <strong>2025-Q3:</strong> σ = <span id="cs-vol-current">4.8</span> (scoring consistente) ✅<br>
@@ -6964,8 +7095,8 @@
                 </p>
                 <canvas id="hcpCurveChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 15px;">📊 Análisis Estadístico</h3>
+                <div class="card-detail accent-blue" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #4A9FD8; margin-bottom: 15px;">📊 Análisis Estadístico</h3>
                     <ul style="margin: 0; padding-left: 20px; line-height: 2;">
                         <li><strong>Score esperado (HCP 23):</strong> 95 en par 72</li>
                         <li><strong>Dentro de ±6 golpes (1σ):</strong> 50.9% de tus rondas ✅</li>
@@ -7047,7 +7178,7 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                <div class="card-detail accent-blue" style="margin-top: 20px;">
                     <strong style="color: #4A9FD8;">💡 Interpretación:</strong>
                     <p style="margin: 10px 0 0 0; line-height: 1.8;">
                         Tu tendencia es <strong style="color: #5ABF8F;">claramente positiva</strong> (-0.8 golpes por trimestre). 
@@ -7799,8 +7930,8 @@
                 </p>
                 
                 <!-- Long Game: Driver, 3W, Hybrid -->
-                <div style="background: rgba(232,139,122,0.08); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 4px solid #E88B7A;">
-                    <h3 style="color: #E88B7A; margin-bottom: 20px; font-size: 1.4em;">🪵 Long Game (Driver, 3W, Hybrid)</h3>
+                <div class="card-detail accent-red" style="margin-bottom: 30px;">
+                    <h3 class="detail-title" style="color: #E88B7A; margin-bottom: 20px; font-size: 1.4em;">🪵 Long Game (Driver, 3W, Hybrid)</h3>
                     <div class="grid-2">
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Driver</h4>
@@ -7827,8 +7958,8 @@
                 </div>
                 
                 <!-- Mid Game: Irons 5-9 -->
-                <div style="background: rgba(212,181,90,0.08); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 4px solid #D4B55A;">
-                    <h3 style="color: #D4B55A; margin-bottom: 20px; font-size: 1.4em;">⛳ Mid Game - Irons (5-9)</h3>
+                <div class="card-detail accent-gold" style="margin-bottom: 30px;">
+                    <h3 class="detail-title" style="color: #D4B55A; margin-bottom: 20px; font-size: 1.4em;">⛳ Mid Game - Irons (5-9)</h3>
                     <div class="grid-3">
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">5 Iron</h4>
@@ -7871,8 +8002,8 @@
                 </div>
                 
                 <!-- Short Game: Wedges -->
-                <div style="background: rgba(90,191,143,0.08); padding: 25px; border-radius: 15px; margin-bottom: 30px; border-left: 4px solid #5ABF8F;">
-                    <h3 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.4em;">🎯 Short Game - Wedges (PW/GW/SW)</h3>
+                <div class="card-detail accent-green" style="margin-bottom: 30px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.4em;">🎯 Short Game - Wedges (PW/GW/SW)</h3>
                     <div class="grid-3">
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;">
                             <h4 style="margin-bottom: 15px; color: #4A9FD8;">Pitching Wedge</h4>
@@ -8885,8 +9016,8 @@
                     </p>
                 </div>
 
-                <div id="shotZonesInsights" style="margin-top: 25px; padding: 25px; background: rgba(232,139,122,0.1); border-radius: 12px; border-left: 4px solid #E88B7A;">
-                    <h3 style="color: #E88B7A; margin-bottom: 15px;">🎯 Insights Clave:</h3>
+                <div id="shotZonesInsights" class="card-detail accent-red" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #E88B7A; margin-bottom: 15px;">🎯 Insights Clave:</h3>
                     <ul style="margin: 0; padding-left: 20px; line-height: 2;">
                         <li><strong>Driver:</strong> 85% de golpes caen IZQUIERDA del centro (promedio 91.6m izq)</li>
                         <li><strong>Corrección recomendada:</strong> Apunta 20-25m DERECHA del objetivo</li>
@@ -8925,7 +9056,7 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                <div class="card-detail accent-blue" style="margin-top: 20px;">
                     <strong style="color: #4A9FD8;">💡 Insight Estratégico:</strong>
                     <p style="margin: 10px 0 0 0; line-height: 1.8;">
                         Lay-up a 95m (zona verde) = <strong style="color: #5ABF8F;">82% par chance</strong> vs forzar desde 175m (zona roja) = <strong style="color: #E88B7A;">28% par chance</strong>. 
@@ -8963,8 +9094,8 @@
                 
                 <canvas id="tempoChart" style="max-height: 250px;"></canvas>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                    <h3 style="color: #D4B55A; margin-bottom: 15px;">📊 Correlación Tempo vs Distancia</h3>
+                <div class="card-detail accent-gold" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #D4B55A; margin-bottom: 15px;">📊 Correlación Tempo vs Distancia</h3>
                     <ul style="margin: 0; padding-left: 20px; line-height: 2;">
                         <li><strong>Golpes >230m:</strong> Tempo cercano a 3:1 (swing controlado)</li>
                         <li><strong>Golpes <220m:</strong> Tempo 2.2:1 (backswing apurado, pérdida de timing)</li>
@@ -9122,8 +9253,8 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 15px;">🧬 Tu "DNA" de Swing</h3>
+                <div class="card-detail accent-blue" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #4A9FD8; margin-bottom: 15px;">🧬 Tu "DNA" de Swing</h3>
                     <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
                         <strong>Similitud con Tour Pro:</strong> <span style="font-size: 1.3em; color: #5ABF8F; font-weight: 800;">68%</span><br>
                         <strong>Perfil:</strong> "Short Game Specialist con Attack Angle Amateur"<br>
@@ -11323,8 +11454,8 @@
                     </div>
                     
                     <!-- Strategic Note -->
-                    <div style="margin-top: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">📌 Nota Estratégica sobre 5W Nuevo</h4>
+                    <div class="card-detail accent-blue" style="margin-top: 25px;">
+                        <h4 class="detail-title" style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">📌 Nota Estratégica sobre 5W Nuevo</h4>
                         <p style="line-height: 1.8; font-size: 1.05em; margin: 0;">
                             Aunque el 5W muestra <strong>0% ROI</strong> en Driver/3W/Irons/Wedges, tiene <strong style="color: #D4B55A;">+18% ROI en Long Woods</strong> específicamente. 
                             Esto es estratégico para completar la suite de maderas y cerrar gaps de distancia entre 3W y híbrido. 

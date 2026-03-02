@@ -1,92 +1,92 @@
 {
-  "hero_statement": "Con handicap 23.2, has mejorado **12.8 puntos** en apenas 18 meses—un progreso excepcional que te sitúa entre los jugadores amateur de mayor mejora sostenida. Tu **juego corto es élite absoluta** (percentil 92), el arma que te salva rondas cuando el resto del juego no acompaña. La oportunidad más rentable está clara: reducir tu dispersión lateral con el driver puede ahorrarte **2.5 golpes por ronda**. Estás a solo 4.2 puntos de tu objetivo sub-20, y la proyección dice que lo consigues antes de julio 2026.",
-  "dna_profile": "Eres 'El Artista Completo': un jugador que gana hoyos desde los 50 metros hacia el green, con un scrambling del 45% que intimida a cualquier rival. Tu consistencia es tu segunda arma —scores con desviación de solo 6.8 golpes, mejor que tu grupo de handicap. Corey Pavin con más metros.",
+  "hero_statement": "Con handicap 23.2, has mejorado **12.8 puntos** en 20 meses —un progreso excepcional que te sitúa entre los jugadores con mayor ritmo de mejora de tu categoría. Tu **juego corto es élite absoluta** (percentil 92), capaz de salvar golpes donde otros pierden rondas enteras. La oportunidad está clara: reducir tu dispersión desde el tee puede ahorrarte **2.5 golpes por ronda** de forma inmediata. Estás a solo 4.2 puntos del sub-19 proyectado para junio 2026.",
+  "dna_profile": "Eres 'El Artista Completo': un jugador que gana partidos con las manos, no con el driver. Tu scrambling del 45% (benchmark: 26%) y tu bounce-back rate del 28% revelan una mentalidad competitiva y una gestión del daño excepcional. Referentes de tu estilo: Corey Pavin, Zach Johnson.",
   "chart_titles": {
     "hcp_evolution": {
-      "title": "Evolución Handicap RFEG - 18 Meses",
-      "subtitle": "Mejora sostenida: -12.8 puntos desde abril 2024"
+      "title": "Evolución Handicap — 20 Meses",
+      "subtitle": "Mejora sostenida: -12.8 puntos desde HCP 35.8"
     },
     "hcp_trajectory": {
-      "title": "Proyección Handicap - Próximos 6 Meses",
-      "subtitle": "Sub-20 en el horizonte: objetivo mayo 2026"
+      "title": "Proyección Handicap — Próximos 6 Meses",
+      "subtitle": "Sub-20 alcanzable en mayo 2026 con ritmo actual"
     },
     "scoring_profile_radar": {
-      "title": "Perfil de Juego - 8 Dimensiones",
-      "subtitle": "Tus fortalezas y áreas de mejora vs HCP 23"
+      "title": "Perfil de Juego — 8 Dimensiones",
+      "subtitle": "Juego corto élite vs. precisión como área clave"
     },
     "strokes_gained": {
       "title": "Strokes Gained por Categoría",
-      "subtitle": "Dónde ganas y pierdes golpes vs benchmark HCP 15"
+      "subtitle": "Dónde ganas y pierdes golpes vs. HCP 15"
     },
     "scoring_probability": {
       "title": "Probabilidad de Score por Distancia",
-      "subtitle": "¿Desde dónde haces pares y bogeys?"
+      "subtitle": "¿Desde dónde haces más pares y bogeys?"
     },
     "quick_wins_matrix": {
-      "title": "Matriz de Oportunidades - Impacto vs Dificultad",
-      "subtitle": "Prioriza lo que más golpes te ahorra con menos esfuerzo"
+      "title": "Matriz de Oportunidades — Impacto vs. Dificultad",
+      "subtitle": "Prioriza las mejoras con mayor ROI de golpes"
     },
     "swing_dna": {
-      "title": "ADN de Swing - 12 Dimensiones",
-      "subtitle": "Tu huella técnica vs HCP 15 y HCP 23"
+      "title": "ADN de Swing — 12 Dimensiones",
+      "subtitle": "Tu huella técnica vs. HCP 15 y HCP 23"
     },
     "round_comparison": {
-      "title": "Evolución de Rondas - Inicio vs Actualidad",
-      "subtitle": "De 107.4 a 92.8 de promedio: -14.6 golpes reales"
+      "title": "Comparativa Rondas: Inicio vs. Hoy",
+      "subtitle": "De 107.4 a 92.8 de media — 14.6 golpes menos"
     }
   },
   "insight_boxes": [
     {
-      "title": "Juego Corto de Élite: Tu Mayor Activo",
-      "content": "Tu scrambling del 45% casi duplica el benchmark de tu handicap (26%). Esto significa que cuando fallas un green, tienes casi 1 de cada 2 oportunidades de salvar el par donde otros anotan bogey. Tu SG Around the Green es +1.8 golpes por ronda vs HCP 15. \n\nCAUSA: Técnica y tacto superiores en zona de 50m.\nSOLUCIÓN: Mantener y consolidar con práctica semanal de 30 min.\nGANANCIA: Ya te aporta +3.1 golpes/ronda vs tu grupo de handicap."
+      "title": "Juego Corto Élite: Tu Mayor Ventaja",
+      "content": "Tu scrambling del 45% triplica el benchmark de tu handicap (26%) y tu SG Around the Green es +1.8 golpes por ronda vs. HCP 15. Esto significa que cuando fallas un green, tienes casi 1 de cada 2 posibilidades de salvar el par. VENTAJA: Cada fairway ganado activa esta zona fuerte antes en el hoyo. ACCIÓN: Mantén 20 min de práctica de chipping semanal para consolidar este diferencial. GANANCIA: Protege 1.8 golpes/ronda que ya estás ganando."
     },
     {
-      "title": "Driver: Dispersión Lateral como Prioridad #1",
-      "content": "Tu dispersión lateral con driver es de 29.9m, frente a los 14.6m del benchmark HCP 23. Esto te cuesta aproximadamente 2.5 golpes por ronda en posiciones de rough y situaciones comprometidas. Solo el 48% de tus drives encuentran calle, aunque superas el benchmark (39%).\n\nCAUSA: Face angle abierto en impacto (+4.5° de face-to-path).\nSOLUCIÓN: Drill de alineación con alignment sticks, 15 min/día, 4 semanas.\nGANANCIA: -15m dispersión lateral, -2.0 golpes/ronda estimados."
+      "title": "Dispersión Driver: El Coste Real",
+      "content": "Tu dispersión lateral con driver es 29.9m (benchmark HCP 23: 14.6m). Esto se traduce en rough frecuente y un SG Off the Tee de -2.5 golpes/ronda. La causa principal: face angle y club path inconsistentes (Face Angle: 62/100, Club Path: 65/100). SOLUCIÓN: Drill de alineación con alignment sticks, 15 min/día, enfocado en cuadrar la cara en impacto. GANANCIA: Reducir dispersión a 20m equivale a -1.5 golpes/ronda."
     },
     {
-      "title": "Zona de Peligro: 100-150 Metros",
-      "content": "Desde 100-150m, solo haces par el 35% de las veces y bogey o peor el 62%. Comparado con tu zona de confort (0-50m, donde haces par o mejor el 65%), la diferencia es brutal. Cada approach desde esta distancia que no controlas te aleja de activar tu mejor arma: el juego corto.\n\nCAUSA: Control de distancia inconsistente con hierros medios.\nSOLUCIÓN: Práctica de distancias fijas con 7i y 8i, 2 sesiones/semana.\nGANANCIA: +10pp en tasa de par desde 100-150m, -1.5 golpes/ronda."
+      "title": "Zona Crítica: 100-150m",
+      "content": "Desde 100-150m, solo haces par el 35% de las veces y bogey o peor el 62%. Es tu zona de mayor pérdida de golpes después del tee. Comparado con 0-50m (par 50%, birdie 15%), la diferencia es brutal. CAUSA: Control de distancia con hierros medios por debajo del potencial. SOLUCIÓN: Sesiones de approach con 3 distancias fijas (100m, 125m, 150m), 20 bolas cada una, 2 veces/semana. GANANCIA: +1.5 golpes/ronda en 8 semanas."
     },
     {
-      "title": "Dobles Bogeys: El Freno Más Costoso",
-      "content": "El 53.3% de tus hoyos terminan en doble bogey o peor —tu mayor fuente de pérdida de golpes. En tus últimas 5 rondas ese porcentaje ha bajado al 35.6%, una mejora de 17.7 puntos. Reducir los grandes números es el camino más directo hacia HCP sub-20.\n\nCAUSA: Decisiones de riesgo en situaciones comprometidas.\nSOLUCIÓN: Protocolo de gestión de campo: juega siempre al centro del green desde rough.\nGANANCIA: -2.2 golpes/ronda con mejor toma de decisiones."
+      "title": "Dobles Bogeys: La Palanca Más Rápida",
+      "content": "El 53.3% de tus hoyos terminan en doble bogey o peor — frente al 35.6% en tus últimas 5 rondas. Esta reducción de 17.7 puntos porcentuales es la mejora más significativa de tu juego reciente. CAUSA: Gestión de riesgo mejorable en hoyos difíciles. SOLUCIÓN: Regla de 'zona segura': ante duda de palo, siempre el más corto. GANANCIA: Reducir dobles del 53% al 40% equivale a -3 golpes/ronda directos."
     }
   ],
   "quick_wins": [
     {
-      "title": "Putting <3 Metros: Dinero en el Banco",
-      "content": "🎯 Impacto: 2.5 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 4 semanas\n\nLos putts cortos son la mejora de mayor ROI disponible para tu perfil. Actualmente tu tasa de 3-putts es del 12% (benchmark: 17%), pero hay margen real desde menos de 3m.\n\nDrill: 50 putts diarios desde 1m, 1.5m y 2.5m con alineación marcada. Objetivo: 95% de conversión desde <2m en 4 semanas."
+      "title": "Putting <3m: Golpes Regalados",
+      "content": "Impacto: 2.5 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 4 semanas. Actualmente pierdes putts cortos que deberían ser automáticos. Objetivo: convertir el 90% de los putts de menos de 3m. Drill: 50 putts diarios desde 1m, 2m y 3m en círculo completo. Solo necesitas 15 min/día."
     },
     {
-      "title": "Gestión de Campo: Golpes Gratis",
-      "content": "🎯 Impacto: 2.2 golpes/ronda | Dificultad: 3/10 (Fácil) | Tiempo: 6 semanas\n\nTomar mejores decisiones no requiere practicar en el range —requiere un protocolo claro. Desde rough o posición comprometida, apunta siempre al centro del green, no al pin.\n\nAcción: Antes de cada tiro, define la zona segura de caída. Elimina los dobles bogeys evitables. Objetivo: bajar de 53% a 40% en hoyos de doble bogey o peor."
+      "title": "Gestión de Campo: Decisiones Más Inteligentes",
+      "content": "Impacto: 2.2 golpes/ronda | Dificultad: 3/10 (Fácil) | Tiempo: 6 semanas. No requiere cambiar tu swing, solo tus decisiones. Objetivo: eliminar el 'héroe shot' en situaciones de riesgo alto. Método: antes de cada golpe, identifica la zona segura y juega a ella. Implementable desde la próxima ronda."
     },
     {
-      "title": "Chipping Consistente: Activa Tu Zona Fuerte",
-      "content": "🎯 Impacto: 1.9 golpes/ronda | Dificultad: 4/10 (Fácil-Medio) | Tiempo: 6 semanas\n\nTu scrambling del 45% es élite, pero hay variabilidad en la primera zona de chip (50-100m). Estandarizar tu técnica de chip aumenta la frecuencia con la que activas tu ventaja real.\n\nDrill: 20 chips desde 3 distancias fijas (10m, 20m, 30m) con objetivo de aterrizaje marcado. 3 sesiones/semana de 20 minutos."
+      "title": "Chipping Consistente: Consolida tu Ventaja",
+      "content": "Impacto: 1.9 golpes/ronda | Dificultad: 4/10 (Fácil-Medio) | Tiempo: 6 semanas. Ya tienes un chipping élite — el objetivo es hacerlo más consistente bajo presión. Objetivo: reducir varianza en chips de 10-30m. Drill: 20 chips a 3 distancias fijas, midiendo dispersión, 2 veces/semana."
     },
     {
-      "title": "Rutina Pre-Shot: Consistencia Mental Gratis",
-      "content": "🎯 Impacto: 0.8 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 2 semanas\n\nTu bounce-back rate del 28% (benchmark: 13%) muestra que tienes resiliencia mental. Una rutina pre-shot estandarizada consolida esa fortaleza y reduce decisiones impulsivas bajo presión.\n\nAcción: Define una rutina de 20 segundos (visualización + alineación + práctica) y aplícala en cada tiro durante las próximas 4 rondas."
+      "title": "Rutina Pre-Shot: El Hábito Más Rentable",
+      "content": "Impacto: 0.8 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 2 semanas. Una rutina consistente reduce errores mentales y mejora la ejecución bajo presión. Objetivo: misma secuencia en cada golpe (alineación, visualización, waggle). Implementable hoy mismo, sin práctica adicional."
     }
   ],
   "roi_cards": [
     {
-      "action": "Programa Putting <3m: Repeticiones Diarias",
-      "content": "📋 Inversión: 2 horas/semana × 4 semanas | Mejora esperada: -2.5 golpes/ronda\n\nEl mayor ROI disponible en tu perfil actual. Bajo coste de tiempo, impacto inmediato y medible.\n\nPLAN:\n• Semana 1: Establecer línea base (% conversión desde 1m, 1.5m, 2.5m)\n• Semana 2: Drill de alineación con marcadores físicos\n• Semana 3: Incorporar presión simulada (series de 10 sin fallar)\n• Semana 4: Validar en ronda real\n• Checkpoint: Medir 3-putt % en semana 2 y semana 4"
+      "action": "Programa de Putting <3m (repetitions drill)",
+      "content": "Inversión: 15 min/día × 4 semanas | Mejora esperada: -2.5 golpes/ronda | ROI: 1.25 golpes/hora. PLAN: Semana 1-2: 50 putts diarios desde 1m y 2m. Semana 3-4: incorporar 3m y putts con presión (si fallas, empiezas de cero). Checkpoint semana 2: medir % de conversión desde 2m. Objetivo: pasar del 75% al 90%."
     },
     {
-      "action": "Protocolo de Gestión de Campo",
-      "content": "📋 Inversión: 1 hora/semana × 6 semanas | Mejora esperada: -2.2 golpes/ronda\n\nEl ROI más alto del plan (2.2 golpes por hora invertida). No requiere range, solo disciplina de decisión.\n\nPLAN:\n• Semana 1-2: Definir zonas seguras en cada campo habitual\n• Semana 3-4: Aplicar protocolo en rondas reales, anotar decisiones\n• Semana 5-6: Revisar hoyos con doble bogey y analizar causa\n• Checkpoint: Reducir dobles de 53% a <42% en semana 6"
+      "action": "Gestión de Campo — Toma de Decisiones",
+      "content": "Inversión: 1 hora/semana × 6 semanas | Mejora esperada: -2.2 golpes/ronda | ROI: 2.2 golpes/hora (el más alto del plan). PLAN: Semana 1-2: identificar tus 3 hoyos con más dobles bogeys. Semana 3-4: estrategia específica para cada uno. Semana 5-6: aplicar en ronda y registrar resultado. Sin práctica física necesaria."
     },
     {
-      "action": "Precisión Driver: Alineación y Face-to-Path",
-      "content": "📋 Inversión: 3 horas/semana × 12 semanas | Mejora esperada: -2.0 golpes/ronda\n\nEl proyecto más ambicioso pero de mayor impacto a largo plazo. Reducir dispersión de 29.9m a <20m activa tu juego corto con más frecuencia desde posiciones favorables.\n\nPLAN:\n• Semana 1-3: Corrección de grip y alineación de cara con alignment sticks\n• Semana 4-6: Trabajo de path con drill de inside-out\n• Semana 7-9: Integración en swing completo con control de tempo\n• Semana 10-12: Validación en campo, objetivo 55% fairways\n• Checkpoint: Medir face-to-path en semana 4 y semana 8"
+      "action": "Precisión Driver — Alineación y Tempo",
+      "content": "Inversión: 3 horas/semana × 12 semanas | Mejora esperada: -2.0 golpes/ronda | ROI: 0.67 golpes/hora. PLAN: Semana 1-3: posición de alineación + altura de tee. Semana 4-6: drill face-to-path con alignment sticks. Semana 7-12: consolidación con medición de dispersión. Checkpoint semana 4: dispersión lateral objetivo <22m."
     },
     {
-      "action": "Control Distancia Approach 100-150m",
-      "content": "📋 Inversión: 2 horas/semana × 8 semanas | Mejora esperada: -1.5 golpes/ronda\n\nMejorar desde esta distancia convierte tus approach shots en oportunidades reales de par, activando antes tu zona fuerte (juego corto y putting).\n\nPLAN:\n• Semana 1-2: Calibrar distancias reales de 7i, 8i y 9i (10 bolas por palo)\n• Semana 3-4: Drill de distancias fijas con objetivo de aterrizaje en green\n• Semana 5-6: Incorporar variación de viento y lie\n• Semana 7-8: Aplicar en rondas reales con anotación de zona de caída\n• Checkpoint: Tasa de par desde 100-150m en semana 4 y semana 8"
+      "action": "Approach Shots 100-150m — Control de Distancia",
+      "content": "Inversión: 2 horas/semana × 8 semanas | Mejora esperada: -1.5 golpes/ronda | ROI: 0.75 golpes/hora. PLAN: Semana 1-2: calibrar distancias reales de PW, 9i y 8i. Semana 3-5: drill de 3 distancias fijas (100m, 125m, 150m), 20 bolas cada una. Semana 6-8: simular situaciones de approach en campo. Objetivo: reducir dispersión de distancia a ±8m."
     }
   ]
 }

@@ -1,8 +1,8 @@
 # AlvGolf - Multi-Agent Golf Analytics System
 
-**Version:** v3.0.7 - 100% Dynamic Dashboard (62 JSON keys, ~176 editorial hardcodes migrated)
+**Version:** v3.0.8 - Card System v3.1 + Golf Identity Typography Fix
 **Estado:** Production Ready
-**Ultima actualizacion:** 2026-03-02
+**Ultima actualizacion:** 2026-03-03
 
 [![Dashboard](https://img.shields.io/badge/Dashboard-v5.3.0-blue)]()
 [![Backend](https://img.shields.io/badge/Backend-v5.3.0-green)]()
@@ -102,6 +102,18 @@ graph TB
 ---
 
 ## What's New
+
+### v3.0.8 - Card System v3.1 + Typography Fix (2026-03-03)
+
+**Card System v3.1** — sistema CSS unificado de 4 niveles de jerarquia visual:
+
+- **CSS Tokens:** 17 custom properties (`:root`) para backgrounds, radios, paddings, colores accent
+- **4 niveles de card:** `card-hero` > `card-section` > `card-detail` > `card-nested` con 5 modifiers de color (green/blue/gold/red/neutral)
+- **14 clases CSS existentes** alineadas a tokens (score-card, chart-container, club-card, etc.)
+- **~60 inline styles migrados** a clases card-detail/card-nested en Tabs 1-6
+- **Golf Identity typography fix:** todos los textos gi-* escalados +15-20% (de 9-13px a 10.5-15px) y colores mas brillantes
+- **Bug fix:** `dimLabelsNarr` scope error (ReferenceError linea 717) — impedia inyeccion dinamica de narrativa de forma
+- **Typography helpers neutralizados:** eliminado font-size/color de detail-title, detail-text, nested-label, nested-value
 
 ### v3.0.7 - 100% Dynamic Dashboard (2026-03-02)
 
@@ -431,6 +443,13 @@ AlvGolf/
 - [x] ~216 IDs dinamicos totales + 12 containers
 - [x] DOMContentLoaded fix para localStorage cache race condition
 
+#### v3.0.8 - Card System v3.1 + Typography Fix (2026-03-03)
+- [x] Card System CSS: 17 tokens + 4 niveles (hero/section/detail/nested) + 5 accent colors
+- [x] 14 clases existentes alineadas a tokens + ~60 inline styles migrados
+- [x] Golf Identity typography: gi-* escalados +15-20%, colores mas brillantes
+- [x] Bug fix: dimLabelsNarr scope error (narrativa forma no se inyectaba)
+- [x] Typography helpers neutralizados (no sobreescriben estilos existentes)
+
 #### v3.0.7 - 100% Dynamic Dashboard (2026-03-02)
 - [x] ~176 hardcodes editoriales migrados (LOTES 1-9)
 - [x] 3 funciones backend nuevas (monthly_recommendations, bubble_analysis, improvement_plan)
@@ -443,6 +462,16 @@ AlvGolf/
 ---
 
 ## Changelog
+
+### v3.0.8 (2026-03-03) - Card System v3.1 + Typography Fix
+- Card System v3.1: 17 CSS tokens + 4 niveles jerarquia (card-hero > card-section > card-detail > card-nested)
+- 5 accent modifiers: green, blue, gold, red, neutral (border-left + gradient background)
+- 14 clases CSS existentes alineadas a tokens (padding, border-radius, backgrounds)
+- ~60 inline styles migrados a clases semanticas en Tabs 1-6
+- Golf Identity typography fix: textos gi-* de 9-13px escalados a 10.5-15px
+- Variables gi-text/gi-muted mas brillantes (#d4d8cc→#e0e2dc, #7a8070→#9a9e94)
+- Bug fix: dimLabelsNarr fuera de scope → dimMap local (ReferenceError linea 717)
+- Typography helpers (.detail-title, .detail-text, .nested-label, .nested-value) neutralizados
 
 ### v3.0.7 (2026-03-02) - 100% Dynamic Dashboard
 - LOTES 1-9: ~176 hardcodes editoriales migrados a JSON
@@ -534,6 +563,6 @@ Proyecto personal - Todos los derechos reservados Alvaro Peralta 2026
 
 ---
 
-**Ultima actualizacion:** 2 de marzo de 2026
+**Ultima actualizacion:** 3 de marzo de 2026
 **Estado:** Production Ready
-**Version:** v3.0.7 - 100% Dynamic Dashboard (62 JSON keys, ~176 editorial hardcodes migrated)
+**Version:** v3.0.8 - Card System v3.1 + Golf Identity Typography Fix

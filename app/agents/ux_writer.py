@@ -12,6 +12,7 @@ cacheable system prompt for cost optimization (90% savings via prompt caching).
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from app.config import settings
+from app.agents import extract_cache_usage
 from typing import Dict, Any
 import json
 
@@ -463,6 +464,7 @@ Return a single valid JSON object with exactly those 6 keys. Do not include stat
         print("[AgentUXWriter] Invoking Claude Sonnet 4.6 (with prompt caching)...")
         try:
             response = self.llm.invoke(messages)
+            cache_usage = extract_cache_usage(response, "AgentUXWriter")
 
             # Try to parse JSON response
             try:
@@ -472,12 +474,12 @@ Return a single valid JSON object with exactly those 6 keys. Do not include stat
                 print("[AgentUXWriter] [WARNING] Response not valid JSON, returning raw text")
                 content_json = {"raw_content": response.content}
 
-            # Extract metadata if available
             metadata = {
                 "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "content_length": len(response.content),
-                "agent_type": "ux_writer"
+                "agent_type": "ux_writer",
+                **cache_usage
             }
 
             print(f"[AgentUXWriter] [OK] Dashboard content complete ({len(response.content)} chars)")

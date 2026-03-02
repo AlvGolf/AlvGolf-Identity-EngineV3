@@ -9,6 +9,7 @@ Output: 3 secciones motivacionales (DNA, PROGRESS, ACTION)
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
+from app.agents import extract_cache_usage
 import os
 import json
 from loguru import logger
@@ -114,6 +115,7 @@ IMPORTANTE: Responde SOLO con el JSON, sin explicaciones adicionales.""")
 
     try:
         response = llm.invoke(messages)
+        extract_cache_usage(response, "DashboardWriter")
         content = response.content.strip()
 
         logger.info(f"Dashboard Writer: Received response ({len(content)} chars)")

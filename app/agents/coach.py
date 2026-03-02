@@ -12,6 +12,7 @@ cacheable system prompt for cost optimization (90% savings via prompt caching).
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from app.config import settings
+from app.agents import extract_cache_usage
 from typing import Dict, Any
 import json
 
@@ -632,14 +633,15 @@ Generate a comprehensive coaching report following the output structure. Return 
         print("[AgentCoach] Invoking Claude Sonnet 4.6 (with prompt caching)...")
         try:
             response = self.llm.invoke(messages)
+            cache_usage = extract_cache_usage(response, "AgentCoach")
 
-            # Extract metadata
             metadata = {
                 "model": "claude-sonnet-4-6",
                 "user_id": user_id,
                 "report_length": len(response.content),
                 "agent_type": "coach",
-                "team2_integrated": team2_analysis is not None
+                "team2_integrated": team2_analysis is not None,
+                **cache_usage
             }
 
             print(f"[AgentCoach] [OK] Coaching report complete ({len(response.content)} chars)")
