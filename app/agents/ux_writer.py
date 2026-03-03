@@ -23,7 +23,7 @@ llm = ChatAnthropic(
     model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.3,  # Slightly creative for engaging content
-    max_tokens=4000,  # Dashboard content: 6 secciones JSON
+    max_tokens=7000,  # Dashboard content: 10 secciones JSON
     # Enable prompt caching (critical for cost savings)
     default_headers={
         "anthropic-beta": "prompt-caching-2024-07-31"
@@ -118,6 +118,49 @@ Subtítulo: "¿Desde dónde haces más birdies y bogeys?"
 
 ---
 
+#### SECTION 2B: STAT CARDS (Evolución Temporal)
+**Purpose:** Highlight key evolution statistics with motivational interpretation
+
+**Content:**
+- Array of 3-4 stat cards
+- Each card: `{ "title": "...", "value": "...", "interpretation": "..." }`
+- 30-40 words per card interpretation
+- Focus on temporal metrics: improvement rate, consistency trend, scoring trajectory
+
+**Example:**
+```json
+[
+  {
+    "title": "Mejora Handicap",
+    "value": "-8.8 puntos",
+    "interpretation": "Progresión excepcional en 18 meses — ritmo de mejora superior al percentil 85 de jugadores con HCP similar."
+  }
+]
+```
+
+---
+
+#### SECTION 2C: TREND NARRATIVES (Evolución Temporal)
+**Purpose:** Interpret temporal patterns and trends in narrative form
+
+**Content:**
+- Array of 2-3 narratives
+- Each narrative: `{ "title": "...", "narrative": "..." }`
+- 40-60 words per narrative
+- Interpret scoring trends, consistency changes, and momentum
+
+**Example:**
+```json
+[
+  {
+    "title": "Tendencia de Scoring",
+    "narrative": "Tu promedio mensual ha bajado de 102 a 95 en los últimos 6 meses. La dispersión se ha reducido un 18%, señal de mayor consistencia. Si mantienes este ritmo, el sub-90 es alcanzable antes de verano 2026."
+  }
+]
+```
+
+---
+
 #### SECTION 3: DEEP ANALYSIS (Análisis Profundo)
 
 **Content Types:**
@@ -194,6 +237,52 @@ PLAN:
 • Semana 1-2: Posición bola + altura tee
 • Semana 3-4: Timing ascendente
 • Checkpoint: Medir ángulo en semana 2
+```
+
+---
+
+#### SECTION 5: COURSE CARDS (Mis Campos)
+**Purpose:** Personalized strategy per course based on performance data
+
+**Content:**
+- Array of 3-4 course cards
+- Each card: `{ "course_name": "...", "narrative": "...", "strategy_tip": "..." }`
+- 40-50 words per card
+- Narrative: performance summary for that course
+- Strategy tip: specific actionable advice for next round there
+
+**Example:**
+```json
+[
+  {
+    "course_name": "Marina Golf",
+    "narrative": "Tu mejor campo — 88 como personal best. Consistencia alta con 4 rondas sub-95. Los pares 5 son tu fortaleza aquí.",
+    "strategy_tip": "Foco en los hoyos 7 y 14 (pares 4 largos): usa hierro largo en lugar de driver para ganar fairway."
+  }
+]
+```
+
+---
+
+#### SECTION 6: CLUB CARDS (Mi Bolsa de Palos)
+**Purpose:** Performance insights and practice tips per club group
+
+**Content:**
+- Array of 3-4 club cards
+- Each card: `{ "club_group": "...", "narrative": "...", "practice_tip": "..." }`
+- 40-50 words per card
+- Club groups: Long Game (Driver/Woods), Mid Game (Irons), Short Game (Wedges), Putting
+- Practice tip: specific drill or focus area
+
+**Example:**
+```json
+[
+  {
+    "club_group": "Long Game (Driver + Maderas)",
+    "narrative": "Driver carry 195m con dispersión 22m lateral. Madera 3 más consistente (dispersión 15m). El híbrido es tu palo más fiable en tiros largos.",
+    "practice_tip": "Drill de alineación con varillas: 20 bolas enfocando tempo suave. Objetivo: reducir dispersión a 18m en 3 semanas."
+  }
+]
 ```
 
 ---
@@ -316,39 +405,38 @@ Tiempo: [X semanas]
 
 ## OUTPUT STRUCTURE
 
-Your output MUST be a valid JSON object with EXACTLY these 6 sections (no more, no less):
+Your output MUST be a valid JSON object with EXACTLY these 10 sections (no more, no less):
 
 ```json
 {
   "hero_statement": "50-80 words hero text",
   "dna_profile": "30-50 words DNA text",
+  "stat_cards": [
+    { "title": "Metric name", "value": "X.X", "interpretation": "30-40 words" }
+  ],
   "chart_titles": {
     "hcp_evolution": {
       "title": "Título del chart",
       "subtitle": "Subtítulo explicativo"
     }
-    // ... more charts (5-8 key charts only)
   },
+  "trend_narratives": [
+    { "title": "Trend name", "narrative": "40-60 words" }
+  ],
+  "course_cards": [
+    { "course_name": "Campo X", "narrative": "40-50 words", "strategy_tip": "..." }
+  ],
   "insight_boxes": [
-    {
-      "title": "Face-to-Path",
-      "content": "50-70 words"
-    }
-    // ... 3-4 insights total
+    { "title": "Face-to-Path", "content": "50-70 words" }
+  ],
+  "club_cards": [
+    { "club_group": "Long Game", "narrative": "40-50 words", "practice_tip": "..." }
   ],
   "quick_wins": [
-    {
-      "title": "Control distancia wedges",
-      "content": "30-40 words"
-    }
-    // ... 3-4 quick wins total
+    { "title": "Control distancia wedges", "content": "30-40 words" }
   ],
   "roi_cards": [
-    {
-      "action": "Mejorar ángulo ataque driver",
-      "content": "40-50 words"
-    }
-    // ... 3-4 ROI cards total
+    { "action": "Mejorar ángulo ataque driver", "content": "40-50 words" }
   ]
 }
 ```
@@ -381,9 +469,8 @@ Your output MUST be a valid JSON object with EXACTLY these 6 sections (no more, 
 
 ## YOUR TASK
 
-When provided with dashboard_data, extract key metrics and generate the EXACT 6 sections
-listed in OUTPUT STRUCTURE. DO NOT generate stat_cards, trend_narratives, course_cards,
-or club_cards — those sections are not used and must be omitted entirely.
+When provided with dashboard_data, extract key metrics and generate the EXACT 10 sections
+listed in OUTPUT STRUCTURE. All 10 keys must be present in the JSON output.
 
 Transform technical data into motivational, clear, actionable Spanish content that helps
 golfers understand their game and improve with confidence.
@@ -429,14 +516,28 @@ class AgentUXWriter:
         print(f"[AgentUXWriter] Processing dashboard_data ({len(json.dumps(dashboard_data)) / 1024:.1f} KB -> extracting key metrics)...")
 
         def _compact(d):
-            """Extrae un resumen compacto con las métricas que necesitan las 6 secciones."""
-            keys = [
+            """Extrae un resumen compacto con las métricas que necesitan las 10 secciones."""
+            full_keys = [
                 "metadata", "player_stats", "scoring_profile", "golf_identity",
                 "benchmark_radar", "strokes_gained", "quick_wins_matrix", "roi_plan",
                 "swing_dna", "swot_matrix", "hcp_trajectory", "current_form_chart",
                 "scoring_probability", "consistency_benchmarks",
+                # Keys para stat_cards, trend_narratives, course_cards, club_cards
+                "temporal_evolution", "learning_curve",
+                "course_statistics", "campo_performance", "club_statistics",
             ]
-            return {k: d[k] for k in keys if k in d}
+            result = {k: d[k] for k in full_keys if k in d}
+            # Trimmed keys — excluir arrays pesados
+            if "score_history" in d:
+                sh = d["score_history"]
+                result["score_history"] = {k: v for k, v in sh.items() if k != "rounds"}
+            if "launch_metrics" in d:
+                lm = d["launch_metrics"]
+                result["launch_metrics"] = {k: v for k, v in lm.items() if k != "clubs"}
+            if "dispersion_analysis" in d:
+                da = d["dispersion_analysis"]
+                result["dispersion_analysis"] = {k: v for k, v in da.items() if k != "clubs"}
+            return result
 
         data_context = json.dumps(_compact(dashboard_data), ensure_ascii=False)
 
@@ -456,8 +557,19 @@ Key Metrics (JSON):
 
 ---
 
-Generate ONLY these 6 JSON sections (no others): hero_statement, dna_profile, chart_titles, insight_boxes, quick_wins, roi_cards.
-Return a single valid JSON object with exactly those 6 keys. Do not include stat_cards, trend_narratives, course_cards, or club_cards.""")
+MANDATORY: Generate ALL 10 JSON sections — every single one must be present:
+1. hero_statement (string)
+2. dna_profile (string)
+3. stat_cards (array of 3-4 objects with title/value/interpretation)
+4. chart_titles (object)
+5. trend_narratives (array of 2-3 objects with title/narrative)
+6. course_cards (array of 3-4 objects with course_name/narrative/strategy_tip)
+7. insight_boxes (array of 3-4 objects with title/content)
+8. club_cards (array of 3-4 objects with club_group/narrative/practice_tip)
+9. quick_wins (array of 3-4 objects with title/content)
+10. roi_cards (array of 3-4 objects with action/content)
+
+Return a single valid JSON object with EXACTLY those 10 keys. Do NOT wrap in markdown code fences. Do NOT omit any section.""")
         ]
 
         # Invoke Claude with cached system prompt
@@ -466,9 +578,15 @@ Return a single valid JSON object with exactly those 6 keys. Do not include stat
             response = self.llm.invoke(messages)
             cache_usage = extract_cache_usage(response, "AgentUXWriter")
 
-            # Try to parse JSON response
+            # Try to parse JSON response (strip markdown code fences if present)
+            raw = response.content.strip()
+            if raw.startswith("```"):
+                # Remove ```json ... ``` wrapper
+                raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+                if raw.endswith("```"):
+                    raw = raw[:-3].strip()
             try:
-                content_json = json.loads(response.content)
+                content_json = json.loads(raw)
             except json.JSONDecodeError:
                 # If not valid JSON, return as raw text
                 print("[AgentUXWriter] [WARNING] Response not valid JSON, returning raw text")

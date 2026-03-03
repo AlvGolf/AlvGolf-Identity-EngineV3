@@ -359,6 +359,117 @@
                 }
             }
 
+            // 7. Stat cards (tab evolution, después del quick menu)
+            if (content.stat_cards && Array.isArray(content.stat_cards) && content.stat_cards.length > 0) {
+                const anchor = document.getElementById('ai-evolution-anchor');
+                if (anchor) {
+                    let statSection = document.getElementById('ai-stat-cards-section');
+                    if (!statSection) {
+                        statSection = document.createElement('div');
+                        statSection.id = 'ai-stat-cards-section';
+                        statSection.className = 'chart-container';
+                        anchor.appendChild(statSection);
+                    }
+                    const statHTML = `
+                        <h2>📊 Métricas Clave de Evolución</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.stat_cards.map(card => `
+                                <div class="card-detail accent-blue">
+                                    <h3 style="color: #4A9FD8; margin-bottom: 8px;">${card.title || 'Métrica'}</h3>
+                                    <p style="font-size: 1.8em; font-weight: 700; color: #5ABF8F; margin: 10px 0;">${card.value || ''}</p>
+                                    <p style="color: #E8E8E8; font-size: 0.95em;">${card.interpretation || ''}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    statSection.innerHTML = statHTML;
+                    console.log(`  ✓ Inserted ${content.stat_cards.length} stat cards`);
+                }
+            }
+
+            // 8. Trend narratives (tab evolution, después de stat cards)
+            if (content.trend_narratives && Array.isArray(content.trend_narratives) && content.trend_narratives.length > 0) {
+                const anchor = document.getElementById('ai-evolution-anchor');
+                if (anchor) {
+                    let trendSection = document.getElementById('ai-trend-narratives-section');
+                    if (!trendSection) {
+                        trendSection = document.createElement('div');
+                        trendSection.id = 'ai-trend-narratives-section';
+                        trendSection.className = 'chart-container';
+                        anchor.appendChild(trendSection);
+                    }
+                    const trendHTML = `
+                        <h2>📈 Tendencias y Patrones</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.trend_narratives.map(trend => `
+                                <div class="card-detail accent-green">
+                                    <h3 style="color: #5ABF8F; margin-bottom: 10px;">${trend.title || 'Tendencia'}</h3>
+                                    <p style="color: #E8E8E8;">${trend.narrative || ''}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    trendSection.innerHTML = trendHTML;
+                    console.log(`  ✓ Inserted ${content.trend_narratives.length} trend narratives`);
+                }
+            }
+
+            // 9. Course cards (tab campos, después del quick menu)
+            if (content.course_cards && Array.isArray(content.course_cards) && content.course_cards.length > 0) {
+                const anchor = document.getElementById('ai-courses-anchor');
+                if (anchor) {
+                    let courseSection = document.getElementById('ai-course-cards-section');
+                    if (!courseSection) {
+                        courseSection = document.createElement('div');
+                        courseSection.id = 'ai-course-cards-section';
+                        courseSection.className = 'chart-container';
+                        anchor.appendChild(courseSection);
+                    }
+                    const courseHTML = `
+                        <h2>⛳ Estrategia por Campo</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.course_cards.map(card => `
+                                <div class="card-detail accent-gold">
+                                    <h3 style="color: #D4B55A; margin-bottom: 10px;">${card.course_name || 'Campo'}</h3>
+                                    <p style="color: #E8E8E8; margin-bottom: 12px;">${card.narrative || ''}</p>
+                                    ${card.strategy_tip ? `<p style="color: #5ABF8F; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">🎯 ${card.strategy_tip}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    courseSection.innerHTML = courseHTML;
+                    console.log(`  ✓ Inserted ${content.course_cards.length} course cards`);
+                }
+            }
+
+            // 10. Club cards (tab palos, después del quick menu)
+            if (content.club_cards && Array.isArray(content.club_cards) && content.club_cards.length > 0) {
+                const anchor = document.getElementById('ai-clubs-anchor');
+                if (anchor) {
+                    let clubSection = document.getElementById('ai-club-cards-section');
+                    if (!clubSection) {
+                        clubSection = document.createElement('div');
+                        clubSection.id = 'ai-club-cards-section';
+                        clubSection.className = 'chart-container';
+                        anchor.appendChild(clubSection);
+                    }
+                    const clubHTML = `
+                        <h2>🏌️ Análisis por Grupo de Palos</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
+                            ${content.club_cards.map(card => `
+                                <div class="card-detail accent-blue">
+                                    <h3 style="color: #4A9FD8; margin-bottom: 10px;">${card.club_group || 'Grupo'}</h3>
+                                    <p style="color: #E8E8E8; margin-bottom: 12px;">${card.narrative || ''}</p>
+                                    ${card.practice_tip ? `<p style="color: #5ABF8F; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">🎯 ${card.practice_tip}</p>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    clubSection.innerHTML = clubHTML;
+                    console.log(`  ✓ Inserted ${content.club_cards.length} club cards`);
+                }
+            }
+
             // Coach report — disponible para generateCoachPDF() sin llamada al backend
             if (content.coach_report) {
                 window.coachReportMd = content.coach_report;
@@ -5908,8 +6019,11 @@
                         </a>
                     </div>
                 </div>
-                
+
             </div>
+
+            <!-- Anchor para AI Stats & Trends (inyectado por UXWriter) -->
+            <div id="ai-evolution-anchor"></div>
 
             <!-- Score History Section -->
             <div class="chart-container" id="score-history" style="margin-bottom: 30px;">
@@ -6687,7 +6801,10 @@
                 </div>
                 
             </div>
-            
+
+            <!-- Anchor para AI Course Cards (inyectado por UXWriter) -->
+            <div id="ai-courses-anchor"></div>
+
             <!-- Header con Stats Generales -->
             <div class="chart-container">
                 <h2 id="trayectoria-rfeg">📊 Mi Trayectoria RFEG</h2>
@@ -7547,7 +7664,10 @@
                 </div>
                 
             </div>
-            
+
+            <!-- Anchor para AI Club Cards (inyectado por UXWriter) -->
+            <div id="ai-clubs-anchor"></div>
+
             <div class="chart-container">
                 <h2 id="rendimiento-distancias">🏌️ Rendimiento por Palo - Distancias</h2>
                 <canvas id="clubDistanceChart"></canvas>
