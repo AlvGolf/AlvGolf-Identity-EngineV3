@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.7 - 100% Dynamic Dashboard (~176 editorial hardcodes migrated, 62 JSON keys)
+**Version:** v3.0.9 - Radar Deduplication + Section Reorg
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -777,6 +777,8 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.0.9 | 2026-03-03 | Radar Deduplication — eliminado radar duplicado Tab 1, Tab 5 unificado a scoring_profile (8 dims), "Estado Actual" reubicado en sección correcta |
+| v3.0.8 | 2026-03-03 | Card System v3.1 — 17 CSS tokens + 4 niveles card + Golf Identity typography fix + dimLabelsNarr bug fix |
 | v3.0.7 | 2026-03-02 | 100% Dynamic Dashboard — ~176 editorial hardcodes migrated (9 LOTES) + 3 new backend functions (monthly_recommendations, bubble_analysis, improvement_plan) + 62 JSON keys |
 | v3.0.6 | 2026-03-01 | Template vs Data Phase 2 — ~216 IDs dinámicos + 12 containers + 3 backend functions (form_summary, scoring_streaks, goals_progress) + DOMContentLoaded fix |
 | v3.0.5+ | 2026-02-28 | Template vs Data Phase 1 — 106 IDs dinámicos + 7 funciones inyección + 7 containers (dashboard reutilizable) |

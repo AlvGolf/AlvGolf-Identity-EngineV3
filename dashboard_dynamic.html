@@ -5324,79 +5324,9 @@
                     </div>
                 </div>
 
-                <!-- Título Análisis 360° -->
-                <div style="text-align: center; margin-bottom: 30px; padding: 30px; background: rgba(74,159,216,0.08); border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
-                    <div style="font-size: 3em; margin-bottom: 15px;">🎯</div>
-                    <h3 style="color: #4A9FD8; font-size: 1.9em; margin: 0; font-weight: 900; text-shadow: 0 0 15px rgba(74,159,216,0.5);">
-                        ANÁLISIS 360° DE TUS 10 DIMENSIONES
-                    </h3>
-                    <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.7); font-size: 0.95em; line-height: 1.4;">
-                        Motor completo de análisis multidimensional | Long Game · Mid Game · Short Game
-                    </p>
-                </div>
+                <!-- [ELIMINADO v3.0.9] Radar "Análisis 360° de tus 10 Dimensiones" — redundante con Golf Identity SVG radar arriba -->
+                <!-- El radar de 10D se mantiene en Tab 5 (Análisis Profundo) alimentado por scoring_profile -->
 
-                <!-- Player Profile Radar Chart - 10 Dimensiones Dinámico - Layout Optimizado -->
-                <div style="margin-top: 40px; background: rgba(255,255,255,0.02); padding: 35px; border-radius: 15px;">
-                    <!-- Grid: Radar Grande + Benchmarks Verticales -->
-                    <div style="display: grid; grid-template-columns: 1fr 220px; gap: 30px; align-items: center;">
-                        <!-- Radar Chart (Protagonista) -->
-                        <div style="position: relative;">
-                            <canvas id="identityRadarChart" style="max-height: 600px; width: 100%;"></canvas>
-                        </div>
-
-                        <!-- Benchmarks Verticales -->
-                        <div style="display: flex; flex-direction: column; gap: 20px; justify-content: center;">
-                            <!-- Tú -->
-                            <div style="padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
-                                <div style="font-size: 2em; margin-bottom: 8px;">🟢</div>
-                                <strong style="color: #5ABF8F; font-size: 1.1em; display: block; margin-bottom: 8px;">TÚ</strong>
-                                <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #5ABF8F;" id="identity-radar-player-avg">--</p>
-                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.6);">Promedio</p>
-                            </div>
-
-                            <!-- PGA Tour -->
-                            <div style="padding: 20px; background: linear-gradient(135deg, rgba(232,139,122,0.2), rgba(232,139,122,0.05)); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center;">
-                                <div style="font-size: 2em; margin-bottom: 8px;">🔴</div>
-                                <strong style="color: #E88B7A; font-size: 1.1em; display: block; margin-bottom: 8px;">PGA TOUR</strong>
-                                <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #E88B7A;" id="identity-radar-pga-avg">10.0</p>
-                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.6);">Élite</p>
-                            </div>
-
-                            <!-- HCP 15 (inicialmente oculto) -->
-                            <div id="identity-hcp15-card" style="padding: 20px; background: linear-gradient(135deg, rgba(58,143,200,0.2), rgba(58,143,200,0.05)); border-radius: 12px; border: 2px solid rgba(58,143,200,0.4); text-align: center; display: none;">
-                                <div style="font-size: 2em; margin-bottom: 8px;">🟣</div>
-                                <strong style="color: #3A8FC8; font-size: 1.1em; display: block; margin-bottom: 8px;">HCP 15</strong>
-                                <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #3A8FC8;" id="identity-radar-hcp15-avg">--</p>
-                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.6);">Referencia</p>
-                            </div>
-
-                            <!-- HCP 23 -->
-                            <div style="padding: 20px; background: linear-gradient(135deg, rgba(212,181,90,0.2), rgba(212,181,90,0.05)); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                                <div style="font-size: 2em; margin-bottom: 8px;">🟡</div>
-                                <strong style="color: #D4B55A; font-size: 1.1em; display: block; margin-bottom: 8px;">HCP 23</strong>
-                                <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #D4B55A;" id="identity-radar-hcp23-avg">--</p>
-                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.6);">Amateur</p>
-                            </div>
-
-                            <!-- Toggle HCP 15 -->
-                            <div style="padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center;">
-                                <label style="display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
-                                    <input type="checkbox" id="toggle-hcp15-identity" onchange="toggleHCP15Identity(this.checked)" style="cursor: pointer; width: 18px; height: 18px;">
-                                    <span style="color: #3A8FC8; font-size: 0.95em;">Mostrar HCP 15</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Responsive: Mobile version (stacked) -->
-                    <style>
-                        @media (max-width: 768px) {
-                            div[style*="grid-template-columns: 1fr 220px"] {
-                                grid-template-columns: 1fr !important;
-                            }
-                        }
-                    </style>
-                </div>
                 <!-- Análisis del Perfil de Jugador -->
                 <div style="margin-top: 40px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); padding: 35px; border-radius: 15px; border: 2px solid rgba(90,191,143,0.3);">
                     <h3 style="color: #5ABF8F; margin-bottom: 25px; text-align: center; font-size: 1.5em; font-weight: 900;">
@@ -5463,16 +5393,6 @@
                                 <strong>Accuracy (4.2/10):</strong> Tu principal debilidad. La dispersión lateral te penaliza en tee shots. <strong style="color: #E88B7A;">Prioridad #1 de mejora.</strong> Trabajar path y face control para reducir misses direccionales.
                             </p>
                         </div>
-                    </div>
-
-                    <!-- Estado Actual -->
-                    <div style="padding: 30px; background: rgba(74,159,216,0.1); border-radius: 12px; text-align: center; border: 2px solid rgba(74,159,216,0.4);">
-                        <h5 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.2em; font-weight: 800;">
-                            🔥 ESTADO ACTUAL: <span id="ps-form-status">EN RACHA</span>
-                        </h5>
-                        <p id="ps-form-narrative" style="margin: 0 auto; font-size: 1.1em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 650px;">
-                            Tu fortaleza en la zona crítica (100m y adentro) te ha llevado a estar <strong style="color: #5ABF8F;">"en racha"</strong> en el campo con un promedio de <strong style="color: #5ABF8F; font-size: 1.3em;">92.8 golpes</strong> en los últimos 5 partidos registrados.
-                        </p>
                     </div>
                 </div>
 
@@ -5559,8 +5479,18 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Estado Actual (movido desde Análisis del Perfil — v3.0.9) -->
+                <div style="margin-top: 30px; padding: 30px; background: rgba(74,159,216,0.1); border-radius: 12px; text-align: center; border: 2px solid rgba(74,159,216,0.4);">
+                    <h5 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.2em; font-weight: 800;">
+                        🔥 ESTADO ACTUAL: <span id="ps-form-status">EN RACHA</span>
+                    </h5>
+                    <p id="ps-form-narrative" style="margin: 0 auto; font-size: 1.1em; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 650px;">
+                        Tu fortaleza en la zona crítica (100m y adentro) te ha llevado a estar <strong style="color: #5ABF8F;">"en racha"</strong> en el campo con un promedio de <strong style="color: #5ABF8F; font-size: 1.3em;">92.8 golpes</strong> en los últimos 5 partidos registrados.
+                    </p>
+                </div>
             </div>
-            
+
             <!-- GRUPO B.5: MIS PERCENTILES -->
             <div class="chart-container">
                 <h2>🎖️ Mis Percentiles - ¿Dónde Me Posiciono Globalmente?</h2>
@@ -9544,9 +9474,9 @@
                 </div>
             </div>
             <div class="chart-container">
-                <h2 id="metricas-radar" style="text-align: center;">📊 Análisis 360° - Radar de 10 Dimensiones</h2>
+                <h2 id="metricas-radar" style="text-align: center;">📊 Análisis 360° - Radar de Dimensiones</h2>
                 <p style="margin-bottom: 30px; color: rgba(255,255,255,0.8); font-size: 0.95em; text-align: center; max-width: 700px; margin-left: auto; margin-right: auto;">
-                    Motor completo de análisis multidimensional: Long Game, Mid Game, Short Game y métricas clave de rendimiento.
+                    Motor de análisis multidimensional con benchmarks PGA Tour y HCP 15. Misma fuente que tu Golf Identity.
                 </p>
 
                 <!-- Grid: Radar Grande + Benchmarks Verticales -->
@@ -14331,29 +14261,39 @@
 
         registerTabChart('performance', initializeClubPerformanceCards);
 
-        // Comparison Radar Chart (compact alternative to detailed metrics)
-        // DINÁMICO: 10 Dimensiones desde JSON - EJECUTA DESPUÉS DE CARGAR DATOS
+        // Comparison Radar Chart (Tab 5: Análisis Profundo)
+        // v3.0.9: Alimentado por scoring_profile (misma fuente que Golf Identity) en vez de benchmark_radar
         function initializeComparisonRadarChart() {
             if (!document.getElementById('comparisonRadarChart')) {
                 return;
             }
 
-            const benchmarkData = window.dashboardData?.benchmark_radar || {};
+            const sp = window.dashboardData?.scoring_profile || {};
+            const dims = sp.dimensions || {};
 
-            // Fallback hardcoded (8 dimensions old)
-            const fallbackDimensions = ['Short Game', 'Tendencia Mejora', 'Consistencia', 'Smash Factor',
-                                         'Velocidad Bola', 'Club Speed', 'Accuracy', 'Launch Angle'];
-            const fallbackPlayer = [9.0, 7.0, 7.0, 7.5, 8.5, 7.5, 4.0, 3.0];
-            const fallbackPGA = [9.5, 6.0, 8.5, 8.5, 9.0, 9.0, 8.0, 8.5];
-            const fallbackHCP15 = [6.0, 5.5, 5.0, 6.5, 6.5, 6.0, 5.5, 6.5];
+            // Labels y benchmarks (mismos que Golf Identity SVG radar)
+            const DIM_LABELS = { long_game:'Long Game', mid_game:'Mid Game', short_game:'Short Game', putting:'Putting', consistency:'Consistencia', mental:'Mental', power:'Potencia', accuracy:'Accuracy' };
+            const BENCH_PGA = { long_game:9.5, mid_game:9.2, short_game:9.5, putting:9.5, consistency:8.5, mental:9.0, power:9.5, accuracy:9.0 };
+            const BENCH_HCP15 = { long_game:6.5, mid_game:6.8, short_game:7.0, putting:7.0, consistency:6.0, mental:6.5, power:7.0, accuracy:6.5 };
 
-            // Use dynamic data or fallback (convert 0-100 to 0-10 scale)
-            const dimensions = benchmarkData.dimensions || fallbackDimensions;
-            const playerData = benchmarkData.player ? benchmarkData.player.map(v => v / 10) : fallbackPlayer;
-            const pgaData = benchmarkData.pga_tour ? benchmarkData.pga_tour.map(v => v / 10) : fallbackPGA;
-            const hcp15Data = benchmarkData.hcp15 ? benchmarkData.hcp15.map(v => v / 10) : fallbackHCP15;
+            const keys = Object.keys(DIM_LABELS);
+            const dimensions = keys.map(k => DIM_LABELS[k]);
+            const playerData = keys.map(k => dims[k]?.score || 5);
+            const pgaData = keys.map(k => BENCH_PGA[k]);
+            const hcp15Data = keys.map(k => BENCH_HCP15[k]);
 
-            console.log('🎯 Radar 10D - Dimensions:', dimensions.length, dimensions);
+            // Update avg cards
+            const playerAvg = sp.overall_score ? sp.overall_score.toFixed(1) : (playerData.reduce((a,b)=>a+b,0)/playerData.length).toFixed(1);
+            const pgaAvg = (pgaData.reduce((a,b)=>a+b,0)/pgaData.length).toFixed(1);
+            const hcp15Avg = (hcp15Data.reduce((a,b)=>a+b,0)/hcp15Data.length).toFixed(1);
+            const pEl = document.getElementById('radar-player-avg');
+            const pgaEl = document.getElementById('radar-pga-avg');
+            const h15El = document.getElementById('radar-hcp15-avg');
+            if (pEl) pEl.textContent = playerAvg + '/10';
+            if (pgaEl) pgaEl.textContent = pgaAvg + '/10';
+            if (h15El) h15El.textContent = hcp15Avg + '/10';
+
+            console.log('🎯 Radar 8D (scoring_profile) - Dimensions:', dimensions.length, dimensions);
 
             // Destroy existing chart if present
             if (window.chartInstances && window.chartInstances.comparisonRadarChart) {
@@ -14450,182 +14390,11 @@
         // Execute after data loads
         registerTabChart('deep-analysis', initializeComparisonRadarChart);
 
-        // Identity Radar Chart (Mi Identidad tab) - 10 Dimensiones Dinámico
-        function initializeIdentityRadarChart() {
-            if (!document.getElementById('identityRadarChart')) {
-                return;
-            }
+        // [ELIMINADO v3.0.9] initializeIdentityRadarChart — radar duplicado en Tab 1
+        // El radar de scoring se mantiene en Tab 5 (comparisonRadarChart) alimentado por scoring_profile
+        // Función toggleHCP15Identity también eliminada (dependía de identityRadarChart)
 
-            const benchmarkData = window.dashboardData?.benchmark_radar || {};
-
-            // Fallback hardcoded (10 dimensions)
-            const fallbackDimensions = ['Short Game', 'Consistency', 'Power', 'Strategy', 'Equipment',
-                                         'Long Game', 'Mid Game', 'Mental', 'Accuracy', 'Putting'];
-            const fallbackPlayer = [9.0, 7.2, 8.5, 8.0, 7.5, 6.5, 6.8, 7.0, 4.2, 7.5];
-            const fallbackPGA = [9.5, 8.5, 9.0, 8.5, 9.0, 9.5, 9.2, 9.0, 9.5, 9.5];
-            const fallbackHCP15 = [6.0, 5.0, 6.5, 6.0, 6.5, 5.5, 5.8, 5.5, 5.5, 6.0];
-            const fallbackHCP23 = [4.5, 4.0, 5.0, 4.5, 5.0, 4.0, 4.2, 4.0, 4.0, 4.5];
-
-            // Use dynamic data or fallback (convert 0-100 to 0-10 scale)
-            const dimensions = benchmarkData.dimensions || fallbackDimensions;
-            const playerData = benchmarkData.player ? benchmarkData.player.map(v => v / 10) : fallbackPlayer;
-            const pgaData = benchmarkData.pga_tour ? benchmarkData.pga_tour.map(v => v / 10) : fallbackPGA;
-            const hcp15Data = benchmarkData.hcp15 ? benchmarkData.hcp15.map(v => v / 10) : fallbackHCP15;
-            const hcp23Data = benchmarkData.hcp23 ? benchmarkData.hcp23.map(v => v / 10) : fallbackHCP23;
-
-            // Calculate averages
-            const playerAvg = (playerData.reduce((a, b) => a + b, 0) / playerData.length).toFixed(1);
-            const pgaAvg = (pgaData.reduce((a, b) => a + b, 0) / pgaData.length).toFixed(1);
-            const hcp15Avg = (hcp15Data.reduce((a, b) => a + b, 0) / hcp15Data.length).toFixed(1);
-            const hcp23Avg = (hcp23Data.reduce((a, b) => a + b, 0) / hcp23Data.length).toFixed(1);
-
-            // Update stats (solo números, labels ya están en HTML)
-            const playerAvgEl = document.getElementById('identity-radar-player-avg');
-            const pgaAvgEl = document.getElementById('identity-radar-pga-avg');
-            const hcp15AvgEl = document.getElementById('identity-radar-hcp15-avg');
-            const hcp23AvgEl = document.getElementById('identity-radar-hcp23-avg');
-
-            if (playerAvgEl) playerAvgEl.textContent = `${playerAvg}/10`;
-            if (pgaAvgEl) pgaAvgEl.textContent = `${pgaAvg}/10`;
-            if (hcp15AvgEl) hcp15AvgEl.textContent = `${hcp15Avg}/10`;
-            if (hcp23AvgEl) hcp23AvgEl.textContent = `${hcp23Avg}/10`;
-
-            console.log('🎯 Identity Radar 10D - Dimensions:', dimensions.length, dimensions);
-
-            // Destroy existing chart if present
-            if (window.chartInstances && window.chartInstances.identityRadarChart) {
-                window.chartInstances.identityRadarChart.destroy();
-            }
-
-            const identityRadarCtx = document.getElementById('identityRadarChart').getContext('2d');
-            const identityChart = new Chart(identityRadarCtx, {
-                type: 'radar',
-                data: {
-                    labels: dimensions,
-                    datasets: [{
-                        label: 'Tú',
-                        data: playerData,
-                        backgroundColor: 'rgba(90, 191, 143, 0.2)',
-                        borderColor: '#5ABF8F',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#5ABF8F',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#5ABF8F'
-                    }, {
-                        label: 'PGA Tour',
-                        data: pgaData,
-                        backgroundColor: 'rgba(232, 139, 122, 0.2)',
-                        borderColor: '#E88B7A',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#E88B7A',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#E88B7A'
-                    }, {
-                        label: 'HCP 15',
-                        data: hcp15Data,
-                        backgroundColor: 'rgba(58, 143, 200, 0.2)',
-                        borderColor: '#3A8FC8',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#3A8FC8',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#3A8FC8',
-                        hidden: true  // Inicialmente oculto
-                    }, {
-                        label: 'HCP 23',
-                        data: hcp23Data,
-                        backgroundColor: 'rgba(212, 181, 90, 0.2)',
-                        borderColor: '#D4B55A',
-                        borderWidth: 2,
-                        pointBackgroundColor: '#D4B55A',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#D4B55A'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 10,
-                            ticks: {
-                                stepSize: 2,
-                                color: '#fff',
-                                backdropColor: 'transparent'
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            angleLines: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            pointLabels: {
-                                color: '#4A9FD8',
-                                font: {
-                                    size: 11,
-                                    weight: 'bold'
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: '#fff',
-                                font: { size: 12 },
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                            titleColor: '#4A9FD8',
-                            bodyColor: '#fff',
-                            borderColor: '#4A9FD8',
-                            borderWidth: 1
-                        }
-                    }
-                }
-            });
-
-            // Store chart instance
-            window.chartInstances.identityRadarChart = identityChart;
-        } // End initializeIdentityRadarChart
-
-        // Execute after data loads
-        document.addEventListener('dashboardDataReady', initializeIdentityRadarChart);
-        setTimeout(initializeIdentityRadarChart, 500);
-
-        // Toggle HCP 15 visibility in Identity Radar
-        function toggleHCP15Identity(show) {
-            const chart = window.chartInstances?.identityRadarChart;
-            const hcp15Card = document.getElementById('identity-hcp15-card');
-
-            if (!chart) {
-                console.warn('⚠️ Identity radar chart not found');
-                return;
-            }
-
-            // Find HCP 15 dataset (index 2)
-            const hcp15Dataset = chart.data.datasets.find(ds => ds.label === 'HCP 15');
-
-            if (hcp15Dataset) {
-                // Toggle visibility
-                hcp15Dataset.hidden = !show;
-                chart.update();
-
-                // Toggle card visibility
-                if (hcp15Card) {
-                    hcp15Card.style.display = show ? 'block' : 'none';
-                }
-
-                console.log(`🟣 HCP 15 ${show ? 'mostrado' : 'ocultado'} en Identity Radar`);
-            }
-        }
-
+        /* --- Código eliminado: ~175 líneas de initializeIdentityRadarChart + toggleHCP15Identity --- */
         // 8. Waterfall Chart - Gap Breakdown vs PGA
         function initializeWaterfallChart() {
             if (!document.getElementById('waterfallChart')) {

@@ -1,6 +1,6 @@
 # AlvGolf - Multi-Agent Golf Analytics System
 
-**Version:** v3.0.8 - Card System v3.1 + Golf Identity Typography Fix
+**Version:** v3.0.9 - Radar Deduplication + Section Reorg
 **Estado:** Production Ready
 **Ultima actualizacion:** 2026-03-03
 
@@ -102,6 +102,17 @@ graph TB
 ---
 
 ## What's New
+
+### v3.0.9 - Radar Deduplication + Section Reorg (2026-03-03)
+
+**Eliminacion de radar duplicado** en Tab 1 y unificacion de fuente de datos en Tab 5:
+
+- **Tab 1: Eliminado radar "Analisis 360° de tus 10 Dimensiones"** — redundante con Golf Identity SVG radar ("El Artista Completo")
+- **Tab 5: Radar unificado a `scoring_profile`** — 8 dimensiones (0-10) en vez de `benchmark_radar` (10 dims, 0-100). Score ahora consistente (6.8) con Golf Identity
+- **~150 lineas JS eliminadas:** `initializeIdentityRadarChart()` + `toggleHCP15Identity()` + event listeners
+- **~73 lineas HTML eliminadas:** canvas, benchmark cards, toggle HCP15, media query responsive
+- **Seccion "Estado Actual" reubicada:** movida de "Analisis de Tu Perfil" a "Estado Actual de Forma" (despues de Ultimas 5 Rondas)
+- **Benchmarks PGA/HCP15 preservados** en Tab 5 con valores calibrados a escala 0-10
 
 ### v3.0.8 - Card System v3.1 + Typography Fix (2026-03-03)
 
@@ -443,6 +454,12 @@ AlvGolf/
 - [x] ~216 IDs dinamicos totales + 12 containers
 - [x] DOMContentLoaded fix para localStorage cache race condition
 
+#### v3.0.9 - Radar Deduplication + Section Reorg (2026-03-03)
+- [x] Tab 1: Eliminado radar "Analisis 360°" duplicado (~73 HTML + ~150 JS lines)
+- [x] Tab 5: Radar unificado a scoring_profile (8 dims, escala 0-10) con benchmarks PGA/HCP15
+- [x] "Estado Actual" reubicado dentro de "Estado Actual de Forma"
+- [x] Score consistente (6.8) entre Golf Identity y Tab 5 radar
+
 #### v3.0.8 - Card System v3.1 + Typography Fix (2026-03-03)
 - [x] Card System CSS: 17 tokens + 4 niveles (hero/section/detail/nested) + 5 accent colors
 - [x] 14 clases existentes alineadas a tokens + ~60 inline styles migrados
@@ -462,6 +479,15 @@ AlvGolf/
 ---
 
 ## Changelog
+
+### v3.0.9 (2026-03-03) - Radar Deduplication + Section Reorg
+- Tab 1: Eliminado radar "Analisis 360° de tus 10 Dimensiones" — redundante con Golf Identity SVG
+- Tab 5: comparisonRadarChart alimentado por scoring_profile (8 dims, 0-10) en vez de benchmark_radar (10 dims, 0-100)
+- Benchmarks PGA Tour y HCP 15 calibrados a escala 0-10
+- ~150 lineas JS eliminadas (initializeIdentityRadarChart + toggleHCP15Identity)
+- ~73 lineas HTML eliminadas (canvas, benchmark cards, toggle, media query)
+- Seccion "Estado Actual: En Racha" movida a "Estado Actual de Forma" (tras Ultimas 5 Rondas)
+- Score unificado: 6.8 consistente entre Golf Identity y Tab 5 radar
 
 ### v3.0.8 (2026-03-03) - Card System v3.1 + Typography Fix
 - Card System v3.1: 17 CSS tokens + 4 niveles jerarquia (card-hero > card-section > card-detail > card-nested)
@@ -565,4 +591,4 @@ Proyecto personal - Todos los derechos reservados Alvaro Peralta 2026
 
 **Ultima actualizacion:** 3 de marzo de 2026
 **Estado:** Production Ready
-**Version:** v3.0.8 - Card System v3.1 + Golf Identity Typography Fix
+**Version:** v3.0.9 - Radar Deduplication + Section Reorg
