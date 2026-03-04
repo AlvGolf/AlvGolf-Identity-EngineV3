@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-02T00:35:09.528811",
+  "generated_at": "2026-03-04T00:30:11.240441",
   "player_stats": {
     "total_rondas": 52,
     "mejor_score": 88,
@@ -5011,10 +5011,10 @@
     ],
     "values": [
       32.0,
-      36.0,
-      31.5,
-      28.0,
-      27.0
+      32.0,
+      21.9,
+      22.9,
+      22.2
     ],
     "source": "rfeg_official"
   },

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo: Radar Scoring Engine (Chart.js)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #e0e2dc;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+  }
+  .demo-wrapper {
+    max-width: 820px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    color: #4A9FD8;
+    font-size: 1.3em;
+    margin-bottom: 8px;
+  }
+  .demo-subtitle {
+    text-align: center;
+    color: #9a9e94;
+    font-size: 0.85em;
+    margin-bottom: 24px;
+  }
+
+  /* ── Radar hero layout (same as dashboard) ── */
+  .gi-radar-hero {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    background: rgba(255,255,255, 0.06);
+    border: 1px solid rgba(255,255,255, 0.10);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .gi-radar-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+  }
+  .gi-panel-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9a9e94;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* ── Cards de promedios ── */
+  .gi-radar-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    min-width: 110px;
+  }
+  .gi-radar-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px;
+    background: rgba(255,255,255, 0.03);
+    border: 1px solid rgba(255,255,255, 0.06);
+    border-radius: 8px;
+    text-align: center;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+  }
+  .gi-radar-card.dimmed {
+    opacity: 0.25;
+  }
+  .gi-radar-card-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-bottom: 2px;
+  }
+  .gi-radar-card-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9a9e94;
+    font-weight: 700;
+  }
+  .gi-radar-card-val {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .gi-radar-card-sub {
+    font-size: 9px;
+    color: #9a9e94;
+  }
+
+  /* ── Chart container ── */
+  .radar-chart-wrap {
+    position: relative;
+    width: 100%;
+    max-height: 420px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .gi-radar-hero { flex-direction: column; }
+    .gi-radar-cards {
+      flex-direction: row;
+      justify-content: center;
+      min-width: auto;
+    }
+    .gi-radar-card { min-width: 90px; }
+  }
+
+  /* ── Comparison note ── */
+  .comparison {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+  }
+  .comparison h3 {
+    color: #D4B55A;
+    font-size: 1em;
+    margin-bottom: 12px;
+  }
+  .comparison ul {
+    list-style: none;
+    padding: 0;
+  }
+  .comparison li {
+    padding: 4px 0;
+    font-size: 0.9em;
+    color: rgba(255,255,255,0.8);
+  }
+  .comparison li::before {
+    content: '✅ ';
+  }
+</style>
+</head>
+<body>
+<div class="demo-wrapper">
+  <h1>Radar Scoring Engine — Chart.js Demo</h1>
+  <p class="demo-subtitle">Mismo layout que el dashboard, ahora con Chart.js en vez de SVG</p>
+
+  <div class="gi-radar-hero">
+    <div class="gi-radar-main">
+      <div class="gi-panel-title" style="width:100%">Radar · Scoring Engine</div>
+      <div class="radar-chart-wrap">
+        <canvas id="scoringRadarChart"></canvas>
+      </div>
+    </div>
+    <div class="gi-radar-cards">
+      <div class="gi-radar-card" data-layer="player">
+        <div class="gi-radar-card-dot" style="background:#4fc3a1;"></div>
+        <div class="gi-radar-card-label">Tú</div>
+        <div class="gi-radar-card-val" style="color:#4fc3a1;" id="gi-card-player">—</div>
+        <div class="gi-radar-card-sub">Promedio</div>
+      </div>
+      <div class="gi-radar-card" data-layer="pga">
+        <div class="gi-radar-card-dot" style="background:#E88B7A;"></div>
+        <div class="gi-radar-card-label">PGA Tour</div>
+        <div class="gi-radar-card-val" style="color:#E88B7A;" id="gi-card-pga">—</div>
+        <div class="gi-radar-card-sub">Elite</div>
+      </div>
+      <div class="gi-radar-card" data-layer="hcp20">
+        <div class="gi-radar-card-dot" style="background:#D4B55A;"></div>
+        <div class="gi-radar-card-label">HCP 20</div>
+        <div class="gi-radar-card-val" style="color:#D4B55A;" id="gi-card-hcp20">—</div>
+        <div class="gi-radar-card-sub">Referencia</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comparison">
+    <h3>Funcionalidades de la demo</h3>
+    <ul>
+      <li>Chart.js radar unificado con el estilo del resto del dashboard</li>
+      <li>PGA Tour y HCP 20 con lineas continuas (solidas)</li>
+      <li>Puntos con borde blanco y tamanos jerarquicos (Tu > PGA > HCP20)</li>
+      <li>Tooltip enriquecido: zona de rendimiento + gap vs PGA y HCP 20</li>
+      <li>Click en leyenda del chart: oculta linea + atenua card de promedio</li>
+      <li>Click en card de promedio: mismo efecto toggle</li>
+      <li>Grid y angle lines consistentes con los otros radares</li>
+      <li>Datos simulados de scoring_profile (en produccion lee del JSON)</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+// ── Simulated data (in production, comes from window.dashboardData.scoring_profile) ──
+const DIM_LABELS = {
+  long_game:   'Long Game',
+  mid_game:    'Mid Game',
+  short_game:  'Short Game',
+  putting:     'Putting',
+  consistency: 'Consistencia',
+  mental:      'Mental',
+  power:       'Potencia',
+  accuracy:    'Accuracy'
+};
+const DIM_ORDER = ['long_game','mid_game','short_game','putting','consistency','mental','power','accuracy'];
+
+const BENCH_PGA = { long_game:9.8, mid_game:9.5, short_game:9.7, putting:9.5, consistency:9.3, mental:9.5, power:9.8, accuracy:9.5 };
+const BENCH_HCP20 = { long_game:5.3, mid_game:5.0, short_game:5.2, putting:5.5, consistency:5.0, mental:5.0, power:5.3, accuracy:5.0 };
+
+// Simulated player scores (from scoring_profile.dimensions)
+const PLAYER_SCORES = {
+  long_game:   5.6,
+  mid_game:    7.3,
+  short_game:  9.2,
+  putting:     6.1,
+  consistency: 6.8,
+  mental:      7.5,
+  power:       5.9,
+  accuracy:    7.8
+};
+
+// ── Prepare data arrays ──
+const labels    = DIM_ORDER.map(k => DIM_LABELS[k]);
+const playerData = DIM_ORDER.map(k => PLAYER_SCORES[k]);
+const pgaData    = DIM_ORDER.map(k => BENCH_PGA[k]);
+const hcp20Data  = DIM_ORDER.map(k => BENCH_HCP20[k]);
+
+// ── Update avg cards ──
+const playerAvg = (playerData.reduce((a,b) => a+b, 0) / playerData.length).toFixed(1);
+const pgaAvg    = (pgaData.reduce((a,b) => a+b, 0) / pgaData.length).toFixed(1);
+const hcp20Avg  = (hcp20Data.reduce((a,b) => a+b, 0) / hcp20Data.length).toFixed(1);
+document.getElementById('gi-card-player').textContent = playerAvg + '/10';
+document.getElementById('gi-card-pga').textContent    = pgaAvg + '/10';
+document.getElementById('gi-card-hcp20').textContent  = hcp20Avg + '/10';
+
+// ── Map dataset index to card data-layer ──
+const layerMap = ['player', 'pga', 'hcp20'];
+
+// ── Create Chart.js radar ──
+const ctx = document.getElementById('scoringRadarChart').getContext('2d');
+const scoringRadar = new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Tú',
+        data: playerData,
+        backgroundColor: 'rgba(79, 195, 161, 0.15)',
+        borderColor: '#4fc3a1',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#4fc3a1',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1.5,
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        order: 0
+      },
+      {
+        label: 'PGA Tour',
+        data: pgaData,
+        backgroundColor: 'rgba(232, 139, 122, 0.06)',
+        borderColor: '#E88B7A',
+        borderWidth: 1.5,
+        pointBackgroundColor: '#E88B7A',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        order: 2
+      },
+      {
+        label: 'HCP 20',
+        data: hcp20Data,
+        backgroundColor: 'rgba(212, 181, 90, 0.06)',
+        borderColor: '#D4B55A',
+        borderWidth: 1.5,
+        pointBackgroundColor: '#D4B55A',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      r: {
+        beginAtZero: true,
+        min: 0,
+        max: 10,
+        ticks: {
+          stepSize: 2,
+          color: 'rgba(255,255,255,0.4)',
+          backdropColor: 'transparent',
+          font: { size: 9 }
+        },
+        grid: {
+          color: 'rgba(255,255,255,0.1)'
+        },
+        angleLines: {
+          color: 'rgba(255,255,255,0.08)'
+        },
+        pointLabels: {
+          color: '#4A9FD8',
+          font: { size: 11, weight: 'bold' }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          color: '#e0e2dc',
+          font: { size: 11 },
+          padding: 16,
+          usePointStyle: false
+        },
+        onClick: function(e, legendItem, legend) {
+          const chart = legend.chart;
+          const index = legendItem.datasetIndex;
+          const meta = chart.getDatasetMeta(index);
+
+          // Toggle dataset visibility
+          meta.hidden = !meta.hidden;
+          chart.update();
+
+          // Toggle card dim
+          const layer = layerMap[index];
+          const card = document.querySelector('.gi-radar-card[data-layer="' + layer + '"]');
+          if (card) {
+            card.classList.toggle('dimmed', meta.hidden);
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(15, 32, 39, 0.95)',
+        titleColor: '#4A9FD8',
+        bodyColor: '#fff',
+        borderColor: '#4A9FD8',
+        borderWidth: 1,
+        padding: 12,
+        callbacks: {
+          afterBody: function(context) {
+            var idx = context[0].dataIndex;
+            var you  = playerData[idx];
+            var pga  = pgaData[idx];
+            var hcp  = hcp20Data[idx];
+            var zone = you >= 8.5 ? '🏆 Elite' :
+                       you >= 6.5 ? '✅ Fuerte' :
+                       you >= 4.0 ? '⚠️ En desarrollo' : '🔴 Foco';
+            var diffPga  = you - pga;
+            var diffHcp  = you - hcp;
+            return [
+              '',
+              zone,
+              'vs PGA: ' + (diffPga >= 0 ? '+' : '') + diffPga.toFixed(1),
+              'vs HCP20: ' + (diffHcp >= 0 ? '+' : '') + diffHcp.toFixed(1)
+            ];
+          }
+        }
+      }
+    }
+  }
+});
+
+// ── Card click → toggle dataset + card ──
+document.querySelectorAll('.gi-radar-card[data-layer]').forEach(function(card) {
+  card.addEventListener('click', function() {
+    var layer = this.dataset.layer;
+    var dsIndex = layerMap.indexOf(layer);
+    if (dsIndex === -1) return;
+
+    var meta = scoringRadar.getDatasetMeta(dsIndex);
+    meta.hidden = !meta.hidden;
+    scoringRadar.update();
+
+    this.classList.toggle('dimmed', meta.hidden);
+  });
+});
+</script>
+</body>
+</html>

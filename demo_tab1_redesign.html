@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo: Tab 1 Mi Identidad — Rediseno Glassmorphism</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Design Tokens ── */
+  :root {
+    --bg-body:      linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+    --card-bg:      rgba(255,255,255, 0.04);
+    --card-bg-2:    rgba(255,255,255, 0.06);
+    --card-border:  rgba(255,255,255, 0.08);
+    --card-hover:   rgba(255,255,255, 0.07);
+    --text:         #e0e2dc;
+    --muted:        #9a9e94;
+    --teal:         #4fc3a1;
+    --blue:         #4A9FD8;
+    --gold:         #D4B55A;
+    --red:          #E88B7A;
+    --green:        #5ABF8F;
+    --deep-blue:    #3A8FC8;
+    --radius:       14px;
+    --radius-sm:    8px;
+    --pad:          24px;
+    --pad-sm:       12px;
+  }
+
+  body {
+    background: var(--bg-body);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .wrapper { max-width: 1200px; margin: 0 auto; }
+  .demo-tag {
+    text-align: center;
+    font-size: 0.7em;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  /* ── Shared section container ── */
+  .section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: var(--pad);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 1.25em;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: 0.88em;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 28px 32px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+  }
+  .header-photo {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 2px solid rgba(79,195,161,0.4);
+    box-shadow: 0 0 16px rgba(79,195,161,0.12);
+    background: #3a4a42;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.4em; color: rgba(255,255,255,0.25);
+  }
+  .header-info { flex: 1; min-width: 240px; }
+  .header-name { font-size: 1.5em; font-weight: 800; color: #fff; margin-bottom: 3px; }
+  .header-meta { font-size: 0.9em; color: var(--muted); }
+  .header-meta strong { color: var(--text); }
+
+  /* Score strip */
+  .score-strip { display: flex; gap: 10px; flex-wrap: wrap; width: 100%; margin-top: 10px; }
+  .score-chip {
+    flex: 1; min-width: 110px;
+    padding: 12px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    transition: background 0.25s;
+  }
+  .score-chip:hover { background: var(--card-hover); }
+  .chip-label { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+  .chip-val { font-size: 1.5em; font-weight: 800; line-height: 1; }
+  .chip-sub { font-size: 0.72em; color: var(--muted); margin-top: 3px; }
+
+  /* ── KPI Grid (Perfil de Jugador) ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .kpi-card {
+    padding: 22px 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    position: relative; overflow: hidden;
+    transition: background 0.25s;
+  }
+  .kpi-card:hover { background: var(--card-hover); }
+  .kpi-card::before {
+    content: ''; position: absolute; top: 0; left: 20%; right: 20%;
+    height: 2px; border-radius: 0 0 2px 2px;
+  }
+  .kpi-card.a-green::before  { background: var(--green); }
+  .kpi-card.a-gold::before   { background: var(--gold); }
+  .kpi-card.a-blue::before   { background: var(--blue); }
+  .kpi-card.a-teal::before   { background: var(--teal); }
+  .kpi-card.a-red::before    { background: var(--red); }
+  .kpi-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
+  .kpi-value { font-size: 2.6em; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+  .kpi-detail { font-size: 0.82em; color: var(--muted); }
+  .kpi-badge {
+    display: inline-block; margin-top: 8px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 6px; font-size: 0.78em;
+  }
+
+  /* ── Form indicators ── */
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; }
+  .form-card {
+    padding: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .form-icon { font-size: 2.2em; margin-bottom: 6px; }
+  .form-val { font-size: 2em; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .form-sub { font-size: 0.78em; color: var(--muted); }
+
+  /* ── Last 5 rounds ── */
+  .round-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 60px 80px;
+    gap: 12px; padding: 14px 16px; align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+  }
+  .round-date { font-size: 0.82em; font-weight: 700; }
+  .round-course { font-size: 0.88em; }
+  .round-score { font-size: 1.5em; font-weight: 900; }
+  .round-diff { font-size: 0.78em; padding: 3px 10px; border-radius: 12px; text-align: center; font-weight: 700; background: rgba(255,255,255,0.05); }
+
+  /* ── Status box ── */
+  .status-box {
+    margin-top: 20px; padding: 20px;
+    background: var(--card-bg-2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .status-label { font-size: 1em; font-weight: 800; margin-bottom: 8px; }
+  .status-text { font-size: 0.92em; line-height: 1.7; color: rgba(255,255,255,0.85); max-width: 650px; margin: 0 auto; }
+
+  /* ── Percentile gauges ── */
+  .perc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .perc-card {
+    padding: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .perc-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  .perc-canvas-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto; }
+  .perc-overlay {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center; pointer-events: none;
+  }
+  .perc-val { font-size: 2em; font-weight: 900; line-height: 1; }
+  .perc-unit { font-size: 0.72em; color: var(--muted); margin-top: 2px; }
+  .perc-text { margin-top: 10px; font-size: 0.82em; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; }
+
+  /* ── Zones grid ── */
+  .zone-card {
+    padding: 18px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid transparent;
+  }
+  .zone-card.z-green { border-left-color: var(--green); }
+  .zone-card.z-gold  { border-left-color: var(--gold); }
+  .zone-card.z-red   { border-left-color: var(--red); }
+  .zone-card.z-blue  { border-left-color: var(--blue); }
+  .zone-title { font-size: 1em; font-weight: 800; margin-bottom: 6px; }
+  .zone-text { font-size: 0.88em; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+  /* ── Trajectory HCP cards ── */
+  .traj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 20px; }
+  .traj-card {
+    padding: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .traj-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .traj-val { font-size: 2.4em; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+  .traj-sub { font-size: 0.82em; color: var(--muted); }
+
+  /* ── Goal banner ── */
+  .goal-banner {
+    margin-top: 16px; padding: 20px;
+    background: var(--card-bg-2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .goal-title { font-size: 1.1em; font-weight: 800; margin-bottom: 8px; }
+  .goal-text { font-size: 0.92em; line-height: 1.8; color: rgba(255,255,255,0.85); }
+
+  /* ── Highlight hero ── */
+  .highlight-hero {
+    padding: 32px;
+    background: var(--card-bg-2);
+    border: 1px solid rgba(212,181,90,0.15);
+    border-radius: var(--radius);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .highlight-score { font-size: 5em; font-weight: 900; line-height: 1; margin: 12px 0; }
+  .highlight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 24px; }
+  .highlight-stat {
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+  }
+  .hl-label { font-size: 0.78em; color: var(--muted); margin-bottom: 4px; }
+  .hl-val { font-size: 1.6em; font-weight: 900; }
+  .hl-sub { font-size: 0.75em; color: var(--muted); margin-top: 2px; }
+
+  /* ── Recommendation ── */
+  .rec-main {
+    padding: 24px;
+    background: var(--card-bg-2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px; align-items: center;
+  }
+  .rec-emoji { font-size: 4em; }
+  .rec-title { font-size: 1.2em; font-weight: 800; margin-bottom: 10px; }
+  .rec-text { font-size: 0.92em; line-height: 1.7; color: rgba(255,255,255,0.85); margin-bottom: 14px; }
+  .rec-drills { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .rec-drill {
+    padding: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid transparent;
+    font-size: 0.88em; line-height: 1.5;
+  }
+  .rec-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 14px; }
+  .rec-card {
+    padding: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid transparent;
+    font-size: 0.88em; line-height: 1.6;
+  }
+
+  /* ── Chart placeholder ── */
+  .chart-placeholder {
+    height: 200px;
+    background: var(--card-bg);
+    border: 1px dashed var(--card-border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 0.85em;
+    margin-bottom: 16px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header { padding: 20px; gap: 16px; justify-content: center; }
+    .header-photo { width: 80px; height: 80px; font-size: 2em; }
+    .header-info { text-align: center; }
+    .section { padding: 18px; }
+    .kpi-value, .traj-val { font-size: 2em; }
+    .highlight-score { font-size: 3.5em; }
+    .rec-main { grid-template-columns: 1fr; text-align: center; }
+    .rec-drills { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <p class="demo-tag">Demo Tab 1 — Mi Identidad — Rediseno Completo</p>
+
+  <!-- ═══════════════════════════════════════════
+       1. HEADER
+       ═══════════════════════════════════════════ -->
+  <div class="header">
+    <div class="header-photo">AP</div>
+    <div class="header-info">
+      <div class="header-name">IA Golf Performance Dashboard 360</div>
+      <p class="header-meta"><strong>Alvaro Peralta</strong> | AMF 8472456</p>
+      <p class="header-meta">Sep 2024 - Dic 2025 · Madrid</p>
+    </div>
+    <div class="score-strip">
+      <div class="score-chip">
+        <div class="chip-label">Score</div>
+        <div class="chip-val" style="color:var(--teal)">6.8<span style="font-size:.4em;color:var(--muted)">/10</span></div>
+        <div class="chip-sub">Potencial: 8.0</div>
+      </div>
+      <div class="score-chip">
+        <div class="chip-label">Golpes</div>
+        <div class="chip-val" style="color:var(--blue)">497</div>
+        <div class="chip-sub">FlightScope</div>
+      </div>
+      <div class="score-chip">
+        <div class="chip-label">HCP</div>
+        <div class="chip-val" style="color:var(--green)">23.2</div>
+        <div class="chip-sub">RFEG Sept 2025</div>
+      </div>
+      <div class="score-chip">
+        <div class="chip-label">Consistencia</div>
+        <div class="chip-val" style="color:var(--teal)">70%</div>
+        <div class="chip-sub">Obj: 82%+</div>
+      </div>
+      <div class="score-chip">
+        <div class="chip-label">Confiabilidad</div>
+        <div class="chip-val" style="color:var(--green)">95%</div>
+        <div class="chip-sub">Calidad datos</div>
+      </div>
+      <div class="score-chip">
+        <div class="chip-label">Record</div>
+        <div class="chip-val" style="color:var(--gold)">88</div>
+        <div class="chip-sub">Marina Golf</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       2. PERFIL DE JUGADOR
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title" style="text-align:center; margin-bottom:20px;">Perfil de Jugador</div>
+    <div class="kpi-grid">
+      <div class="kpi-card a-green">
+        <div class="kpi-label">Handicap Oficial</div>
+        <div class="kpi-value" style="color:var(--green)">23.2</div>
+        <div class="kpi-detail">RFEG - Sept 2025</div>
+        <div class="kpi-badge"><strong style="color:var(--green)">-8.8</strong> en 18 meses</div>
+      </div>
+      <div class="kpi-card a-gold">
+        <div class="kpi-label">Record Personal</div>
+        <div class="kpi-value" style="color:var(--gold)">88</div>
+        <div class="kpi-detail">Marina Golf</div>
+        <div class="kpi-badge"><strong style="color:var(--gold)">16 Nov 2025</strong> · Diff 17</div>
+      </div>
+      <div class="kpi-card a-blue">
+        <div class="kpi-label">Experiencia</div>
+        <div class="kpi-value" style="color:var(--blue)">52</div>
+        <div class="kpi-detail">Rondas Registradas</div>
+        <div class="kpi-badge"><strong style="color:var(--blue)">Mar 2024</strong> - Dic 2025</div>
+      </div>
+      <div class="kpi-card a-teal">
+        <div class="kpi-label">Velocidad</div>
+        <div class="kpi-value" style="color:var(--teal)">1.8x</div>
+        <div class="kpi-detail">vs Jugador Promedio</div>
+        <div class="kpi-badge">Aprendes <strong style="color:var(--teal)">RAPIDO</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       3. ADN GOLFISTICO (placeholder - ya migrado a Chart.js)
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">ADN Golfistico</div>
+    <div class="section-sub">Seccion Golf Identity — ya rediseñada con Chart.js (no cambia)</div>
+    <div class="chart-placeholder">[ Radar Scoring Engine + Golf Identity — sin cambios ]</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       4. ESTADO ACTUAL DE FORMA
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Estado Actual de Forma</div>
+    <div class="section-sub">Tus ultimas 20 rondas. En racha ascendente o descendente?</div>
+
+    <div class="chart-placeholder">[ currentFormChart — grafico linea ]</div>
+
+    <div class="form-grid">
+      <div class="form-card">
+        <div class="form-icon">🔥</div>
+        <div class="form-val" style="color:var(--green)">EN RACHA</div>
+        <div class="form-sub">Tendencia</div>
+      </div>
+      <div class="form-card">
+        <div class="form-val" style="color:var(--blue)">95.3</div>
+        <div class="form-sub">Promedio L20</div>
+      </div>
+      <div class="form-card">
+        <div class="form-val" style="color:var(--gold)">88</div>
+        <div class="form-sub">Mejor L20</div>
+      </div>
+      <div class="form-card">
+        <div class="form-icon">🔥</div>
+        <div class="form-val" style="color:var(--green);font-size:1.4em">Ultimas 5: 92.8</div>
+        <div class="form-sub">Racha actual</div>
+      </div>
+    </div>
+
+    <!-- Ultimas 5 rondas -->
+    <div style="margin-top:20px;">
+      <div class="section-title" style="font-size:1em; margin-bottom:12px;">Ultimas 5 Rondas</div>
+      <div class="round-row">
+        <div class="round-date" style="color:var(--green)">07 DIC 25</div>
+        <div class="round-course">La Dehesa</div>
+        <div class="round-score" style="color:var(--green)">93</div>
+        <div class="round-diff">Diff 21</div>
+      </div>
+      <div class="round-row">
+        <div class="round-date" style="color:var(--gold)">16 NOV 25</div>
+        <div class="round-course">Marina Golf</div>
+        <div class="round-score" style="color:var(--gold)">88</div>
+        <div class="round-diff">Diff 17</div>
+      </div>
+      <div class="round-row">
+        <div class="round-date" style="color:var(--blue)">02 NOV 25</div>
+        <div class="round-course">RFEG</div>
+        <div class="round-score" style="color:var(--blue)">95</div>
+        <div class="round-diff">Diff 23</div>
+      </div>
+      <div class="round-row">
+        <div class="round-date" style="color:var(--teal)">19 OCT 25</div>
+        <div class="round-course">Nuevo Portil</div>
+        <div class="round-score" style="color:var(--teal)">92</div>
+        <div class="round-diff">Diff 20</div>
+      </div>
+      <div class="round-row">
+        <div class="round-date" style="color:var(--green)">05 OCT 25</div>
+        <div class="round-course">La Dehesa</div>
+        <div class="round-score" style="color:var(--green)">96</div>
+        <div class="round-diff">Diff 24</div>
+      </div>
+    </div>
+
+    <!-- Estado actual box -->
+    <div class="status-box">
+      <div class="status-label" style="color:var(--blue)">ESTADO ACTUAL: <span style="color:var(--green)">EN RACHA</span></div>
+      <div class="status-text">Tu fortaleza en la zona critica (100m y adentro) te ha llevado a estar <strong style="color:var(--green)">"en racha"</strong> con un promedio de <strong style="color:var(--green)">92.8 golpes</strong> en los ultimos 5 partidos.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       5. MIS PERCENTILES
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Mis Percentiles</div>
+    <div class="section-sub">Tu ranking comparado con jugadores amateur globalmente.</div>
+    <div class="perc-grid">
+      <div class="perc-card">
+        <div class="perc-label" style="color:var(--green)">Short Game</div>
+        <div class="perc-canvas-wrap"><canvas id="percSG"></canvas>
+          <div class="perc-overlay"><div class="perc-val" style="color:var(--green)">91</div><div class="perc-unit">Percentil</div></div>
+        </div>
+        <div class="perc-text"><strong style="color:var(--green)">TOP 9%</strong> — Elite amateur</div>
+      </div>
+      <div class="perc-card">
+        <div class="perc-label" style="color:var(--blue)">Ball Speed</div>
+        <div class="perc-canvas-wrap"><canvas id="percBS"></canvas>
+          <div class="perc-overlay"><div class="perc-val" style="color:var(--blue)">78</div><div class="perc-unit">Percentil</div></div>
+        </div>
+        <div class="perc-text"><strong style="color:var(--blue)">TOP 22%</strong> — Por encima promedio</div>
+      </div>
+      <div class="perc-card">
+        <div class="perc-label" style="color:var(--gold)">Consistency</div>
+        <div class="perc-canvas-wrap"><canvas id="percCO"></canvas>
+          <div class="perc-overlay"><div class="perc-val" style="color:var(--gold)">65</div><div class="perc-unit">Percentil</div></div>
+        </div>
+        <div class="perc-text"><strong style="color:var(--gold)">PROMEDIO+</strong> — Area de mejora</div>
+      </div>
+      <div class="perc-card">
+        <div class="perc-label" style="color:var(--red)">Attack Angle</div>
+        <div class="perc-canvas-wrap"><canvas id="percAA"></canvas>
+          <div class="perc-overlay"><div class="perc-val" style="color:var(--red)">25</div><div class="perc-unit">Percentil</div></div>
+        </div>
+        <div class="perc-text"><strong style="color:var(--red)">BOTTOM 75%</strong> — Prioridad critica</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       6. ZONAS DE SCORING
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Mapa de Calor: Zonas de Scoring</div>
+    <div class="section-sub">Donde eres mortal vs donde sufres.</div>
+    <div style="display:grid; gap:12px;">
+      <div class="zone-card z-green">
+        <div class="zone-title" style="color:var(--green)">ZONA VERDE: 50-100m</div>
+        <div class="zone-text">Tu territorio. Short game de elite (9.2/10). Desde aqui conviertes con precision quirurgica.</div>
+      </div>
+      <div class="zone-card z-gold">
+        <div class="zone-title" style="color:var(--gold)">ZONA AMARILLA: 100-150m</div>
+        <div class="zone-text">Territorio competitivo. Mid irons solidos (7.3/10). Hay margen de mejora en control de distancia.</div>
+      </div>
+      <div class="zone-card z-red">
+        <div class="zone-title" style="color:var(--red)">ZONA ROJA: 150m+</div>
+        <div class="zone-text">Aqui sufres. Long game (5.6/10) requiere trabajo en launch angle y accuracy.</div>
+      </div>
+      <div class="zone-card z-blue">
+        <div class="zone-title" style="color:var(--blue)">ZONA GRIS: 0-50m</div>
+        <div class="zone-text">Putting solido (6.1/10). Reads de green correctos, mejorar lag putting en distancias largas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       7. TRAYECTORIA DE MEJORA
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Trayectoria de Mejora</div>
+    <div class="section-sub">Tu evolucion historica de HCP con proyeccion futura.</div>
+    <div class="chart-placeholder">[ hcpTrajectoryChart — linea historico + proyeccion ]</div>
+    <div class="traj-grid">
+      <div class="traj-card">
+        <div class="traj-label" style="color:var(--red)">Punto de partida</div>
+        <div class="traj-val" style="color:var(--red)">32.0</div>
+        <div class="traj-sub">Marzo 2024</div>
+      </div>
+      <div class="traj-card">
+        <div class="traj-label" style="color:var(--green)">Mejor marca</div>
+        <div class="traj-val" style="color:var(--green)">21.9</div>
+        <div class="traj-sub">Mayo 2025</div>
+      </div>
+      <div class="traj-card">
+        <div class="traj-label" style="color:var(--blue)">Actual</div>
+        <div class="traj-val" style="color:var(--blue)">23.2</div>
+        <div class="traj-sub">Septiembre 2025</div>
+      </div>
+      <div class="traj-card">
+        <div class="traj-label" style="color:var(--gold)">Proyeccion Q2-2026</div>
+        <div class="traj-val" style="color:var(--gold)">19.5</div>
+        <div class="traj-sub">Con plan actual</div>
+      </div>
+    </div>
+    <div class="goal-banner">
+      <div class="goal-title" style="color:var(--green)">META 2026: HCP SUB-20</div>
+      <div class="goal-text">Con tu tendencia de <strong style="color:var(--green)">-0.44 puntos/mes</strong>, alcanzaras HCP 20 en <strong style="color:var(--gold)">~7 meses (Julio 2026)</strong>. Con plan de mejora, proyeccion acelera a <strong style="color:var(--green)">HCP 19.5 en Q2-2026</strong>.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       8. HIGHLIGHT DEL MES
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Highlight del Mes</div>
+    <div class="highlight-hero">
+      <div class="kpi-label" style="color:var(--gold); letter-spacing:3px; font-size:10px;">RECORD PERSONAL</div>
+      <div class="highlight-score" style="color:var(--gold)">88</div>
+      <div style="font-size:1.2em; font-weight:700; margin-bottom:4px;">Marina Golf — 16 Noviembre 2025</div>
+      <div style="font-size:0.9em; color:var(--muted)">Differential: 17 | HCP de Juego: 28</div>
+      <div class="highlight-grid">
+        <div class="highlight-stat">
+          <div class="hl-label">Mejor que</div>
+          <div class="hl-val" style="color:var(--green)">97%</div>
+          <div class="hl-sub">de tus rondas</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="hl-label">Bajo par HCP por</div>
+          <div class="hl-val" style="color:var(--blue)">7</div>
+          <div class="hl-sub">golpes (esperado: 95)</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="hl-label">Proximo objetivo</div>
+          <div class="hl-val" style="color:var(--gold)">85</div>
+          <div class="hl-sub">Faltan 3 golpes</div>
+        </div>
+        <div class="highlight-stat">
+          <div class="hl-label">Resultados</div>
+          <div style="font-size:1.1em; font-weight:900; color:var(--gold);">2 Birdies</div>
+          <div style="font-size:1.1em; font-weight:900; color:var(--green);">4 Pares</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       9. RECOMENDACION DEL MES
+       ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">Recomendacion del Mes</div>
+    <div class="rec-main">
+      <div class="rec-emoji">🎯</div>
+      <div>
+        <div class="rec-title" style="color:var(--deep-blue)">ESTE MES: Launch Angle Training</div>
+        <div class="rec-text">Tu prioridad #1 es mejorar tu area mas debil. <strong style="color:var(--green)">ROI estimado: -2.3 golpes/ronda.</strong></div>
+        <div class="rec-drills">
+          <div class="rec-drill" style="border-left-color:var(--green)">
+            <strong style="color:var(--green)">Drill:</strong> Tee alto + palo por debajo de bola + swing ascendente
+          </div>
+          <div class="rec-drill" style="border-left-color:var(--blue)">
+            <strong style="color:var(--blue)">Objetivo sesion:</strong> 50 drives con attack angle -3 o menor
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rec-cards">
+      <div class="rec-card" style="border-left-color:var(--gold)">
+        <strong style="color:var(--gold)">Campo sugerido:</strong>
+        <p style="margin:6px 0 0">Tu mejor campo para romper records.</p>
+      </div>
+      <div class="rec-card" style="border-left-color:var(--blue)">
+        <strong style="color:var(--blue)">Timing optimo:</strong>
+        <p style="margin:6px 0 0">Ritmo regular de juego para consolidar.</p>
+      </div>
+      <div class="rec-card" style="border-left-color:var(--green)">
+        <strong style="color:var(--green)">Quick Win:</strong>
+        <p style="margin:6px 0 0">Inversion de alto impacto en equipamiento.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Percentile doughnut charts ── -->
+<script>
+var percData = [
+  { id:'percSG', val:91, color:'#5ABF8F' },
+  { id:'percBS', val:78, color:'#4A9FD8' },
+  { id:'percCO', val:65, color:'#D4B55A' },
+  { id:'percAA', val:25, color:'#E88B7A' }
+];
+percData.forEach(function(p) {
+  new Chart(document.getElementById(p.id).getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: [p.val, 100 - p.val],
+        backgroundColor: [p.color, 'rgba(255,255,255,0.04)'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      cutout: '78%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } }
+    }
+  });
+});
+</script>
+</body>
+</html>

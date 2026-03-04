@@ -2921,7 +2921,7 @@ class DashboardDataGenerator:
 
                                 if hcp_match:
                                     try:
-                                        hcp = int(hcp_match.group(2))
+                                        hcp = float(hcp_match.group(1))  # SMH column = actual HCP
                                         fecha = datetime.strptime(fecha_str, '%d/%m/%Y')
 
                                         records.append({
@@ -2948,11 +2948,11 @@ class DashboardDataGenerator:
 
                     for month_key in sorted(hcp_by_month.keys()):
                         hcps = hcp_by_month[month_key]
-                        avg_hcp = sum(hcps) / len(hcps)
+                        last_hcp = hcps[-1]  # Último valor del mes (más reciente)
 
                         fecha = datetime.strptime(month_key, '%Y-%m')
                         labels.append(fecha.strftime('%b %Y'))
-                        values.append(round(avg_hcp, 1))
+                        values.append(round(last_hcp, 1))
 
                     logger.success(f"HCP evolution RFEG: {len(records)} official records, "
                                    f"{len(labels)} months, current HCP={values[-1] if values else 0}, "
@@ -2968,7 +2968,8 @@ class DashboardDataGenerator:
                 logger.warning(f"Could not read RFEG PDF: {e}. Using estimated data.")
 
         # FALLBACK: Usar datos estimados si no hay PDF o falla
-        logger.info("Using estimated HCP data (no official PDF found)")
+        # Usa fórmula WHS: mejores 8 de últimos 20 diferenciales × 0.96
+        logger.info("Using estimated HCP data (WHS formula, no official PDF found)")
 
         all_rounds = []
         for campo_data in self.tarjetas_data.values():
@@ -2987,41 +2988,52 @@ class DashboardDataGenerator:
                 'source': 'estimated'
             }
 
-        hcp_by_month = defaultdict(list)
         course_rating = 72
         slope = 113
 
+        # Calcular diferenciales en orden cronológico
+        round_diffs = []
         for ronda in all_rounds:
             try:
                 fecha = datetime.strptime(ronda['fecha'], '%Y-%m-%d')
-                month_key = fecha.strftime('%Y-%m')
             except:
                 continue
+            differential = (ronda['score'] - course_rating) * 113 / slope
+            round_diffs.append({'fecha': fecha, 'diff': differential})
 
-            differential = ((ronda['score'] - course_rating) * 113 / slope)
-            hcp_by_month[month_key].append(differential)
-
+        # Calcular HCP rolling al final de cada mes (WHS: best 8 of last 20 × 0.96)
         labels = []
         values = []
+        seen_months = set()
 
-        for month_key in sorted(hcp_by_month.keys()):
-            diffs = hcp_by_month[month_key]
-            hcp_est = sum(diffs) / len(diffs)
+        for i, entry in enumerate(round_diffs):
+            month_key = entry['fecha'].strftime('%Y-%m')
+            # Solo registrar el último valor de cada mes
+            if month_key in seen_months:
+                # Actualizar el valor para este mes (última ronda del mes)
+                available = [d['diff'] for d in round_diffs[:i + 1]]
+                last_20 = available[-20:]
+                n_best = min(8, len(last_20))
+                best_n = sorted(last_20)[:n_best]
+                hcp = (sum(best_n) / len(best_n)) * 0.96
+                values[-1] = round(hcp, 1)
+            else:
+                seen_months.add(month_key)
+                available = [d['diff'] for d in round_diffs[:i + 1]]
+                last_20 = available[-20:]
+                n_best = min(8, len(last_20))
+                best_n = sorted(last_20)[:n_best]
+                hcp = (sum(best_n) / len(best_n)) * 0.96
+                labels.append(entry['fecha'].strftime('%b %Y'))
+                values.append(round(hcp, 1))
 
-            try:
-                fecha = datetime.strptime(month_key, '%Y-%m')
-                labels.append(fecha.strftime('%b %Y'))
-            except:
-                labels.append(month_key)
-
-            values.append(round(hcp_est, 1))
-
-        logger.success(f"HCP evolution RFEG: {len(labels)} months (estimated)")
+        logger.success(f"HCP evolution RFEG: {len(labels)} months (WHS estimated), "
+                       f"range={min(values)}-{max(values)}")
 
         return {
             'labels': labels,
             'values': values,
-            'source': 'estimated'
+            'source': 'estimated_whs'
         }
 
     def calculate_scoring_zones_by_course(self):

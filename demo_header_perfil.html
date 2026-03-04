@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo: Header + Perfil de Jugador (Rediseño)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── Tokens (from dashboard Golf Identity) ── */
+  :root {
+    --bg-body:     linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+    --card-bg:     rgba(255,255,255, 0.04);
+    --card-border: rgba(255,255,255, 0.08);
+    --card-hover:  rgba(255,255,255, 0.07);
+    --text:        #e0e2dc;
+    --muted:       #9a9e94;
+    --teal:        #4fc3a1;
+    --blue:        #4A9FD8;
+    --gold:        #D4B55A;
+    --red:         #E88B7A;
+    --green:       #5ABF8F;
+    --radius:      14px;
+    --radius-sm:   8px;
+  }
+
+  body {
+    background: var(--bg-body);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 30px 20px;
+  }
+  .demo-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .demo-label {
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  /* ══════════════════════════════════════════════════
+     HEADER — Rediseño glassmorphism
+     ══════════════════════════════════════════════════ */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    padding: 32px 36px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+  }
+
+  /* Photo circle */
+  .header-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid rgba(79,195,161,0.4);
+    box-shadow: 0 0 20px rgba(79,195,161,0.15);
+    overflow: hidden;
+    background: #3a4a42;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Info block */
+  .header-info {
+    flex: 1;
+    min-width: 260px;
+  }
+  .header-title {
+    font-size: 1.6em;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .header-sub {
+    font-size: 0.95em;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .header-sub strong {
+    color: var(--text);
+  }
+
+  /* Score summary strip */
+  .score-strip {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .score-chip {
+    flex: 1;
+    min-width: 130px;
+    padding: 14px 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    transition: background 0.25s;
+  }
+  .score-chip:hover {
+    background: var(--card-hover);
+  }
+  .score-chip-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .score-chip-val {
+    font-size: 1.6em;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .score-chip-sub {
+    font-size: 0.75em;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ══════════════════════════════════════════════════
+     PERFIL DE JUGADOR — Rediseño glassmorphism
+     ══════════════════════════════════════════════════ */
+  .perfil-section {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .perfil-title {
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .kpi-card {
+    padding: 24px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .kpi-card:hover {
+    background: var(--card-hover);
+  }
+  /* Subtle accent top border per card */
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    border-radius: 0 0 2px 2px;
+  }
+  .kpi-card.accent-green::before  { background: var(--green); }
+  .kpi-card.accent-gold::before   { background: var(--gold); }
+  .kpi-card.accent-blue::before   { background: var(--blue); }
+  .kpi-card.accent-teal::before   { background: var(--teal); }
+
+  .kpi-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .kpi-value {
+    font-size: 2.8em;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .kpi-detail {
+    font-size: 0.85em;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .kpi-detail strong {
+    color: var(--text);
+  }
+  .kpi-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    font-size: 0.8em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header { padding: 24px 20px; gap: 20px; justify-content: center; }
+    .header-photo { width: 90px; height: 90px; font-size: 2.2em; }
+    .header-info { text-align: center; }
+    .header-title { font-size: 1.3em; }
+    .score-chip { min-width: 100px; }
+    .kpi-value { font-size: 2.2em; }
+    .perfil-section { padding: 24px 16px; }
+  }
+
+  /* ── Comparison label ── */
+  .section-label {
+    text-align: center;
+    font-size: 0.7em;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 40px 0 16px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="demo-wrapper">
+  <p class="demo-label">Demo: Rediseno Header + Perfil de Jugador</p>
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <div class="header">
+    <div class="header-photo">AP</div>
+
+    <div class="header-info">
+      <div class="header-title">IA Golf Performance Dashboard 360</div>
+      <p class="header-sub"><strong>Alvaro Peralta</strong> | AMF 8472456</p>
+      <p class="header-sub">Sep 2024 - Dic 2025 · Madrid, Espana</p>
+    </div>
+
+    <div class="score-strip">
+      <div class="score-chip">
+        <div class="score-chip-label">Score General</div>
+        <div class="score-chip-val" style="color: var(--teal);">6.8<span style="font-size:0.45em; color:var(--muted);">/10</span></div>
+        <div class="score-chip-sub">Potencial: 8.0</div>
+      </div>
+      <div class="score-chip">
+        <div class="score-chip-label">Golpes</div>
+        <div class="score-chip-val" style="color: var(--blue);">497</div>
+        <div class="score-chip-sub">FlightScope</div>
+      </div>
+      <div class="score-chip">
+        <div class="score-chip-label">HCP Oficial</div>
+        <div class="score-chip-val" style="color: var(--green);">23.2</div>
+        <div class="score-chip-sub">RFEG Sept 2025</div>
+      </div>
+      <div class="score-chip">
+        <div class="score-chip-label">Consistencia</div>
+        <div class="score-chip-val" style="color: var(--teal);">70%</div>
+        <div class="score-chip-sub">Obj: 82%+</div>
+      </div>
+      <div class="score-chip">
+        <div class="score-chip-label">Confiabilidad</div>
+        <div class="score-chip-val" style="color: var(--green);">95%</div>
+        <div class="score-chip-sub">Calidad datos</div>
+      </div>
+      <div class="score-chip">
+        <div class="score-chip-label">Record</div>
+        <div class="score-chip-val" style="color: var(--gold);">88</div>
+        <div class="score-chip-sub">Marina Golf</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PERFIL DE JUGADOR ══════════════ -->
+  <div class="perfil-section">
+    <div class="perfil-title">Perfil de Jugador</div>
+
+    <div class="kpi-grid">
+      <!-- KPI 1: HCP -->
+      <div class="kpi-card accent-green">
+        <div class="kpi-label">Handicap Oficial</div>
+        <div class="kpi-value" style="color: var(--green);">23.2</div>
+        <div class="kpi-detail">RFEG - Sept 2025</div>
+        <div class="kpi-badge"><strong style="color: var(--green);">-8.8</strong> puntos en 18 meses</div>
+      </div>
+
+      <!-- KPI 2: Best Score -->
+      <div class="kpi-card accent-gold">
+        <div class="kpi-label">Record Personal</div>
+        <div class="kpi-value" style="color: var(--gold);">88</div>
+        <div class="kpi-detail">Marina Golf</div>
+        <div class="kpi-badge"><strong style="color: var(--gold);">16 Nov 2025</strong> · Diff 17</div>
+      </div>
+
+      <!-- KPI 3: Total Rounds -->
+      <div class="kpi-card accent-blue">
+        <div class="kpi-label">Experiencia</div>
+        <div class="kpi-value" style="color: var(--blue);">52</div>
+        <div class="kpi-detail">Rondas Registradas</div>
+        <div class="kpi-badge"><strong style="color: var(--blue);">Mar 2024</strong> - Dic 2025</div>
+      </div>
+
+      <!-- KPI 4: Speed -->
+      <div class="kpi-card accent-teal">
+        <div class="kpi-label">Velocidad</div>
+        <div class="kpi-value" style="color: var(--teal);">1.8x</div>
+        <div class="kpi-detail">vs Jugador Promedio</div>
+        <div class="kpi-badge">Aprendes <strong style="color: var(--teal);">RAPIDO</strong></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

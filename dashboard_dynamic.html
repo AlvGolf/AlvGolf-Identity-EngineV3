@@ -71,6 +71,25 @@
         // Initialize chartInstances global object
         window.chartInstances = window.chartInstances || {};
 
+        // ── FIX: fill direction on reversed axes ─────────────────
+        // Con reverse: true, fill: true (='origin') rellena hacia y=0 (arriba del chart).
+        // Este plugin lo corrige: fill: 'start' rellena hacia el borde inferior del canvas.
+        Chart.register({
+            id: 'reverseFillFix',
+            beforeInit: function(chart) {
+                var dominated = false;
+                var scales = chart.options.scales || {};
+                for (var key in scales) {
+                    if (scales[key] && scales[key].reverse === true) { dominated = true; break; }
+                }
+                if (dominated) {
+                    chart.data.datasets.forEach(function(ds) {
+                        if (ds.fill === true) ds.fill = 'start';
+                    });
+                }
+            }
+        });
+
         // ── LAZY LOADING SYSTEM ───────────────────────────────────
         window.OPTIMIZATION_CONFIG = { ENABLE_LAZY_LOADING: true };
         window.tabChartQueue  = { overview:[], evolution:[], campos:[], performance:[], 'deep-analysis':[], strategy:[] };
@@ -1043,20 +1062,38 @@
                 }
             }
 
-            // Milestone achievements — render timeline
+            // Milestone achievements — render alternating timeline
             if (ma) {
                 const container = document.getElementById('cs-timeline-container');
                 if (container) {
-                    const icons = { personal_best: '🏆', broke_100: '💯', broke_90: '🔥', consistency_streak: '🔥' };
-                    container.innerHTML = ma.map(m => `
-                        <div class="card-nested" style="display: flex; align-items: center; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <div style="font-size: 1.5em;">${icons[m.type] || '⭐'}</div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 600;">${m.description}</div>
-                                <div class="detail-text">${m.course} · ${formatPlayerDate(m.date, 'short')}</div>
-                            </div>
-                        </div>
-                    `).join('');
+                    const mIcons = { personal_best: '🏆', broke_100: '💯', broke_90: '🎯', broke_85: '⭐', consistency_streak: '🔥' };
+                    const mColors = { personal_best: '#D4B55A', broke_100: '#E88B7A', broke_90: '#4A9FD8', broke_85: '#5ABF8F', consistency_streak: '#5ABF8F' };
+                    container.innerHTML = ma.map((m, i) => {
+                        const icon = mIcons[m.type] || '⭐';
+                        const color = mColors[m.type] || '#4A9FD8';
+                        const dateStr = formatPlayerDate(m.date, 'full');
+                        const isLeft = i % 2 === 0;
+                        const isLast = i === ma.length - 1;
+                        const circleSize = isLast ? 60 : 50;
+                        const circleIcon = isLast ? '👑' : '📅';
+                        const cardContent = `
+                            <div style="padding: 20px; background: rgba(${color === '#D4B55A' ? '212,181,90' : color === '#E88B7A' ? '232,139,122' : color === '#5ABF8F' ? '90,191,143' : '74,159,216'},0.1); border-radius: 12px; border-${isLeft ? 'right' : 'left'}: 4px solid ${color}; text-align: ${isLeft ? 'right' : 'left'};">
+                                <h4 style="color: ${color}; margin: 0 0 8px 0;">${icon} ${m.description}</h4>
+                                <p style="margin: 0; font-size: 1.2em; font-weight: 700;">${m.value ? 'Score: ' + m.value : ''}</p>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">${m.course}</p>
+                            </div>`;
+                        const dateContent = `
+                            <div style="padding: 15px;">
+                                <p style="margin: 0; font-size: 0.95em; color: ${color}; font-weight: 700;">${dateStr}</p>
+                            </div>`;
+                        const circle = `
+                            <div style="width: ${circleSize}px; height: ${circleSize}px; background: linear-gradient(135deg, rgba(90,191,143,0.3), rgba(61,212,124,0.3)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: ${isLast ? '2em' : '1.5em'}; font-weight: 900; z-index: 1; border: 4px solid #001a33;${isLast ? ' box-shadow: 0 0 20px rgba(212,181,90,0.5);' : ''}">${circleIcon}</div>`;
+                        return `<div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center;">
+                            ${isLeft ? cardContent : dateContent}
+                            ${circle}
+                            ${isLeft ? dateContent : cardContent}
+                        </div>`;
+                    }).join('');
                 }
             }
 
@@ -4500,40 +4537,6 @@
   align-items: center;
   min-width: 0;
 }
-.gi-radar-legend {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-.gi-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 10px;
-  color: var(--gi-text);
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.25s;
-}
-.gi-legend-item.inactive {
-  opacity: 0.35;
-}
-.gi-legend-item.inactive .gi-legend-swatch {
-  background: rgba(255,255,255,0.2) !important;
-  border-color: rgba(255,255,255,0.2) !important;
-}
-.gi-legend-swatch {
-  width: 18px;
-  height: 3px;
-  border-radius: 2px;
-}
-.gi-legend-swatch.dashed {
-  background: none;
-  border-top: 2px dashed;
-  height: 0;
-}
 /* Cards de promedios */
 .gi-radar-cards {
   display: flex;
@@ -4552,6 +4555,8 @@
   border: 1px solid var(--card-border-subtle);
   border-radius: var(--radius-sm);
   text-align: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 .gi-radar-card-dot {
   width: 12px;
@@ -4693,11 +4698,11 @@
 .bar-developing { background: linear-gradient(90deg, var(--gi-gold-dim), var(--gi-gold)); }
 .bar-focus_area { background: linear-gradient(90deg, #8a3030, var(--gi-red)); }
 
-/* ── Radar SVG (hero size) ──────────────────────────────── */
-.gi-radar-svg {
+/* ── Radar Chart.js (hero size) ─────────────────────────── */
+.gi-radar-chart-wrap {
   width: 100%;
   max-width: 420px;
-  height: auto;
+  position: relative;
 }
 
 /* ── Insight personalizado ───────────────────────────────── */
@@ -4944,23 +4949,9 @@
   <div class="gi-radar-hero">
     <div class="gi-radar-main">
       <div class="gi-panel-title" style="width:100%">Radar · Scoring Engine</div>
-      <div class="gi-radar-legend">
-        <div class="gi-legend-item" data-layer="player">
-          <div class="gi-legend-swatch" style="background:#4fc3a1;"></div>
-          <span>Tú</span>
-        </div>
-        <div class="gi-legend-item" data-layer="pga">
-          <div class="gi-legend-swatch dashed" style="border-color:#E88B7A;"></div>
-          <span>PGA Tour</span>
-        </div>
-        <div class="gi-legend-item" data-layer="hcp20">
-          <div class="gi-legend-swatch dashed" style="border-color:#D4B55A;"></div>
-          <span>HCP 20</span>
-        </div>
+      <div class="gi-radar-chart-wrap">
+        <canvas id="gi-scoring-radar"></canvas>
       </div>
-      <svg class="gi-radar-svg" id="gi-radar-svg" viewBox="0 0 360 360">
-        <!-- Generado por JS -->
-      </svg>
     </div>
     <div class="gi-radar-cards">
       <div class="gi-radar-card" data-layer="player">
@@ -5180,144 +5171,136 @@
     });
   }
 
-  // ── Radar SVG renderer ─────────────────────────────────────
+  // ── Radar Chart.js renderer ────────────────────────────────
+  var giScoringRadar = null;
+  var giLayerMap = ['player', 'pga', 'hcp20'];
+
   function renderRadar(dimensions) {
-    const svg     = document.getElementById('gi-radar-svg');
-    const cx      = 180, cy = 180, R = 140;
-    const keys    = DIM_ORDER;
-    const n       = keys.length;
-    const zoneColors = {
-      elite: '#4fc3a1', strong: '#5b9bd5',
-      developing: '#c9a84c', focus_area: '#e05c5c'
-    };
+    const canvas = document.getElementById('gi-scoring-radar');
+    if (!canvas) return;
 
-    svg.innerHTML = '';
+    const keys = DIM_ORDER;
+    const labels = keys.map(k => DIM_LABELS[k]);
+    const playerData = keys.map(k => dimensions[k] ? dimensions[k].score : 5);
+    const pgaData    = keys.map(k => BENCH_PGA[k]);
+    const hcp20Data  = keys.map(k => BENCH_HCP20[k]);
 
-    // Grid rings (2, 4, 6, 8, 10)
-    const rings = [2, 4, 6, 8, 10];
-    rings.forEach(ring => {
-      const r = (ring / 10) * R;
-      const pts = keys.map((_, i) => {
-        const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
-        return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
-      });
-      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-      poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
-      poly.setAttribute('fill',   'none');
-      poly.setAttribute('stroke', ring === 10 ? 'rgba(201,168,76,0.25)' : 'rgba(255,255,255,0.05)');
-      poly.setAttribute('stroke-width', '1');
-      svg.appendChild(poly);
+    // Destroy previous instance
+    if (giScoringRadar) { giScoringRadar.destroy(); giScoringRadar = null; }
 
-      // Label del ring
-      if (ring % 4 === 0) {
-        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        lbl.setAttribute('x', cx + 4);
-        lbl.setAttribute('y', cy - r + 4);
-        lbl.setAttribute('font-size', '9');
-        lbl.setAttribute('fill', 'rgba(255,255,255,0.25)');
-        lbl.textContent = ring;
-        svg.appendChild(lbl);
+    const ctx = canvas.getContext('2d');
+    giScoringRadar = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Tú',
+            data: playerData,
+            backgroundColor: 'rgba(79, 195, 161, 0.15)',
+            borderColor: '#4fc3a1',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#4fc3a1',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1.5,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            order: 0
+          },
+          {
+            label: 'PGA Tour',
+            data: pgaData,
+            backgroundColor: 'rgba(232, 139, 122, 0.06)',
+            borderColor: '#E88B7A',
+            borderWidth: 1.5,
+            pointBackgroundColor: '#E88B7A',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            order: 2
+          },
+          {
+            label: 'HCP 20',
+            data: hcp20Data,
+            backgroundColor: 'rgba(212, 181, 90, 0.06)',
+            borderColor: '#D4B55A',
+            borderWidth: 1.5,
+            pointBackgroundColor: '#D4B55A',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 1,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          r: {
+            beginAtZero: true, min: 0, max: 10,
+            ticks: { stepSize: 2, color: 'rgba(255,255,255,0.4)', backdropColor: 'transparent', font: { size: 9 } },
+            grid: { color: 'rgba(255,255,255,0.1)' },
+            angleLines: { color: 'rgba(255,255,255,0.08)' },
+            pointLabels: { color: '#4A9FD8', font: { size: 11, weight: 'bold' } }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#e0e2dc',
+              font: { size: 11 },
+              padding: 16,
+              usePointStyle: false
+            },
+            onClick: function(e, legendItem, legend) {
+              var chart = legend.chart;
+              var index = legendItem.datasetIndex;
+              var meta = chart.getDatasetMeta(index);
+              meta.hidden = !meta.hidden;
+              chart.update();
+              var layer = giLayerMap[index];
+              var card = document.querySelector('.gi-radar-card[data-layer="' + layer + '"]');
+              if (card) card.style.opacity = meta.hidden ? '0.25' : '1';
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(15, 32, 39, 0.95)',
+            titleColor: '#4A9FD8',
+            bodyColor: '#fff',
+            borderColor: '#4A9FD8',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              afterBody: function(context) {
+                var idx = context[0].dataIndex;
+                var you = playerData[idx];
+                var pga = pgaData[idx];
+                var hcp = hcp20Data[idx];
+                var zone = you >= 8.5 ? '🏆 Elite' : you >= 6.5 ? '✅ Fuerte' : you >= 4.0 ? '⚠️ En desarrollo' : '🔴 Foco';
+                var diffPga = you - pga;
+                var diffHcp = you - hcp;
+                return ['', zone, 'vs PGA: ' + (diffPga >= 0 ? '+' : '') + diffPga.toFixed(1), 'vs HCP20: ' + (diffHcp >= 0 ? '+' : '') + diffHcp.toFixed(1)];
+              }
+            }
+          }
+        }
       }
     });
 
-    // Ejes
-    keys.forEach((_, i) => {
-      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
-      const x2 = cx + R * Math.cos(angle);
-      const y2 = cy + R * Math.sin(angle);
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-      line.setAttribute('stroke', 'rgba(255,255,255,0.08)');
-      line.setAttribute('stroke-width', '1');
-      svg.appendChild(line);
-    });
+    // Store globally for tab resize
+    window.chartInstances = window.chartInstances || {};
+    window.chartInstances.giScoringRadar = giScoringRadar;
 
-    // Área PGA Tour (dashed, roja)
-    const pgaPts = keys.map((key, i) => {
-      const score = BENCH_PGA[key] || 9.5;
-      const r     = (score / 10) * R;
-      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
-      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
-    });
-    const pgaArea = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    pgaArea.setAttribute('id', 'gi-layer-pga');
-    pgaArea.setAttribute('points', pgaPts.map(p => p.join(',')).join(' '));
-    pgaArea.setAttribute('fill',           'rgba(232,139,122,0.06)');
-    pgaArea.setAttribute('stroke',         '#E88B7A');
-    pgaArea.setAttribute('stroke-width',   '1.5');
-    pgaArea.setAttribute('stroke-dasharray','6,4');
-    svg.appendChild(pgaArea);
-
-    // Área HCP 20 (dashed, dorada)
-    const hcp20Pts = keys.map((key, i) => {
-      const score = BENCH_HCP20[key] || 5.0;
-      const r     = (score / 10) * R;
-      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
-      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
-    });
-    const hcp20Area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    hcp20Area.setAttribute('id', 'gi-layer-hcp20');
-    hcp20Area.setAttribute('points', hcp20Pts.map(p => p.join(',')).join(' '));
-    hcp20Area.setAttribute('fill',           'rgba(212,181,90,0.06)');
-    hcp20Area.setAttribute('stroke',         '#D4B55A');
-    hcp20Area.setAttribute('stroke-width',   '1.5');
-    hcp20Area.setAttribute('stroke-dasharray','6,4');
-    svg.appendChild(hcp20Area);
-
-    // Grupo del jugador (polígono + puntos + labels)
-    const playerGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    playerGroup.setAttribute('id', 'gi-layer-player');
-
-    const playerPts = keys.map((key, i) => {
-      const dim   = dimensions[key];
-      const score = dim ? dim.score : 5;
-      const r     = (score / 10) * R;
-      const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
-      return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
-    });
-    const area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-    area.setAttribute('points', playerPts.map(p => p.join(',')).join(' '));
-    area.setAttribute('fill',         'rgba(79,195,161,0.15)');
-    area.setAttribute('stroke',       '#4fc3a1');
-    area.setAttribute('stroke-width', '1.5');
-    playerGroup.appendChild(area);
-
-    // Puntos + labels (dentro del grupo del jugador)
-    keys.forEach((key, i) => {
-      const dim   = dimensions[key];
-      const score = dim ? dim.score : 5;
-      const zone  = dim ? dim.zone  : 'developing';
-      const [px, py] = playerPts[i];
-      const angle    = (i / n) * 2 * Math.PI - Math.PI / 2;
-
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      dot.setAttribute('cx', px); dot.setAttribute('cy', py);
-      dot.setAttribute('r', '5');
-      dot.setAttribute('fill', zoneColors[zone] || '#4fc3a1');
-      dot.setAttribute('stroke', '#0a120c'); dot.setAttribute('stroke-width', '1.5');
-      playerGroup.appendChild(dot);
-
-      const lx = cx + (R + 24) * Math.cos(angle);
-      const ly = cy + (R + 24) * Math.sin(angle);
-      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      label.setAttribute('x', lx);
-      label.setAttribute('y', ly + 3);
-      label.setAttribute('text-anchor', 'middle');
-      label.setAttribute('font-size', '10');
-      label.setAttribute('fill', zoneColors[zone] || 'rgba(255,255,255,0.5)');
-      label.textContent = DIM_LABELS[key].split(' ')[0];
-      playerGroup.appendChild(label);
-    });
-
-    svg.appendChild(playerGroup);
-
-    // Actualizar cards de promedio (usar overall_score del backend para consistencia)
+    // Actualizar cards de promedio
     const dd = window.dashboardData || window.dashboard_data;
     const overallScore = dd?.scoring_profile?.overall_score;
-    const playerAvg = overallScore != null ? overallScore.toFixed(1) : (keys.map(k => dimensions[k] ? dimensions[k].score : 5).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
-    const pgaAvg = (keys.map(k => BENCH_PGA[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
-    const hcp20Avg = (keys.map(k => BENCH_HCP20[k]).reduce((a, b) => a + b, 0) / keys.length).toFixed(1);
+    const playerAvg = overallScore != null ? overallScore.toFixed(1) : (playerData.reduce((a, b) => a + b, 0) / playerData.length).toFixed(1);
+    const pgaAvg = (pgaData.reduce((a, b) => a + b, 0) / pgaData.length).toFixed(1);
+    const hcp20Avg = (hcp20Data.reduce((a, b) => a + b, 0) / hcp20Data.length).toFixed(1);
     const cardPlayer = document.getElementById('gi-card-player');
     const cardPga = document.getElementById('gi-card-pga');
     const cardHcp20 = document.getElementById('gi-card-hcp20');
@@ -5326,26 +5309,19 @@
     if (cardHcp20) cardHcp20.textContent = hcp20Avg + '/10';
   }
 
-  // ── Radar legend interactivity (toggle layers) ──────────────
-  (function initRadarLegendToggle() {
-    document.querySelectorAll('.gi-radar-legend .gi-legend-item[data-layer]').forEach(item => {
-      item.addEventListener('click', function() {
-        const layer = this.dataset.layer;
-        const svgEl = document.getElementById('gi-layer-' + layer);
-        const card  = document.querySelector('.gi-radar-card[data-layer="' + layer + '"]');
-        const isActive = !this.classList.contains('inactive');
-
-        // Toggle legend item
-        this.classList.toggle('inactive');
-
-        // Toggle SVG polygon/group
-        if (svgEl) svgEl.style.display = isActive ? 'none' : '';
-
-        // Toggle card
-        if (card) card.style.opacity = isActive ? '0.25' : '1';
-      });
+  // ── Card click → toggle dataset + card ──────────────────────
+  document.querySelectorAll('.gi-radar-card[data-layer]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      if (!giScoringRadar) return;
+      var layer = this.dataset.layer;
+      var dsIndex = giLayerMap.indexOf(layer);
+      if (dsIndex === -1) return;
+      var meta = giScoringRadar.getDatasetMeta(dsIndex);
+      meta.hidden = !meta.hidden;
+      giScoringRadar.update();
+      this.style.opacity = meta.hidden ? '0.25' : '1';
     });
-  })();
+  });
 
   // ── Helper: etiqueta zona ────────────────────────────────────
   function zoneLabel(zone) {
@@ -9609,7 +9585,7 @@
                     <!-- Benchmarks Verticales -->
                     <div style="display: flex; flex-direction: column; gap: 20px; justify-content: center;">
                         <!-- Tú -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
+                        <div data-radar="comparison" data-ds="0" style="padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center; cursor: pointer; transition: opacity 0.3s ease;">
                             <div style="font-size: 2em; margin-bottom: 8px;">🟢</div>
                             <strong style="color: #5ABF8F; font-size: 1.1em; display: block; margin-bottom: 8px;">TÚ</strong>
                             <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #5ABF8F;" id="radar-player-avg">--</p>
@@ -9617,7 +9593,7 @@
                         </div>
 
                         <!-- PGA Tour -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(232,139,122,0.2), rgba(232,139,122,0.05)); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center;">
+                        <div data-radar="comparison" data-ds="1" style="padding: 20px; background: linear-gradient(135deg, rgba(232,139,122,0.2), rgba(232,139,122,0.05)); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center; cursor: pointer; transition: opacity 0.3s ease;">
                             <div style="font-size: 2em; margin-bottom: 8px;">🔴</div>
                             <strong style="color: #E88B7A; font-size: 1.1em; display: block; margin-bottom: 8px;">PGA TOUR</strong>
                             <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #E88B7A;" id="radar-pga-avg">10.0</p>
@@ -9625,7 +9601,7 @@
                         </div>
 
                         <!-- HCP 15 -->
-                        <div style="padding: 20px; background: linear-gradient(135deg, rgba(58,143,200,0.2), rgba(58,143,200,0.05)); border-radius: 12px; border: 2px solid rgba(58,143,200,0.4); text-align: center;">
+                        <div data-radar="comparison" data-ds="2" style="padding: 20px; background: linear-gradient(135deg, rgba(58,143,200,0.2), rgba(58,143,200,0.05)); border-radius: 12px; border: 2px solid rgba(58,143,200,0.4); text-align: center; cursor: pointer; transition: opacity 0.3s ease;">
                             <div style="font-size: 2em; margin-bottom: 8px;">🟣</div>
                             <strong style="color: #3A8FC8; font-size: 1.1em; display: block; margin-bottom: 8px;">HCP 15</strong>
                             <p style="margin: 0; font-size: 1.8em; font-weight: 900; color: #3A8FC8;" id="radar-hcp15-avg">--</p>
@@ -12527,15 +12503,28 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            titleColor: chartColors.secondary,
+                            backgroundColor: 'rgba(15, 32, 39, 0.95)',
+                            titleColor: '#4A9FD8',
                             bodyColor: '#fff',
+                            borderColor: '#4A9FD8',
+                            borderWidth: 1,
                             padding: 12,
                             callbacks: {
                                 label: function(context) {
                                     const label = context.dataset.label || '';
                                     const value = context.parsed.y;
-                                    return value !== null ? `${label}: ${value}m` : `${label}: Sin datos`;
+                                    return value !== null ? label + ': ' + value + 'm' : label + ': Sin datos';
+                                },
+                                afterLabel: function(context) {
+                                    const value = context.parsed.y;
+                                    if (value === null) return '';
+                                    const data = context.dataset.data;
+                                    const firstValid = data.find(function(v) { return v !== null; });
+                                    if (firstValid && firstValid !== value) {
+                                        const delta = (value - firstValid).toFixed(1);
+                                        return (delta >= 0 ? '+' : '') + delta + 'm vs inicio';
+                                    }
+                                    return '';
                                 }
                             }
                         }
@@ -13370,23 +13359,31 @@
                         } 
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                        titleColor: chartColors.secondary,
+                        backgroundColor: 'rgba(15, 32, 39, 0.95)',
+                        titleColor: '#4A9FD8',
                         bodyColor: '#fff',
+                        borderColor: '#4A9FD8',
+                        borderWidth: 1,
                         padding: 12,
                         callbacks: {
                             afterBody: function(context) {
                                 const index = context[0].dataIndex;
-                                const total = [246, 210.5, 170.3, 148, 140.5, 136.6, 130.9, 118.3, 95.6, 80.9, 64.7][index];
-                                const carry = [231, 198, 162, 142, 135, 131, 126, 114, 92, 78, 62][index];
-                                const roll = (total - carry).toFixed(1);
-                                const rollPercent = ((roll / total) * 100).toFixed(1);
-                                
-                                return [
-                                    '',
-                                    `Roll: ${roll}m (${rollPercent}%)`,
-                                    `Carry/Total: ${((carry/total)*100).toFixed(1)}%`
-                                ];
+                                const clubNames = ['Driver', '3W', 'Hybrid', '5i', '6i', '7i', '8i', '9i', 'PW', 'GW', 'SW'];
+                                const clubKey = clubNames[index];
+                                const clubs = window.dashboardData?.launch_metrics?.clubs || {};
+                                const clubData = clubs[clubKey];
+                                if (clubData) {
+                                    const total = clubData.total_distance || clubData.carry + (clubData.roll || 0);
+                                    const carry = clubData.carry || 0;
+                                    const roll = (total - carry).toFixed(1);
+                                    const rollPercent = total > 0 ? ((roll / total) * 100).toFixed(1) : '0.0';
+                                    return [
+                                        '',
+                                        'Roll: ' + roll + 'm (' + rollPercent + '%)',
+                                        'Carry/Total: ' + (total > 0 ? ((carry / total) * 100).toFixed(1) : '0.0') + '%'
+                                    ];
+                                }
+                                return '';
                             }
                         }
                     }
@@ -14489,15 +14486,38 @@
                         labels: {
                             color: '#fff',
                             font: { size: 12 },
-                            padding: 15
+                            padding: 15,
+                            usePointStyle: false
+                        },
+                        onClick: function(e, legendItem, legend) {
+                            var chart = legend.chart;
+                            var index = legendItem.datasetIndex;
+                            var meta = chart.getDatasetMeta(index);
+                            meta.hidden = !meta.hidden;
+                            chart.update();
+                            var card = document.querySelector('[data-radar="comparison"][data-ds="' + index + '"]');
+                            if (card) card.style.opacity = meta.hidden ? '0.25' : '1';
                         }
                     },
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        backgroundColor: 'rgba(15, 32, 39, 0.95)',
                         titleColor: '#4A9FD8',
                         bodyColor: '#fff',
                         borderColor: '#4A9FD8',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            afterBody: function(context) {
+                                const idx = context[0].dataIndex;
+                                const you = playerData[idx];
+                                const hcp15 = hcp15Data[idx];
+                                const pga = pgaData[idx];
+                                const zone = you >= 8.5 ? '🏆 Elite' : you >= 6.5 ? '✅ Fuerte' : you >= 4.0 ? '⚠️ En desarrollo' : '🔴 Foco';
+                                const diffHcp = you - hcp15;
+                                const diffPga = you - pga;
+                                return ['', zone, 'vs HCP15: ' + (diffHcp >= 0 ? '+' : '') + diffHcp.toFixed(1), 'vs PGA: ' + diffPga.toFixed(1)];
+                            }
+                        }
                     }
                 }
             }
@@ -14505,6 +14525,17 @@
 
         // Store chart instance
         window.chartInstances.comparisonRadarChart = comparisonChart;
+
+        // Card click → toggle dataset + card
+        document.querySelectorAll('[data-radar="comparison"][data-ds]').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var dsIndex = parseInt(this.dataset.ds);
+                var meta = comparisonChart.getDatasetMeta(dsIndex);
+                meta.hidden = !meta.hidden;
+                comparisonChart.update();
+                this.style.opacity = meta.hidden ? '0.25' : '1';
+            });
+        });
         } // End initializeComparisonRadarChart
 
         // Execute after data loads
@@ -15734,7 +15765,7 @@
                             }
                         },
                         y: {
-                            reverse: false,  // Scores: menos es mejor, pero eje normal (85 abajo, 120 arriba)
+                            reverse: true,  // Scores: menos es mejor → mejor arriba (línea ascendente = mejora)
                             ticks: {
                                 color: 'rgba(255, 255, 255, 0.7)',
                                 stepSize: 5
@@ -17054,7 +17085,7 @@
                                 color: 'rgba(255, 255, 255, 0.1)',
                                 drawBorder: false
                             },
-                            reverse: false  // Valores altos ARRIBA
+                            reverse: true  // Scores: mejor (bajo) arriba → línea ascendente = mejora
                         },
                         x: {
                             title: {
@@ -17285,7 +17316,7 @@
                             },
                             ticks: { color: '#E8E8E8' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            reverse: false  // Scores: valores bajos abajo, altos arriba
+                            reverse: true  // Scores: mejor (bajo) arriba → línea ascendente = mejora
                         },
                         y1: {
                             type: 'linear',
@@ -17450,7 +17481,7 @@
                             },
                             ticks: { color: '#E8E8E8' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            reverse: false  // Scores: valores bajos abajo, altos arriba
+                            reverse: true  // Scores: mejor (bajo) arriba → línea ascendente = mejora
                         },
                         x: {
                             title: {
@@ -18440,11 +18471,11 @@
                     title: { display: true, text: 'Mejora de 8.8 puntos en 18 meses', color: '#5ABF8F', font: { size: 14 }}
                 },
                 scales: {
-                    y: { 
-                        title: { display: true, text: 'Handicap', color: '#4A9FD8' }, 
-                        min: 20, 
+                    y: {
+                        title: { display: true, text: 'Handicap', color: '#4A9FD8' },
+                        min: 20,
                         max: 35,
-                        reverse: false,
+                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
                         ticks: { color: '#fff' }
                     },
                     x: { ticks: { color: '#fff' }}
@@ -18544,25 +18575,41 @@
                         }
                     },
                     tooltip: {
+                        backgroundColor: 'rgba(15, 32, 39, 0.95)',
+                        titleColor: '#4A9FD8',
+                        bodyColor: '#fff',
+                        borderColor: '#4A9FD8',
+                        borderWidth: 1,
+                        padding: 12,
                         callbacks: {
                             label: function(context) {
                                 return context.dataset.label + ': ' + context.parsed.y + ' golpes';
+                            },
+                            afterBody: function(context) {
+                                const courseName = context[0].label;
+                                const cpData = campoPerfData[courseName];
+                                if (!cpData) return '';
+                                const cs = (window.dashboardData?.course_statistics || []).find(function(c) { return c.nombre === courseName; });
+                                const lines = ['', 'Rango: ' + cpData.best + ' - ' + cpData.worst + ' (' + (cpData.worst - cpData.best) + ' golpes)'];
+                                lines.push('Rondas: ' + (cpData.rounds || (cs && cs.rondas_jugadas) || '?'));
+                                if (cs) { lines.push('Par ' + cs.par + ' | Slope ' + cs.slope); }
+                                return lines;
                             }
                         }
                     }
                 },
                 scales: {
-                    y: { 
+                    y: {
                         beginAtZero: false,
                         min: 80,
                         max: 120,
-                        title: { 
-                            display: true, 
-                            text: 'Golpes', 
+                        title: {
+                            display: true,
+                            text: 'Golpes',
                             color: '#4A9FD8',
                             font: { size: 14, weight: 'bold' }
                         },
-                        ticks: { 
+                        ticks: {
                             color: '#fff',
                             font: { size: 12 }
                         },
@@ -18570,9 +18617,9 @@
                             color: 'rgba(255, 255, 255, 0.1)'
                         }
                     },
-                    x: { 
-                        ticks: { 
-                            color: '#fff', 
+                    x: {
+                        ticks: {
+                            color: '#fff',
                             font: { size: 11, weight: 'bold' }
                         },
                         grid: {
@@ -18876,11 +18923,11 @@
                     }
                 },
                 scales: {
-                    y: { 
+                    y: {
                         title: { display: true, text: 'Score', color: '#4A9FD8' },
                         min: 85,
                         max: 110,
-                        reverse: false,
+                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
                         ticks: { color: '#fff' },
                         grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
@@ -19123,12 +19170,42 @@
                         text: `Mejora sostenida: ${improvement} puntos en ${hcpData.historical.labels.length} meses | Proyección: HCP ${hcpData.target} en Q2-2026`,
                         color: '#5ABF8F',
                         font: { size: 14, weight: 'bold' }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(15, 32, 39, 0.95)',
+                        titleColor: '#4A9FD8',
+                        bodyColor: '#fff',
+                        borderColor: '#4A9FD8',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed.y;
+                                if (val === null) return null;
+                                const dsLabel = context.dataset.label;
+                                if (dsLabel.includes('Sub-20') || dsLabel.includes('Goal') || dsLabel.includes('Mejor') || dsLabel.includes('Milestone')) return '⭐ ' + dsLabel + ': ' + val.toFixed(1);
+                                const prefix = context.datasetIndex === 0 ? '📊 Real' : '🔮 Proyección';
+                                return prefix + ': HCP ' + val.toFixed(1);
+                            },
+                            afterLabel: function(context) {
+                                if (context.datasetIndex !== 0 || context.parsed.y === null) return '';
+                                const idx = context.dataIndex;
+                                const vals = hcpData.historical.values;
+                                if (idx > 0 && idx < vals.length) {
+                                    const delta = (vals[idx] - vals[idx - 1]).toFixed(1);
+                                    return delta <= 0 ? '↓ ' + delta + ' vs mes anterior' : '↑ +' + delta + ' vs mes anterior';
+                                }
+                                return '';
+                            }
+                        }
                     }
                 },
                 scales: {
                     y: {
                         title: { display: true, text: 'Handicap', color: '#4A9FD8', font: { size: 13 }},
-                        reverse: false,
+                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
                         min: 18,
                         max: 36,
                         ticks: {
@@ -19239,7 +19316,7 @@
                 scales: {
                     y: {
                         title: { display: true, text: 'Handicap', color: '#4A9FD8', font: { size: 13 }},
-                        reverse: false,
+                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
                         min: 18,
                         max: 34,
                         ticks: { 
@@ -19378,7 +19455,7 @@
                 responsive: true,
                 plugins: { legend: { display: false }},
                 scales: {
-                    y: { title: { display: true, text: 'Score', color: '#4A9FD8' }, reverse: false, ticks: { color: '#fff' }},
+                    y: { title: { display: true, text: 'Score', color: '#4A9FD8' }, reverse: true, ticks: { color: '#fff' }},
                     x: { ticks: { color: '#fff', maxRotation: 45 }}
                 }
             }
@@ -19529,7 +19606,7 @@
                         title: { display: true, text: 'Score', color: '#4A9FD8' },
                         min: 85,
                         max: 95,
-                        reverse: false,
+                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
                         ticks: { color: '#fff' }
                     },
                     x: { ticks: { color: '#fff' }}
@@ -19587,7 +19664,7 @@
                     title: { display: true, text: 'Tu curva es 1.8x más empinada = aprendes más rápido', color: '#5ABF8F', font: { size: 13 }}
                 },
                 scales: {
-                    y: { title: { display: true, text: 'Handicap', color: '#4A9FD8' }, reverse: false, min: 20, max: 35, ticks: { color: '#fff' }},
+                    y: { title: { display: true, text: 'Handicap', color: '#4A9FD8' }, reverse: true, min: 20, max: 35, ticks: { color: '#fff' }},
                     x: { ticks: { color: '#fff' }}
                 }
             }
@@ -19647,7 +19724,7 @@
                     }
                 },
                 scales: {
-                    y: { title: { display: true, text: 'Scoring Promedio', color: '#4A9FD8' }, min: 90, max: 110, reverse: false, ticks: { color: '#fff' }},
+                    y: { title: { display: true, text: 'Scoring Promedio', color: '#4A9FD8' }, min: 90, max: 110, ticks: { color: '#fff' }},
                     x: { ticks: { color: '#fff' }}
                 }
             }
@@ -19950,6 +20027,7 @@
                     scales: {
                         y: {
                             title: { display: true, text: 'Score', color: '#4A9FD8' },
+                            reverse: true,  // Mejor (bajo) arriba
                             ticks: { color: '#E8E8E8' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
