@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.0.9 - Radar Deduplication + Section Reorg
+**Version:** v3.1.3 - Tab 2 Redesign + AI Conclusions + Quick Menu Audit
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -127,21 +127,26 @@ END (Total: ~56,000 chars, ~3.6 min — was 5.3 min before v4.1)
 
 ### UXWriter Dashboard Integration (v3.0.3)
 
-AgentUXWriter generates **6 content sections** in Spanish inserted into the dashboard.
-(Previously described as 10 sections — stat_cards, trend_narratives, course_cards, club_cards
-were removed from the skill prompt in v3.0.3 to fix JSON truncation bug.)
+AgentUXWriter generates **12 content sections** in Spanish inserted into the dashboard.
+(Originally 10 sections, reduced to 6 in v3.0.3, restored to 10 in v3.1.0, expanded to 12 in v3.1.3.)
 
 1. **hero_statement** (50-80 words) --> Tab 1: Mi Identidad
 2. **dna_profile** (30-50 words) --> Tab 1: Mi Identidad
-3. **chart_titles** (object) --> All charts across all tabs
-4. **insight_boxes** (array) --> Tab 5: Analisis Profundo
-5. **quick_wins** (array) --> Tab 6: Estrategia
-6. **roi_cards** (array) --> Tab 6: Estrategia
+3. **stat_cards** (array) --> Tab 2: Evolución
+4. **chart_titles** (object) --> All charts across all tabs
+5. **trend_narratives** (array) --> Tab 2: Evolución
+6. **course_cards** (array) --> Tab 3: Campos
+7. **insight_boxes** (array) --> Tab 5: Análisis Profundo
+8. **club_cards** (array) --> Tab 4: Palos
+9. **quick_wins** (array) --> Tab 6: Estrategia
+10. **roi_cards** (array) --> Tab 6: Estrategia
+11. **quarterly_conclusion** (string, 40-80 words) --> Tab 2: Performance por Trimestre
+12. **volatility_conclusion** (string, 40-80 words) --> Tab 2: Volatilidad Mensual
 
 **Frontend Integration Pattern (v3.0.4 - Static Only):**
 - `loadUXContent()` -- single source: `output/ai_content.json` (11 lines, zero fallbacks)
 - Priority 1 (only): `output/ai_content.json` (pre-generated, loads in <100ms, **instantaneo**)
-- `insertUXContent(content)` -- DOM manipulation for 6 content sections + sets `window.coachReportMd`
+- `insertUXContent(content)` -- DOM manipulation for 12 content sections + sets `window.coachReportMd`
 - Graceful degradation if file unavailable (dashboard works without AI content)
 - **CERO llamadas live a localhost:8000** — dashboard 100% estático, GitHub Pages native
 
@@ -777,6 +782,10 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.1.3 | 2026-03-05 | Tab 2 Redesign — UXWriter 10→12 sections (quarterly_conclusion + volatility_conclusion), quick menu 9→13 items in correct order, minimalist style (no emojis), planning docs for Tab 3-6 |
+| v3.1.2 | 2026-03-04 | Glassmorphism Redesign Tab 1 — card-detail sutil + ADN al final |
+| v3.1.1 | 2026-03-04 | Tooltips enriquecidos + SVG→Chart.js radar + ejes Y corregidos + timeline fix |
+| v3.1.0 | 2026-03-04 | Restaurar 10 secciones IA — stat_cards, trend_narratives, course_cards, club_cards |
 | v3.0.9 | 2026-03-03 | Radar Deduplication — eliminado radar duplicado Tab 1, Tab 5 unificado a scoring_profile (8 dims), "Estado Actual" reubicado en sección correcta |
 | v3.0.8 | 2026-03-03 | Card System v3.1 — 17 CSS tokens + 4 niveles card + Golf Identity typography fix + dimLabelsNarr bug fix |
 | v3.0.7 | 2026-03-02 | 100% Dynamic Dashboard — ~176 editorial hardcodes migrated (9 LOTES) + 3 new backend functions (monthly_recommendations, bubble_analysis, improvement_plan) + 62 JSON keys |
