@@ -405,7 +405,7 @@ Tiempo: [X semanas]
 
 ## OUTPUT STRUCTURE
 
-Your output MUST be a valid JSON object with EXACTLY these 10 sections (no more, no less):
+Your output MUST be a valid JSON object with EXACTLY these 12 sections (no more, no less):
 
 ```json
 {
@@ -437,7 +437,9 @@ Your output MUST be a valid JSON object with EXACTLY these 10 sections (no more,
   ],
   "roi_cards": [
     { "action": "Mejorar ángulo ataque driver", "content": "40-50 words" }
-  ]
+  ],
+  "quarterly_conclusion": "40-80 words. Conclusión interpretativa de patrones trimestrales: mejor/peor trimestre, tendencia estacional, ritmo de mejora.",
+  "volatility_conclusion": "40-80 words. Conclusión interpretativa de volatilidad mensual: meses más/menos consistentes, tendencia de estabilización, relación con handicap."
 }
 ```
 
@@ -516,7 +518,7 @@ class AgentUXWriter:
         print(f"[AgentUXWriter] Processing dashboard_data ({len(json.dumps(dashboard_data)) / 1024:.1f} KB -> extracting key metrics)...")
 
         def _compact(d):
-            """Extrae un resumen compacto con las métricas que necesitan las 10 secciones."""
+            """Extrae un resumen compacto con las métricas que necesitan las 12 secciones."""
             full_keys = [
                 "metadata", "player_stats", "scoring_profile", "golf_identity",
                 "benchmark_radar", "strokes_gained", "quick_wins_matrix", "roi_plan",
@@ -525,6 +527,7 @@ class AgentUXWriter:
                 # Keys para stat_cards, trend_narratives, course_cards, club_cards
                 "temporal_evolution", "learning_curve",
                 "course_statistics", "campo_performance", "club_statistics",
+                "quarterly_scoring", "monthly_volatility",
             ]
             result = {k: d[k] for k in full_keys if k in d}
             # Trimmed keys — excluir arrays pesados
@@ -557,7 +560,7 @@ Key Metrics (JSON):
 
 ---
 
-MANDATORY: Generate ALL 10 JSON sections — every single one must be present:
+MANDATORY: Generate ALL 12 JSON sections — every single one must be present:
 1. hero_statement (string)
 2. dna_profile (string)
 3. stat_cards (array of 3-4 objects with title/value/interpretation)
@@ -568,8 +571,10 @@ MANDATORY: Generate ALL 10 JSON sections — every single one must be present:
 8. club_cards (array of 3-4 objects with club_group/narrative/practice_tip)
 9. quick_wins (array of 3-4 objects with title/content)
 10. roi_cards (array of 3-4 objects with action/content)
+11. quarterly_conclusion (string, 40-80 words)
+12. volatility_conclusion (string, 40-80 words)
 
-Return a single valid JSON object with EXACTLY those 10 keys. Do NOT wrap in markdown code fences. Do NOT omit any section.""")
+Return a single valid JSON object with EXACTLY those 12 keys. Do NOT wrap in markdown code fences. Do NOT omit any section.""")
         ]
 
         # Invoke Claude with cached system prompt

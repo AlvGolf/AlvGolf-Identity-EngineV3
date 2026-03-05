@@ -1,164 +1,174 @@
 {
-  "hero_statement": "Con handicap 23.2, has mejorado **8.8 puntos en 20 meses** — un progreso excepcional que te sitúa entre los jugadores con mayor ritmo de mejora de tu categoría. Tu **juego corto es élite absoluta** (percentil 92), salvando golpes donde la mayoría no puede. La oportunidad más rentable está clara: reducir tu dispersión lateral con el driver de 29.9m a 20m puede ahorrarte **2-3 golpes por ronda**. Estás a solo 4.2 puntos del sub-20, alcanzable antes de verano 2026.",
-  "dna_profile": "Eres 'El Artista Completo': un jugador que gana partidos desde los 50 metros hacia el hoyo. Tu scrambling del 45% (benchmark HCP23: 26%) es tu superpoder. Juegas con cabeza fría — rara vez encadenas grandes números. Tu firma es salvar lo insalvable cerca del green.",
+  "hero_statement": "Con handicap 23.2, has mejorado 8.8 puntos en 20 meses — un progreso excepcional que te sitúa entre los jugadores con mayor ritmo de mejora de tu categoría. Tu juego corto es élite absoluta (percentil 92), un arma real que salva rondas cuando el resto del juego falla. La oportunidad más clara está en la precisión con el driver: corregirla puede ahorrarte 2-3 golpes por ronda. Estás a solo 4.2 puntos del sub-20, alcanzable antes de verano 2026.",
+  "dna_profile": "Eres 'El Artista Completo': un jugador que gana hoyos desde los 50 metros hacia el hoyo, con un scrambling de élite (45%) que convierte situaciones difíciles en pares. Tu potencia está por encima del benchmark de tu handicap, pero tu firma real es la precisión en el juego corto. En competición de stableford o matchplay, eres un rival peligroso.",
   "stat_cards": [
     {
-      "title": "Mejora Handicap",
+      "title": "Mejora de Handicap",
       "value": "-8.8 pts",
-      "interpretation": "De 32.0 a 23.2 en 20 meses — ritmo de mejora superior al percentil 85 de jugadores con HCP similar. Si mantienes la tendencia actual, el sub-20 llega en junio 2026."
+      "interpretation": "De 32.0 a 23.2 en 20 meses — ritmo de mejora superior al percentil 85 de jugadores con handicap similar. Si mantienes este ritmo, el sub-20 llega antes de julio 2026."
     },
     {
-      "title": "Mejor Score",
-      "value": "88",
-      "interpretation": "Personal best en Marina Golf (nov 2025), 16 golpes mejor que tu debut. Tus últimas 5 rondas promedian 92.8 — el sub-90 ya no es un sueño, es tu nueva normalidad emergente."
+      "title": "Mejor Score Reciente",
+      "value": "88 golpes",
+      "interpretation": "Personal best en Marina Golf (nov 2025), 16 golpes mejor que tu primera ronda registrada. Tus últimas 5 rondas promedian 92.8 — señal clara de que el nivel ha subido de forma sostenida."
     },
     {
-      "title": "Scoring Reciente",
-      "value": "92.8 avg",
-      "interpretation": "Promedio de tus últimas 5 rondas vs 107.4 en tus primeras 5 — una mejora de 14.6 golpes. La tendencia es clara y sostenida: estás jugando el mejor golf de tu vida."
+      "title": "Promedio Últimas 5 Rondas",
+      "value": "92.8 golpes",
+      "interpretation": "Frente a un promedio histórico de 100.6, tus últimas 5 rondas muestran una mejora de 7.8 golpes. La tendencia reciente es la mejor de toda tu trayectoria registrada."
     },
     {
       "title": "Scrambling",
       "value": "45%",
-      "interpretation": "Salvas el par desde fuera del green casi 1 de cada 2 veces — benchmark HCP23 es 26%. Esta habilidad élite te ahorra entre 2 y 3 golpes por ronda frente a jugadores de tu mismo handicap."
+      "interpretation": "Casi el doble del benchmark para HCP 23 (26%). Cuando fallas el green, salvas el golpe casi 1 de cada 2 veces — una ventaja competitiva real que pocos jugadores de tu categoría tienen."
     }
   ],
   "chart_titles": {
     "hcp_evolution": {
       "title": "Evolución Handicap — 20 Meses",
-      "subtitle": "Tendencia de mejora sostenida: -8.8 puntos desde HCP 32.0"
+      "subtitle": "Tendencia de mejora sostenida: -8.8 puntos desde abril 2024"
     },
     "scoring_trend": {
-      "title": "Historial de Scores — 52 Rondas",
-      "subtitle": "Primera mitad: 104.3 avg → Segunda mitad: 96.8 avg (-7.5 golpes)"
+      "title": "Evolución de Scores — Últimas 52 Rondas",
+      "subtitle": "Primera mitad: 104.3 promedio → Segunda mitad: 96.8 promedio"
     },
     "strokes_gained": {
       "title": "Strokes Gained por Categoría",
-      "subtitle": "Fortalezas y áreas de mejora vs benchmark HCP 15"
+      "subtitle": "Compara tu rendimiento vs benchmark HCP 15"
     },
     "dispersion_driver": {
       "title": "Dispersión Driver — Patrón Lateral",
-      "subtitle": "Dispersión actual 29.9m — objetivo: reducir a 20m en 10 semanas"
+      "subtitle": "Analiza tu consistencia izquierda/derecha en tee"
     },
     "scoring_probability": {
       "title": "Probabilidad de Score por Distancia",
-      "subtitle": "¿Desde dónde haces más pares y bogeys? Tu zona fuerte: 0-50m"
+      "subtitle": "¿Desde dónde haces más pares y birdies?"
     },
-    "club_distances": {
-      "title": "Distancias por Palo — Tu Bolsa Completa",
-      "subtitle": "Carry real vs benchmark HCP 23 — 11 palos analizados"
+    "quarterly_scoring": {
+      "title": "Scoring Trimestral — Tendencia Anual",
+      "subtitle": "Evolución por trimestre: mejor y peor período"
+    },
+    "swing_dna": {
+      "title": "ADN de Swing — 12 Dimensiones",
+      "subtitle": "Tu perfil técnico vs HCP 15 y HCP 23"
+    },
+    "benchmark_radar": {
+      "title": "Radar Multidimensional vs Benchmarks",
+      "subtitle": "Tu posición vs HCP 23, HCP 15 y PGA Tour"
     }
   },
   "trend_narratives": [
     {
-      "title": "Momentum de Scoring Imparable",
-      "narrative": "Tu promedio ha bajado de 104.3 en la primera mitad del seguimiento a 96.8 en la segunda — una mejora de 7.5 golpes. Más importante: la dispersión de scores se ha reducido (std 6.8 vs benchmark 7.5), señal de mayor consistencia. Si mantienes este ritmo, el promedio sub-95 es alcanzable antes de primavera 2026."
+      "title": "Tendencia de Scoring: Aceleración Real",
+      "narrative": "Tu promedio ha bajado de 104.3 en la primera mitad de tu historial a 96.8 en la segunda — una mejora de 7.5 golpes por ronda. Las últimas 5 rondas promedian 92.8, el mejor tramo de tu carrera. La dispersión de scores también se ha reducido (std 4.9 → 3.4), señal de mayor consistencia bajo presión."
     },
     {
-      "title": "Proyección HCP: Sub-20 en Junio 2026",
-      "narrative": "La regresión lineal de tu handicap proyecta llegar a 18.8 en junio 2026, con el hito sub-20 en mayo. Tu ritmo actual de mejora es -0.7 puntos/mes. El factor clave para acelerar esta proyección es reducir los dobles bogeys, que representan el 53% de tus hoyos — bajarlos al 40% equivale a -3 golpes/ronda."
+      "title": "Momentum Actual: El Mejor Momento",
+      "narrative": "Q3 y Q4 de 2025 son tus mejores trimestres históricos (95.1 y 95.7 de promedio respectivamente). Noviembre 2025 marcó tu personal best con 88 golpes. El momentum es positivo y sostenido — este es el momento de consolidar hábitos de práctica que aceleren la llegada al sub-20."
     },
     {
-      "title": "Transformación Real: Primeras vs Últimas Rondas",
-      "narrative": "Comparando tus primeras 5 rondas (avg 107.4, mejor 104) con tus últimas 5 (avg 92.8, mejor 88), la transformación es de 14.6 golpes de mejora. Los pares o mejor han pasado del 4.4% al 24.4% de los hoyos — seis veces más. Esto no es suerte: es progreso estructural y sostenido."
+      "title": "Proyección HCP: Sub-20 en el Horizonte",
+      "narrative": "Con una tasa de mejora de -0.7 puntos/mes, la proyección sitúa tu handicap en 18.8 para junio 2026. El hito sub-20 es alcanzable en mayo 2026. La clave es mantener la frecuencia de rondas y añadir práctica específica en precisión con driver y control de wedges."
     }
   ],
   "course_cards": [
     {
       "course_name": "Marina Golf",
-      "narrative": "Tu mejor campo sin discusión — 88 como personal best y promedio de 96.8 en 11 rondas. Es donde más cómodo te sientes: slope 126 (el más amigable de tu circuito habitual) y tu juego corto se activa con frecuencia en sus greens accesibles.",
-      "strategy_tip": "Aprovecha los pares 5 para buscar el green en dos con tu híbrido o 5 hierro. En los pares 4 cortos, prioriza hierro largo desde el tee para ganar calle y activar tu zona fuerte (50m hacia el hoyo)."
-    },
-    {
-      "course_name": "La Dehesa",
-      "narrative": "Tu campo más jugado (16 rondas) pero también el más exigente — slope 144, el más alto de tu circuito. Promedio 102.9 con un rango amplio (93-117). Aquí la gestión del campo marca la diferencia entre una ronda buena y un desastre.",
-      "strategy_tip": "Con slope 144, cada decisión arriesgada se penaliza doble. Usa hierro o madera 3 desde tees difíciles. Objetivo: eliminar los hoyos explosivos (+3 o más) que disparan tu score — apunta a no más de 2 dobles bogeys por ronda."
+      "narrative": "Tu mejor campo sin discusión — personal best de 88 y promedio de 96.8 en 11 rondas. Es donde más birdies has anotado y donde tu juego corto se activa con más frecuencia. El slope 126 favorece tu estilo de juego.",
+      "strategy_tip": "Aprovecha los pares 5 para atacar en dos: tu distancia con driver (213m) te deja opciones reales. En los pares 4 más cortos, prioriza hierro largo desde tee para ganar calle y activar tu juego corto élite."
     },
     {
       "course_name": "Valle del Este",
-      "narrative": "Promedio de 96.4 en 5 rondas con un rango llamativo (89-112) — tu campo más volátil. Cuando estás bien aquí, juegas tu mejor golf. Cuando no, los números se disparan. El potencial está demostrado: 89 es tu segundo mejor score.",
-      "strategy_tip": "La clave aquí es la consistencia mental en los primeros 6 hoyos. Si arrancas con calma y sin grandes números, el campo te premia. Usa tu rutina pre-shot en cada tiro para mantener el foco desde el hoyo 1."
+      "narrative": "Promedio de 96.4 en 5 rondas con un personal best de 89 — tu segundo mejor campo. Alta variabilidad (89-112) sugiere que cuando el driver funciona, el campo se te da muy bien; cuando falla, el daño se acumula.",
+      "strategy_tip": "Gestiona el driver con criterio: en hoyos estrechos, usa madera 3 o híbrido desde tee. Tu 3W (202m, dispersión mínima) es más fiable que el driver en este campo. Prioriza calle sobre distancia."
     },
     {
-      "course_name": "Real Club Las Rozas",
-      "narrative": "Tu campo más difícil en términos de resultado — promedio 104.6 en 8 rondas, con dos rondas de 110. Slope 127 y par 70 lo hacen exigente. Tu mejor aquí fue 97, lo que demuestra que tienes nivel para mejorar significativamente.",
-      "strategy_tip": "En un par 70 con slope 127, el juego desde el tee es crítico. Prioriza fairway sobre distancia: con tu 3 madera (dispersión 15m vs driver 30m), ganarás posición y activarás tu juego corto élite con más frecuencia."
+      "course_name": "La Dehesa",
+      "narrative": "Tu campo más jugado (16 rondas) con promedio de 102.9 — el slope 144 es el más exigente de tu carrera. Aquí se nota más la penalización por imprecisión desde tee. Tu mejor score es 93, lo que demuestra que el campo es manejable cuando el driver está controlado.",
+      "strategy_tip": "Con slope 144, cada golpe desde rough cuesta 0.8 golpes extra. Usa hierro largo o madera 3 en los hoyos más estrechos. Tu juego corto puede compensar, pero necesitas llegar al approach desde calle."
+    },
+    {
+      "course_name": "Nuevo Portil",
+      "narrative": "Solo 2 rondas pero promedio de 90.5 — el segundo mejor promedio de todos tus campos. Scores de 89 y 92 muestran una consistencia notable. El slope 125 es favorable y tu juego se adapta bien a este tipo de recorrido.",
+      "strategy_tip": "Repite la estrategia que funcionó: datos muestran que en campos con slope bajo (<127) tu promedio baja casi 6 golpes. Mantén el plan de juego conservador desde tee y confía en tu juego corto para hacer el daño."
     }
   ],
   "insight_boxes": [
     {
-      "title": "⛳ Dispersión Driver: Tu Mayor Oportunidad",
-      "content": "Tu driver muestra dispersión lateral de 29.9m — el doble del benchmark HCP15 (14.6m). Esto te cuesta posición en calle y activa situaciones de rough donde pierdes 0.8 golpes vs fairway. Tu face-to-path de 4.5° genera un patrón de slice moderado. CAUSA: Face abierta en impacto. SOLUCIÓN: Drill de rotación de antebrazo con alignment sticks, 15 min/día, 3 semanas. GANANCIA: Reducir dispersión a 20m equivale a -1.5 golpes/ronda."
+      "title": "Juego Corto Élite: Tu Mayor Activo",
+      "content": "Tu scrambling del 45% casi duplica el benchmark HCP 23 (26%) y supera incluso el nivel HCP 15 (estimado 35%). Esto se traduce en +1.8 strokes gained alrededor del green por ronda. Cada vez que fallas un green, tienes casi 1 de cada 2 posibilidades de salvar el par. Esta ventaja es real, medible y diferencial. Acción: mantén al menos 20 minutos de práctica de chipping por sesión para no perder este nivel."
     },
     {
-      "title": "💡 Wedges: Inconsistencia que Duele",
-      "content": "Tu PW tiene dispersión lateral de 15.6m (1.9x el nivel HCP15) y un CV de distancia del 14.5% cuando el objetivo es menos del 8%. El SW 58 es aún más inconsistente (CV 18.9%). Paradójicamente, tu juego corto es élite — pero la inconsistencia en wedges desde 80-120m te cuesta birdies y pares fáciles. SOLUCIÓN: Sesiones de 10 bolas a 3 distancias fijas (80m, 100m, 115m) dos veces por semana. GANANCIA: -1.4 golpes/ronda en 6 semanas."
+      "title": "Dispersión Driver: El Coste Oculto",
+      "content": "Tu dispersión lateral con driver es de 29.9m frente a 14.6m del benchmark HCP 15 — más del doble. Esto genera -2.5 strokes gained desde tee por ronda. La causa principal es el face-to-path (4.5°) que produce un patrón de slice moderado. Solución: drill de alineación con varillas, 15 min/día, 3 semanas. Ganancia estimada: -1.5 a -2.0 golpes/ronda si reduces dispersión a 20m."
     },
     {
-      "title": "🎯 Zona de Confort: 0-50 Metros",
-      "content": "Desde menos de 50m tienes un 65% de probabilidad de hacer par o mejor (15% birdie + 50% par) — cifras de jugador HCP15. Desde 100-150m esa probabilidad cae al 38%. Esto confirma tu identidad: eres letal cerca del hoyo. La estrategia óptima es maximizar los tiros que te dejan en tu zona de confort. Cada fairway ganado con el driver te acerca 20-30m más al green y activa tu superpoder."
+      "title": "Zona de Confort: Los 50 Metros",
+      "content": "Desde menos de 50m tienes 65% de probabilidad de hacer par o mejor (15% birdie + 50% par). Desde 100-150m esa probabilidad cae al 38%. Esto confirma que tu zona de poder es el juego corto. Implicación táctica: en approach shots, prioriza dejar la bola en tu zona de confort (<50m) aunque eso signifique un palo menos agresivo. Ganarás más hoyos jugando a tus fortalezas."
     },
     {
-      "title": "📊 Dobles Bogeys: El Freno Oculto",
-      "content": "El 53.3% de tus hoyos terminan en doble bogey o peor — tu mayor freno para bajar el handicap. En tus últimas 5 rondas ese número ya bajó al 35.6%, una mejora de 18 puntos. Llevar ese porcentaje al 30% de forma consistente equivale a -3 golpes/ronda y aceleraría tu llegada al sub-20 en 3 meses antes de lo proyectado. FOCO: Gestión de riesgo en hoyos difíciles — bogey es un buen resultado."
+      "title": "Wedges: Potencia Oculta con Margen de Mejora",
+      "content": "Tu Sand Wedge muestra una dispersión lateral de 11.9m — el doble del nivel HCP 15 (objetivo: <6m). El Pitching Wedge tiene un CV de distancia del 14.5% cuando el objetivo es <8%. Desde dentro de 100m, la inconsistencia te cuesta oportunidades de birdie. Solución: práctica de wedges a 3 distancias fijas (60m, 75m, 90m), 10 bolas cada una, 2 veces por semana durante 4 semanas."
     }
   ],
   "club_cards": [
     {
       "club_group": "Long Game (Driver + Madera 3)",
-      "narrative": "Driver carry 212.8m con dispersión 29.9m lateral — potencia por encima del benchmark HCP23 (+20m) pero precisión por debajo. Tu madera 3 es más fiable (dispersión 2.9m) y casi igual de larga (202.3m). El híbrido a 160.5m completa un juego largo con potencia real pero precisión mejorable.",
-      "practice_tip": "Alterna driver y madera 3 en práctica: 10 bolas con driver enfocando tempo suave (no potencia), 10 con madera 3. Mide la dispersión lateral. Objetivo en 4 semanas: driver con dispersión menor de 22m en el 70% de los tiros."
+      "narrative": "Driver carry de 213m supera el benchmark HCP 23 en 20m — tienes potencia real. Sin embargo, la dispersión lateral de 29.9m es el doble del nivel HCP 15. La madera 3 (202m, dispersión mínima de 2.9m) es significativamente más fiable y debe ser tu opción en hoyos exigentes.",
+      "practice_tip": "Drill de alineación con varillas: coloca dos varillas formando un canal de 10m de ancho a 50m. Objetivo: 15 de 20 bolas dentro del canal. Foco en tempo suave y cara cuadrada en impacto. 3 sesiones/semana durante 4 semanas."
     },
     {
-      "club_group": "Mid Game (Hierros 5 al 8)",
-      "narrative": "Tu 7 hierro es tu palo más consistente del grupo medio (dispersión 5.1m, carry 136.9m — +13m vs benchmark). El 5 hierro muestra sesgo derecho pronunciado (+19.8m) y el 6 hierro sesgo izquierdo (-16m). Esta inconsistencia direccional entre hierros consecutivos sugiere un problema de alineación o path variable.",
-      "practice_tip": "Drill de alineación con varillas en el suelo: practica 5i y 6i alternados, 15 bolas cada uno, enfocando el mismo path. Grábate desde atrás para verificar la línea de swing. Objetivo: reducir el sesgo del 5i a menos de 10m en 3 semanas."
+      "club_group": "Mid Game (Hierros 5-8)",
+      "narrative": "El 7 hierro es tu hierro más fiable (137m, dispersión 5.1m) y tu smash factor de 1.400 supera el benchmark HCP 23. El 5 hierro muestra un sesgo fuerte a la derecha (+19.8m) que requiere atención. El 6 hierro tiene sesgo a la izquierda (-16m) — posible problema de alineación.",
+      "practice_tip": "Practica con 6 y 5 hierro con varilla de alineación en el suelo. Verifica que los pies, caderas y hombros apuntan al objetivo. 15 bolas por palo enfocando el path de swing. El 7 hierro es tu referencia — úsalo para calibrar la sensación correcta."
     },
     {
-      "club_group": "Short Game (PW, GW 52, SW 58)",
-      "narrative": "Aquí está tu mayor paradoja: tu juego corto es élite (percentil 92) pero la consistencia de tus wedges desde distancia es tu punto más débil. El SW 58 tiene CV de distancia del 18.9% y el PW del 14.5%. El GW 52 es el más consistente del grupo (carry 93m, dispersión 2.9m).",
-      "practice_tip": "Sesión de control de distancia: 10 bolas con PW a 90m, 10 a 105m, 10 a 115m. Registra dónde cae cada bola. Repite 2 veces por semana. Objetivo en 6 semanas: CV de distancia menor del 8% en PW y SW — esto se traduce directamente en más birdies."
+      "club_group": "Short Game (Wedges: PW, GW, SW)",
+      "narrative": "El Gap Wedge (93m) es el más consistente de los tres. El PW muestra alta variabilidad de distancia (CV 14.5%) y el SW tiene dispersión lateral de 11.9m — el doble del objetivo. Son los palos que más impacto tienen en tu scoring desde dentro de 100m.",
+      "practice_tip": "Práctica de control de distancia: 10 bolas a 60m, 10 a 75m y 10 a 90m con cada wedge. Mide la dispersión real. Objetivo en 4 semanas: CV de distancia <10% y dispersión lateral <8m. Dos sesiones semanales de 30 minutos."
     },
     {
       "club_group": "Putting",
-      "narrative": "33.2 putts por ronda vs benchmark HCP23 de 34.7 — ya estás por encima de tu categoría. Tu tasa de 3-putts del 12% (benchmark 17%) es otro indicador sólido. El putting es una fortaleza real, especialmente desde corta distancia donde tu SG Putting de -0.50 supera claramente el benchmark de -0.93.",
-      "practice_tip": "Consolida tu ventaja con el drill de los 3 metros: 10 putts desde 1m, 10 desde 2m, 10 desde 3m. Objetivo: 27/30 convertidos en cada sesión. Esto reforzará tu confianza y reducirá los 3-putts del 12% al 8%, ahorrando 0.7 golpes/ronda adicionales."
+      "narrative": "33.2 putts por ronda frente a 34.7 del benchmark HCP 23 — ya estás por encima de tu categoría. El 3-putt rate del 12% vs 17% del benchmark es una ventaja real. Tu SG Putting de -0.5 está muy cerca del nivel HCP 15 (-0.93 es el benchmark, tú estás mejor).",
+      "practice_tip": "Foco en putts de menos de 3 metros: coloca 6 bolas en círculo a 1.5m del hoyo y completa el círculo sin fallar. Luego repite a 2.5m. Esta rutina de 15 minutos puede ahorrarte 2.5 golpes/ronda según el análisis de quick wins."
     }
   ],
   "quick_wins": [
     {
-      "title": "🎯 Putting Corto (<3m): Máximo ROI",
-      "content": "Impacto: 2.5 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 4 semanas. Ya tienes base sólida en putting — solo necesitas automatizar la distancia corta. Drill: 50 putts diarios desde 1-3m con marcador de posición. Convierte el 90% y ahorras 2.5 golpes sin tocar el swing."
+      "title": "Putting <3 metros: Máximo ROI",
+      "content": "Impacto estimado: 2.5 golpes/ronda. Dificultad: 2/10. Tiempo: 4 semanas. Tu porcentaje de 3-putts (12%) ya es bueno, pero los putts cortos fallados son la pérdida más evitable. Drill: círculo de 6 bolas a 1.5m y 2.5m, completar sin fallar. 15 min/día, 4 días/semana."
     },
     {
-      "title": "🎯 Gestión de Campo: Golpes Gratis",
-      "content": "Impacto: 2.2 golpes/ronda | Dificultad: 3/10 (Fácil) | Tiempo: 6 semanas. En hoyos difíciles, elegir bogey como objetivo elimina los grandes números. Regla práctica: si el riesgo de doble bogey supera el 40%, juega a bogey seguro. Implementable desde la próxima ronda — sin práctica física requerida."
+      "title": "Gestión de Campo: Decisiones más Inteligentes",
+      "content": "Impacto estimado: 2.2 golpes/ronda. Dificultad: 3/10. Tiempo: 6 semanas. En hoyos con rough penalizante, cambiar driver por madera 3 puede ahorrarte 0.8 golpes/hoyo. Regla práctica: si el hoyo tiene menos de 350m o es estrecho, usa madera 3 o híbrido desde tee."
     },
     {
-      "title": "🎯 Madera 3 desde Tee: Cambio Inmediato",
-      "content": "Impacto: 1.5 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 2 semanas. Tu madera 3 tiene dispersión de 2.9m vs 29.9m del driver — 10 veces más precisa. En hoyos estrechos o con agua, sustituir el driver por madera 3 te da calle garantizada y activa tu juego corto élite antes en el hoyo."
+      "title": "Chipping Consistente: Activa tu Zona Fuerte",
+      "content": "Impacto estimado: 1.9 golpes/ronda. Dificultad: 4/10. Tiempo: 6 semanas. Tu scrambling del 45% es élite, pero hay margen para subir al 55%. Practica chips desde 4 situaciones distintas (rough corto, rough largo, pendiente arriba, pendiente abajo) — 10 bolas cada una, 2 veces/semana."
     },
     {
-      "title": "🎯 Rutina Pre-Shot: Consistencia Mental",
-      "content": "Impacto: 0.8 golpes/ronda | Dificultad: 2/10 (Muy fácil) | Tiempo: 3 semanas. Tu bounce-back rate del 28% (benchmark 13%) muestra resiliencia mental. Una rutina pre-shot de 20 segundos fija — visualización + alineación + un swing de práctica — reduce los hoyos explosivos del 10% actual al 6%, ahorrando 0.8 golpes/ronda."
+      "title": "Rutina Pre-Shot: Consistencia Mental Gratuita",
+      "content": "Impacto estimado: 0.8 golpes/ronda. Dificultad: 2/10. Tiempo: 2 semanas. Una rutina pre-shot de 20 segundos (alineación, visualización, práctica) reduce la variabilidad mental sin coste de práctica. Aplícala en cada tiro de approach y en todos los putts. El bounce-back rate del 28% (vs 13% benchmark) muestra que ya tienes fortaleza mental — una rutina la potencia."
     }
   ],
   "roi_cards": [
     {
-      "action": "Putting corto: drill de repeticiones <3m",
-      "content": "Inversión: 2 horas/semana × 4 semanas. Mejora esperada: -2.5 golpes/ronda. ROI: 1.25 golpes por hora de práctica — el más alto de tu plan. Semana 1-2: 50 putts diarios desde 1m y 2m. Semana 3-4: añadir 3m con presión (series de 10 sin fallar). Checkpoint semana 2: tasa de conversión >85% desde 2m."
+      "action": "Práctica de putting <3m (drill de repeticiones)",
+      "content": "Inversión: 2 horas/semana durante 4 semanas. Mejora esperada: 2.5 golpes/ronda. ROI: 1.25 golpes por hora de práctica — el más alto de tu plan. Semana 1-2: círculo a 1.5m sin fallar. Semana 3-4: círculo a 2.5m. Checkpoint semana 2: mide tu % de conversión en ronda real."
     },
     {
-      "action": "Gestión de campo: toma de decisiones",
-      "content": "Inversión: 1 hora/semana × 6 semanas (análisis de ronda + planificación). Mejora esperada: -2.2 golpes/ronda. ROI: 2.2 golpes por hora — el mejor ratio del plan. Acción inmediata: antes de cada ronda, identifica los 3 hoyos donde el bogey es el objetivo real. Checkpoint semana 3: dobles bogeys por ronda reducidos de 8.5 a 6."
+      "action": "Gestión de campo (toma de decisiones desde tee)",
+      "content": "Inversión: 1 hora/semana durante 6 semanas (revisión de estrategia pre-ronda). Mejora esperada: 2.2 golpes/ronda. ROI: 2.2 golpes por hora — el mejor ratio del plan. Acción concreta: antes de cada ronda, marca en la tarjeta los hoyos donde usarás madera 3 en lugar de driver."
     },
     {
-      "action": "Driver accuracy: alineación y tempo",
-      "content": "Inversión: 3 horas/semana × 12 semanas. Mejora esperada: -2.0 golpes/ronda. Semana 1-4: drill face-to-path con alignment sticks, enfocando rotación de antebrazo. Semana 5-8: transferir al campo con madera 3 como referencia. Semana 9-12: consolidar con driver. Checkpoint semana 4: dispersión lateral menor de 22m en el 70% de tiros."
+      "action": "Precisión con driver (alineación + tempo)",
+      "content": "Inversión: 3 horas/semana durante 12 semanas. Mejora esperada: 2.0 golpes/ronda. Objetivo: reducir dispersión lateral de 29.9m a 20m. Plan: semanas 1-4 alineación con varillas, semanas 5-8 face-to-path con feedback visual, semanas 9-12 integración en campo. Checkpoint: medir dispersión en semana 6."
     },
     {
-      "action": "Approach shots 100-150m: control de distancia",
-      "content": "Inversión: 2 horas/semana × 8 semanas. Mejora esperada: -1.5 golpes/ronda. Desde 100-150m solo haces par el 35% de las veces — el mayor margen de mejora tras el driver. Drill: 15 bolas a distancias fijas (100m, 125m, 150m) con hierros 7, 8 y 9. Objetivo: CV de distancia menor del 8%. Checkpoint semana 4: GIR desde 100-130m superior al 25%."
+      "action": "Control de distancia en approach 100-150m",
+      "content": "Inversión: 2 horas/semana durante 8 semanas. Mejora esperada: 1.5 golpes/ronda. Desde 100-150m solo haces par el 35% de las veces — el objetivo es llegar al 45%. Drill: 10 bolas a 110m, 10 a 130m, 10 a 150m midiendo dispersión. Objetivo: CV de distancia <10% en cada rango."
     }
-  ]
+  ],
+  "quarterly_conclusion": "Tu mejor trimestre histórico fue Q3 2025 (95.1 promedio, 13 rondas) seguido muy de cerca por Q4 2025 (95.7, 7 rondas) — ambos representan un salto cualitativo respecto a 2024, donde Q4 promedió 104.8. La tendencia estacional muestra que verano y otoño son tus mejores períodos. Q2 2024 fue tu peor trimestre (107.6), pero Q2 2025 ya bajó a 103.1 — una mejora interanual de 4.5 golpes que confirma progreso real y sostenido.",
+  "volatility_conclusion": "Agosto 2025 fue tu mes más activo (8 rondas, promedio 93.0) y uno de los más consistentes, señal de que la práctica frecuente estabiliza tu juego. Diciembre 2025 muestra el CV más bajo reciente (1.6%) con promedio de 94.5 — máxima consistencia. Los meses de mayor volatilidad coinciden con períodos de pocas rondas, lo que sugiere que jugar con regularidad es tu mejor herramienta de estabilización."
 }

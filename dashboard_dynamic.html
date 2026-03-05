@@ -421,9 +421,9 @@
                 }
             }
 
-            // 8. Trend narratives (tab evolution, después de stat cards)
+            // 8. Trend narratives (tab evolution, entre momentum y proyección)
             if (content.trend_narratives && Array.isArray(content.trend_narratives) && content.trend_narratives.length > 0) {
-                const anchor = document.getElementById('ai-evolution-anchor');
+                const anchor = document.getElementById('ai-trends-anchor');
                 if (anchor) {
                     let trendSection = document.getElementById('ai-trend-narratives-section');
                     if (!trendSection) {
@@ -445,6 +445,34 @@
                     `;
                     trendSection.innerHTML = trendHTML;
                     console.log(`  ✓ Inserted ${content.trend_narratives.length} trend narratives`);
+                }
+            }
+
+            // 11. Quarterly conclusion (tab evolution, pie de Performance por Trimestre)
+            if (content.quarterly_conclusion) {
+                const anchor = document.getElementById('ai-quarterly-conclusion');
+                if (anchor) {
+                    anchor.innerHTML = `
+                        <div style="margin-top: 14px; padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                            <strong style="color: #4A9FD8;">Conclusión:</strong>
+                            <span style="color: rgba(255,255,255,0.85); line-height: 1.7;"> ${content.quarterly_conclusion}</span>
+                        </div>
+                    `;
+                    console.log('  ✓ Inserted quarterly conclusion');
+                }
+            }
+
+            // 12. Volatility conclusion (tab evolution, pie de Volatilidad Mensual)
+            if (content.volatility_conclusion) {
+                const anchor = document.getElementById('ai-volatility-conclusion');
+                if (anchor) {
+                    anchor.innerHTML = `
+                        <div style="margin-top: 14px; padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                            <strong style="color: #4A9FD8;">Conclusión:</strong>
+                            <span style="color: rgba(255,255,255,0.85); line-height: 1.7;"> ${content.volatility_conclusion}</span>
+                        </div>
+                    `;
+                    console.log('  ✓ Inserted volatility conclusion');
                 }
             }
 
@@ -5871,24 +5899,20 @@
             </div>
 
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(74,159,216,0.08) 0%, rgba(90,191,143,0.08) 100%);
-                        border: 2px solid rgba(74,159,216,0.25); 
-                        border-radius: 15px; 
-                        padding: 30px; 
-                        margin-bottom: 40px;
-                        box-shadow: 0 8px 32px rgba(74,159,216,0.15);">
-                
-                
-                <!-- TEMPORAL (8 secciones) -->
-                <div style="margin-bottom: 25px; 
-                           padding: 20px; 
-                           background: rgba(74,159,216,0.05); 
-                           border-radius: 10px;
-                           border-left: 4px solid #4A9FD8;">
-                    
-                    <h4 style="color: #4A9FD8; 
-                              margin: 0 0 15px 0; 
-                              font-size: 1.15em;">
+            <div class="quick-nav-header" style="background: rgba(255,255,255,0.04);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 14px;
+                        padding: 24px;
+                        margin-bottom: 32px;">
+
+
+                <!-- TEMPORAL (13 secciones) -->
+                <div style="margin-bottom: 0;">
+
+                    <h4 style="color: #4A9FD8;
+                              margin: 0 0 16px 0;
+                              font-size: 1em;
+                              font-weight: 700;">
                         📊 Evolución Temporal
                     </h4>
                     
@@ -5896,120 +5920,61 @@
                                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                                gap: 10px;">
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" style="color: rgba(255,255,255,0.85);
-                                                            text-decoration: none;
-                                                            padding: 10px 15px;
-                                                            border-radius: 8px;
-                                                            background: rgba(74,159,216,0.08);
-                                                            transition: all 0.3s ease;
-                                                            display: block;
-                                                            border-left: 3px solid transparent;
-                                                            font-size: 0.95em;">
-                            • 📊 Historial de Scores (<span id="ev-nav-rounds">52</span> rondas)
+                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Historial de Scores (<span id="ev-nav-rounds">52</span> rondas)
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                            text-decoration: none; 
-                                                            padding: 10px 15px; 
-                                                            border-radius: 8px; 
-                                                            background: rgba(74,159,216,0.08);
-                                                            transition: all 0.3s ease;
-                                                            display: block;
-                                                            border-left: 3px solid transparent;
-                                                            font-size: 0.95em;">
-                            • Proyección Score & Consistencia
+                        <a href="javascript:void(0)" onclick="scrollToSection('best-worst-rounds'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Mejores y Peores Rondas
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                                   text-decoration: none; 
-                                                                   padding: 10px 15px; 
-                                                                   border-radius: 8px; 
-                                                                   background: rgba(74,159,216,0.08);
-                                                                   transition: all 0.3s ease;
-                                                                   display: block;
-                                                                   border-left: 3px solid transparent;
-                                                                   font-size: 0.95em;">
-                            • Progresión de Consistencia
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('quarterly-scoring'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Performance por Trimestre
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                              text-decoration: none; 
-                                                              padding: 10px 15px; 
-                                                              border-radius: 8px; 
-                                                              background: rgba(74,159,216,0.08);
-                                                              transition: all 0.3s ease;
-                                                              display: block;
-                                                              border-left: 3px solid transparent;
-                                                              font-size: 0.95em;">
-                            • Comparativa de Mejora
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('monthly-volatility'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Volatilidad Mensual
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                              text-decoration: none; 
-                                                              padding: 10px 15px; 
-                                                              border-radius: 8px; 
-                                                              background: rgba(74,159,216,0.08);
-                                                              transition: all 0.3s ease;
-                                                              display: block;
-                                                              border-left: 3px solid transparent;
-                                                              font-size: 0.95em;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('momentum-indicators'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Indicadores de Momentum
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
                             • Evolución Long Game
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                          text-decoration: none; 
-                                                          padding: 10px 15px; 
-                                                          border-radius: 8px; 
-                                                          background: rgba(74,159,216,0.08);
-                                                          transition: all 0.3s ease;
-                                                          display: block;
-                                                          border-left: 3px solid transparent;
-                                                          font-size: 0.95em;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
                             • Evolución Irons 5-9
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                           text-decoration: none; 
-                                                           padding: 10px 15px; 
-                                                           border-radius: 8px; 
-                                                           background: rgba(74,159,216,0.08);
-                                                           transition: all 0.3s ease;
-                                                           display: block;
-                                                           border-left: 3px solid transparent;
-                                                           font-size: 0.95em;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
                             • Evolución Wedges
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                                 text-decoration: none; 
-                                                                 padding: 10px 15px; 
-                                                                 border-radius: 8px; 
-                                                                 background: rgba(74,159,216,0.08);
-                                                                 transition: all 0.3s ease;
-                                                                 display: block;
-                                                                 border-left: 3px solid transparent;
-                                                                 font-size: 0.95em;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
                             • Tendencia Attack Angle
                         </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                                 text-decoration: none; 
-                                                                 padding: 10px 15px; 
-                                                                 border-radius: 8px; 
-                                                                 background: rgba(74,159,216,0.08);
-                                                                 transition: all 0.3s ease;
-                                                                 display: block;
-                                                                 border-left: 3px solid transparent;
-                                                                 font-size: 0.95em;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
                             • Evolución Smash Factor
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Proyección Score & Consistencia
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Progresión de Consistencia
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                            • Comparativa de Mejora
                         </a>
                     </div>
                 </div>
 
             </div>
-
-            <!-- Anchor para AI Stats & Trends (inyectado por UXWriter) -->
-            <div id="ai-evolution-anchor"></div>
 
             <!-- Score History Section -->
             <div class="chart-container" id="score-history" style="margin-bottom: 30px;">
@@ -6018,30 +5983,30 @@
                     Evolución cronológica de tus <span id="ev-desc-rounds">52</span> rondas con tendencias y milestones alcanzados
                 </p>
 
-                <!-- Stats Cards -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
-                    <div class="stat-card" style="background: rgba(74, 159, 216, 0.1); border-left: 4px solid #4A9FD8; padding: 15px; border-radius: 8px;">
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-bottom: 5px;">Mejor Score</div>
-                        <div id="bestScoreValue" style="font-size: 1.8em; font-weight: bold; color: #4A9FD8;">--</div>
-                        <div id="bestScoreDate" style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin-top: 3px;">--</div>
+                <!-- Stats Cards (KPI glassmorphism) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJOR SCORE</div>
+                        <div id="bestScoreValue" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="bestScoreDate" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
 
-                    <div class="stat-card" style="background: rgba(90, 191, 143, 0.1); border-left: 4px solid #5ABF8F; padding: 15px; border-radius: 8px;">
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-bottom: 5px;">Score Promedio</div>
-                        <div id="avgScoreValue" style="font-size: 1.8em; font-weight: bold; color: #5ABF8F;">--</div>
-                        <div style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin-top: 3px;">Últimas <span id="ev-stat-rounds">52</span> rondas</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SCORE PROMEDIO</div>
+                        <div id="avgScoreValue" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas <span id="ev-stat-rounds">52</span> rondas</div>
                     </div>
 
-                    <div class="stat-card" style="background: rgba(212, 181, 90, 0.1); border-left: 4px solid #D4B55A; padding: 15px; border-radius: 8px;">
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-bottom: 5px;">Tendencia</div>
-                        <div id="trendValue" style="font-size: 1.8em; font-weight: bold; color: #D4B55A;">--</div>
-                        <div id="trendText" style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin-top: 3px;">--</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TENDENCIA</div>
+                        <div id="trendValue" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="trendText" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
 
-                    <div class="stat-card" style="background: rgba(232, 139, 122, 0.1); border-left: 4px solid #E88B7A; padding: 15px; border-radius: 8px;">
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-bottom: 5px;">Total Rondas</div>
-                        <div id="totalRoundsValue" style="font-size: 1.8em; font-weight: bold; color: #E88B7A;">--</div>
-                        <div style="font-size: 0.8em; color: rgba(255,255,255,0.6); margin-top: 3px;"><span id="ev-stat-months">18</span> meses de datos</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TOTAL RONDAS</div>
+                        <div id="totalRoundsValue" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;"><span id="ev-stat-months">18</span> meses de datos</div>
                     </div>
                 </div>
 
@@ -6058,6 +6023,9 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Anchor para AI Stats & Trends (inyectado por UXWriter) -->
+            <div id="ai-evolution-anchor"></div>
 
             <!-- Best/Worst Rounds Section -->
             <div class="chart-container">
@@ -6092,27 +6060,27 @@
                     Análisis de tu rendimiento agrupado por trimestres. Identifica patrones estacionales y tendencias de mejora.
                 </p>
 
-                <!-- Summary Cards -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
-                    <div style="background: rgba(74,159,216,0.1); border-left: 4px solid #4A9FD8; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Mejor Trimestre</div>
-                        <div id="bestQuarter" style="font-size: 1.8em; font-weight: bold; color: #4A9FD8;">--</div>
-                        <div id="bestQuarterScore" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                <!-- Summary Cards (KPI glassmorphism) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJOR TRIMESTRE</div>
+                        <div id="bestQuarter" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="bestQuarterScore" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
-                    <div style="background: rgba(232,139,122,0.1); border-left: 4px solid #E88B7A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Peor Trimestre</div>
-                        <div id="worstQuarter" style="font-size: 1.8em; font-weight: bold; color: #E88B7A;">--</div>
-                        <div id="worstQuarterScore" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">PEOR TRIMESTRE</div>
+                        <div id="worstQuarter" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="worstQuarterScore" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
-                    <div style="background: rgba(212,181,90,0.1); border-left: 4px solid #D4B55A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Mejora Total</div>
-                        <div id="totalImprovement" style="font-size: 1.8em; font-weight: bold; color: #D4B55A;">--</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">Último vs Primero</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJORA TOTAL</div>
+                        <div id="totalImprovement" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">Último vs Primero</div>
                     </div>
-                    <div style="background: rgba(90,191,143,0.1); border-left: 4px solid #5ABF8F; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Trimestres Jugados</div>
-                        <div id="totalQuarters" style="font-size: 1.8em; font-weight: bold; color: #5ABF8F;">--</div>
-                        <div id="totalQuarterRounds" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TRIMESTRES JUGADOS</div>
+                        <div id="totalQuarters" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="totalQuarterRounds" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
                 </div>
 
@@ -6125,6 +6093,9 @@
                 <div id="quarterlyDetailsCards" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
                     <!-- Populated by JavaScript -->
                 </div>
+
+                <!-- AI Quarterly Conclusion -->
+                <div id="ai-quarterly-conclusion"></div>
             </div>
 
             <!-- Monthly Volatility Section (Sprint 6) -->
@@ -6134,27 +6105,27 @@
                     Análisis de la consistencia mes a mes. Una volatilidad baja indica mayor regularidad en tu juego.
                 </p>
 
-                <!-- Summary Cards -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
-                    <div style="background: rgba(90,191,143,0.1); border-left: 4px solid #5ABF8F; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Mes Más Consistente</div>
-                        <div id="mostConsistentMonth" style="font-size: 1.6em; font-weight: bold; color: #5ABF8F;">--</div>
-                        <div id="mostConsistentCV" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                <!-- Summary Cards (KPI glassmorphism) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MES MÁS CONSISTENTE</div>
+                        <div id="mostConsistentMonth" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="mostConsistentCV" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
-                    <div style="background: rgba(232,139,122,0.1); border-left: 4px solid #E88B7A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Mes Más Volátil</div>
-                        <div id="mostVolatileMonth" style="font-size: 1.6em; font-weight: bold; color: #E88B7A;">--</div>
-                        <div id="mostVolatileCV" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MES MÁS VOLÁTIL</div>
+                        <div id="mostVolatileMonth" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="mostVolatileCV" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
-                    <div style="background: rgba(74,159,216,0.1); border-left: 4px solid #4A9FD8; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">CV Promedio</div>
-                        <div id="avgCV" style="font-size: 1.6em; font-weight: bold; color: #4A9FD8;">--</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">Coeficiente Variación</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">CV PROMEDIO</div>
+                        <div id="avgCV" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">Coeficiente Variación</div>
                     </div>
-                    <div style="background: rgba(212,181,90,0.1); border-left: 4px solid #D4B55A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Meses Analizados</div>
-                        <div id="totalMonths" style="font-size: 1.6em; font-weight: bold; color: #D4B55A;">--</div>
-                        <div id="totalMonthRounds" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MESES ANALIZADOS</div>
+                        <div id="totalMonths" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="totalMonthRounds" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
                 </div>
 
@@ -6162,6 +6133,9 @@
                 <div style="position: relative; height: 400px; margin-bottom: 20px;">
                     <canvas id="monthlyVolatilityChart"></canvas>
                 </div>
+
+                <!-- AI Volatility Conclusion -->
+                <div id="ai-volatility-conclusion"></div>
             </div>
 
             <!-- Momentum Indicators Section (Sprint 6) -->
@@ -6171,27 +6145,27 @@
                     Medias móviles y tendencias de tus scores. Identifica si estás en tendencia alcista o bajista.
                 </p>
 
-                <!-- Summary Cards -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
-                    <div style="background: rgba(74,159,216,0.1); border-left: 4px solid #4A9FD8; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Tendencia Actual</div>
-                        <div id="currentTrend" style="font-size: 1.6em; font-weight: bold; color: #4A9FD8;">--</div>
-                        <div id="currentTrendDesc" style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">--</div>
+                <!-- Summary Cards (KPI glassmorphism) -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TENDENCIA ACTUAL</div>
+                        <div id="currentTrend" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div id="currentTrendDesc" style="font-size: 0.82em; color: #9a9e94;">--</div>
                     </div>
-                    <div style="background: rgba(90,191,143,0.1); border-left: 4px solid #5ABF8F; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">SMA-5 Actual</div>
-                        <div id="currentSMA5" style="font-size: 1.6em; font-weight: bold; color: #5ABF8F;">--</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">Últimas 5 rondas</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SMA-5 ACTUAL</div>
+                        <div id="currentSMA5" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas 5 rondas</div>
                     </div>
-                    <div style="background: rgba(212,181,90,0.1); border-left: 4px solid #D4B55A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">SMA-10 Actual</div>
-                        <div id="currentSMA10" style="font-size: 1.6em; font-weight: bold; color: #D4B55A;">--</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">Últimas 10 rondas</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SMA-10 ACTUAL</div>
+                        <div id="currentSMA10" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas 10 rondas</div>
                     </div>
-                    <div style="background: rgba(232,139,122,0.1); border-left: 4px solid #E88B7A; padding: 15px; border-radius: 10px;">
-                        <div style="font-size: 0.85em; color: rgba(255,255,255,0.6); margin-bottom: 5px;">Momentum</div>
-                        <div id="currentMomentum" style="font-size: 1.6em; font-weight: bold; color: #E88B7A;">--</div>
-                        <div style="font-size: 0.9em; color: rgba(255,255,255,0.7); margin-top: 3px;">SMA5 - SMA10</div>
+                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
+                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MOMENTUM</div>
+                        <div id="currentMomentum" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
+                        <div style="font-size: 0.82em; color: #9a9e94;">SMA5 - SMA10</div>
                     </div>
                 </div>
 
@@ -6201,120 +6175,28 @@
                 </div>
             </div>
 
-            <div class="chart-container">
-                <h2 id="proyeccion-score">🎯 Proyección Score & Consistencia (18 meses: 12 histórico + 6 proyección)</h2>
-                <p style="margin-bottom: 15px; color: rgba(255,255,255,0.8);">
-                    <strong>Líneas sólidas:</strong> Datos históricos | <strong>Líneas punteadas:</strong> Proyección optimista
-                </p>
-                <canvas id="projectionChart"></canvas>
-            </div>
-            
-
-            <div class="chart-container">
-                    <h2 id="progresion-consistencia">📈 Progresión de Consistencia</h2>
-                    <div style="margin-top: 20px;">
-                        <div style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #4A9FD8;">Sep 2024 - Inicio</span>
-                                <span style="color: #5ABF8F; font-weight: bold;">55%</span>
-                            </div>
-                            <div class="progress-bar" style="height: 25px;">
-                                <div class="progress-fill" style="width: 55%; background: linear-gradient(90deg, #E88B7A, #D4B55A);">55%</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #4A9FD8;">Dic 2024 - 6 Meses</span>
-                                <span style="color: #5ABF8F; font-weight: bold;">68%</span>
-                            </div>
-                            <div class="progress-bar" style="height: 25px;">
-                                <div class="progress-fill" style="width: 68%; background: linear-gradient(90deg, #D4B55A, #4A9FD8);">68%</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #4A9FD8;">Jun 2025 - Plateau</span>
-                                <span style="color: #5ABF8F; font-weight: bold;">75%</span>
-                            </div>
-                            <div class="progress-bar" style="height: 25px;">
-                                <div class="progress-fill" style="width: 75%; background: linear-gradient(90deg, #4A9FD8, #5ABF8F);">75%</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-bottom: 25px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #4A9FD8;">Dic 2025 - Actual</span>
-                                <span style="color: #5ABF8F; font-weight: bold;">80%+</span>
-                            </div>
-                            <div class="progress-bar" style="height: 25px;">
-                                <div class="progress-fill" style="width: 80%; background: linear-gradient(90deg, #5ABF8F, #5ABF8F);">80%+</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-bottom: 10px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="color: #4A9FD8;">Jun 2026 - Proyección</span>
-                                <span style="color: #5ABF8F; font-weight: bold;">82%+</span>
-                            </div>
-                            <div class="progress-bar" style="height: 25px;">
-                                <div class="progress-fill" style="width: 82%; background: linear-gradient(90deg, #5ABF8F, #40ffaa);">82%+ 🎯</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(74,159,216,0.1); border-radius: 8px; border-left: 3px solid #4A9FD8;">
-                        <strong style="color: #4A9FD8;">Análisis:</strong> Mejora progresiva de +25% en 18 meses. 
-                        El plateau en Jun 2025 indica maduración de fundamentos. Proyección realista y alcanzable.
-                    </div>
-            </div>
-            
-
-            <div class="chart-container">
-                <h2 id="comparativa-mejora">📊 Comparativa de Mejora por Categoría</h2>
-                <canvas id="categoryImprovementChart"></canvas>
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 10px;">Interpretación de Tendencias:</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <strong style="color: #E88B7A;">🪵 Long Game:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora moderada (<span id="ev-imp-long">+12.4%</span>) pero con plateau reciente. Requiere intervención técnica urgente.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <strong style="color: #D4B55A;">⛳ Mid Game:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora sólida (<span id="ev-imp-mid">+18.4%</span>) con tendencia positiva sostenida. Base confiable establecida.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                            <strong style="color: #5ABF8F;">🎯 Short Game:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora extraordinaria (<span id="ev-imp-short">+36.6%</span>) muy por encima de nivel tour. Fortaleza dominante - no alterar.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+            <!-- Anchor para AI Trends & Patterns (inyectado por UXWriter) -->
+            <div id="ai-trends-anchor"></div>
 
             <div class="chart-container" id="evolucion-long-game">
                 <h2>📈 Evolución Long Game - Driver, 3W, Hybrid (18 meses)</h2>
                 <canvas id="temporalChart"></canvas>
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <strong style="color: #4A9FD8;">Análisis Long Game:</strong>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">🏌️ Driver:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Crecimiento exponencial inicial alcanza plateau <span id="ev-lg-driver-peak">243</span>m (Jun 2025). Ligera disminución actual (<span id="ev-lg-driver-dist">231</span>m) es recuperable con ajustes attack angle identificados. Ganancia +15m promedio en 18 meses.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(74,159,216,0.1); border-radius: 8px; border-left: 3px solid #4A9FD8;">
-                            <strong style="color: #4A9FD8;">🪵 3 Wood:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora gradual sostenida de 195m a <span id="ev-lg-3w-dist">210.5</span>m (+15.5m, +7.9%). Más estable que driver pero con smash factor mejorable (1.483 → 1.50 potencial). Sample size bajo (19 golpes) requiere más data.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
-                            <strong style="color: #D4B55A;">⚡ Hybrid:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Progreso consistente y lineal 160m a <span id="ev-lg-hybrid-dist">170.3</span>m (+10.3m, +6.4%). Control direccional superior (50% neutral) vs maderas. Palo más confiable del long game - base para añadir 5W.</p>
-                        </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">🏌️ Driver:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Crecimiento exponencial inicial alcanza plateau <span id="ev-lg-driver-peak">243</span>m (Jun 2025). Ligera disminución actual (<span id="ev-lg-driver-dist">231</span>m) es recuperable con ajustes attack angle identificados. Ganancia +15m promedio en 18 meses.</p>
                     </div>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(232,139,122,0.1); border-radius: 8px; border: 1px solid #E88B7A;">
-                        <strong style="color: #E88B7A;">⚠️ Brecha Crítica Visualizada:</strong> El gap 3W (<span id="ev-lg-3w-gap">210.5</span>m) → Hybrid (<span id="ev-lg-hybrid-gap">170.3</span>m) = <span id="ev-lg-gap-size">40.2</span>m es visible en el gráfico. Esta zona muerta 170-210m requiere 5W (rango 180-190m ideal) para cerrar brecha.
+                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                        <strong style="color: #4A9FD8;">🪵 3 Wood:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora gradual sostenida de 195m a <span id="ev-lg-3w-dist">210.5</span>m (+15.5m, +7.9%). Más estable que driver pero con smash factor mejorable (1.483 → 1.50 potencial). Sample size bajo (19 golpes) requiere más data.</p>
                     </div>
+                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                        <strong style="color: #D4B55A;">⚡ Hybrid:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Progreso consistente y lineal 160m a <span id="ev-lg-hybrid-dist">170.3</span>m (+10.3m, +6.4%). Control direccional superior (50% neutral) vs maderas. Palo más confiable del long game - base para añadir 5W.</p>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; padding: 18px; background: rgba(232,139,122,0.06); border-radius: 10px; border: 1px solid rgba(232,139,122,0.18);">
+                    <strong style="color: #E88B7A;">⚠️ Brecha Crítica Visualizada:</strong> El gap 3W (<span id="ev-lg-3w-gap">210.5</span>m) → Hybrid (<span id="ev-lg-hybrid-gap">170.3</span>m) = <span id="ev-lg-gap-size">40.2</span>m es visible en el gráfico. Esta zona muerta 170-210m requiere 5W (rango 180-190m ideal) para cerrar brecha.
                 </div>
             </div>
             
@@ -6322,37 +6204,34 @@
             <div class="chart-container">
                 <h2 id="evolucion-irons">🎯 Evolución Irons 5-9 (18 meses)</h2>
                 <canvas id="ironsEvolutionChart"></canvas>
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <strong style="color: #4A9FD8;">Análisis Mid Game (Irons):</strong>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">⛳ 5-Iron:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora sólida de 138m a <span id="ev-ir-5i-dist">148</span>m (+10m, +7.2%). Dispersión consistente ~12-14m. Control direccional estable con 45% neutral. Palo confiable para approach largo - mantener en bag.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">⛳ 6-Iron:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">★ EXCELENCIA: Progreso excepcional 130m a <span id="ev-ir-6i-dist">140.5</span>m (+10.5m, +8.1%). <strong style="color: #D4B55A;">Dispersión <11m = nivel tour-caliber</strong>. Tu hierro más confiable - referencia técnica para otros palos.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(74,159,216,0.1); border-radius: 8px; border-left: 3px solid #4A9FD8;">
-                            <strong style="color: #4A9FD8;">⛳ 7-Iron:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora moderada 126m a <span id="ev-ir-7i-dist">136.6</span>m (+10.6m, +8.4%). Dispersión aceptable ~13-15m. Mayor variabilidad vs 6-iron pero dentro de rango amateur avanzado. Palo de trabajo fiable.</p>
-                        </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">⛳ 5-Iron:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida de 138m a <span id="ev-ir-5i-dist">148</span>m (+10m, +7.2%). Dispersión consistente ~12-14m. Control direccional estable con 45% neutral. Palo confiable para approach largo - mantener en bag.</p>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 12px; background: rgba(74,159,216,0.1); border-radius: 8px; border-left: 3px solid #4A9FD8;">
-                            <strong style="color: #4A9FD8;">⛳ 8-Iron:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Progreso constante 120m a <span id="ev-ir-8i-dist">130.9</span>m (+10.9m, +9.1%). Dispersión ~14m controlada. Smash factor 1.32-1.34 óptimo. Palo scoring position - excelente para approach a green.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
-                            <strong style="color: #D4B55A;">⛳ 9-Iron:</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora robusta 108m a <span id="ev-ir-9i-dist">118.3</span>m (+10.3m, +9.5%). Transición perfecta a wedges. Spin alto controlado (6500+ rpm). Palo de precisión para greens pequeños - dominio técnico evidente.</p>
-                        </div>
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">⛳ 6-Iron:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★ EXCELENCIA: Progreso excepcional 130m a <span id="ev-ir-6i-dist">140.5</span>m (+10.5m, +8.1%). <strong style="color: #D4B55A;">Dispersión <11m = nivel tour-caliber</strong>. Tu hierro más confiable - referencia técnica para otros palos.</p>
                     </div>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(90,191,143,0.15); border-radius: 8px; border: 1px solid #5ABF8F;">
-                        <strong style="color: #5ABF8F;">✅ Fortaleza Identificada:</strong> Los hierros muestran <strong>mejora progresiva y uniforme (+10m promedio por palo)</strong>. 
-                        6-Iron con dispersión <11m es tu referencia técnica. <strong style="color: #D4B55A;">Gap spacing ideal 10-14m entre palos</strong> = bag optimizado. 
-                        No requieren cambios - enfócate en mantener esta excelencia y replicar mecánica en long game.
+                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                        <strong style="color: #4A9FD8;">⛳ 7-Iron:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora moderada 126m a <span id="ev-ir-7i-dist">136.6</span>m (+10.6m, +8.4%). Dispersión aceptable ~13-15m. Mayor variabilidad vs 6-iron pero dentro de rango amateur avanzado. Palo de trabajo fiable.</p>
                     </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
+                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                        <strong style="color: #4A9FD8;">⛳ 8-Iron:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Progreso constante 120m a <span id="ev-ir-8i-dist">130.9</span>m (+10.9m, +9.1%). Dispersión ~14m controlada. Smash factor 1.32-1.34 óptimo. Palo scoring position - excelente para approach a green.</p>
+                    </div>
+                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                        <strong style="color: #D4B55A;">⛳ 9-Iron:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora robusta 108m a <span id="ev-ir-9i-dist">118.3</span>m (+10.3m, +9.5%). Transición perfecta a wedges. Spin alto controlado (6500+ rpm). Palo de precisión para greens pequeños - dominio técnico evidente.</p>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <strong style="color: #5ABF8F;">✅ Fortaleza Identificada:</strong> Los hierros muestran <strong>mejora progresiva y uniforme (+10m promedio por palo)</strong>.
+                    6-Iron con dispersión <11m es tu referencia técnica. <strong style="color: #D4B55A;">Gap spacing ideal 10-14m entre palos</strong> = bag optimizado.
+                    No requieren cambios - enfócate en mantener esta excelencia y replicar mecánica en long game.
                 </div>
             </div>
             
@@ -6360,28 +6239,26 @@
             <div class="chart-container">
                 <h2 id="evolucion-wedges">⭐ Evolución Wedges PW/GW/SW (18 meses)</h2>
                 <canvas id="wedgesEvolutionChart"></canvas>
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <strong style="color: #4A9FD8;">Análisis Short Game (Wedges):</strong>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
-                        <div style="padding: 12px; background: rgba(212,181,90,0.15); border-radius: 8px; border-left: 3px solid #D4B55A;">
-                            <strong style="color: #D4B55A;">🎯 Pitching Wedge (PW):</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">Mejora sólida 88m a <span id="ev-wg-pw-dist">95.6</span>m (+7.6m, +8.6%). Dispersión ~5-7m excelente. Spin 7500-8000 rpm controlado. Transición perfecta desde 9-iron. Palo scoring confiable para approach 90-100m.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(90,191,143,0.15); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">🎯 Gap Wedge (GW):</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">★ TOUR-LEVEL: Progreso 74m a <span id="ev-wg-gw-dist">80.9</span>m (+6.9m, +9.3%). <strong style="color: #D4B55A;">Dispersión <4m = precisión tour-caliber</strong>. Spin 8500+ rpm. Control distancia excepcional - arma letal 75-85m. Tu wedge más consistente.</p>
-                        </div>
-                        <div style="padding: 12px; background: rgba(90,191,143,0.15); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">🎯 Sand Wedge (SW):</strong>
-                            <p style="margin-top: 5px; font-size: 0.95em;">★★ ÉLITE: Mejora 58m a <span id="ev-wg-sw-dist">64.7</span>m (+6.7m, +11.6%). <strong style="color: #D4B55A;">Dispersión <3.5m = top 10% amateur</strong>. Spin máximo 9000+ rpm. Versatilidad bunker/rough excepcional. Arma confiable absoluta.</p>
-                        </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
+                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                        <strong style="color: #D4B55A;">🎯 Pitching Wedge (PW):</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida 88m a <span id="ev-wg-pw-dist">95.6</span>m (+7.6m, +8.6%). Dispersión ~5-7m excelente. Spin 7500-8000 rpm controlado. Transición perfecta desde 9-iron. Palo scoring confiable para approach 90-100m.</p>
                     </div>
-                    <div style="margin-top: 15px; padding: 15px; background: rgba(90,191,143,0.2); border-radius: 8px; border: 2px solid #5ABF8F;">
-                        <strong style="color: #5ABF8F;">⭐ ZONA DE ÉLITE CONFIRMADA:</strong> Tus wedges operan a <strong style="color: #D4B55A;">nivel tour-caliber consistente</strong>. 
-                        SW con dispersión <3.5m y GW con <4m son <strong>armas letales de precisión</strong>. 
-                        Gap spacing perfecto 14-16m entre wedges. Spin control 7500-9000+ rpm = dominio técnico completo. 
-                        <strong style="color: #4A9FD8;">Esta es tu fortaleza #1</strong> - preservar mecánica exacta y replicar fundamentos en long/mid game para elevar juego completo.
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">🎯 Gap Wedge (GW):</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★ TOUR-LEVEL: Progreso 74m a <span id="ev-wg-gw-dist">80.9</span>m (+6.9m, +9.3%). <strong style="color: #D4B55A;">Dispersión <4m = precisión tour-caliber</strong>. Spin 8500+ rpm. Control distancia excepcional - arma letal 75-85m. Tu wedge más consistente.</p>
                     </div>
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">🎯 Sand Wedge (SW):</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★★ ÉLITE: Mejora 58m a <span id="ev-wg-sw-dist">64.7</span>m (+6.7m, +11.6%). <strong style="color: #D4B55A;">Dispersión <3.5m = top 10% amateur</strong>. Spin máximo 9000+ rpm. Versatilidad bunker/rough excepcional. Arma confiable absoluta.</p>
+                    </div>
+                </div>
+                <div style="margin-top: 14px; padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <strong style="color: #5ABF8F;">⭐ ZONA DE ÉLITE CONFIRMADA:</strong> Tus wedges operan a <strong style="color: #D4B55A;">nivel tour-caliber consistente</strong>.
+                    SW con dispersión <3.5m y GW con <4m son <strong>armas letales de precisión</strong>.
+                    Gap spacing perfecto 14-16m entre wedges. Spin control 7500-9000+ rpm = dominio técnico completo.
+                    <strong style="color: #4A9FD8;">Esta es tu fortaleza #1</strong> - preservar mecánica exacta y replicar fundamentos en long/mid game para elevar juego completo.
+                </div>
                     <div class="card-detail accent-gold" style="margin-top: 15px;">
                         <strong style="color: #D4B55A;">💡 Insight Estratégico:</strong>
                         Con wedges a este nivel, tu estrategia debe ser <strong>"wedge backwards"</strong> desde green.
@@ -6390,34 +6267,31 @@
                         <strong style="color: #5ABF8F;">Juega a tus fortalezas = scoring óptimo.</strong>
                     </div>
                 </div>
-            </div>
-            
 
-    
+
                 <div class="chart-container" id="tendencia-attack-angle">
                     <h2>📐 Tendencia Attack Angle (Driver)</h2>
                     
                     <!-- Definición de Attack Angle -->
-                    <div style="margin-bottom: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px; border-left: 4px solid #4A9FD8;">
-                        <h3 style="color: #4A9FD8; margin: 0 0 12px 0; font-size: 1.1em;">📚 ¿Qué es el Attack Angle?</h3>
-                        <p style="margin: 0 0 12px 0; line-height: 1.7; color: rgba(255,255,255,0.9);">
-                            El <strong>Attack Angle</strong> es el ángulo vertical de la trayectoria del palo en el momento del impacto. 
-                            En el driver, un valor <strong style="color: #E88B7A;">negativo (-)</strong> significa que el palo golpea la bola 
-                            en <strong>descenso</strong>, mientras que un valor <strong style="color: #5ABF8F;">positivo (+)</strong> indica 
-                            que golpea en <strong>ascenso</strong>.
+                    <div style="margin-bottom: 20px; padding: 18px; background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+                        <h3 style="color: #4A9FD8; margin: 0 0 12px 0; font-size: 1.05em;">📚 ¿Qué es el Attack Angle?</h3>
+                        <p style="margin: 0 0 12px 0; line-height: 1.7; color: rgba(255,255,255,0.8);">
+                            El <strong>Attack Angle</strong> es el ángulo vertical de la trayectoria del palo en el momento del impacto.
+                            Un valor <strong style="color: #E88B7A;">negativo (-)</strong> = descenso,
+                            un valor <strong style="color: #5ABF8F;">positivo (+)</strong> = ascenso.
                         </p>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #E88B7A;">❌ Negativo (-0.9° a -6°):</strong>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Golpe descendente = pérdida de distancia, spin alto, trayectoria baja</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #E88B7A; font-size: 0.9em;">❌ Negativo (-0.9° a -6°):</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Pérdida de distancia, spin alto, trayectoria baja</p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #5ABF8F;">✅ Ideal (-4° a -6°):</strong>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">Golpe ligeramente ascendente = máxima distancia, spin óptimo, launch angle correcto</p>
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #5ABF8F; font-size: 0.9em;">✅ Ideal (-4° a -6°):</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Máxima distancia, spin óptimo, launch correcto</p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #D4B55A;">⚡ PGA Tour promedio:</strong>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9em;">+1° a +5° (golpe ascendente consistente)</p>
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #D4B55A; font-size: 0.9em;">⚡ PGA Tour promedio:</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">+1° a +5° (ascendente consistente)</p>
                             </div>
                         </div>
                     </div>
@@ -6426,49 +6300,41 @@
                     
                     <!-- Análisis del gráfico -->
                     <div style="margin-top: 20px;">
-                        <div style="padding: 15px; background: rgba(232,139,122,0.15); border-radius: 10px; border-left: 4px solid #E88B7A; margin-bottom: 15px;">
+                        <div style="padding: 18px; background: rgba(232,139,122,0.06); border-radius: 10px; border: 1px solid rgba(232,139,122,0.18); margin-bottom: 14px;">
                             <h4 style="color: #E88B7A; margin: 0 0 10px 0;">⚠️ Problema Identificado: Alta Variabilidad</h4>
                             <p style="margin: 0 0 10px 0; line-height: 1.7;">
-                                Tu attack angle muestra un <strong>rango errático de <span id="ev-aa-current">-0.9°</span> a -6°</strong> a lo largo del periodo analizado. 
-                                Esta inconsistencia indica:
+                                Tu attack angle muestra un <strong>rango errático de <span id="ev-aa-current">-0.9°</span> a -6°</strong>. Indica falta de patrón repetible, posición de bola inconsistente, variación en tilt de columna y pérdida de 15-25 metros potenciales.
                             </p>
-                            <ul style="margin: 0 0 10px 15px; line-height: 1.8;">
-                                <li><strong>Falta de patrón repetible</strong> en el setup y swing</li>
-                                <li><strong>Posición de bola inconsistente</strong> respecto al stance</li>
-                                <li><strong>Variación en el tilt de columna</strong> al address</li>
-                                <li><strong>Pérdida de 15-25 metros</strong> de distancia potencial en drives problemáticos</li>
-                            </ul>
                         </div>
-                        
-                        <div style="padding: 15px; background: rgba(90,191,143,0.15); border-radius: 10px; border-left: 4px solid #5ABF8F; margin-bottom: 15px;">
+
+                        <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18); margin-bottom: 14px;">
                             <h4 style="color: #5ABF8F; margin: 0 0 10px 0;">🎯 Objetivo: Estabilización en Zona Óptima</h4>
-                            <p style="margin: 0 0 10px 0; line-height: 1.7;">
-                                Necesitas <strong>estabilizar tu attack angle entre -4° y -6° consistentemente</strong>. 
-                                Lograr esto resultará en:
+                            <p style="margin: 0 0 12px 0; line-height: 1.7;">
+                                Estabilizar entre <strong>-4° y -6°</strong> consistentemente:
                             </p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
-                                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                    <strong style="color: #D4B55A;">📏 Distancia:</strong>
-                                    <p style="margin: 5px 0 0 0;">+15-20 metros inmediatos en promedio</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                                <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                    <strong style="color: #D4B55A; font-size: 0.9em;">📏 Distancia:</strong>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">+15-20 metros inmediatos</p>
                                 </div>
-                                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                    <strong style="color: #4A9FD8;">🎪 Dispersión:</strong>
-                                    <p style="margin: 5px 0 0 0;">Reducción de 30% en variabilidad lateral</p>
+                                <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                    <strong style="color: #4A9FD8; font-size: 0.9em;">🎪 Dispersión:</strong>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">-30% variabilidad lateral</p>
                                 </div>
-                                <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                    <strong style="color: #5ABF8F;">🎯 Consistencia:</strong>
-                                    <p style="margin: 5px 0 0 0;">Carry predecible ronda tras ronda</p>
+                                <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                    <strong style="color: #5ABF8F; font-size: 0.9em;">🎯 Consistencia:</strong>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Carry predecible ronda a ronda</p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div style="padding: 15px; background: rgba(212,181,90,0.15); border-radius: 10px; border-left: 4px solid #D4B55A;">
+
+                        <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
                             <h4 style="color: #D4B55A; margin: 0 0 10px 0;">💡 Recomendación Técnica</h4>
                             <p style="margin: 0; line-height: 1.7;">
-                                <strong>Corrección #1:</strong> Aumenta tilt de columna (spine angle) 5-8° hacia la derecha al address<br>
-                                <strong>Corrección #2:</strong> Posiciona bola más adelante en stance (off del talón izquierdo)<br>
-                                <strong>Corrección #3:</strong> Tee más alto (mínimo 7cm) para fomentar swing ascendente<br>
-                                <strong>ROI esperado:</strong> <span style="color: #5ABF8F;">Mejora inmediata en 3-5 sesiones de práctica dirigida</span>
+                                <strong>Corrección #1:</strong> Aumenta tilt de columna 5-8° hacia derecha al address<br>
+                                <strong>Corrección #2:</strong> Posiciona bola más adelante (off talón izquierdo)<br>
+                                <strong>Corrección #3:</strong> Tee más alto (mínimo 7cm) para swing ascendente<br>
+                                <strong>ROI:</strong> <span style="color: #5ABF8F;">Mejora inmediata en 3-5 sesiones</span>
                             </p>
                         </div>
                     </div>
@@ -6481,28 +6347,26 @@
                 <h2>⚡ Evolución Smash Factor (Eficiencia)</h2>
                 
                 <!-- Definición de Smash Factor -->
-                <div style="margin-bottom: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px; border-left: 4px solid #4A9FD8;">
-                    <h3 style="color: #4A9FD8; margin: 0 0 12px 0; font-size: 1.1em;">📚 ¿Qué es el Smash Factor?</h3>
-                    <p style="margin: 0 0 12px 0; line-height: 1.7; color: rgba(255,255,255,0.9);">
-                        El <strong>Smash Factor</strong> es la relación entre la velocidad de la bola y la velocidad del palo en el impacto. 
-                        Mide la <strong>eficiencia de la transferencia de energía</strong> del swing a la bola. Un smash factor más alto 
-                        significa que estás aprovechando mejor tu velocidad de swing para generar velocidad de bola.
+                <div style="margin-bottom: 20px; padding: 18px; background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+                    <h3 style="color: #4A9FD8; margin: 0 0 12px 0; font-size: 1.05em;">📚 ¿Qué es el Smash Factor?</h3>
+                    <p style="margin: 0 0 8px 0; line-height: 1.7; color: rgba(255,255,255,0.8);">
+                        El <strong>Smash Factor</strong> mide la eficiencia de la transferencia de energía del swing a la bola.
                     </p>
-                    <p style="margin: 0 0 12px 0; line-height: 1.7; color: rgba(255,255,255,0.9);">
+                    <p style="margin: 0 0 12px 0; line-height: 1.7; color: rgba(255,255,255,0.8);">
                         <strong>Fórmula:</strong> Smash Factor = Velocidad Bola ÷ Velocidad Palo
                     </p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-                        <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                            <strong style="color: #D4B55A;">🏌️ Driver:</strong>
-                            <p style="margin: 5px 0 0 0; font-size: 0.9em;">Óptimo: 1.48-1.50<br>Tour promedio: 1.48<br>Tu rango: <span id="ev-sf-driver">1.43-1.44</span></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
+                        <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                            <strong style="color: #D4B55A; font-size: 0.9em;">🏌️ Driver:</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Óptimo: 1.48-1.50 · Tour: 1.48 · Tú: <span id="ev-sf-driver">1.43-1.44</span></p>
                         </div>
-                        <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                            <strong style="color: #4A9FD8;">🪵 Maderas:</strong>
-                            <p style="margin: 5px 0 0 0; font-size: 0.9em;">Óptimo: 1.45-1.50<br>3W promedio: 1.47<br>Tu 3W: <span id="ev-sf-3w">1.48</span></p>
+                        <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                            <strong style="color: #4A9FD8; font-size: 0.9em;">🪵 Maderas:</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Óptimo: 1.45-1.50 · 3W: 1.47 · Tú: <span id="ev-sf-3w">1.48</span></p>
                         </div>
-                        <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                            <strong style="color: #5ABF8F;">⛳ Irons:</strong>
-                            <p style="margin: 5px 0 0 0; font-size: 0.9em;">Óptimo: 1.30-1.40<br>Tour promedio: 1.35-1.38<br>Tu rango: <span id="ev-sf-irons">1.30-1.35</span></p>
+                        <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                            <strong style="color: #5ABF8F; font-size: 0.9em;">⛳ Irons:</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7);">Óptimo: 1.30-1.40 · Tour: 1.35-1.38 · Tú: <span id="ev-sf-irons">1.30-1.35</span></p>
                         </div>
                     </div>
                 </div>
@@ -6511,72 +6375,56 @@
                 
                 <!-- Análisis del gráfico -->
                 <div style="margin-top: 20px;">
-                    <div style="padding: 15px; background: rgba(90,191,143,0.15); border-radius: 10px; border-left: 4px solid #5ABF8F; margin-bottom: 15px;">
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18); margin-bottom: 14px;">
                         <h4 style="color: #5ABF8F; margin: 0 0 10px 0;">✅ Fortalezas Identificadas</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-top: 10px;">
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #D4B55A;">🏌️ Driver (1.43-1.44):</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    Consistencia excelente en rango 1.43-1.44. Contacto centro de cara sólido. 
-                                    <strong style="color: #4A9FD8;">Potencial mejora 1.44 → 1.48</strong> ajustando attack angle.
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #D4B55A; font-size: 0.9em;">🏌️ Driver (1.43-1.44):</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    Consistencia en rango. Potencial 1.44 → 1.48 ajustando attack angle.
                                 </p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #4A9FD8;">🪵 3 Wood (1.48):</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    ★ <strong style="color: #D4B55A;">Óptimo tour-level</strong>. Transferencia energía máxima. 
-                                    Mantener mecánica actual - referencia para driver.
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #4A9FD8; font-size: 0.9em;">🪵 3 Wood (1.48):</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    ★ Óptimo tour-level. Mantener mecánica actual.
                                 </p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #5ABF8F;">⛳ Irons (1.30-1.35):</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    Rango óptimo consistente. Contacto limpio repetible. 
-                                    6-Iron destaca con 1.35 = eficiencia tour-caliber.
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #5ABF8F; font-size: 0.9em;">⛳ Irons (1.30-1.35):</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    Rango óptimo. 6-Iron con 1.35 = tour-caliber.
                                 </p>
                             </div>
                         </div>
                     </div>
-                    
-                    <div style="padding: 15px; background: rgba(212,181,90,0.15); border-radius: 10px; border-left: 4px solid #D4B55A; margin-bottom: 15px;">
+
+                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18); margin-bottom: 14px;">
                         <h4 style="color: #D4B55A; margin: 0 0 10px 0;">🎯 Área de Mejora: Driver</h4>
-                        <p style="margin: 0 0 10px 0; line-height: 1.7;">
-                            Tu driver opera a <strong>1.43-1.44</strong> cuando el óptimo es <strong>1.48-1.50</strong>. 
-                            Esta diferencia de <strong style="color: #E88B7A;">0.04-0.06 puntos</strong> representa:
-                        </p>
-                        <ul style="margin: 0 0 10px 15px; line-height: 1.8;">
-                            <li><strong>Pérdida de 10-15 mph</strong> velocidad de bola</li>
-                            <li><strong>Pérdida de 15-22 metros</strong> de distancia carry</li>
-                            <li>Contacto <strong>ligeramente descentrado</strong> de forma consistente</li>
-                            <li>Posible issue de <strong>loft dinámico</strong> al impacto</li>
-                        </ul>
                         <p style="margin: 0; line-height: 1.7;">
-                            <strong style="color: #4A9FD8;">Causa probable:</strong> Attack angle negativo (-0.9° a -6°) genera contacto bajo en cara del driver, 
-                            reduciendo smash factor. Corrigiendo attack angle a -4°/-6° debería elevar smash factor a 1.46-1.48.
+                            Driver 1.43-1.44 vs óptimo 1.48-1.50. Diferencia de <strong style="color: #E88B7A;">0.04-0.06</strong> = pérdida de 10-15 mph velocidad bola y 15-22 metros carry. Causa probable: attack angle negativo genera contacto bajo en cara del driver.
                         </p>
                     </div>
-                    
-                    <div style="padding: 15px; background: rgba(74,159,216,0.15); border-radius: 10px; border-left: 4px solid #4A9FD8;">
+
+                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
                         <h4 style="color: #4A9FD8; margin: 0 0 10px 0;">💡 Plan de Optimización</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #D4B55A;">Corrección #1:</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    <strong>Mejorar attack angle</strong> de -0.9° a -4°/-6° = contacto más centrado = 
-                                    smash factor +0.03-0.05 puntos
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #D4B55A; font-size: 0.9em;">Corrección #1:</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    Mejorar attack angle → contacto centrado → smash +0.03-0.05
                                 </p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #5ABF8F;">Corrección #2:</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    <strong>Validar contacto</strong> con impact tape/spray - verificar patrón centro de cara. 
-                                    Ajustar si bias alto/bajo.
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #5ABF8F; font-size: 0.9em;">Corrección #2:</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    Validar contacto con impact tape/spray. Ajustar bias.
                                 </p>
                             </div>
-                            <div style="padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px;">
-                                <strong style="color: #4A9FD8;">Resultado esperado:</strong>
-                                <p style="margin: 5px 0 0 0; line-height: 1.6;">
-                                    Smash factor 1.43 → 1.47-1.48 = <strong style="color: #D4B55A;">+17-25m distancia total inmediata</strong>
+                            <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
+                                <strong style="color: #4A9FD8; font-size: 0.9em;">Resultado:</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 0.85em; color: rgba(255,255,255,0.7); line-height: 1.5;">
+                                    1.43 → 1.47-1.48 = <strong style="color: #D4B55A;">+17-25m</strong>
                                 </p>
                             </div>
                         </div>
@@ -6591,14 +6439,100 @@
                     </div>
                 </div>
             </div>
-            
+
+            <div class="chart-container">
+                <h2 id="proyeccion-score">🎯 Proyección Score & Consistencia (18 meses: 12 histórico + 6 proyección)</h2>
+                <p style="margin-bottom: 15px; color: rgba(255,255,255,0.8);">
+                    <strong>Líneas sólidas:</strong> Datos históricos | <strong>Líneas punteadas:</strong> Proyección optimista
+                </p>
+                <canvas id="projectionChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                    <h2 id="progresion-consistencia">📈 Progresión de Consistencia</h2>
+                    <div style="margin-top: 20px;">
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #4A9FD8;">Sep 2024 - Inicio</span>
+                                <span style="color: #5ABF8F; font-weight: bold;">55%</span>
+                            </div>
+                            <div class="progress-bar" style="height: 25px;">
+                                <div class="progress-fill" style="width: 55%; background: linear-gradient(90deg, #E88B7A, #D4B55A);">55%</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #4A9FD8;">Dic 2024 - 6 Meses</span>
+                                <span style="color: #5ABF8F; font-weight: bold;">68%</span>
+                            </div>
+                            <div class="progress-bar" style="height: 25px;">
+                                <div class="progress-fill" style="width: 68%; background: linear-gradient(90deg, #D4B55A, #4A9FD8);">68%</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #4A9FD8;">Jun 2025 - Plateau</span>
+                                <span style="color: #5ABF8F; font-weight: bold;">75%</span>
+                            </div>
+                            <div class="progress-bar" style="height: 25px;">
+                                <div class="progress-fill" style="width: 75%; background: linear-gradient(90deg, #4A9FD8, #5ABF8F);">75%</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #4A9FD8;">Dic 2025 - Actual</span>
+                                <span style="color: #5ABF8F; font-weight: bold;">80%+</span>
+                            </div>
+                            <div class="progress-bar" style="height: 25px;">
+                                <div class="progress-fill" style="width: 80%; background: linear-gradient(90deg, #5ABF8F, #5ABF8F);">80%+</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #4A9FD8;">Jun 2026 - Proyección</span>
+                                <span style="color: #5ABF8F; font-weight: bold;">82%+</span>
+                            </div>
+                            <div class="progress-bar" style="height: 25px;">
+                                <div class="progress-fill" style="width: 82%; background: linear-gradient(90deg, #5ABF8F, #40ffaa);">82%+ 🎯</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                        <strong style="color: #4A9FD8;">Análisis:</strong> Mejora progresiva de +25% en 18 meses.
+                        El plateau en Jun 2025 indica maduración de fundamentos. Proyección realista y alcanzable.
+                    </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 id="comparativa-mejora">📊 Comparativa de Mejora por Categoría</h2>
+                <canvas id="categoryImprovementChart"></canvas>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 20px;">
+                    <div style="padding: 18px; background: rgba(232,139,122,0.06); border-radius: 10px; border: 1px solid rgba(232,139,122,0.18);">
+                        <strong style="color: #E88B7A;">🪵 Long Game:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora moderada (<span id="ev-imp-long">+12.4%</span>) pero con plateau reciente. Requiere intervención técnica urgente.</p>
+                    </div>
+                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                        <strong style="color: #D4B55A;">⛳ Mid Game:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida (<span id="ev-imp-mid">+18.4%</span>) con tendencia positiva sostenida. Base confiable establecida.</p>
+                    </div>
+                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                        <strong style="color: #5ABF8F;">🎯 Short Game:</strong>
+                        <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora extraordinaria (<span id="ev-imp-short">+36.6%</span>) muy por encima de nivel tour. Fortaleza dominante - no alterar.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
             </div>
 
         </div>
-        
+
         <!-- TAB: MIS CAMPOS -->
         <div id="campos" class="tab-content">
             
@@ -16935,7 +16869,7 @@
             console.log('✅ Best/Worst Rounds inicializado correctamente');
         }
 
-        registerTabChart('deep-analysis', initializeBestWorstRounds);
+        registerTabChart('evolution', initializeBestWorstRounds);
 
         // ============================================
         // 8. QUARTERLY SCORING (Sprint 5)
