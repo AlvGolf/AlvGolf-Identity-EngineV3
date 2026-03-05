@@ -18391,13 +18391,16 @@
         // 1. Handicap Evolution RFEG - DINÁMICO ✅
         if (document.getElementById('hcpEvolutionChart')) {
         const hcpEvolutionCtx = document.getElementById('hcpEvolutionChart').getContext('2d');
+        const hcpValues = window.dashboardData?.hcp_evolution_rfeg?.values || [32.0, 32.0, 21.9, 22.9, 23.2];
+        const hcpMin = Math.floor(Math.min(...hcpValues) - 2);
+        const hcpMax = Math.ceil(Math.max(...hcpValues) + 2);
         new Chart(hcpEvolutionCtx, {
             type: 'line',
             data: {
                 labels: window.dashboardData?.hcp_evolution_rfeg?.labels || ['Mar 2024', 'Dic 2024', 'May 2025', 'Jun 2025', 'Sep 2025 (Actual)'],
                 datasets: [{
                     label: 'Handicap Oficial RFEG',
-                    data: window.dashboardData?.hcp_evolution_rfeg?.values || [32.0, 32.0, 21.9, 22.9, 23.2],
+                    data: hcpValues,
                     borderColor: '#5ABF8F',
                     backgroundColor: 'rgba(90, 191, 143,0.1)',
                     fill: true,
@@ -18417,9 +18420,9 @@
                 scales: {
                     y: {
                         title: { display: true, text: 'Handicap', color: '#4A9FD8' },
-                        min: 20,
-                        max: 35,
-                        reverse: true,  // Mejor (bajo) arriba → línea ascendente = mejora
+                        min: hcpMin,
+                        max: hcpMax,
+                        reverse: true,
                         ticks: { color: '#fff' }
                     },
                     x: { ticks: { color: '#fff' }}
