@@ -1076,8 +1076,9 @@
                 if (container) {
                     const sorted = [...sh.rounds].sort((a, b) => a.score - b.score).slice(0, 6);
                     const colors = ['#D4B55A', '#5ABF8F', '#5ABF8F', '#4A9FD8', '#4A9FD8', '#4A9FD8'];
+                    const borderColors = ['rgba(212,181,90,0.4)', 'rgba(90,191,143,0.4)', 'rgba(90,191,143,0.4)', 'rgba(74,159,216,0.4)', 'rgba(74,159,216,0.4)', 'rgba(74,159,216,0.4)'];
                     container.innerHTML = sorted.map((r, i) => `
-                        <div class="card-nested tint-dark" style="text-align: center; min-width: 120px; ${i === 0 ? 'border: 1px solid rgba(212,181,90,0.4);' : ''}">
+                        <div class="card-nested tint-dark" style="text-align: center; min-width: 120px; border: 1px solid ${borderColors[i] || 'rgba(74,159,216,0.4)'};">
                             <span style="font-size: 2em; font-weight: bold; color: ${colors[i] || '#4A9FD8'};">${r.score}</span><br>
                             <span class="detail-text">${formatPlayerDate(r.date, 'short')}</span>
                             <div style="font-size: 0.9em; margin-top: 5px;">${r.course}</div>
@@ -1091,7 +1092,11 @@
             if (qs) {
                 const container = document.getElementById('cs-quarterly-container');
                 if (container) {
-                    const quarters = Object.entries(qs).sort((a, b) => a[0].localeCompare(b[0]));
+                    const quarters = Object.entries(qs).sort((a, b) => {
+                        const [qa, ya] = a[0].match(/Q(\d)_(\d{4})/).slice(1);
+                        const [qb, yb] = b[0].match(/Q(\d)_(\d{4})/).slice(1);
+                        return (ya - yb) || (qa - qb);
+                    });
                     container.innerHTML = quarters.map(([q, d]) => {
                         const label = q.replace('_', '-');
                         const trendIcon = d.trend === 'improving' ? '📈' : d.trend === 'declining' ? '📉' : '➡️';
@@ -6748,15 +6753,15 @@
 
                 <div style="margin-bottom: 0;">
                     <h4 style="color: #5ABF8F; margin: 0 0 16px 0; font-size: 1em; font-weight: 700;">
-                        Mis Campos
+                        ⛳ Mis Campos
                     </h4>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
-                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" class="quick-nav-link">• Performance por Campo</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" class="quick-nav-link">• Mis Mejores Rondas</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" class="quick-nav-link">• Performance por Campo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('scoring-zones'); return false;" class="quick-nav-link">• Scoring Zones por Campo</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" class="quick-nav-link">• Análisis de Scoring</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('analisis-consistencia'); return false;" class="quick-nav-link">• Análisis de Consistencia</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('scoring-zones'); return false;" class="quick-nav-link">• Scoring Zones por Campo</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('volatility-index'); return false;" class="quick-nav-link">• Score Volatility Index</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('estado-forma'); return false;" class="quick-nav-link">• Estado de Forma</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('posicion-hcp-curve'); return false;" class="quick-nav-link">• Posición vs HCP Curve</a>
@@ -6772,69 +6777,6 @@
 
             </div>
 
-            <!-- Anchor para AI Course Cards (inyectado por UXWriter) -->
-            <div id="ai-courses-anchor"></div>
-
-            <!-- 2. Performance por Campo -->
-            <div class="chart-container">
-                <h2 id="performance-campo">🏌️ Performance por Campo</h2>
-                <p style="margin-bottom: 30px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
-                    Análisis visual completo de tu rendimiento en cada campo. Compara métricas clave de un vistazo.
-                </p>
-                
-                <!-- TARJETAS VISUALES POR CAMPO - DINÁMICAS -->
-                <div id="courseCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px;">
-                    <!-- Generadas dinámicamente por JavaScript -->
-                    <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando tarjetas de campos...</p>
-                </div>
-
-                <!-- Tarjetas hardcodeadas removidas -->
-
-                <!-- GRÁFICO DE BARRAS AGRUPADAS COMPARATIVO -->
-                <div style="margin: 40px 0 30px 0;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📊 Comparativa Visual de Rendimiento</h3>
-                    <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7); font-size: 0.95em;">
-                        Compara tu mejor ronda, promedio y peor ronda en todos los campos de 18 hoyos. Ordenados de mejor a peor promedio.
-                    </p>
-                    <canvas id="campoPerfChart" style="max-height: 400px;"></canvas>
-                </div>
-                
-                <!-- TABLA DE DATOS DETALLADOS -->
-                <div style="margin-top: 40px;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📋 Tabla de Datos Completa</h3>
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px;">
-                            <thead>
-                                <tr style="background: rgba(255,255,255,0.06);">
-                                    <th style="padding: 14px 12px; text-align: left; color: #E8E8E8; font-weight: 700; border-top-left-radius: 8px;">Campo</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rondas</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Promedio</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Mejor</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Peor</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rango</th>
-                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700; border-top-right-radius: 8px;">Par</th>
-                                </tr>
-                            </thead>
-                            <tbody id="courseTableBody">
-                                <!-- Rows generados dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <!-- INSIGHT -->
-                <div class="card-detail accent-blue" style="margin-top: 30px;">
-                    <strong style="color: #4A9FD8; font-size: 1.2em;">💡 Insights Clave:</strong>
-                    <ul id="cs-insights-list" style="margin: 15px 0 0 20px; line-height: 2; font-size: 1.05em;">
-                        <li><strong style="color: #D4B55A;">🏆 <span id="cs-insight-best-course">Nuevo Portil</span></strong> es tu mejor campo (promedio <span id="cs-insight-best-avg">90.5</span>) - ¡diferencia significativa vs tu promedio general!</li>
-                        <li><strong style="color: #4A9FD8;"><span id="cs-insight-most-played">La Dehesa</span></strong> es tu campo con más rondas (<span id="cs-insight-most-played-n">16</span>) y mayor conocimiento del recorrido</li>
-                        <li>Tu mejor ronda absoluta fue en <strong style="color: #5ABF8F;"><span id="cs-insight-record-course">Marina Golf</span> (<span id="cs-insight-record">88</span>)</strong></li>
-                        <li><strong style="color: #40e0d0;"><span id="cs-insight-most-consistent">Golf El Rompido Norte</span></strong> muestra tu menor rango (<span id="cs-insight-consistent-range">--</span> golpes), demostrando máxima consistencia</li>
-                        <li><strong style="color: #E88B7A;"><span id="cs-insight-hardest-name">Palomarejos Golf</span></strong> ha sido tu campo más difícil (promedio <span id="cs-insight-hardest-avg">108.0</span>)</li>
-                    </ul>
-                </div>
-            </div>
-            
             <!-- 3. Mejores Rondas Timeline -->
             <div class="chart-container">
                 <h2 id="mejores-rondas">🏆 Mis Mejores Rondas</h2>
@@ -6900,6 +6842,91 @@
                         <li><strong>Noviembre 2025:</strong> Récord personal de 88 en Marina Golf</li>
                         <li><strong>Campos favoritos:</strong> Marina Golf y Valle del Este aparecen múltiples veces</li>
                     </ul>
+                </div>
+            </div>
+            
+            <!-- 2. Performance por Campo -->
+            <div class="chart-container">
+                <h2 id="performance-campo">🏌️ Performance por Campo</h2>
+                <p style="margin-bottom: 30px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
+                    Análisis visual completo de tu rendimiento en cada campo. Compara métricas clave de un vistazo.
+                </p>
+                
+                <!-- TARJETAS VISUALES POR CAMPO - DINÁMICAS -->
+                <div id="courseCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                    <!-- Generadas dinámicamente por JavaScript -->
+                    <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando tarjetas de campos...</p>
+                </div>
+
+                <!-- Tarjetas hardcodeadas removidas -->
+
+                <!-- GRÁFICO DE BARRAS AGRUPADAS COMPARATIVO -->
+                <div style="margin: 40px 0 30px 0;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📊 Comparativa Visual de Rendimiento</h3>
+                    <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7); font-size: 0.95em;">
+                        Compara tu mejor ronda, promedio y peor ronda en todos los campos de 18 hoyos. Ordenados de mejor a peor promedio.
+                    </p>
+                    <canvas id="campoPerfChart" style="max-height: 400px;"></canvas>
+                </div>
+                
+                <!-- TABLA DE DATOS DETALLADOS -->
+                <div style="margin-top: 40px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📋 Tabla de Datos Completa</h3>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px;">
+                            <thead>
+                                <tr style="background: rgba(255,255,255,0.06);">
+                                    <th style="padding: 14px 12px; text-align: left; color: #E8E8E8; font-weight: 700; border-top-left-radius: 8px;">Campo</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rondas</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Promedio</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Mejor</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Peor</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rango</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700; border-top-right-radius: 8px;">Par</th>
+                                </tr>
+                            </thead>
+                            <tbody id="courseTableBody">
+                                <!-- Rows generados dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- INSIGHT -->
+                <div class="card-detail accent-blue" style="margin-top: 30px;">
+                    <strong style="color: #4A9FD8; font-size: 1.2em;">💡 Insights Clave:</strong>
+                    <ul id="cs-insights-list" style="margin: 15px 0 0 20px; line-height: 2; font-size: 1.05em;">
+                        <li><strong style="color: #D4B55A;">🏆 <span id="cs-insight-best-course">Nuevo Portil</span></strong> es tu mejor campo (promedio <span id="cs-insight-best-avg">90.5</span>) - ¡diferencia significativa vs tu promedio general!</li>
+                        <li><strong style="color: #4A9FD8;"><span id="cs-insight-most-played">La Dehesa</span></strong> es tu campo con más rondas (<span id="cs-insight-most-played-n">16</span>) y mayor conocimiento del recorrido</li>
+                        <li>Tu mejor ronda absoluta fue en <strong style="color: #5ABF8F;"><span id="cs-insight-record-course">Marina Golf</span> (<span id="cs-insight-record">88</span>)</strong></li>
+                        <li><strong style="color: #40e0d0;"><span id="cs-insight-most-consistent">Golf El Rompido Norte</span></strong> muestra tu menor rango (<span id="cs-insight-consistent-range">--</span> golpes), demostrando máxima consistencia</li>
+                        <li><strong style="color: #E88B7A;"><span id="cs-insight-hardest-name">Palomarejos Golf</span></strong> ha sido tu campo más difícil (promedio <span id="cs-insight-hardest-avg">108.0</span>)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Anchor para AI Course Cards (inyectado por UXWriter) -->
+            <div id="ai-courses-anchor"></div>
+
+            <!-- 6. SCORING ZONES POR CAMPO -->
+            <div class="chart-container">
+                <h3 id="scoring-zones" style="color: #4A9FD8; margin-top: 40px;">Scoring Zones por Campo</h3>
+                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
+                    Distribución de tus scores en cada campo. Identifica tu "comfort zone" donde scores más frecuentemente.
+                </p>
+                <canvas id="scoringZonesChart" style="max-height: 400px;"></canvas>
+                
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div class="inner-box inner-box--blue" style="padding: 20px;">
+                        <h4 style="color: #4A9FD8; margin-bottom: 12px;">LA DEHESA</h4>
+                        <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 100-105 (31% rondas)</p>
+                        <p class="kpi-sub" style="margin: 8px 0 0 0;">16 rondas de 18 hoyos</p>
+                    </div>
+                    <div class="inner-box inner-box--green" style="padding: 20px;">
+                        <h4 style="color: #5ABF8F; margin-bottom: 12px;">MARINA GOLF</h4>
+                        <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 90-95 (36% rondas)</p>
+                        <p class="kpi-sub" style="margin: 8px 0 0 0;">11 rondas totales</p>
+                    </div>
                 </div>
             </div>
             
@@ -6988,28 +7015,6 @@
                         Tu <strong>mejor differential fue 4</strong> (ronda excepcional) y tu promedio es 25.5, 
                         indicando que juegas consistentemente cerca de tu handicap con picos de excelencia.
                     </p>
-                </div>
-            </div>
-            
-            <!-- 6. SCORING ZONES POR CAMPO -->
-            <div class="chart-container">
-                <h3 id="scoring-zones" style="color: #4A9FD8; margin-top: 40px;">Scoring Zones por Campo</h3>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
-                    Distribución de tus scores en cada campo. Identifica tu "comfort zone" donde scores más frecuentemente.
-                </p>
-                <canvas id="scoringZonesChart" style="max-height: 400px;"></canvas>
-                
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
-                    <div class="inner-box inner-box--blue" style="padding: 20px;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 12px;">LA DEHESA</h4>
-                        <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 100-105 (31% rondas)</p>
-                        <p class="kpi-sub" style="margin: 8px 0 0 0;">16 rondas de 18 hoyos</p>
-                    </div>
-                    <div class="inner-box inner-box--green" style="padding: 20px;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 12px;">MARINA GOLF</h4>
-                        <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 90-95 (36% rondas)</p>
-                        <p class="kpi-sub" style="margin: 8px 0 0 0;">11 rondas totales</p>
-                    </div>
                 </div>
             </div>
             
