@@ -6001,7 +6001,7 @@
                         margin-bottom: 32px;">
 
 
-                <!-- TEMPORAL (13 secciones) -->
+                <!-- TEMPORAL (15 secciones) -->
                 <div style="margin-bottom: 0;">
 
                     <h4 style="color: #4A9FD8;
@@ -6014,6 +6014,14 @@
                     <div style="display: grid; 
                                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                                gap: 10px;">
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" class="quick-nav-link">
+                            • Mi Trayectoria RFEG
+                        </a>
+
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-hcp-rfeg'); return false;" class="quick-nav-link">
+                            • Evolución Handicap RFEG
+                        </a>
 
                         <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" class="quick-nav-link">
                             • Historial de Scores (<span id="ev-nav-rounds">52</span> rondas)
@@ -6069,6 +6077,56 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Trayectoria RFEG (movido desde Tab 3) -->
+            <div class="chart-container">
+                <h2 id="trayectoria-rfeg">Mi Trayectoria RFEG</h2>
+                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
+                    Datos reales de 52 rondas jugadas desde Marzo 2024. Integración con Handicap Oficial RFEG.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">HCP OFICIAL RFEG</div>
+                        <div class="kpi-value color-green" style="font-size: 2.6em;"><span id="cs-hcp">23.2</span></div>
+                        <div class="kpi-sub"><span id="cs-hcp-updated">Actualizado 14/09/2025</span></div>
+                    </div>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">TOTAL RONDAS</div>
+                        <div class="kpi-value color-blue" style="font-size: 2.6em;"><span id="cs-total-rounds">52</span></div>
+                        <div class="kpi-sub"><span id="cs-date-range">Mar 2024 - Dic 2025</span></div>
+                    </div>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">MEJOR RONDA</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.6em;"><span id="cs-best-score">88</span></div>
+                        <div class="kpi-sub"><span id="cs-best-round">Marina Golf (Nov 2025)</span></div>
+                    </div>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">AVG DIFFERENTIAL</div>
+                        <div class="kpi-value color-red" style="font-size: 2.6em;"><span id="cs-avg-diff">25.5</span></div>
+                        <div class="kpi-sub">Rango: <span id="cs-diff-range">4 - 45</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolución Handicap RFEG (movido desde Tab 3) -->
+            <div class="chart-container">
+                <h3 id="evolucion-hcp-rfeg" style="color: #4A9FD8; margin-top: 40px;">Evolución Handicap Oficial RFEG</h3>
+                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
+                    Tracking oficial de tu handicap registrado en la Real Federación Española de Golf.
+                </p>
+                <canvas id="hcpEvolutionChart" style="max-height: 350px;"></canvas>
+
+                <div class="card-detail accent-green" style="margin-top: 25px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 15px;">Logro Principal: Bajada de 10 puntos</h3>
+                    <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
+                        <strong><span id="cs-hcp-start-date">Marzo 2024</span>:</strong> Iniciaste con HCP <span id="cs-hcp-initial">32.0</span><br>
+                        <strong><span id="cs-hcp-best-date">Mayo 2025</span>:</strong> Bajaste a HCP <span id="cs-hcp-best-val">21.9</span> (mejor marca histórica)<br>
+                        <strong>Actual (<span id="cs-hcp-current-date">Sep 2025</span>):</strong> HCP <span id="cs-hcp-current-val">23.2</span><br>
+                        <strong>Mejora total:</strong> <span style="color: #5ABF8F; font-size: 1.3em; font-weight: 800;"><span id="cs-hcp-mejora">-8.8</span> puntos en <span id="cs-months-tracked">18</span> meses</span>
+                    </p>
+                </div>
             </div>
 
             <!-- Score History Section -->
@@ -6694,8 +6752,6 @@
                     </h4>
 
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
-                        <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" class="quick-nav-link">• Mi Trayectoria RFEG</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-hcp-rfeg'); return false;" class="quick-nav-link">• Evolución Handicap RFEG</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" class="quick-nav-link">• Performance por Campo</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" class="quick-nav-link">• Mis Mejores Rondas</a>
                         <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" class="quick-nav-link">• Análisis de Scoring</a>
@@ -6719,56 +6775,6 @@
             <!-- Anchor para AI Course Cards (inyectado por UXWriter) -->
             <div id="ai-courses-anchor"></div>
 
-            <!-- Header con Stats Generales -->
-            <div class="chart-container">
-                <h2 id="trayectoria-rfeg">📊 Mi Trayectoria RFEG</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
-                    Datos reales de 52 rondas jugadas desde Marzo 2024. Integración con Handicap Oficial RFEG.
-                </p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <div class="kpi-card kpi-card--green">
-                        <div class="text-label">HCP OFICIAL RFEG</div>
-                        <div class="kpi-value color-green" style="font-size: 2.6em;"><span id="cs-hcp">23.2</span></div>
-                        <div class="kpi-sub"><span id="cs-hcp-updated">Actualizado 14/09/2025</span></div>
-                    </div>
-                    <div class="kpi-card kpi-card--blue">
-                        <div class="text-label">TOTAL RONDAS</div>
-                        <div class="kpi-value color-blue" style="font-size: 2.6em;"><span id="cs-total-rounds">52</span></div>
-                        <div class="kpi-sub"><span id="cs-date-range">Mar 2024 - Dic 2025</span></div>
-                    </div>
-                    <div class="kpi-card kpi-card--gold">
-                        <div class="text-label">MEJOR RONDA</div>
-                        <div class="kpi-value color-gold" style="font-size: 2.6em;"><span id="cs-best-score">88</span></div>
-                        <div class="kpi-sub"><span id="cs-best-round">Marina Golf (Nov 2025)</span></div>
-                    </div>
-                    <div class="kpi-card kpi-card--red">
-                        <div class="text-label">AVG DIFFERENTIAL</div>
-                        <div class="kpi-value color-red" style="font-size: 2.6em;"><span id="cs-avg-diff">25.5</span></div>
-                        <div class="kpi-sub">Rango: <span id="cs-diff-range">4 - 45</span></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 1. Evolución Handicap RFEG -->
-            <div class="chart-container">
-                <h3 id="evolucion-hcp-rfeg" style="color: #4A9FD8; margin-top: 40px;">Evolución Handicap Oficial RFEG</h3>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
-                    Tracking oficial de tu handicap registrado en la Real Federación Española de Golf.
-                </p>
-                <canvas id="hcpEvolutionChart" style="max-height: 350px;"></canvas>
-                
-                <div class="card-detail accent-green" style="margin-top: 25px;">
-                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 15px;">🎯 Logro Principal: Bajada de 10 puntos</h3>
-                    <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
-                        <strong><span id="cs-hcp-start-date">Marzo 2024</span>:</strong> Iniciaste con HCP <span id="cs-hcp-initial">32.0</span><br>
-                        <strong><span id="cs-hcp-best-date">Mayo 2025</span>:</strong> Bajaste a HCP <span id="cs-hcp-best-val">21.9</span> (mejor marca histórica)<br>
-                        <strong>Actual (<span id="cs-hcp-current-date">Sep 2025</span>):</strong> HCP <span id="cs-hcp-current-val">23.2</span><br>
-                        <strong>Mejora total:</strong> <span style="color: #5ABF8F; font-size: 1.3em; font-weight: 800;"><span id="cs-hcp-mejora">-8.8</span> puntos en <span id="cs-months-tracked">18</span> meses</span>
-                    </p>
-                </div>
-            </div>
-            
             <!-- 2. Performance por Campo -->
             <div class="chart-container">
                 <h2 id="performance-campo">🏌️ Performance por Campo</h2>
