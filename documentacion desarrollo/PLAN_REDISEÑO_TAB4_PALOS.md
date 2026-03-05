@@ -7,12 +7,16 @@
 - **KPI cards**: flat + `border-top: 2px solid [accent-color]` + valor `2-2.6em font-weight 900` sin text-shadow
 - **Labels**: `9px uppercase letter-spacing 1.5px color #9a9e94 font-weight 700`
 - **Inner boxes**: `rgba(255,255,255,0.03)` + `border-left: 3px solid [accent]`
-- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji robot, sin texto "IA", fondo `rgba(74,159,216,0.06)` + borde `rgba(74,159,216,0.18)`
+- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji, sin "IA"
 
 ### Quick Menu
 - Sin emojis, solo bullet point `•` + texto
 - Todas las secciones representadas en orden exacto del dashboard
-- Grid `repeat(auto-fill, minmax(280px, 1fr))`, items con fondo `rgba(255,255,255,0.03)`
+- Lista plana (sin sub-grupos), usando clase `.quick-nav-link`
+
+### Prerequisito
+> Las clases CSS utilitarias del Paso 0 (definidas en `PLAN_REDISEÑO_TAB3_CAMPOS.md`) deben estar ya implementadas.
+> Clases disponibles: `.text-label`, `.kpi-card`, `.kpi-value`, `.kpi-sub`, `.quick-nav-link`, `.ai-conclusion`, `.inner-box`
 
 ---
 
@@ -26,8 +30,8 @@
 | 2 | Análisis de Brechas | `brechas-palos` | ✅ (7645) |
 | 3 | Performance Detallado | `performance-detallado` | ✅ (7834) |
 | 4 | Distribución Direccional | `distribucion-direccional` | ✅ (7839) |
-| — | ❌ Percentiles de Distancia | `percentiles-distancia` | ✅ (7862) — **FALTA en menu** |
-| — | ❌ Datos de Trayectoria | `trajectory-data` | ✅ (7880) — **FALTA en menu** |
+| — | ❌ Percentiles de Distancia | `percentiles-distancia` | ✅ (7862) — **FALTA** |
+| — | ❌ Datos de Trayectoria | `trajectory-data` | ✅ (7880) — **FALTA** |
 | 5 | Análisis de Dispersión | `analisis-dispersion` | ✅ (7897) |
 | 6 | Análisis de Burbujas | `analisis-burbujas` | ✅ (8043) |
 | 7 | Smash Factor por Palo | `smash-factor-palo` | ✅ (8073) |
@@ -35,11 +39,11 @@
 | 9 | Matriz de Rendimiento | `matriz-rendimiento` | ✅ (8448) |
 
 ### Acciones requeridas
-- [ ] Añadir "Percentiles de Distancia" → `percentiles-distancia` (entre Distribución Direccional y Análisis de Dispersión)
-- [ ] Añadir "Datos de Trayectoria" → `trajectory-data` (entre Percentiles y Análisis de Dispersión)
+- [ ] Añadir "Percentiles de Distancia" → `percentiles-distancia`
+- [ ] Añadir "Datos de Trayectoria" → `trajectory-data`
 - [ ] Quitar emojis del quick menu → solo `•` + texto
-- [ ] Eliminar agrupación en 3 sub-grupos → lista plana en orden secuencial (patrón Tab 2)
-- [ ] Total final: 11 items en orden exacto del dashboard
+- [ ] Eliminar agrupación en 3 sub-grupos → lista plana en orden secuencial
+- [ ] Migrar inline styles a `.quick-nav-link`
 
 ### Orden correcto (11 items)
 1. Rendimiento por Palo - Distancias
@@ -56,50 +60,40 @@
 
 ---
 
-## 2. Glassmorphism — Secciones a rediseñar
+## 2. Glassmorphism — Secciones a rediseñar (usando clases CSS)
 
-Revisar cada sección y migrar al patrón glassmorphism:
-
-- [ ] **Rendimiento por Palo** — Cards carry/roll/total (cl-carry-long/mid/short)
-- [ ] **Análisis de Brechas** — Gráfico de gaps entre palos
-- [ ] **Performance Detallado** — Tabla matrix (cl-matrix-body)
-- [ ] **Distribución Direccional** — Gráficos de dispersión lateral
-- [ ] **Percentiles de Distancia** — Cards de percentiles
-- [ ] **Datos de Trayectoria** — Cards de launch angle, spin, etc.
-- [ ] **Análisis de Dispersión** — Charts por palo + summary (cl-disp-summary)
-- [ ] **Análisis de Burbujas** — Bubble cards (cl-bubble-cards) + strategy (cl-bubble-strategy)
-- [ ] **Smash Factor** — Gráfico comparativo por palo
-- [ ] **Métricas de Velocidad** — Cards ball speed / club speed
-- [ ] **Matriz de Rendimiento** — Tabla resumen general
-
-### Patrón de migración por sección
-1. Gradient backgrounds → `rgba(255,255,255,0.04)`
-2. Borders con color → `1px solid rgba(255,255,255,0.08)` + `border-top: 2px solid [accent]`
-3. Text-shadow en valores → eliminar
-4. Labels descriptivos → `9px uppercase #9a9e94`
-5. Inner boxes → `rgba(255,255,255,0.03)` con `border-left: 3px solid`
+- [ ] **Rendimiento por Palo** — Cards carry/roll/total → `.kpi-card` + `.text-label`
+- [ ] **Análisis de Brechas** — Gráfico de gaps → `.card-detail`
+- [ ] **Performance Detallado** — Tabla matrix (cl-matrix-body) → borders con tokens CSS
+- [ ] **Distribución Direccional** — Gráficos dispersión → `.card-detail`
+- [ ] **Percentiles de Distancia** — Cards percentiles → `.kpi-card`
+- [ ] **Datos de Trayectoria** — Cards launch angle/spin → `.card-detail`
+- [ ] **Análisis de Dispersión** — Charts + summary → `.inner-box`
+- [ ] **Análisis de Burbujas** — Bubble cards → `.card-detail` + `.accent-*`
+- [ ] **Smash Factor** — Gráfico comparativo → `.card-detail`
+- [ ] **Métricas de Velocidad** — Cards ball/club speed → `.kpi-card`
+- [ ] **Matriz de Rendimiento** — Tabla resumen → borders con tokens CSS
 
 ---
 
 ## 3. Conclusiones AI (UXWriter)
 
-### Secciones candidatas para conclusión AI
-- [ ] **Análisis de Dispersión** — Conclusión sobre patrones de dispersión y prioridades de mejora
-- [ ] **Matriz de Rendimiento** — Conclusión general sobre el estado de la bolsa de palos
+### Secciones candidatas
+- [ ] **Análisis de Dispersión** — Conclusión sobre patrones y prioridades de mejora
+- [ ] **Matriz de Rendimiento** — Conclusión general sobre estado de la bolsa
 
 ### Implementación
 1. Añadir keys al skill prompt: `dispersion_conclusion`, `equipment_conclusion`
 2. Añadir anchors HTML al pie de cada sección
-3. Añadir inyección JS en `insertUXContent()` con estilo azul `#4A9FD8`
+3. Inyección JS usa `class="ai-conclusion"` (no inline style)
 
 ---
 
 ## 4. Checklist final
 
-- [ ] Quick menu: 11 secciones, orden correcto, sin emojis, lista plana
-- [ ] Glassmorphism aplicado a todas las secciones
-- [ ] Conclusiones AI inyectadas y funcionales
+- [ ] Quick menu: 11 secciones, orden correcto, sin emojis, lista plana, `.quick-nav-link`
+- [ ] Glassmorphism con clases CSS (no inline)
+- [ ] Conclusiones AI con `.ai-conclusion`
 - [ ] Consola sin errores
 - [ ] Test en mobile (360px)
-- [ ] Gráficos resize correctamente al cambiar de tab
 - [ ] Tablas/matrices legibles en mobile

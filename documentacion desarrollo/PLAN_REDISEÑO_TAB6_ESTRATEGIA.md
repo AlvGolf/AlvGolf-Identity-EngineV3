@@ -7,37 +7,40 @@
 - **KPI cards**: flat + `border-top: 2px solid [accent-color]` + valor `2-2.6em font-weight 900` sin text-shadow
 - **Labels**: `9px uppercase letter-spacing 1.5px color #9a9e94 font-weight 700`
 - **Inner boxes**: `rgba(255,255,255,0.03)` + `border-left: 3px solid [accent]`
-- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji robot, sin texto "IA", fondo `rgba(74,159,216,0.06)` + borde `rgba(74,159,216,0.18)`
+- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji, sin "IA"
 
 ### Quick Menu
 - Sin emojis, solo bullet point `•` + texto
 - Todas las secciones representadas en orden exacto del dashboard
-- Lista plana (sin sub-grupos), grid `repeat(auto-fill, minmax(280px, 1fr))`
+- Lista plana (sin sub-grupos), usando clase `.quick-nav-link`
+
+### Prerequisito
+> Las clases CSS utilitarias del Paso 0 (definidas en `PLAN_REDISEÑO_TAB3_CAMPOS.md`) deben estar ya implementadas.
 
 ---
 
 ## 1. Auditoría de Quick Menu
 
-### Estado actual (9 items en 3 grupos, 8 secciones H2 + 1 sin id en h2)
+### Estado actual (9 items en 3 grupos, 9 secciones) — ✅ Cobertura 100%
 
 **Quick menu actual (9 items en 3 grupos):**
 
-Grupo 1 — Diagnóstico Estratégico (4 items):
+Grupo 1 — Diagnóstico Estratégico:
 1. Análisis DAFO Completo → `dafo-completo`
 2. Matriz DAFO Visual → `matriz-dafo`
 3. Posicionamiento vs Tour → `posicionamiento`
 4. Estrategias Derivadas → `estrategias-derivadas`
 
-Grupo 2 — Plan de Acción (4 items):
+Grupo 2 — Plan de Acción:
 5. Matriz de Priorización → `matriz-priorizacion`
 6. Optimización Técnica → `optimizacion-tecnica`
 7. Heatmap ROI por Palo → `heatmap-roi`
 8. ROI Plan Mejora → `roi-plan-mejora`
 
-Grupo 3 — Conclusión (1 item):
+Grupo 3 — Conclusión:
 9. Conclusión & Próximos Pasos → `conclusion-final`
 
-**Secciones H2 reales en el dashboard (8 + 1):**
+**Secciones H2 reales (9):**
 
 | # | ID | Título (línea) |
 |---|----|----|
@@ -51,14 +54,11 @@ Grupo 3 — Conclusión (1 item):
 | 8 | `roi-plan-mejora` | 📈 ROI del Plan de Mejora (11439) — ⚠️ id en div, NO en h2 |
 | 9 | `conclusion-final` | 🎯 Conclusión & Próximos Pasos (11491) |
 
-### Problemas detectados
-1. **`roi-plan-mejora`** — El `id` está en el `<div>` container (línea 11439), no en el `<h2>` (línea 11440). Inconsistencia estructural.
-
 ### Acciones requeridas
-- [ ] Mover `id="roi-plan-mejora"` del div al h2 para consistencia estructural
-- [ ] Eliminar agrupación en 3 sub-grupos → lista plana en orden secuencial
-- [ ] Quitar emojis del quick menu → solo `•` + texto
-- [ ] Verificar que el orden es correcto (parece serlo)
+- [ ] Fix: mover `id="roi-plan-mejora"` del div container al h2 (línea 11440)
+- [ ] Eliminar agrupación en 3 sub-grupos → lista plana
+- [ ] Quitar emojis → solo `•` + texto
+- [ ] Migrar inline styles a `.quick-nav-link`
 
 ### Orden correcto (9 items)
 1. Análisis DAFO Completo
@@ -73,47 +73,39 @@ Grupo 3 — Conclusión (1 item):
 
 ---
 
-## 2. Glassmorphism — Secciones a rediseñar
+## 2. Glassmorphism — Secciones a rediseñar (usando clases CSS)
 
-- [ ] **Análisis DAFO** — Cards de Debilidades/Amenazas/Fortalezas/Oportunidades
-- [ ] **Matriz DAFO** — Visualización 2x2 estratégica
-- [ ] **Posicionamiento** — Gráfico comparativo Tú/PGA/HCP15
-- [ ] **Estrategias Derivadas** — Cards de estrategias por cuadrante DAFO
-- [ ] **Matriz de Priorización** — Scatter plot impacto vs esfuerzo + cards
-- [ ] **Optimización Técnica** — Hoja de ruta con timeline (la más compleja)
-- [ ] **Heatmap ROI** — Heat map de acciones por palo
-- [ ] **ROI Plan de Mejora** — Cards antes/después con métricas (st-plan-metrics, st-plan-weeks, st-plan-success)
-- [ ] **Conclusión & Próximos Pasos** — Resumen final con call-to-action
-
-### Patrón de migración por sección
-1. Gradient backgrounds → `rgba(255,255,255,0.04)`
-2. Borders con color → `1px solid rgba(255,255,255,0.08)` + `border-top: 2px solid [accent]`
-3. Text-shadow en valores → eliminar
-4. Labels descriptivos → `9px uppercase #9a9e94`
-5. Inner boxes → `rgba(255,255,255,0.03)` con `border-left: 3px solid`
+- [ ] **Análisis DAFO** — Cards D/A/F/O → `.card-detail` + `.accent-*`
+- [ ] **Matriz DAFO** — Visualización 2x2 → borders con tokens CSS
+- [ ] **Posicionamiento** — Gráfico comparativo → `.card-detail`
+- [ ] **Estrategias Derivadas** — Cards por cuadrante → `.card-detail` + `.inner-box`
+- [ ] **Matriz de Priorización** — Scatter plot + cards → `.kpi-card` + `.card-detail`
+- [ ] **Optimización Técnica** — Hoja de ruta timeline (la más compleja) → `.card-detail` + `.inner-box`
+- [ ] **Heatmap ROI** — Heat map acciones → `.card-detail`
+- [ ] **ROI Plan de Mejora** — Cards antes/después → `.kpi-card` + `.text-label`
+- [ ] **Conclusión & Próximos Pasos** — Resumen final → `.card-detail` + `.inner-box`
 
 ---
 
 ## 3. Conclusiones AI (UXWriter)
 
-### Secciones candidatas para conclusión AI
+### Secciones candidatas
 - [ ] **Análisis DAFO** — Conclusión síntesis del DAFO y prioridad estratégica
-- [ ] **Conclusión Final** — Ya existe como sección completa; valorar si necesita AI adicional o si el contenido actual es suficiente
+- [ ] **Conclusión Final** — Ya existe como sección completa; valorar si necesita AI adicional
 
 ### Implementación
-1. Añadir key al skill prompt: `dafo_conclusion`
+1. Añadir key: `dafo_conclusion`
 2. Añadir anchor HTML al pie de la sección DAFO
-3. Añadir inyección JS en `insertUXContent()` con estilo azul `#4A9FD8`
+3. Inyección JS con `class="ai-conclusion"`
 
 ---
 
 ## 4. Checklist final
 
-- [ ] Quick menu: 9 secciones, orden correcto, sin emojis, lista plana
-- [ ] Fix estructural: id de `roi-plan-mejora` en h2
-- [ ] Glassmorphism aplicado a todas las secciones
-- [ ] Conclusiones AI inyectadas y funcionales
+- [ ] Quick menu: 9 secciones, orden correcto, sin emojis, lista plana, `.quick-nav-link`
+- [ ] Fix: id `roi-plan-mejora` movido al h2
+- [ ] Glassmorphism con clases CSS (no inline)
+- [ ] Conclusión AI con `.ai-conclusion`
 - [ ] Consola sin errores
 - [ ] Test en mobile (360px)
-- [ ] Gráficos resize correctamente al cambiar de tab
-- [ ] Sección Optimización Técnica legible en mobile (es la más densa)
+- [ ] Sección Optimización Técnica legible en mobile (la más densa)

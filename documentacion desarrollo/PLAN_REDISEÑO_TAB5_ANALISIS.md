@@ -7,20 +7,23 @@
 - **KPI cards**: flat + `border-top: 2px solid [accent-color]` + valor `2-2.6em font-weight 900` sin text-shadow
 - **Labels**: `9px uppercase letter-spacing 1.5px color #9a9e94 font-weight 700`
 - **Inner boxes**: `rgba(255,255,255,0.03)` + `border-left: 3px solid [accent]`
-- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji robot, sin texto "IA", fondo `rgba(74,159,216,0.06)` + borde `rgba(74,159,216,0.18)`
+- **Conclusiones AI**: `"Conclusión:"` en azul `#4A9FD8`, sin emoji, sin "IA"
 
 ### Quick Menu
 - Sin emojis, solo bullet point `•` + texto
 - Todas las secciones representadas en orden exacto del dashboard
-- Lista plana (sin sub-grupos), grid `repeat(auto-fill, minmax(280px, 1fr))`
+- Lista plana (sin sub-grupos), usando clase `.quick-nav-link`
+
+### Prerequisito
+> Las clases CSS utilitarias del Paso 0 (definidas en `PLAN_REDISEÑO_TAB3_CAMPOS.md`) deben estar ya implementadas.
 
 ---
 
 ## 1. Auditoría de Quick Menu
 
-### Estado actual (16 items en 2 grupos, 14 secciones) — ⚠️ Discrepancias
+### Estado actual (16 items en 2 grupos, 14 secciones) — ⚠️ Discrepancias graves
 
-**Quick menu actual (16 items en 2 grupos):**
+**Quick menu actual (16 items):**
 
 Grupo 1 — Análisis Avanzado (10 items):
 1. Shot Zones → `shot-zones`
@@ -30,9 +33,9 @@ Grupo 1 — Análisis Avanzado (10 items):
 5. Game Plan Simulator → `game-plan-simulator`
 6. Swing DNA → `swing-dna`
 7. Quick Wins Calculator → `quick-wins`
-8. Launch Metrics → `launch-metrics` ⚠️
-9. Dispersion Analysis → `dispersion-analysis` ⚠️
-10. Consistency Benchmarks → `consistency-benchmarks` ⚠️
+8. Launch Metrics → `launch-metrics` ⚠️ **FANTASMA — no existe como h2 en Tab 5**
+9. Dispersion Analysis → `dispersion-analysis` ⚠️ **FANTASMA — es `analisis-dispersion` de Tab 4**
+10. Consistency Benchmarks → `consistency-benchmarks` ⚠️ **VERIFICAR si existe**
 
 Grupo 2 — vs PGA Tour (6 items):
 11. Distancias Comparativa → `distancias-comparativa`
@@ -42,11 +45,11 @@ Grupo 2 — vs PGA Tour (6 items):
 15. 8 Competencias vs Tour → `comparativa-8-competencias`
 16. Zonas de Confort → `zonas-confort`
 
-**Secciones H2 reales en el dashboard (14):**
+**Secciones H2 reales (14):**
 
 | # | ID | Título (línea) |
 |---|----|----|
-| 1 | `learning-curve` | 📈 Curvas de Aprendizaje (8814) |
+| 1 | `learning-curve` | 📈 Curvas de Aprendizaje (8814) — **FALTA en menu** |
 | 2 | `shot-zones` | 🎯 Shot Zones (8910) |
 | 3 | `probabilidad-par-birdie` | 🎲 Probabilidad Par/Birdie (9002) |
 | 4 | `tempo-rhythm` | ⏱️ Tempo & Rhythm (9040) |
@@ -61,20 +64,15 @@ Grupo 2 — vs PGA Tour (6 items):
 | 13 | `comparativa-8-competencias` | ⚔️ 8 Competencias vs PGA (9568) |
 | 14 | `zonas-confort` | 🗺️ Zonas de Confort (9648) |
 
-### Problemas detectados
-1. **`learning-curve` (Curvas de Aprendizaje)** — Sección existe en dashboard pero **NO está en quick menu**
-2. **`launch-metrics`** — Está en quick menu pero **NO existe como h2 en Tab 5** (puede ser sección de otro tab o ID fantasma)
-3. **`dispersion-analysis`** — Está en quick menu pero **NO existe como h2 en Tab 5** (es `analisis-dispersion` en Tab 4)
-4. **`consistency-benchmarks`** — Está en quick menu pero **verificar si existe como h2 en Tab 5**
-
 ### Acciones requeridas
-- [ ] Verificar si `launch-metrics`, `dispersion-analysis`, `consistency-benchmarks` existen como secciones en Tab 5 (pueden tener id en div pero no en h2)
+- [ ] Verificar `launch-metrics`, `dispersion-analysis`, `consistency-benchmarks` — si no existen como secciones en Tab 5, eliminar del menu
 - [ ] Añadir "Curvas de Aprendizaje" → `learning-curve` como primer item
-- [ ] Eliminar items fantasma que no corresponden a secciones de Tab 5
-- [ ] Eliminar agrupación en 2 sub-grupos → lista plana en orden secuencial
-- [ ] Quitar emojis del quick menu → solo `•` + texto
+- [ ] Eliminar items fantasma
+- [ ] Eliminar agrupación en 2 sub-grupos → lista plana
+- [ ] Quitar emojis → solo `•` + texto
+- [ ] Migrar inline styles a `.quick-nav-link`
 
-### Orden correcto propuesto (14 items o ajustar según verificación)
+### Orden correcto propuesto (14 items, ajustar según verificación)
 1. Curvas de Aprendizaje
 2. Shot Zones - Mapa de Calor
 3. Probabilidad de Par/Birdie
@@ -92,51 +90,43 @@ Grupo 2 — vs PGA Tour (6 items):
 
 ---
 
-## 2. Glassmorphism — Secciones a rediseñar
+## 2. Glassmorphism — Secciones a rediseñar (usando clases CSS)
 
-- [ ] **Curvas de Aprendizaje** — Gráfico de learning curves
-- [ ] **Shot Zones** — Mapa de calor del campo
-- [ ] **Probabilidad Par/Birdie** — Gráfico por distancia
-- [ ] **Tempo & Rhythm** — Cards de análisis de tempo
-- [ ] **Strokes Gained** — Cards SG por categoría + gráfico
-- [ ] **Game Plan Simulator** — Interfaz del simulador
-- [ ] **Swing DNA** — Visualización de fingerprint
-- [ ] **Quick Wins Calculator** — Matriz esfuerzo vs impacto
-- [ ] **Distancias Comparativa** — Triple comparativa (Tú/HCP15/PGA)
-- [ ] **Dispersión Comparativa** — Comparativa por categoría
-- [ ] **Análisis de Pérdidas (Waterfall)** — Gráfico waterfall
-- [ ] **Radar de Dimensiones** — Radar 360° con toggles
-- [ ] **8 Competencias** — Cards comparativas vs PGA
-- [ ] **Zonas de Confort** — Heat map de distancias
-
-### Patrón de migración por sección
-1. Gradient backgrounds → `rgba(255,255,255,0.04)`
-2. Borders con color → `1px solid rgba(255,255,255,0.08)` + `border-top: 2px solid [accent]`
-3. Text-shadow en valores → eliminar
-4. Labels descriptivos → `9px uppercase #9a9e94`
-5. Inner boxes → `rgba(255,255,255,0.03)` con `border-left: 3px solid`
+- [ ] **Curvas de Aprendizaje** — Gráfico → `.card-detail`
+- [ ] **Shot Zones** — Mapa de calor → `.card-detail`
+- [ ] **Probabilidad Par/Birdie** — Gráfico por distancia → `.card-detail`
+- [ ] **Tempo & Rhythm** — Cards de análisis → `.kpi-card` + `.text-label`
+- [ ] **Strokes Gained** — Cards SG por categoría + gráfico → `.kpi-card` + `.inner-box`
+- [ ] **Game Plan Simulator** — Interfaz simulador → `.card-detail`
+- [ ] **Swing DNA** — Visualización fingerprint → `.card-detail`
+- [ ] **Quick Wins Calculator** — Matriz esfuerzo vs impacto → `.card-detail` + `.accent-*`
+- [ ] **Distancias Comparativa** — Triple (Tú/HCP15/PGA) → `.kpi-card`
+- [ ] **Dispersión Comparativa** — Por categoría → `.card-detail`
+- [ ] **Análisis de Pérdidas (Waterfall)** — Gráfico → `.card-detail`
+- [ ] **Radar de Dimensiones** — Radar 360° con toggles → `.card-detail`
+- [ ] **8 Competencias** — Cards comparativas → `.kpi-card` + `.inner-box`
+- [ ] **Zonas de Confort** — Heat map → `.card-detail`
 
 ---
 
 ## 3. Conclusiones AI (UXWriter)
 
-### Secciones candidatas para conclusión AI
+### Secciones candidatas
 - [ ] **Strokes Gained** — Conclusión sobre dónde se ganan/pierden golpes vs benchmark
-- [ ] **Zonas de Confort** — Conclusión sobre zonas fuertes/débiles y estrategia derivada
+- [ ] **Zonas de Confort** — Conclusión sobre zonas fuertes/débiles y estrategia
 
 ### Implementación
-1. Añadir keys al skill prompt: `strokes_gained_conclusion`, `comfort_zones_conclusion`
+1. Añadir keys: `strokes_gained_conclusion`, `comfort_zones_conclusion`
 2. Añadir anchors HTML al pie de cada sección
-3. Añadir inyección JS en `insertUXContent()` con estilo azul `#4A9FD8`
+3. Inyección JS con `class="ai-conclusion"`
 
 ---
 
 ## 4. Checklist final
 
-- [ ] Quick menu: todas las secciones reales, orden correcto, sin emojis, lista plana
-- [ ] Items fantasma eliminados del quick menu
-- [ ] Glassmorphism aplicado a todas las secciones
-- [ ] Conclusiones AI inyectadas y funcionales
+- [ ] Quick menu: secciones reales, orden correcto, sin emojis, lista plana, `.quick-nav-link`
+- [ ] Items fantasma eliminados
+- [ ] Glassmorphism con clases CSS (no inline)
+- [ ] Conclusiones AI con `.ai-conclusion`
 - [ ] Consola sin errores
 - [ ] Test en mobile (360px)
-- [ ] Gráficos resize correctamente al cambiar de tab
