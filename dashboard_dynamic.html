@@ -453,9 +453,9 @@
                 const anchor = document.getElementById('ai-quarterly-conclusion');
                 if (anchor) {
                     anchor.innerHTML = `
-                        <div style="margin-top: 14px; padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
-                            <strong style="color: #4A9FD8;">Conclusión:</strong>
-                            <span style="color: rgba(255,255,255,0.85); line-height: 1.7;"> ${content.quarterly_conclusion}</span>
+                        <div class="ai-conclusion">
+                            <strong>Conclusión:</strong>
+                            <span> ${content.quarterly_conclusion}</span>
                         </div>
                     `;
                     console.log('  ✓ Inserted quarterly conclusion');
@@ -467,9 +467,9 @@
                 const anchor = document.getElementById('ai-volatility-conclusion');
                 if (anchor) {
                     anchor.innerHTML = `
-                        <div style="margin-top: 14px; padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
-                            <strong style="color: #4A9FD8;">Conclusión:</strong>
-                            <span style="color: rgba(255,255,255,0.85); line-height: 1.7;"> ${content.volatility_conclusion}</span>
+                        <div class="ai-conclusion">
+                            <strong>Conclusión:</strong>
+                            <span> ${content.volatility_conclusion}</span>
                         </div>
                     `;
                     console.log('  ✓ Inserted volatility conclusion');
@@ -4354,9 +4354,9 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px;">
                     <!-- KPI 1: HCP Actual -->
                     <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; border-top: 2px solid #5ABF8F;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">HANDICAP OFICIAL</div>
+                        <div class="text-label">HANDICAP OFICIAL</div>
                         <div style="font-size: 2.6em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;"><span id="ps-hcp">23.2</span></div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">RFEG - <span id="ps-hcp-date">Sept 2025</span></div>
+                        <div class="kpi-sub">RFEG - <span id="ps-hcp-date">Sept 2025</span></div>
                         <div style="display: inline-block; margin-top: 8px; padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; font-size: 0.78em;">
                             <strong style="color: #5ABF8F;"><span id="ps-improvement">-8.8</span></strong> en 18 meses
                         </div>
@@ -4364,9 +4364,9 @@
                     
                     <!-- KPI 2: Mejor Ronda -->
                     <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; border-top: 2px solid #D4B55A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">RÉCORD PERSONAL</div>
+                        <div class="text-label">RÉCORD PERSONAL</div>
                         <div style="font-size: 2.6em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;"><span id="ps-best-score">88</span></div>
-                        <div style="font-size: 0.82em; color: #9a9e94;"><span id="ps-best-course">Marina Golf</span></div>
+                        <div class="kpi-sub"><span id="ps-best-course">Marina Golf</span></div>
                         <div style="display: inline-block; margin-top: 8px; padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; font-size: 0.78em;">
                             <strong style="color: #D4B55A;"><span id="ps-best-date">16 Nov 2025</span></strong> · Diff <span id="ps-best-diff">17</span>
                         </div>
@@ -4374,9 +4374,9 @@
                     
                     <!-- KPI 3: Total Rondas -->
                     <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; border-top: 2px solid #4A9FD8;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">EXPERIENCIA</div>
+                        <div class="text-label">EXPERIENCIA</div>
                         <div style="font-size: 2.6em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;"><span id="ps-total-rounds">52</span></div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Rondas Registradas</div>
+                        <div class="kpi-sub">Rondas Registradas</div>
                         <div style="display: inline-block; margin-top: 8px; padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; font-size: 0.78em;">
                             <strong style="color: #4A9FD8;"><span id="ps-first-date">Mar 2024</span></strong> - <span id="ps-last-date">Dic 2025</span>
                         </div>
@@ -4384,9 +4384,9 @@
                     
                     <!-- KPI 4: Mejora Anual -->
                     <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; border-top: 2px solid #4fc3a1;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">VELOCIDAD</div>
+                        <div class="text-label">VELOCIDAD</div>
                         <div style="font-size: 2.6em; font-weight: 900; color: #4fc3a1; line-height: 1; margin-bottom: 6px;">1.8x</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">vs Jugador Promedio</div>
+                        <div class="kpi-sub">vs Jugador Promedio</div>
                         <div style="display: inline-block; margin-top: 8px; padding: 4px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; font-size: 0.78em;">
                             Aprendes <strong style="color: #4fc3a1;">RÁPIDO</strong>
                         </div>
@@ -4839,6 +4839,7 @@
     --card-bg-3: rgba(255,255,255, 0.04);
     --card-bg-4: rgba(255,255,255, 0.03);
     --card-border: rgba(255,255,255, 0.10);
+    --card-border-md: rgba(255,255,255, 0.08);
     --card-border-subtle: rgba(255,255,255, 0.06);
     --radius-lg: 14px;
     --radius-md: 10px;
@@ -4955,6 +4956,100 @@
 }
 @media (max-width: 480px) {
     .card-section { padding: 14px 10px; }
+}
+
+/* ── Utility Classes — Paso 0 Refactoring ────────────────── */
+
+/* Labels uppercase minimalistas */
+.text-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9a9e94;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* KPI card base (glassmorphism flat) */
+.kpi-card {
+    background: var(--card-bg-3);
+    padding: 22px 18px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    border: 1px solid var(--card-border-md);
+}
+.kpi-card--blue  { border-top: 2px solid #4A9FD8; }
+.kpi-card--green { border-top: 2px solid #5ABF8F; }
+.kpi-card--gold  { border-top: 2px solid #D4B55A; }
+.kpi-card--red   { border-top: 2px solid #E88B7A; }
+
+/* KPI value (numero grande) */
+.kpi-value {
+    font-size: 2em;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+/* KPI subtitle */
+.kpi-sub {
+    font-size: 0.82em;
+    color: #9a9e94;
+}
+
+/* Quick nav link */
+.quick-nav-link {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--card-bg-4);
+    border: 1px solid var(--card-border-subtle);
+    transition: all 0.2s ease;
+    display: block;
+    font-size: 0.88em;
+}
+.quick-nav-link:hover {
+    background: var(--card-bg-2);
+    color: rgba(255,255,255,0.95);
+}
+
+/* AI Conclusion box */
+.ai-conclusion {
+    margin-top: 14px;
+    padding: 18px;
+    background: rgba(74,159,216,0.06);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(74,159,216,0.18);
+}
+.ai-conclusion strong {
+    color: #4A9FD8;
+}
+.ai-conclusion span {
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+}
+
+/* Inner box with accent left border */
+.inner-box {
+    background: var(--card-bg-4);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+.inner-box--blue  { border-left: 3px solid #4A9FD8; }
+.inner-box--green { border-left: 3px solid #5ABF8F; }
+.inner-box--gold  { border-left: 3px solid #D4B55A; }
+.inner-box--red   { border-left: 3px solid #E88B7A; }
+
+/* Utility responsive */
+@media (max-width: 768px) {
+    .kpi-card { padding: 16px 12px; }
+    .kpi-value { font-size: 1.6em; }
+}
+@media (max-width: 480px) {
+    .kpi-card { padding: 12px 8px; }
+    .kpi-value { font-size: 1.4em; }
+    .quick-nav-link { padding: 8px 10px; font-size: 0.82em; }
 }
 </style>
 
@@ -5920,55 +6015,55 @@
                                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                                gap: 10px;">
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" class="quick-nav-link">
                             • Historial de Scores (<span id="ev-nav-rounds">52</span> rondas)
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('best-worst-rounds'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('best-worst-rounds'); return false;" class="quick-nav-link">
                             • Mejores y Peores Rondas
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('quarterly-scoring'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('quarterly-scoring'); return false;" class="quick-nav-link">
                             • Performance por Trimestre
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('monthly-volatility'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('monthly-volatility'); return false;" class="quick-nav-link">
                             • Volatilidad Mensual
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('momentum-indicators'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('momentum-indicators'); return false;" class="quick-nav-link">
                             • Indicadores de Momentum
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" class="quick-nav-link">
                             • Evolución Long Game
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" class="quick-nav-link">
                             • Evolución Irons 5-9
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" class="quick-nav-link">
                             • Evolución Wedges
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" class="quick-nav-link">
                             • Tendencia Attack Angle
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" class="quick-nav-link">
                             • Evolución Smash Factor
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" class="quick-nav-link">
                             • Proyección Score & Consistencia
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" class="quick-nav-link">
                             • Progresión de Consistencia
                         </a>
 
-                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" style="color: rgba(255,255,255,0.75); text-decoration: none; padding: 10px 14px; border-radius: 8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; display: block; font-size: 0.88em;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" class="quick-nav-link">
                             • Comparativa de Mejora
                         </a>
                     </div>
@@ -5985,28 +6080,28 @@
 
                 <!-- Stats Cards (KPI glassmorphism) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJOR SCORE</div>
-                        <div id="bestScoreValue" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="bestScoreDate" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">MEJOR SCORE</div>
+                        <div id="bestScoreValue" class="kpi-value color-blue">--</div>
+                        <div id="bestScoreDate" class="kpi-sub">--</div>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SCORE PROMEDIO</div>
-                        <div id="avgScoreValue" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas <span id="ev-stat-rounds">52</span> rondas</div>
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">SCORE PROMEDIO</div>
+                        <div id="avgScoreValue" class="kpi-value color-green">--</div>
+                        <div class="kpi-sub">Últimas <span id="ev-stat-rounds">52</span> rondas</div>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TENDENCIA</div>
-                        <div id="trendValue" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="trendText" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">TENDENCIA</div>
+                        <div id="trendValue" class="kpi-value color-gold">--</div>
+                        <div id="trendText" class="kpi-sub">--</div>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TOTAL RONDAS</div>
-                        <div id="totalRoundsValue" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;"><span id="ev-stat-months">18</span> meses de datos</div>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">TOTAL RONDAS</div>
+                        <div id="totalRoundsValue" class="kpi-value color-red">--</div>
+                        <div class="kpi-sub"><span id="ev-stat-months">18</span> meses de datos</div>
                     </div>
                 </div>
 
@@ -6062,25 +6157,25 @@
 
                 <!-- Summary Cards (KPI glassmorphism) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJOR TRIMESTRE</div>
-                        <div id="bestQuarter" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="bestQuarterScore" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">MEJOR TRIMESTRE</div>
+                        <div id="bestQuarter" class="kpi-value color-blue">--</div>
+                        <div id="bestQuarterScore" class="kpi-sub">--</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">PEOR TRIMESTRE</div>
-                        <div id="worstQuarter" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="worstQuarterScore" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">PEOR TRIMESTRE</div>
+                        <div id="worstQuarter" class="kpi-value color-red">--</div>
+                        <div id="worstQuarterScore" class="kpi-sub">--</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MEJORA TOTAL</div>
-                        <div id="totalImprovement" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Último vs Primero</div>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">MEJORA TOTAL</div>
+                        <div id="totalImprovement" class="kpi-value color-gold">--</div>
+                        <div class="kpi-sub">Último vs Primero</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TRIMESTRES JUGADOS</div>
-                        <div id="totalQuarters" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="totalQuarterRounds" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">TRIMESTRES JUGADOS</div>
+                        <div id="totalQuarters" class="kpi-value color-green">--</div>
+                        <div id="totalQuarterRounds" class="kpi-sub">--</div>
                     </div>
                 </div>
 
@@ -6107,25 +6202,25 @@
 
                 <!-- Summary Cards (KPI glassmorphism) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MES MÁS CONSISTENTE</div>
-                        <div id="mostConsistentMonth" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="mostConsistentCV" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">MES MÁS CONSISTENTE</div>
+                        <div id="mostConsistentMonth" class="kpi-value color-green">--</div>
+                        <div id="mostConsistentCV" class="kpi-sub">--</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MES MÁS VOLÁTIL</div>
-                        <div id="mostVolatileMonth" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="mostVolatileCV" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">MES MÁS VOLÁTIL</div>
+                        <div id="mostVolatileMonth" class="kpi-value color-red">--</div>
+                        <div id="mostVolatileCV" class="kpi-sub">--</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">CV PROMEDIO</div>
-                        <div id="avgCV" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Coeficiente Variación</div>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">CV PROMEDIO</div>
+                        <div id="avgCV" class="kpi-value color-blue">--</div>
+                        <div class="kpi-sub">Coeficiente Variación</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MESES ANALIZADOS</div>
-                        <div id="totalMonths" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="totalMonthRounds" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">MESES ANALIZADOS</div>
+                        <div id="totalMonths" class="kpi-value color-gold">--</div>
+                        <div id="totalMonthRounds" class="kpi-sub">--</div>
                     </div>
                 </div>
 
@@ -6147,25 +6242,25 @@
 
                 <!-- Summary Cards (KPI glassmorphism) -->
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #4A9FD8;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">TENDENCIA ACTUAL</div>
-                        <div id="currentTrend" style="font-size: 2em; font-weight: 900; color: #4A9FD8; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div id="currentTrendDesc" style="font-size: 0.82em; color: #9a9e94;">--</div>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">TENDENCIA ACTUAL</div>
+                        <div id="currentTrend" class="kpi-value color-blue">--</div>
+                        <div id="currentTrendDesc" class="kpi-sub">--</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #5ABF8F;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SMA-5 ACTUAL</div>
-                        <div id="currentSMA5" style="font-size: 2em; font-weight: 900; color: #5ABF8F; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas 5 rondas</div>
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">SMA-5 ACTUAL</div>
+                        <div id="currentSMA5" class="kpi-value color-green">--</div>
+                        <div class="kpi-sub">Últimas 5 rondas</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #D4B55A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">SMA-10 ACTUAL</div>
-                        <div id="currentSMA10" style="font-size: 2em; font-weight: 900; color: #D4B55A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">Últimas 10 rondas</div>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">SMA-10 ACTUAL</div>
+                        <div id="currentSMA10" class="kpi-value color-gold">--</div>
+                        <div class="kpi-sub">Últimas 10 rondas</div>
                     </div>
-                    <div style="background: rgba(255,255,255,0.04); padding: 22px 18px; border-radius: 8px; text-align: center; border: 1px solid rgba(255,255,255,0.08); border-top: 2px solid #E88B7A;">
-                        <div style="font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #9a9e94; font-weight: 700; margin-bottom: 10px;">MOMENTUM</div>
-                        <div id="currentMomentum" style="font-size: 2em; font-weight: 900; color: #E88B7A; line-height: 1; margin-bottom: 6px;">--</div>
-                        <div style="font-size: 0.82em; color: #9a9e94;">SMA5 - SMA10</div>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">MOMENTUM</div>
+                        <div id="currentMomentum" class="kpi-value color-red">--</div>
+                        <div class="kpi-sub">SMA5 - SMA10</div>
                     </div>
                 </div>
 
@@ -6182,20 +6277,20 @@
                 <h2>📈 Evolución Long Game - Driver, 3W, Hybrid (18 meses)</h2>
                 <canvas id="temporalChart"></canvas>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">🏌️ Driver:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Crecimiento exponencial inicial alcanza plateau <span id="ev-lg-driver-peak">243</span>m (Jun 2025). Ligera disminución actual (<span id="ev-lg-driver-dist">231</span>m) es recuperable con ajustes attack angle identificados. Ganancia +15m promedio en 18 meses.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                    <div class="card-detail accent-blue" style="padding: 18px;">
                         <strong style="color: #4A9FD8;">🪵 3 Wood:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora gradual sostenida de 195m a <span id="ev-lg-3w-dist">210.5</span>m (+15.5m, +7.9%). Más estable que driver pero con smash factor mejorable (1.483 → 1.50 potencial). Sample size bajo (19 golpes) requiere más data.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                    <div class="card-detail accent-gold" style="padding: 18px;">
                         <strong style="color: #D4B55A;">⚡ Hybrid:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Progreso consistente y lineal 160m a <span id="ev-lg-hybrid-dist">170.3</span>m (+10.3m, +6.4%). Control direccional superior (50% neutral) vs maderas. Palo más confiable del long game - base para añadir 5W.</p>
                     </div>
                 </div>
-                <div style="margin-top: 14px; padding: 18px; background: rgba(232,139,122,0.06); border-radius: 10px; border: 1px solid rgba(232,139,122,0.18);">
+                <div class="card-detail accent-red" style="margin-top: 14px; padding: 18px;">
                     <strong style="color: #E88B7A;">⚠️ Brecha Crítica Visualizada:</strong> El gap 3W (<span id="ev-lg-3w-gap">210.5</span>m) → Hybrid (<span id="ev-lg-hybrid-gap">170.3</span>m) = <span id="ev-lg-gap-size">40.2</span>m es visible en el gráfico. Esta zona muerta 170-210m requiere 5W (rango 180-190m ideal) para cerrar brecha.
                 </div>
             </div>
@@ -6205,25 +6300,25 @@
                 <h2 id="evolucion-irons">🎯 Evolución Irons 5-9 (18 meses)</h2>
                 <canvas id="ironsEvolutionChart"></canvas>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">⛳ 5-Iron:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida de 138m a <span id="ev-ir-5i-dist">148</span>m (+10m, +7.2%). Dispersión consistente ~12-14m. Control direccional estable con 45% neutral. Palo confiable para approach largo - mantener en bag.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">⛳ 6-Iron:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★ EXCELENCIA: Progreso excepcional 130m a <span id="ev-ir-6i-dist">140.5</span>m (+10.5m, +8.1%). <strong style="color: #D4B55A;">Dispersión <11m = nivel tour-caliber</strong>. Tu hierro más confiable - referencia técnica para otros palos.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                    <div class="card-detail accent-blue" style="padding: 18px;">
                         <strong style="color: #4A9FD8;">⛳ 7-Iron:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora moderada 126m a <span id="ev-ir-7i-dist">136.6</span>m (+10.6m, +8.4%). Dispersión aceptable ~13-15m. Mayor variabilidad vs 6-iron pero dentro de rango amateur avanzado. Palo de trabajo fiable.</p>
                     </div>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 14px;">
-                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                    <div class="card-detail accent-blue" style="padding: 18px;">
                         <strong style="color: #4A9FD8;">⛳ 8-Iron:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Progreso constante 120m a <span id="ev-ir-8i-dist">130.9</span>m (+10.9m, +9.1%). Dispersión ~14m controlada. Smash factor 1.32-1.34 óptimo. Palo scoring position - excelente para approach a green.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                    <div class="card-detail accent-gold" style="padding: 18px;">
                         <strong style="color: #D4B55A;">⛳ 9-Iron:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora robusta 108m a <span id="ev-ir-9i-dist">118.3</span>m (+10.3m, +9.5%). Transición perfecta a wedges. Spin alto controlado (6500+ rpm). Palo de precisión para greens pequeños - dominio técnico evidente.</p>
                     </div>
@@ -6240,15 +6335,15 @@
                 <h2 id="evolucion-wedges">⭐ Evolución Wedges PW/GW/SW (18 meses)</h2>
                 <canvas id="wedgesEvolutionChart"></canvas>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 20px;">
-                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                    <div class="card-detail accent-gold" style="padding: 18px;">
                         <strong style="color: #D4B55A;">🎯 Pitching Wedge (PW):</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida 88m a <span id="ev-wg-pw-dist">95.6</span>m (+7.6m, +8.6%). Dispersión ~5-7m excelente. Spin 7500-8000 rpm controlado. Transición perfecta desde 9-iron. Palo scoring confiable para approach 90-100m.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">🎯 Gap Wedge (GW):</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★ TOUR-LEVEL: Progreso 74m a <span id="ev-wg-gw-dist">80.9</span>m (+6.9m, +9.3%). <strong style="color: #D4B55A;">Dispersión <4m = precisión tour-caliber</strong>. Spin 8500+ rpm. Control distancia excepcional - arma letal 75-85m. Tu wedge más consistente.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">🎯 Sand Wedge (SW):</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">★★ ÉLITE: Mejora 58m a <span id="ev-wg-sw-dist">64.7</span>m (+6.7m, +11.6%). <strong style="color: #D4B55A;">Dispersión <3.5m = top 10% amateur</strong>. Spin máximo 9000+ rpm. Versatilidad bunker/rough excepcional. Arma confiable absoluta.</p>
                     </div>
@@ -6328,7 +6423,7 @@
                             </div>
                         </div>
 
-                        <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                        <div class="card-detail accent-gold" style="padding: 18px;">
                             <h4 style="color: #D4B55A; margin: 0 0 10px 0;">💡 Recomendación Técnica</h4>
                             <p style="margin: 0; line-height: 1.7;">
                                 <strong>Corrección #1:</strong> Aumenta tilt de columna 5-8° hacia derecha al address<br>
@@ -6406,7 +6501,7 @@
                         </p>
                     </div>
 
-                    <div style="padding: 18px; background: rgba(74,159,216,0.06); border-radius: 10px; border: 1px solid rgba(74,159,216,0.18);">
+                    <div class="card-detail accent-blue" style="padding: 18px;">
                         <h4 style="color: #4A9FD8; margin: 0 0 10px 0;">💡 Plan de Optimización</h4>
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
                             <div style="padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;">
@@ -6515,11 +6610,11 @@
                         <strong style="color: #E88B7A;">🪵 Long Game:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora moderada (<span id="ev-imp-long">+12.4%</span>) pero con plateau reciente. Requiere intervención técnica urgente.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(212,181,90,0.06); border-radius: 10px; border: 1px solid rgba(212,181,90,0.18);">
+                    <div class="card-detail accent-gold" style="padding: 18px;">
                         <strong style="color: #D4B55A;">⛳ Mid Game:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora sólida (<span id="ev-imp-mid">+18.4%</span>) con tendencia positiva sostenida. Base confiable establecida.</p>
                     </div>
-                    <div style="padding: 18px; background: rgba(90,191,143,0.06); border-radius: 10px; border: 1px solid rgba(90,191,143,0.18);">
+                    <div class="card-detail accent-green" style="padding: 18px;">
                         <strong style="color: #5ABF8F;">🎯 Short Game:</strong>
                         <p style="margin-top: 8px; font-size: 0.92em; line-height: 1.6;">Mejora extraordinaria (<span id="ev-imp-short">+36.6%</span>) muy por encima de nivel tour. Fortaleza dominante - no alterar.</p>
                     </div>
@@ -6587,139 +6682,38 @@
             </div>
 
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(90,191,143,0.08) 0%, rgba(74,159,216,0.08) 100%);
-                        border: 2px solid rgba(90,191,143,0.25);
-                        border-radius: 15px;
-                        padding: 30px;
-                        margin-bottom: 40px;
-                        box-shadow: 0 8px 32px rgba(90,191,143,0.15);">
-                
-                
-                <div style="padding: 20px; 
-                           background: rgba(90,191,143,0.05); 
-                           border-radius: 10px;
-                           border-left: 4px solid #5ABF8F;">
-                    
-                    <h4 style="color: #5ABF8F; 
-                              margin: 0 0 15px 0; 
-                              font-size: 1.15em;">
-                        📈 Mis campos
+            <div class="quick-nav-header" style="background: rgba(255,255,255,0.04);
+                        border: 1px solid rgba(255,255,255,0.08);
+                        border-radius: 14px;
+                        padding: 24px;
+                        margin-bottom: 32px;">
+
+                <div style="margin-bottom: 0;">
+                    <h4 style="color: #5ABF8F; margin: 0 0 16px 0; font-size: 1em; font-weight: 700;">
+                        Mis Campos
                     </h4>
-                    
-                    <div style="display: grid; 
-                               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-                               gap: 10px;">
-                        
-                                                <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                       text-decoration: none; 
-                                                       padding: 10px 15px; 
-                                                       border-radius: 8px; 
-                                                       background: rgba(90,191,143,0.08);
-                                                       transition: all 0.3s ease;
-                                                       display: block;
-                                                       border-left: 3px solid transparent;
-                                                       font-size: 0.95em;">
-                            • Mi Trayectoria RFEG
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                            text-decoration: none; 
-                                                            padding: 10px 15px; 
-                                                            border-radius: 8px; 
-                                                            background: rgba(90,191,143,0.08);
-                                                            transition: all 0.3s ease;
-                                                            display: block;
-                                                            border-left: 3px solid transparent;
-                                                            font-size: 0.95em;">
-                            • Performance por Campo
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                     text-decoration: none; 
-                                                     padding: 10px 15px; 
-                                                     border-radius: 8px; 
-                                                     background: rgba(90,191,143,0.08);
-                                                     transition: all 0.3s ease;
-                                                     display: block;
-                                                     border-left: 3px solid transparent;
-                                                     font-size: 0.95em;">
-                            • Mis Mejores Rondas
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                             text-decoration: none; 
-                                                             padding: 10px 15px; 
-                                                             border-radius: 8px; 
-                                                             background: rgba(90,191,143,0.08);
-                                                             transition: all 0.3s ease;
-                                                             display: block;
-                                                             border-left: 3px solid transparent;
-                                                             font-size: 0.95em;">
-                            • Análisis de Scoring
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-consistencia'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                           text-decoration: none; 
-                                                           padding: 10px 15px; 
-                                                           border-radius: 8px; 
-                                                           background: rgba(90,191,143,0.08);
-                                                           transition: all 0.3s ease;
-                                                           display: block;
-                                                           border-left: 3px solid transparent;
-                                                           font-size: 0.95em;">
-                            • Análisis de Consistencia
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('estado-forma'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                        text-decoration: none; 
-                                                        padding: 10px 15px; 
-                                                        border-radius: 8px; 
-                                                        background: rgba(90,191,143,0.08);
-                                                        transition: all 0.3s ease;
-                                                        display: block;
-                                                        border-left: 3px solid transparent;
-                                                        font-size: 0.95em;">
-                            • Estado de Forma
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-rendimiento'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                           text-decoration: none; 
-                                                           padding: 10px 15px; 
-                                                           border-radius: 8px; 
-                                                           background: rgba(90,191,143,0.08);
-                                                           transition: all 0.3s ease;
-                                                           display: block;
-                                                           border-left: 3px solid transparent;
-                                                           font-size: 0.95em;">
-                            • Proyección de Rendimiento
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('objetivos-logros'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                           text-decoration: none; 
-                                                           padding: 10px 15px; 
-                                                           border-radius: 8px; 
-                                                           background: rgba(90,191,143,0.08);
-                                                           transition: all 0.3s ease;
-                                                           display: block;
-                                                           border-left: 3px solid transparent;
-                                                           font-size: 0.95em;">
-                            • Objetivos y Logros
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('optimizacion-practica'); return false;" style="color: rgba(255,255,255,0.85); 
-                                                              text-decoration: none; 
-                                                              padding: 10px 15px; 
-                                                              border-radius: 8px; 
-                                                              background: rgba(90,191,143,0.08);
-                                                              transition: all 0.3s ease;
-                                                              display: block;
-                                                              border-left: 3px solid transparent;
-                                                              font-size: 0.95em;">
-                            • Optimización de Práctica
-                        </a>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" class="quick-nav-link">• Mi Trayectoria RFEG</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-hcp-rfeg'); return false;" class="quick-nav-link">• Evolución Handicap RFEG</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" class="quick-nav-link">• Performance por Campo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" class="quick-nav-link">• Mis Mejores Rondas</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" class="quick-nav-link">• Análisis de Scoring</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-consistencia'); return false;" class="quick-nav-link">• Análisis de Consistencia</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('scoring-zones'); return false;" class="quick-nav-link">• Scoring Zones por Campo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('volatility-index'); return false;" class="quick-nav-link">• Score Volatility Index</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('estado-forma'); return false;" class="quick-nav-link">• Estado de Forma</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('posicion-hcp-curve'); return false;" class="quick-nav-link">• Posición vs HCP Curve</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-rendimiento'); return false;" class="quick-nav-link">• Proyección de Rendimiento</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('score-prediction'); return false;" class="quick-nav-link">• Score Prediction Model</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('objetivos-logros'); return false;" class="quick-nav-link">• Objetivos y Logros</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('personal-bests-timeline'); return false;" class="quick-nav-link">• Personal Bests Timeline</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('progress-goals'); return false;" class="quick-nav-link">• Progress to Goals</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('optimizacion-practica'); return false;" class="quick-nav-link">• Optimización de Práctica</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('roi-practica'); return false;" class="quick-nav-link">• ROI de Práctica</a>
                     </div>
                 </div>
-                
+
             </div>
 
             <!-- Anchor para AI Course Cards (inyectado por UXWriter) -->
@@ -6732,33 +6726,33 @@
                     Datos reales de 52 rondas jugadas desde Marzo 2024. Integración con Handicap Oficial RFEG.
                 </p>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
-                        <h3 style="color: #5ABF8F; font-size: 0.95em; margin-bottom: 10px;">HCP OFICIAL RFEG</h3>
-                        <div style="font-size: 3em; font-weight: 900; color: #5ABF8F; margin: 10px 0;"><span id="cs-hcp">23.2</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;"><span id="cs-hcp-updated">Actualizado 14/09/2025</span></p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">HCP OFICIAL RFEG</div>
+                        <div class="kpi-value color-green" style="font-size: 2.6em;"><span id="cs-hcp">23.2</span></div>
+                        <div class="kpi-sub"><span id="cs-hcp-updated">Actualizado 14/09/2025</span></div>
                     </div>
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(74,159,216,0.05)); border-radius: 12px; border: 2px solid rgba(74,159,216,0.4); text-align: center;">
-                        <h3 style="color: #4A9FD8; font-size: 0.95em; margin-bottom: 10px;">TOTAL RONDAS</h3>
-                        <div style="font-size: 3em; font-weight: 900; color: #4A9FD8; margin: 10px 0;"><span id="cs-total-rounds">52</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;"><span id="cs-date-range">Mar 2024 - Dic 2025</span></p>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">TOTAL RONDAS</div>
+                        <div class="kpi-value color-blue" style="font-size: 2.6em;"><span id="cs-total-rounds">52</span></div>
+                        <div class="kpi-sub"><span id="cs-date-range">Mar 2024 - Dic 2025</span></div>
                     </div>
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                        <h3 style="color: #D4B55A; font-size: 0.95em; margin-bottom: 10px;">MEJOR RONDA</h3>
-                        <div style="font-size: 3em; font-weight: 900; color: #D4B55A; margin: 10px 0;"><span id="cs-best-score">88</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;"><span id="cs-best-round">Marina Golf (Nov 2025)</span></p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">MEJOR RONDA</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.6em;"><span id="cs-best-score">88</span></div>
+                        <div class="kpi-sub"><span id="cs-best-round">Marina Golf (Nov 2025)</span></div>
                     </div>
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(232,139,122,0.15), rgba(232,139,122,0.05)); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center;">
-                        <h3 style="color: #E88B7A; font-size: 0.95em; margin-bottom: 10px;">AVG DIFFERENTIAL</h3>
-                        <div style="font-size: 3em; font-weight: 900; color: #E88B7A; margin: 10px 0;"><span id="cs-avg-diff">25.5</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Rango: <span id="cs-diff-range">4 - 45</span></p>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">AVG DIFFERENTIAL</div>
+                        <div class="kpi-value color-red" style="font-size: 2.6em;"><span id="cs-avg-diff">25.5</span></div>
+                        <div class="kpi-sub">Rango: <span id="cs-diff-range">4 - 45</span></div>
                     </div>
                 </div>
             </div>
             
             <!-- 1. Evolución Handicap RFEG -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">📈 Evolución Handicap Oficial RFEG</h3>
+                <h3 id="evolucion-hcp-rfeg" style="color: #4A9FD8; margin-top: 40px;">Evolución Handicap Oficial RFEG</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Tracking oficial de tu handicap registrado en la Real Federación Española de Golf.
                 </p>
@@ -6805,14 +6799,14 @@
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px;">
                             <thead>
-                                <tr style="background: linear-gradient(135deg, #003366, #004488);">
-                                    <th style="padding: 18px 15px; text-align: left; color: #E8E8E8; font-weight: 700; border-top-left-radius: 10px;">Campo</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Rondas</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Promedio</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Mejor</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Peor</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Rango</th>
-                                    <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700; border-top-right-radius: 10px;">Par</th>
+                                <tr style="background: rgba(255,255,255,0.06);">
+                                    <th style="padding: 14px 12px; text-align: left; color: #E8E8E8; font-weight: 700; border-top-left-radius: 8px;">Campo</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rondas</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Promedio</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Mejor</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Peor</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700;">Rango</th>
+                                    <th style="padding: 14px 12px; text-align: center; color: #E8E8E8; font-weight: 700; border-top-right-radius: 8px;">Par</th>
                                 </tr>
                             </thead>
                             <tbody id="courseTableBody">
@@ -6843,53 +6837,53 @@
                 </p>
                 
                 <div id="cs-best-rounds-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px;">
-                    <div style="padding: 20px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 12px; border-left: 4px solid #D4B55A;">
+                    <div class="card-detail accent-gold" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #D4B55A;">88</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">16/11/2025</span>
+                            <span class="kpi-value color-gold">88</span>
+                            <span class="kpi-sub">16/11/2025</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">MARINA GOLF</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 17</div>
+                        <div class="kpi-sub">Differential: 17</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(90,191,143,0.08); border-radius: 12px; border-left: 4px solid #5ABF8F;">
+                    <div class="card-detail accent-green" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #5ABF8F;">89</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">16/08/2025</span>
+                            <span class="kpi-value color-green">89</span>
+                            <span class="kpi-sub">16/08/2025</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">NUEVO PORTIL</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 18</div>
+                        <div class="kpi-sub">Differential: 18</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(90,191,143,0.08); border-radius: 12px; border-left: 4px solid #5ABF8F;">
+                    <div class="card-detail accent-green" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #5ABF8F;">89</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">21/08/2025</span>
+                            <span class="kpi-value color-green">89</span>
+                            <span class="kpi-sub">21/08/2025</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">MARINA GOLF</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 18</div>
+                        <div class="kpi-sub">Differential: 18</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(90,191,143,0.08); border-radius: 12px; border-left: 4px solid #5ABF8F;">
+                    <div class="card-detail accent-green" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #5ABF8F;">89</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">24/08/2025</span>
+                            <span class="kpi-value color-green">89</span>
+                            <span class="kpi-sub">24/08/2025</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">VALLE DEL ESTE</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 18</div>
+                        <div class="kpi-sub">Differential: 18</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(74,159,216,0.08); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                    <div class="card-detail accent-blue" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #4A9FD8;">90</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">15/11/2025</span>
+                            <span class="kpi-value color-blue">90</span>
+                            <span class="kpi-sub">15/11/2025</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">VALLE DEL ESTE</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 19</div>
+                        <div class="kpi-sub">Differential: 19</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(74,159,216,0.08); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                    <div class="card-detail accent-blue" style="padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 2em; font-weight: 900; color: #4A9FD8;">92</span>
-                            <span style="font-size: 0.9em; opacity: 0.8;">13/08/2024</span>
+                            <span class="kpi-value color-blue">92</span>
+                            <span class="kpi-sub">13/08/2024</span>
                         </div>
                         <div style="font-weight: 700; color: #4A9FD8; margin-bottom: 5px;">NUEVO PORTIL</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Differential: 21</div>
+                        <div class="kpi-sub">Differential: 21</div>
                     </div>
                 </div>
                 
@@ -6912,30 +6906,30 @@
                 <canvas id="quarterlyTrendChart" style="max-height: 350px;"></canvas>
                 
                 <div id="cs-quarterly-container" style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                    <div style="padding: 20px; background: rgba(232,139,122,0.1); border-radius: 12px; border: 2px solid rgba(232,139,122,0.4); text-align: center;">
-                        <h4 style="color: #E88B7A; margin-bottom: 10px;">2024-Q2</h4>
-                        <div style="font-size: 2.2em; font-weight: 800; color: #E88B7A;">95.5</div>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">11 rondas | Inicio</p>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">2024-Q2</div>
+                        <div class="kpi-value color-red" style="font-size: 2.2em;">95.5</div>
+                        <div class="kpi-sub">11 rondas | Inicio</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(255,165,0,0.1); border-radius: 12px; border: 2px solid rgba(255,165,0,0.4); text-align: center;">
-                        <h4 style="color: #D4B55A; margin-bottom: 10px;">2024-Q3</h4>
-                        <div style="font-size: 2.2em; font-weight: 800; color: #D4B55A;">101.7</div>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">10 rondas | Ajuste</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">2024-Q3</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.2em;">101.7</div>
+                        <div class="kpi-sub">10 rondas | Ajuste</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                        <h4 style="color: #D4B55A; margin-bottom: 10px;">2025-Q2</h4>
-                        <div style="font-size: 2.2em; font-weight: 800; color: #D4B55A;">103.1</div>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">9 rondas</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">2025-Q2</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.2em;">103.1</div>
+                        <div class="kpi-sub">9 rondas</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(90,191,143,0.12); border-radius: 12px; border: 2px solid rgba(90,191,143,0.5); text-align: center;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 10px;">2025-Q3</h4>
-                        <div style="font-size: 2.2em; font-weight: 800; color: #5ABF8F;">95.1</div>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">13 rondas | ✅ Mejor</p>
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">2025-Q3</div>
+                        <div class="kpi-value color-green" style="font-size: 2.2em;">95.1</div>
+                        <div class="kpi-sub">13 rondas | Mejor</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(74,159,216,0.12); border-radius: 12px; border: 2px solid rgba(74,159,216,0.5); text-align: center;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 10px;">2025-Q4</h4>
-                        <div style="font-size: 2.2em; font-weight: 800; color: #4A9FD8;">95.7</div>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">7 rondas | Actual</p>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">2025-Q4</div>
+                        <div class="kpi-value color-blue" style="font-size: 2.2em;">95.7</div>
+                        <div class="kpi-sub">7 rondas | Actual</div>
                     </div>
                 </div>
                 
@@ -6957,26 +6951,26 @@
                 </p>
                 <canvas id="diffDistChart" style="max-height: 300px;"></canvas>
                 
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-                    <div style="padding: 20px; background: rgba(90,191,143,0.12); border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 10px;">🟢 Excelente (≤15)</h4>
-                        <div style="font-size: 2.5em; font-weight: 900; color: #5ABF8F; margin: 10px 0;"><span id="cs-diff-excellent">12</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Rondas bajo par tu HCP</p>
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">Excelente (≤15)</div>
+                        <div class="kpi-value color-green" style="font-size: 2.4em;"><span id="cs-diff-excellent">12</span></div>
+                        <div class="kpi-sub">Rondas bajo par tu HCP</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(212,181,90,0.12); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                        <h4 style="color: #D4B55A; margin-bottom: 10px;">🟡 Bueno (16-25)</h4>
-                        <div style="font-size: 2.5em; font-weight: 900; color: #D4B55A; margin: 10px 0;"><span id="cs-diff-good">21</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Rondas competitivas</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">Bueno (16-25)</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.4em;"><span id="cs-diff-good">21</span></div>
+                        <div class="kpi-sub">Rondas competitivas</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(255,165,0,0.12); border-radius: 12px; border-left: 4px solid #D4B55A;">
-                        <h4 style="color: #D4B55A; margin-bottom: 10px;">🟠 Promedio (26-35)</h4>
-                        <div style="font-size: 2.5em; font-weight: 900; color: #D4B55A; margin: 10px 0;"><span id="cs-diff-average">28</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Rondas normales</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">Promedio (26-35)</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.4em;"><span id="cs-diff-average">28</span></div>
+                        <div class="kpi-sub">Rondas normales</div>
                     </div>
-                    <div style="padding: 20px; background: rgba(232,139,122,0.12); border-radius: 12px; border-left: 4px solid #E88B7A;">
-                        <h4 style="color: #E88B7A; margin-bottom: 10px;">🔴 Difícil (>35)</h4>
-                        <div style="font-size: 2.5em; font-weight: 900; color: #E88B7A; margin: 10px 0;"><span id="cs-diff-poor">14</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Rondas complicadas</p>
+                    <div class="kpi-card kpi-card--red">
+                        <div class="text-label">Difícil (>35)</div>
+                        <div class="kpi-value color-red" style="font-size: 2.4em;"><span id="cs-diff-poor">14</span></div>
+                        <div class="kpi-sub">Rondas complicadas</div>
                     </div>
                 </div>
                 
@@ -6993,29 +6987,29 @@
             
             <!-- 6. SCORING ZONES POR CAMPO -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">🎯 Scoring Zones por Campo</h3>
+                <h3 id="scoring-zones" style="color: #4A9FD8; margin-top: 40px;">Scoring Zones por Campo</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Distribución de tus scores en cada campo. Identifica tu "comfort zone" donde scores más frecuentemente.
                 </p>
                 <canvas id="scoringZonesChart" style="max-height: 400px;"></canvas>
                 
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div style="padding: 20px; background: rgba(74,159,216,0.1); border-radius: 12px; border-left: 4px solid #4A9FD8;">
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div class="inner-box inner-box--blue" style="padding: 20px;">
                         <h4 style="color: #4A9FD8; margin-bottom: 12px;">LA DEHESA</h4>
                         <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 100-105 (31% rondas)</p>
-                        <p style="margin: 8px 0 0 0; font-size: 0.85em; opacity: 0.8;">16 rondas de 18 hoyos</p>
+                        <p class="kpi-sub" style="margin: 8px 0 0 0;">16 rondas de 18 hoyos</p>
                     </div>
-                    <div style="padding: 20px; background: rgba(90,191,143,0.1); border-radius: 12px; border-left: 4px solid #5ABF8F;">
+                    <div class="inner-box inner-box--green" style="padding: 20px;">
                         <h4 style="color: #5ABF8F; margin-bottom: 12px;">MARINA GOLF</h4>
                         <p style="margin: 0; font-size: 0.95em;"><strong>Comfort Zone:</strong> 90-95 (36% rondas)</p>
-                        <p style="margin: 8px 0 0 0; font-size: 0.85em; opacity: 0.8;">11 rondas totales</p>
+                        <p class="kpi-sub" style="margin: 8px 0 0 0;">11 rondas totales</p>
                     </div>
                 </div>
             </div>
             
             <!-- 7. SCORE VOLATILITY INDEX -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">📊 Score Volatility Index</h3>
+                <h3 id="volatility-index" style="color: #4A9FD8; margin-top: 40px;">Score Volatility Index</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Desviación estándar de tus scores por trimestre. Menor volatilidad = mayor consistencia.
                 </p>
@@ -7040,23 +7034,23 @@
                 </p>
                 <canvas id="estadoFormaChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 12px;">🔥 MEJOR RACHA</h4>
-                        <div style="font-size: 3em; font-weight: 900; color: #5ABF8F; margin: 10px 0;"><span id="cs-streak-best">3</span></div>
-                        <p style="margin: 0; font-size: 0.95em;">Rondas consecutivas bajo HCP</p>
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">MEJOR RACHA</div>
+                        <div class="kpi-value color-green" style="font-size: 2.6em;"><span id="cs-streak-best">3</span></div>
+                        <div class="kpi-sub">Rondas consecutivas bajo HCP</div>
                     </div>
-                    <div style="padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                        <h4 style="color: #D4B55A; margin-bottom: 12px;">📊 TOTAL RACHAS</h4>
-                        <div style="font-size: 3em; font-weight: 900; color: #D4B55A; margin: 10px 0;"><span id="cs-streak-total">6</span></div>
-                        <p style="margin: 0; font-size: 0.95em;">Rachas identificadas (2+ rondas)</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">TOTAL RACHAS</div>
+                        <div class="kpi-value color-gold" style="font-size: 2.6em;"><span id="cs-streak-total">6</span></div>
+                        <div class="kpi-sub">Rachas identificadas (2+ rondas)</div>
                     </div>
                 </div>
             </div>
             
             <!-- 9. MI POSICIÓN VS HCP CURVE -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">🎖️ Mi Posición vs HCP Curve Esperado</h3>
+                <h3 id="posicion-hcp-curve" style="color: #4A9FD8; margin-top: 40px;">Mi Posición vs HCP Curve Esperado</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Distribución normal de jugadores con HCP 23. ¿Dónde te posicionas tú?
                 </p>
@@ -7081,39 +7075,39 @@
                     Comparación entre tu mejor trimestre y tu peor trimestre. ¿Cuánto te ganaría tu mejor versión?
                 </p>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px;">
-                    <div style="padding: 30px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 15px; border: 3px solid rgba(90,191,143,0.5); text-align: center;">
-                        <h3 style="color: #5ABF8F; margin-bottom: 15px; font-size: 1.4em;">🏆 MI MEJOR VERSIÓN</h3>
-                        <div style="font-size: 4em; font-weight: 900; color: #5ABF8F; margin: 20px 0;"><span id="cs-best-version-avg">95.1</span></div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                    <div class="card-detail accent-green" style="padding: 28px; text-align: center;">
+                        <div class="text-label">MI MEJOR VERSION</div>
+                        <div class="kpi-value color-green" style="font-size: 3.2em; margin: 12px 0;"><span id="cs-best-version-avg">95.1</span></div>
                         <p style="margin: 0; font-size: 1.1em; font-weight: 700;"><span id="cs-best-version-quarter">2025-Q3</span></p>
-                        <p style="margin-top: 10px; font-size: 0.95em; opacity: 0.8;"><span id="cs-best-version-rounds">13</span> rondas | Mejor: <span id="cs-best-version-best">89</span></p>
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div class="kpi-sub" style="margin-top: 8px;"><span id="cs-best-version-rounds">13</span> rondas | Mejor: <span id="cs-best-version-best">89</span></div>
+                        <div class="card-nested" style="margin-top: 16px; padding: 12px;">
                             <strong>Características:</strong>
-                            <p style="margin: 8px 0 0 0; font-size: 0.9em;">Consistente, confiado, scoring bajo 96</p>
+                            <p style="margin: 6px 0 0 0; font-size: 0.9em;">Consistente, confiado, scoring bajo 96</p>
                         </div>
                     </div>
-                    
-                    <div style="padding: 30px; background: linear-gradient(135deg, rgba(232,139,122,0.2), rgba(232,139,122,0.05)); border-radius: 15px; border: 3px solid rgba(232,139,122,0.5); text-align: center;">
-                        <h3 style="color: #E88B7A; margin-bottom: 15px; font-size: 1.4em;">📉 MI PEOR VERSIÓN</h3>
-                        <div style="font-size: 4em; font-weight: 900; color: #E88B7A; margin: 20px 0;"><span id="cs-worst-version-avg">104.8</span></div>
+
+                    <div class="card-detail accent-red" style="padding: 28px; text-align: center;">
+                        <div class="text-label">MI PEOR VERSION</div>
+                        <div class="kpi-value color-red" style="font-size: 3.2em; margin: 12px 0;"><span id="cs-worst-version-avg">104.8</span></div>
                         <p style="margin: 0; font-size: 1.1em; font-weight: 700;"><span id="cs-worst-version-quarter">2024-Q4</span></p>
-                        <p style="margin-top: 10px; font-size: 0.95em; opacity: 0.8;"><span id="cs-worst-version-rounds">5</span> rondas | Peor: <span id="cs-worst-version-worst">110</span></p>
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                        <div class="kpi-sub" style="margin-top: 8px;"><span id="cs-worst-version-rounds">5</span> rondas | Peor: <span id="cs-worst-version-worst">110</span></div>
+                        <div class="card-nested" style="margin-top: 16px; padding: 12px;">
                             <strong>Características:</strong>
-                            <p style="margin: 8px 0 0 0; font-size: 0.9em;">Inconsistente, scoring alto, bache temporal</p>
+                            <p style="margin: 6px 0 0 0; font-size: 0.9em;">Inconsistente, scoring alto, bache temporal</p>
                         </div>
                     </div>
                 </div>
-                
-                <div style="padding: 30px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 15px; border: 2px solid rgba(212,181,90,0.5); text-align: center;">
-                    <h3 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.6em;">🎯 RESULTADO DEL MATCH</h3>
-                    <p style="margin: 0; font-size: 1.2em; line-height: 2;">
+
+                <div class="card-detail accent-gold" style="padding: 28px; text-align: center;">
+                    <div class="text-label">RESULTADO DEL MATCH</div>
+                    <p style="margin: 12px 0; font-size: 1.1em; line-height: 1.8;">
                         Tu <strong style="color: #5ABF8F;">mejor versión</strong> le ganaría a tu <strong style="color: #E88B7A;">peor versión</strong> por:
                     </p>
-                    <div style="font-size: 5em; font-weight: 900; color: #D4B55A; margin: 20px 0;"><span id="cs-version-diff">9.7</span></div>
-                    <p style="margin: 0; font-size: 1.3em; font-weight: 700;">GOLPES DE DIFERENCIA</p>
-                    <p style="margin-top: 20px; font-size: 1.05em; line-height: 1.8; opacity: 0.9;">
-                        Esto demuestra tu <strong>potencial de mejora</strong>. Ya sabes jugar a 95.1 de promedio. 
+                    <div class="kpi-value color-gold" style="font-size: 4em; margin: 16px 0;"><span id="cs-version-diff">9.7</span></div>
+                    <p style="margin: 0; font-size: 1.2em; font-weight: 700;">GOLPES DE DIFERENCIA</p>
+                    <p style="margin-top: 16px; font-size: 1.05em; line-height: 1.8; opacity: 0.9;">
+                        Esto demuestra tu <strong>potencial de mejora</strong>. Ya sabes jugar a 95.1 de promedio.
                         El objetivo es convertir esa versión excepcional en tu nueva normalidad.
                     </p>
                 </div>
@@ -7121,27 +7115,27 @@
             
             <!-- 11. SCORE PREDICTION MODEL -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">🎲 Score Prediction Model</h3>
+                <h3 id="score-prediction" style="color: #4A9FD8; margin-top: 40px;">Score Prediction Model</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Regresión lineal basada en tus últimos 6 trimestres. ¿Dónde estarás en Q1-Q2 2026?
                 </p>
                 <canvas id="predictionChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div style="padding: 25px; background: rgba(90,191,143,0.12); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4); text-align: center;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 12px;">📅 Q1-2026</h4>
-                        <div style="font-size: 3em; font-weight: 900; color: #5ABF8F; margin: 10px 0;"><span id="cs-pred-q1">94.6</span></div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Proyección conservadora</p>
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">Q1-2026</div>
+                        <div class="kpi-value color-green" style="font-size: 2.6em;"><span id="cs-pred-q1">94.6</span></div>
+                        <div class="kpi-sub">Proyección conservadora</div>
                     </div>
-                    <div style="padding: 25px; background: rgba(74,159,216,0.12); border-radius: 12px; border: 2px solid rgba(74,159,216,0.4); text-align: center;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 12px;">📅 Q2-2026</h4>
-                        <div style="font-size: 3em; font-weight: 900; color: #4A9FD8; margin: 10px 0;">93.8</div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;">Continuando tendencia</p>
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">Q2-2026</div>
+                        <div class="kpi-value color-blue" style="font-size: 2.6em;">93.8</div>
+                        <div class="kpi-sub">Continuando tendencia</div>
                     </div>
-                    <div style="padding: 25px; background: rgba(212,181,90,0.12); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                        <h4 style="color: #D4B55A; margin-bottom: 12px;">📈 TENDENCIA</h4>
-                        <div style="font-size: 2.5em; font-weight: 900; color: #D4B55A; margin: 10px 0;">MEJORANDO</div>
-                        <p style="margin: 0; font-size: 0.9em; opacity: 0.8;"><span id="cs-pred-trend">-0.8</span> golpes/trimestre</p>
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">TENDENCIA</div>
+                        <div class="kpi-value color-gold">MEJORANDO</div>
+                        <div class="kpi-sub"><span id="cs-pred-trend">-0.8</span> golpes/trimestre</div>
                     </div>
                 </div>
                 
@@ -7162,95 +7156,95 @@
                     Sistema de logros tipo videojuego. ¿Cuántos has desbloqueado?
                 </p>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
                     <!-- Unlocked Achievements -->
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 3px solid rgba(90,191,143,0.6);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">🏅 Sub-100</h4>
-                            <span style="background: #5ABF8F; color: #001a0a; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">✓ UNLOCKED</span>
+                    <div class="card-detail accent-green" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.1em;">Sub-100</h4>
+                            <span style="background: #5ABF8F; color: #001a0a; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">UNLOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em;"><strong>Score:</strong> 92</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">Nuevo Portil | 13/08/2024</p>
+                        <p class="kpi-sub" style="margin: 4px 0 0 0;">Nuevo Portil | 13/08/2024</p>
                     </div>
-                    
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 3px solid rgba(90,191,143,0.6);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">🏅 Sub-95</h4>
-                            <span style="background: #5ABF8F; color: #001a0a; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">✓ UNLOCKED</span>
+
+                    <div class="card-detail accent-green" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.1em;">Sub-95</h4>
+                            <span style="background: #5ABF8F; color: #001a0a; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">UNLOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em;"><strong>Score:</strong> 92</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">Nuevo Portil | 13/08/2024</p>
+                        <p class="kpi-sub" style="margin: 4px 0 0 0;">Nuevo Portil | 13/08/2024</p>
                     </div>
-                    
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 3px solid rgba(90,191,143,0.6);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">🏅 Sub-90</h4>
-                            <span style="background: #5ABF8F; color: #001a0a; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">✓ UNLOCKED</span>
+
+                    <div class="card-detail accent-green" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.1em;">Sub-90</h4>
+                            <span style="background: #5ABF8F; color: #001a0a; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">UNLOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em;"><strong>Score:</strong> 89</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">Nuevo Portil | 16/08/2025</p>
+                        <p class="kpi-sub" style="margin: 4px 0 0 0;">Nuevo Portil | 16/08/2025</p>
                     </div>
-                    
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(90,191,143,0.05)); border-radius: 12px; border: 3px solid rgba(90,191,143,0.6);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">🔥 Racha Caliente</h4>
-                            <span style="background: #5ABF8F; color: #001a0a; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">✓ UNLOCKED</span>
+
+                    <div class="card-detail accent-green" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.1em;">Racha Caliente</h4>
+                            <span style="background: #5ABF8F; color: #001a0a; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">UNLOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em;">3 rondas consecutivas bajo 95</p>
-                        <p style="margin: 5px 0 0 0; font-size: 0.85em; opacity: 0.8;">Agosto 2025</p>
+                        <p class="kpi-sub" style="margin: 4px 0 0 0;">Agosto 2025</p>
                     </div>
-                    
+
                     <!-- Locked Achievements -->
-                    <div style="padding: 25px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 3px dashed rgba(255,255,255,0.2); opacity: 0.6;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #888; margin: 0; font-size: 1.2em;">🔒 Sub-85</h4>
-                            <span style="background: #444; color: #aaa; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">LOCKED</span>
+                    <div class="card-nested" style="padding: 22px; border: 2px dashed rgba(255,255,255,0.15); opacity: 0.6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #888; margin: 0; font-size: 1.1em;">Sub-85</h4>
+                            <span style="background: #444; color: #aaa; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">LOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em; color: #aaa;"><strong>Mejor:</strong> 88 | <strong>Faltan:</strong> 3 golpes</p>
                         <div style="margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; height: 8px; overflow: hidden;">
-                            <div style="width: 85%; height: 100%; background: linear-gradient(90deg, #D4B55A, #D4B55A);"></div>
+                            <div style="width: 85%; height: 100%; background: #D4B55A;"></div>
                         </div>
                     </div>
-                    
-                    <div style="padding: 25px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 3px dashed rgba(255,255,255,0.2); opacity: 0.6;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #888; margin: 0; font-size: 1.2em;">🔒 HCP 20</h4>
-                            <span style="background: #444; color: #aaa; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">LOCKED</span>
+
+                    <div class="card-nested" style="padding: 22px; border: 2px dashed rgba(255,255,255,0.15); opacity: 0.6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #888; margin: 0; font-size: 1.1em;">HCP 20</h4>
+                            <span style="background: #444; color: #aaa; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">LOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em; color: #aaa;"><strong>Actual:</strong> 23.2 | <strong>Faltan:</strong> 3.2 puntos</p>
                         <div style="margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; height: 8px; overflow: hidden;">
-                            <div style="width: 73%; height: 100%; background: linear-gradient(90deg, #4A9FD8, #0088cc);"></div>
+                            <div style="width: 73%; height: 100%; background: #4A9FD8;"></div>
                         </div>
                     </div>
-                    
-                    <div style="padding: 25px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 3px dashed rgba(255,255,255,0.2); opacity: 0.6;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #888; margin: 0; font-size: 1.2em;">🔒 HCP 15</h4>
-                            <span style="background: #444; color: #aaa; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">LOCKED</span>
+
+                    <div class="card-nested" style="padding: 22px; border: 2px dashed rgba(255,255,255,0.15); opacity: 0.6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #888; margin: 0; font-size: 1.1em;">HCP 15</h4>
+                            <span style="background: #444; color: #aaa; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">LOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em; color: #aaa;"><strong>Actual:</strong> 23.2 | <strong>Faltan:</strong> 8.2 puntos</p>
                         <div style="margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; height: 8px; overflow: hidden;">
-                            <div style="width: 52%; height: 100%; background: linear-gradient(90deg, #3A8FC8, #3A8FC8);"></div>
+                            <div style="width: 52%; height: 100%; background: #4A9FD8;"></div>
                         </div>
                     </div>
-                    
-                    <div style="padding: 25px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 3px dashed rgba(255,255,255,0.2); opacity: 0.6;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #888; margin: 0; font-size: 1.2em;">🔒 Single Digit HCP</h4>
-                            <span style="background: #444; color: #aaa; padding: 5px 12px; border-radius: 20px; font-weight: 900; font-size: 0.85em;">LOCKED</span>
+
+                    <div class="card-nested" style="padding: 22px; border: 2px dashed rgba(255,255,255,0.15); opacity: 0.6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #888; margin: 0; font-size: 1.1em;">Single Digit HCP</h4>
+                            <span style="background: #444; color: #aaa; padding: 4px 10px; border-radius: 20px; font-weight: 900; font-size: 0.8em;">LOCKED</span>
                         </div>
                         <p style="margin: 0; font-size: 0.95em; color: #aaa;"><strong>Actual:</strong> 23.2 | <strong>Faltan:</strong> 13.3 puntos</p>
                         <div style="margin-top: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; height: 8px; overflow: hidden;">
-                            <div style="width: 28%; height: 100%; background: linear-gradient(90deg, #E88B7A, #cc5555);"></div>
+                            <div style="width: 28%; height: 100%; background: #E88B7A;"></div>
                         </div>
                     </div>
                 </div>
-                
-                <div style="margin-top: 25px; padding: 25px; background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); border-radius: 15px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                    <h3 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.5em;">🎮 PROGRESO TOTAL</h3>
-                    <div style="font-size: 4em; font-weight: 900; color: #D4B55A; margin: 15px 0;">50%</div>
-                    <p style="margin: 0; font-size: 1.2em;">4 de 8 Achievements Desbloqueados</p>
-                    <p style="margin-top: 15px; font-size: 1.05em; opacity: 0.9;">
+
+                <div class="card-detail accent-gold" style="margin-top: 24px; padding: 28px; text-align: center;">
+                    <div class="text-label">PROGRESO TOTAL</div>
+                    <div class="kpi-value color-gold" style="font-size: 3.5em; margin: 12px 0;">50%</div>
+                    <p style="margin: 0; font-size: 1.1em;">4 de 8 Achievements Desbloqueados</p>
+                    <p style="margin-top: 12px; font-size: 1.05em; opacity: 0.9;">
                         <strong>Próximo objetivo:</strong> Sub-85 (solo 3 golpes de distancia)
                     </p>
                 </div>
@@ -7258,7 +7252,7 @@
             
             <!-- 13. PERSONAL BESTS TIMELINE -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">📊 Personal Bests Timeline</h3>
+                <h3 id="personal-bests-timeline" style="color: #4A9FD8; margin-top: 40px;">Personal Bests Timeline</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Cronología de cuando rompiste tus récords personales.
                 </p>
@@ -7309,19 +7303,19 @@
             
             <!-- 14. PROGRESS TO GOALS -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">🎯 Progress to Goals - Avance Hacia Objetivos</h3>
+                <h3 id="progress-goals" style="color: #4A9FD8; margin-top: 40px;">Progress to Goals - Avance Hacia Objetivos</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Tracking visual de tus objetivos principales. ¿Qué tan cerca estás de lograrlos?
                 </p>
                 
-                <div id="cs-goals-container" style="display: grid; gap: 25px;">
+                <div id="cs-goals-container" style="display: grid; gap: 20px;">
                     <!-- Goal 1: HCP 20 (fallback) -->
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.4);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.3em;">🎯 Objetivo: HCP 20</h4>
-                            <span style="background: linear-gradient(135deg, #5ABF8F, #00cc6a); color: #001a0a; padding: 8px 20px; border-radius: 25px; font-weight: 900; font-size: 1.1em;">73%</span>
+                    <div class="card-detail accent-green" style="padding: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="color: #5ABF8F; margin: 0; font-size: 1.2em;">Objetivo: HCP 20</h4>
+                            <span style="background: #5ABF8F; color: #001a0a; padding: 6px 16px; border-radius: 20px; font-weight: 900; font-size: 1em;">73%</span>
                         </div>
-                        <p style="margin: 0; font-size: 0.95em; opacity: 0.8;">Cargando progreso...</p>
+                        <p class="kpi-sub" style="margin: 0;">Cargando progreso...</p>
                     </div>
                 </div>
             </div>
@@ -7334,36 +7328,36 @@
                 </p>
                 <canvas id="learningCurveChart" style="max-height: 350px;"></canvas>
                 
-                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div style="padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); border-radius: 12px; border: 2px solid rgba(90,191,143,0.5); text-align: center;">
-                        <h4 style="color: #5ABF8F; margin-bottom: 12px;">⚡ TU VELOCIDAD</h4>
-                        <div style="font-size: 3.5em; font-weight: 900; color: #5ABF8F; margin: 15px 0;">1.8x</div>
-                        <p style="margin: 0; font-size: 1.05em;">Más rápido que promedio</p>
-                        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">20 meses para bajar 8.8 puntos</p>
+                <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
+                    <div class="kpi-card kpi-card--green">
+                        <div class="text-label">TU VELOCIDAD</div>
+                        <div class="kpi-value color-green" style="font-size: 3em;">1.8x</div>
+                        <p style="margin: 6px 0 0 0; font-size: 1em;">Más rápido que promedio</p>
+                        <div class="kpi-sub" style="margin-top: 6px;">20 meses para bajar 8.8 puntos</div>
                     </div>
-                    
-                    <div style="padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4); text-align: center;">
-                        <h4 style="color: #D4B55A; margin-bottom: 12px;">📊 BENCHMARK</h4>
-                        <div style="font-size: 3.5em; font-weight: 900; color: #D4B55A; margin: 15px 0;">36</div>
-                        <p style="margin: 0; font-size: 1.05em;">Meses (jugador promedio)</p>
-                        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Para misma mejora</p>
+
+                    <div class="kpi-card kpi-card--gold">
+                        <div class="text-label">BENCHMARK</div>
+                        <div class="kpi-value color-gold" style="font-size: 3em;">36</div>
+                        <p style="margin: 6px 0 0 0; font-size: 1em;">Meses (jugador promedio)</p>
+                        <div class="kpi-sub" style="margin-top: 6px;">Para misma mejora</div>
                     </div>
-                    
-                    <div style="padding: 25px; background: rgba(74,159,216,0.1); border-radius: 12px; border: 2px solid rgba(74,159,216,0.4); text-align: center;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 12px;">📈 RATE</h4>
-                        <div style="font-size: 3.5em; font-weight: 900; color: #4A9FD8; margin: 15px 0;">-0.44</div>
-                        <p style="margin: 0; font-size: 1.05em;">Puntos HCP / mes</p>
-                        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">Ritmo de mejora sostenido</p>
+
+                    <div class="kpi-card kpi-card--blue">
+                        <div class="text-label">RATE</div>
+                        <div class="kpi-value color-blue" style="font-size: 3em;">-0.44</div>
+                        <p style="margin: 6px 0 0 0; font-size: 1em;">Puntos HCP / mes</p>
+                        <div class="kpi-sub" style="margin-top: 6px;">Ritmo de mejora sostenido</div>
                     </div>
                 </div>
-                
-                <div style="margin-top: 25px; padding: 25px; background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(74,159,216,0.1)); border-radius: 15px; border: 2px solid rgba(90,191,143,0.5);">
-                    <h3 style="color: #5ABF8F; margin-bottom: 15px; font-size: 1.4em;">🏆 Felicidades: Aprendes RÁPIDO</h3>
-                    <p style="margin: 0; line-height: 2; font-size: 1.05em;">
-                        Tu curva de aprendizaje es <strong style="color: #5ABF8F;">1.8x más empinada</strong> que el jugador promedio. 
+
+                <div class="card-detail accent-green" style="margin-top: 24px; padding: 24px;">
+                    <h3 class="detail-title" style="color: #5ABF8F; margin-bottom: 12px;">Felicidades: Aprendes RAPIDO</h3>
+                    <p style="margin: 0; line-height: 1.9; font-size: 1.05em;">
+                        Tu curva de aprendizaje es <strong style="color: #5ABF8F;">1.8x más empinada</strong> que el jugador promedio.
                         En 20 meses has logrado lo que al jugador típico le toma 36 meses. Esto indica:
                     </p>
-                    <ul style="margin: 15px 0 0 20px; line-height: 2;">
+                    <ul style="margin: 12px 0 0 20px; line-height: 2;">
                         <li>Práctica deliberada y efectiva</li>
                         <li>Buena capacidad de absorber feedback técnico</li>
                         <li>Consistencia en frecuencia de juego</li>
@@ -7374,7 +7368,7 @@
             
             <!-- 16. ROI DE PRÁCTICA -->
             <div class="chart-container">
-                <h3 style="color: #4A9FD8; margin-top: 40px;">💰 ROI de Práctica - Frecuencia vs Performance</h3>
+                <h3 id="roi-practica" style="color: #4A9FD8; margin-top: 40px;">ROI de Práctica - Frecuencia vs Performance</h3>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8);">
                     Correlación entre cuánto juegas y cómo juegas. ¿Jugar más = scoring mejor?
                 </p>
