@@ -5999,86 +5999,38 @@
             </div>
 
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: rgba(255,255,255,0.04);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 14px;
-                        padding: 24px;
-                        margin-bottom: 32px;">
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(45,62,80,0.08) 0%, rgba(74,159,216,0.08) 100%); border: 2px solid rgba(45,62,80,0.25); border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 32px rgba(45,62,80,0.15);">
 
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(45,62,80,0.05); border-radius: 10px; border-left: 4px solid #4A9FD8;">
+                    <h4 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.15em;">📊 Handicap y Scoring</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Mi Trayectoria RFEG</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-hcp-rfeg'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Evolución Handicap RFEG</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Historial de Scores</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('best-worst-rounds'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Mejores y Peores Rondas</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('quarterly-scoring'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Performance por Trimestre</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('monthly-volatility'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Volatilidad Mensual</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('momentum-indicators'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Indicadores de Momentum</a>
+                    </div>
+                </div>
 
-                <!-- TEMPORAL (15 secciones) -->
-                <div style="margin-bottom: 0;">
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(90,191,143,0.05); border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                    <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.15em;">📈 Evolución Técnica</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Evolución Long Game</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Evolución Irons 5-9</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Evolución Wedges</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Tendencia Attack Angle</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Evolución Smash Factor</a>
+                    </div>
+                </div>
 
-                    <h4 style="color: #4A9FD8;
-                              margin: 0 0 16px 0;
-                              font-size: 1em;
-                              font-weight: 700;">
-                        📊 Evolución Temporal
-                    </h4>
-                    
-                    <div style="display: grid; 
-                               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                               gap: 10px;">
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('trayectoria-rfeg'); return false;" class="quick-nav-link">
-                            • Mi Trayectoria RFEG
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-hcp-rfeg'); return false;" class="quick-nav-link">
-                            • Evolución Handicap RFEG
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('score-history'); return false;" class="quick-nav-link">
-                            • Historial de Scores (<span id="ev-nav-rounds">52</span> rondas)
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('best-worst-rounds'); return false;" class="quick-nav-link">
-                            • Mejores y Peores Rondas
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('quarterly-scoring'); return false;" class="quick-nav-link">
-                            • Performance por Trimestre
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('monthly-volatility'); return false;" class="quick-nav-link">
-                            • Volatilidad Mensual
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('momentum-indicators'); return false;" class="quick-nav-link">
-                            • Indicadores de Momentum
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-long-game'); return false;" class="quick-nav-link">
-                            • Evolución Long Game
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-irons'); return false;" class="quick-nav-link">
-                            • Evolución Irons 5-9
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-wedges'); return false;" class="quick-nav-link">
-                            • Evolución Wedges
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('tendencia-attack-angle'); return false;" class="quick-nav-link">
-                            • Tendencia Attack Angle
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('evolucion-smash-factor'); return false;" class="quick-nav-link">
-                            • Evolución Smash Factor
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" class="quick-nav-link">
-                            • Proyección Score & Consistencia
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" class="quick-nav-link">
-                            • Progresión de Consistencia
-                        </a>
-
-                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" class="quick-nav-link">
-                            • Comparativa de Mejora
-                        </a>
+                <div style="padding: 20px; background: rgba(212,181,90,0.05); border-radius: 10px; border-left: 4px solid #D4B55A;">
+                    <h4 style="color: #D4B55A; margin: 0 0 15px 0; font-size: 1.15em;">🔮 Proyección y Consistencia</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-score'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Proyección Score & Consistencia</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('progresion-consistencia'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Progresión de Consistencia</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('comparativa-mejora'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Comparativa de Mejora</a>
                     </div>
                 </div>
 
@@ -6745,33 +6697,50 @@
             </div>
 
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: rgba(255,255,255,0.04);
-                        border: 1px solid rgba(255,255,255,0.08);
-                        border-radius: 14px;
-                        padding: 24px;
-                        margin-bottom: 32px;">
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(45,62,80,0.08) 0%, rgba(90,191,143,0.08) 100%); border: 2px solid rgba(45,62,80,0.25); border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 32px rgba(45,62,80,0.15);">
 
-                <div style="margin-bottom: 0;">
-                    <h4 style="color: #5ABF8F; margin: 0 0 16px 0; font-size: 1em; font-weight: 700;">
-                        ⛳ Mis Campos
-                    </h4>
-
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(90,191,143,0.05); border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                    <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.15em;">⛳ Resultados</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
-                        <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" class="quick-nav-link">• Mis Mejores Rondas</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" class="quick-nav-link">• Performance por Campo</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('scoring-zones'); return false;" class="quick-nav-link">• Scoring Zones por Campo</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" class="quick-nav-link">• Análisis de Scoring</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-consistencia'); return false;" class="quick-nav-link">• Análisis de Consistencia</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('volatility-index'); return false;" class="quick-nav-link">• Score Volatility Index</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('estado-forma'); return false;" class="quick-nav-link">• Estado de Forma</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('posicion-hcp-curve'); return false;" class="quick-nav-link">• Posición vs HCP Curve</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-rendimiento'); return false;" class="quick-nav-link">• Proyección de Rendimiento</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('score-prediction'); return false;" class="quick-nav-link">• Score Prediction Model</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('objetivos-logros'); return false;" class="quick-nav-link">• Objetivos y Logros</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('personal-bests-timeline'); return false;" class="quick-nav-link">• Personal Bests Timeline</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('progress-goals'); return false;" class="quick-nav-link">• Progress to Goals</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('optimizacion-practica'); return false;" class="quick-nav-link">• Optimización de Práctica</a>
-                        <a href="javascript:void(0)" onclick="scrollToSection('roi-practica'); return false;" class="quick-nav-link">• ROI de Práctica</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('mejores-rondas'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Mis Mejores Rondas</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('performance-campo'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Performance por Campo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('scoring-zones'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Scoring Zones por Campo</a>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(45,62,80,0.05); border-radius: 10px; border-left: 4px solid #4A9FD8;">
+                    <h4 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.15em;">📊 Análisis de Scoring</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-scoring'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Análisis de Scoring</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-consistencia'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Análisis de Consistencia</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('volatility-index'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Score Volatility Index</a>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(212,181,90,0.05); border-radius: 10px; border-left: 4px solid #D4B55A;">
+                    <h4 style="color: #D4B55A; margin: 0 0 15px 0; font-size: 1.15em;">📍 Estado y Posición</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('estado-forma'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Estado de Forma</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('posicion-hcp-curve'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Posición vs HCP Curve</a>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(232,139,122,0.05); border-radius: 10px; border-left: 4px solid #E88B7A;">
+                    <h4 style="color: #E88B7A; margin: 0 0 15px 0; font-size: 1.15em;">🎯 Futuro y Objetivos</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('proyeccion-rendimiento'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Proyección de Rendimiento</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('score-prediction'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Score Prediction Model</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('objetivos-logros'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Objetivos y Logros</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('personal-bests-timeline'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Personal Bests Timeline</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('progress-goals'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Progress to Goals</a>
+                    </div>
+                </div>
+
+                <div style="padding: 20px; background: rgba(90,191,143,0.05); border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                    <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.15em;">🏋️ Optimización</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('optimizacion-practica'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Optimización de Práctica</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('roi-practica'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• ROI de Práctica</a>
                     </div>
                 </div>
 
@@ -7488,106 +7457,43 @@
             </div>
 
             <!-- MENÚ DE NAVEGACIÓN RÁPIDA -->
-            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(255,165,0,0.08) 0%, rgba(212,181,90,0.08) 100%);
-                        border: 2px solid rgba(255,165,0,0.25); 
-                        border-radius: 15px; 
-                        padding: 30px; 
-                        margin-bottom: 40px;
-                        box-shadow: 0 8px 32px rgba(255,165,0,0.15);">
-                
-                
-                <!-- DISTANCIAS & GAPS (3 secciones) -->
-                <div style="margin-bottom: 25px; 
-                           padding: 20px; 
-                           background: rgba(74,159,216,0.05); 
-                           border-radius: 10px;
-                           border-left: 4px solid #4A9FD8;">
-                    
-                    <h4 style="color: #4A9FD8; 
-                              margin: 0 0 15px 0; 
-                              font-size: 1.15em;">
-                        📏 Distancias & Gaps
-                    </h4>
-                    
-                    <div style="display: grid; 
-                               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-                               gap: 10px;">
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('rendimiento-distancias'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(74,159,216,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Rendimiento por Palo
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('brechas-palos'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(74,159,216,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Análisis de Brechas
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('performance-detallado'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(74,159,216,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Performance Detallado
-                        </a>
+            <div class="quick-nav-header" style="background: linear-gradient(135deg, rgba(45,62,80,0.08) 0%, rgba(212,181,90,0.08) 100%); border: 2px solid rgba(45,62,80,0.25); border-radius: 15px; padding: 30px; margin-bottom: 40px; box-shadow: 0 8px 32px rgba(45,62,80,0.15);">
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(45,62,80,0.05); border-radius: 10px; border-left: 4px solid #4A9FD8;">
+                    <h4 style="color: #4A9FD8; margin: 0 0 15px 0; font-size: 1.15em;">📏 Distancias</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('rendimiento-distancias'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Rendimiento por Palo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('percentiles-distancia'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Percentiles de Distancia</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('brechas-palos'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Análisis de Brechas</a>
                     </div>
                 </div>
-                
-                <!-- PRECISIÓN & DISPERSIÓN (3 secciones) -->
-                <div style="margin-bottom: 25px; 
-                           padding: 20px; 
-                           background: rgba(90,191,143,0.05); 
-                           border-radius: 10px;
-                           border-left: 4px solid #5ABF8F;">
-                    
-                    <h4 style="color: #5ABF8F; 
-                              margin: 0 0 15px 0; 
-                              font-size: 1.15em;">
-                        🎯 Precisión & Dispersión
-                    </h4>
-                    
-                    <div style="display: grid; 
-                               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-                               gap: 10px;">
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('distribucion-direccional'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(90,191,143,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Distribución Direccional
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-dispersion'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(90,191,143,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Análisis de Dispersión
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-burbujas'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(90,191,143,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Análisis de Burbujas
-                        </a>
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(90,191,143,0.05); border-radius: 10px; border-left: 4px solid #5ABF8F;">
+                    <h4 style="color: #5ABF8F; margin: 0 0 15px 0; font-size: 1.15em;">🎯 Precisión</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('distribucion-direccional'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Distribución Direccional</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-dispersion'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Análisis de Dispersión</a>
                     </div>
                 </div>
-                
-                <!-- TÉCNICA & EFICIENCIA (3 secciones) -->
-                <div style="padding: 20px; 
-                           background: rgba(255,165,0,0.05); 
-                           border-radius: 10px;
-                           border-left: 4px solid #D4B55A;">
-                    
-                    <h4 style="color: #D4B55A; 
-                              margin: 0 0 15px 0; 
-                              font-size: 1.15em;">
-                        ⚡ Técnica & Eficiencia
-                    </h4>
-                    
-                    <div style="display: grid; 
-                               grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-                               gap: 10px;">
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('smash-factor-palo'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(255,165,0,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Smash Factor por Palo
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('metricas-velocidad'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(255,165,0,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Métricas de Velocidad
-                        </a>
-                        
-                        <a href="javascript:void(0)" onclick="scrollToSection('matriz-rendimiento'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(255,165,0,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">
-                            • Matriz de Rendimiento
-                        </a>
+
+                <div style="margin-bottom: 25px; padding: 20px; background: rgba(212,181,90,0.05); border-radius: 10px; border-left: 4px solid #D4B55A;">
+                    <h4 style="color: #D4B55A; margin: 0 0 15px 0; font-size: 1.15em;">⚙️ Técnica y Eficiencia</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('trajectory-data'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Datos de Trayectoria</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('smash-factor-palo'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Smash Factor por Palo</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('metricas-velocidad'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(45,62,80,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Métricas de Velocidad</a>
                     </div>
                 </div>
-                
+
+                <div style="padding: 20px; background: rgba(232,139,122,0.05); border-radius: 10px; border-left: 4px solid #E88B7A;">
+                    <h4 style="color: #E88B7A; margin: 0 0 15px 0; font-size: 1.15em;">🔭 Visión Global</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
+                        <a href="javascript:void(0)" onclick="scrollToSection('analisis-burbujas'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Análisis de Burbujas</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('performance-detallado'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Performance Detallado</a>
+                        <a href="javascript:void(0)" onclick="scrollToSection('matriz-rendimiento'); return false;" style="color: rgba(255,255,255,0.85); text-decoration: none; padding: 10px 15px; border-radius: 8px; background: rgba(232,139,122,0.08); transition: all 0.3s ease; display: block; border-left: 3px solid transparent; font-size: 0.95em;">• Matriz de Rendimiento</a>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Anchor para AI Club Cards (inyectado por UXWriter) -->
@@ -7596,11 +7502,11 @@
             <div class="chart-container">
                 <h2 id="rendimiento-distancias">🏌️ Rendimiento por Palo - Distancias</h2>
                 <canvas id="clubDistanceChart"></canvas>
-                <div style="margin-top: 20px; padding: 20px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 15px;">📊 Análisis Carry vs Total Distance</h3>
+                <div class="card-detail" style="margin-top: 20px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 15px;">Análisis Carry vs Total Distance</h3>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
-                        <div style="padding: 15px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 3px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F;">🏌️ Long Game (Driver, 3W, Hybrid)</strong>
+                        <div class="inner-box inner-box--green">
+                            <strong style="color: #5ABF8F;">Long Game (Driver, 3W, Hybrid)</strong>
                             <ul id="cl-carry-long" style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Driver:</strong> 231m carry + 15m roll (6.1%) = 246m total</li>
                                 <li><strong>3 Wood:</strong> 198m carry + 12.5m roll (5.9%) = 210.5m total</li>
@@ -7611,8 +7517,8 @@
                             </p>
                         </div>
                         
-                        <div style="padding: 15px; background: rgba(212,181,90,0.1); border-radius: 8px; border-left: 3px solid #D4B55A;">
-                            <strong style="color: #D4B55A;">⛳ Mid Game (Irons 5-9)</strong>
+                        <div class="inner-box inner-box--gold">
+                            <strong style="color: #D4B55A;">Mid Game (Irons 5-9)</strong>
                             <ul id="cl-carry-mid" style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>5-Iron:</strong> 142m carry + 6m roll (4.1%) = 148m total</li>
                                 <li><strong>6-Iron:</strong> 135m carry + 5.5m roll (3.9%) = 140.5m total</li>
@@ -7625,8 +7531,8 @@
                             </p>
                         </div>
                         
-                        <div style="padding: 15px; background: rgba(74,159,216,0.1); border-radius: 8px; border-left: 3px solid #4A9FD8;">
-                            <strong style="color: #4A9FD8;">🎯 Short Game (Wedges)</strong>
+                        <div class="inner-box inner-box--blue">
+                            <strong style="color: #4A9FD8;">Short Game (Wedges)</strong>
                             <ul id="cl-carry-short" style="margin: 10px 0 0 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>PW:</strong> 92m carry + 3.6m roll (3.8%) = 95.6m total</li>
                                 <li><strong>GW:</strong> 78m carry + 2.9m roll (3.6%) = 80.9m total</li>
@@ -7638,14 +7544,32 @@
                         </div>
                     </div>
                     
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                        <strong style="color: #5ABF8F;">💡 Insight Clave:</strong> 
-                        La relación carry/total es óptima en todos los palos. Driver 94% carry es excelente (ideal 92-95%). 
+                    <div class="inner-box" style="margin-top: 20px;">
+                        <strong style="color: #5ABF8F;">Insight Clave:</strong>
+                        La relación carry/total es óptima en todos los palos. Driver 94% carry es excelente (ideal 92-95%).
                         Wedges con 96%+ carry indican spin control superior - característica tour-level que debes preservar.
                     </div>
                 </div>
             </div>
             
+            <!-- Percentiles Section -->
+            <div class="chart-container">
+                <h2 id="percentiles-distancia">📊 Percentiles de Distancia por Palo</h2>
+                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
+                    Distribución estadística de tus distancias (p10, p25, p50-mediana, p75, p90). La mediana (p50) representa tu distancia típica.
+                </p>
+
+                <!-- Main Percentiles Chart -->
+                <div class="card-detail" style="padding: 25px; margin-bottom: 25px;">
+                    <canvas id="percentilesChart" style="max-height: 500px;"></canvas>
+                </div>
+
+                <!-- Percentiles Cards -->
+                <div id="percentilesCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
             <div class="chart-container">
                 <h2 id="brechas-palos">📏 Análisis de Brechas Entre Palos</h2>
                 <div class="priority-box">
@@ -7664,13 +7588,13 @@
                 </div>
                 <canvas id="gapAnalysisChart"></canvas>
                 
-                <div style="margin-top: 25px; padding: 25px; background: rgba(74,159,216,0.1); border-radius: 10px;">
-                    <h3 style="color: #4A9FD8; margin-bottom: 20px;">📊 Comparativa Triple: Tú vs PGA Tour vs Amateur HCP15</h3>
+                <div class="card-detail" style="margin-top: 25px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 20px;">Comparativa Triple: Tú vs PGA Tour vs Amateur HCP15</h3>
                     
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
                             <thead>
-                                <tr style="background: rgba(74,159,216,0.2); border-bottom: 2px solid #4A9FD8;">
+                                <tr style="background: rgba(255,255,255,0.06); border-bottom: 2px solid rgba(255,255,255,0.08);">
                                     <th style="padding: 10px; text-align: left; color: #4A9FD8;">Transición</th>
                                     <th style="padding: 10px; text-align: center; color: #5ABF8F;">Tu Brecha</th>
                                     <th style="padding: 10px; text-align: center; color: #D4B55A;">PGA Tour</th>
@@ -7776,8 +7700,8 @@
                     </div>
                     
                     <div style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
-                        <div style="padding: 18px; background: rgba(90,191,143,0.1); border-radius: 8px; border-left: 4px solid #5ABF8F;">
-                            <strong style="color: #5ABF8F; font-size: 1.05em;">🏆 Mejor que AMBOS (PGA + HCP15)</strong>
+                        <div class="inner-box inner-box--green">
+                            <strong style="color: #5ABF8F; font-size: 1.05em;">Mejor que AMBOS (PGA + HCP15)</strong>
                             <ul style="margin: 12px 0 0 15px; line-height: 1.9; font-size: 0.95em;">
                                 <li><strong>5i→6i:</strong> 7.5m vs 12m/14m (-37%/-46%)</li>
                                 <li><strong>6i→7i:</strong> 3.9m vs 10m/13m (-61%/-70%)</li>
@@ -7788,8 +7712,8 @@
                             </p>
                         </div>
                         
-                        <div style="padding: 18px; background: rgba(58,143,200,0.1); border-radius: 8px; border-left: 4px solid #3A8FC8;">
-                            <strong style="color: #3A8FC8; font-size: 1.05em;">🥈 Similar/Mejor que HCP15</strong>
+                        <div class="inner-box inner-box--blue">
+                            <strong style="color: #3A8FC8; font-size: 1.05em;">Similar/Mejor que HCP15</strong>
                             <ul style="margin: 12px 0 0 15px; line-height: 1.9; font-size: 0.95em;">
                                 <li><strong>Hybrid→5i:</strong> 22.3m vs 22m HCP15 (+1.4%)</li>
                                 <li><strong>PW→GW:</strong> 14.7m vs 15m HCP15 (-2%)</li>
@@ -7799,8 +7723,8 @@
                             </p>
                         </div>
                         
-                        <div style="padding: 18px; background: rgba(232,139,122,0.1); border-radius: 8px; border-left: 4px solid #E88B7A;">
-                            <strong style="color: #E88B7A; font-size: 1.05em;">📈 Por debajo de ambos benchmarks</strong>
+                        <div class="inner-box inner-box--red">
+                            <strong style="color: #E88B7A; font-size: 1.05em;">Por debajo de ambos benchmarks</strong>
                             <ul style="margin: 12px 0 0 15px; line-height: 1.9; font-size: 0.95em;">
                                 <li><strong>3W→Hybrid:</strong> 40.2m vs 18m/25m PGA/HCP15 ❌</li>
                                 <li><strong>Driver→3W:</strong> 35.5m vs 23m/28m (+54%/+27%)</li>
@@ -7812,8 +7736,8 @@
                         </div>
                     </div>
                     
-                    <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, rgba(90,191,143,0.1), rgba(58,143,200,0.1)); border-radius: 10px; border: 2px solid rgba(74,159,216,0.3);">
-                        <strong style="color: #4A9FD8; font-size: 1.1em;">💡 Análisis Posicional Completo:</strong>
+                    <div class="card-detail accent-blue" style="margin-top: 25px;">
+                        <strong style="color: #4A9FD8; font-size: 1.1em;">Análisis Posicional Completo:</strong>
                         <div style="margin-top: 15px; display: grid; gap: 12px;">
                             <p style="line-height: 1.8; margin: 0;">
                                 <strong style="color: #5ABF8F;">Tu perfil único:</strong> Spacing de irons <strong>superior a PGA Tour</strong> 
@@ -7836,11 +7760,6 @@
             </div>
             
             <div class="chart-container">
-                <h2 id="performance-detallado">📋 Performance Detallado por Club</h2>
-                <div class="club-performance" id="clubPerformance"></div>
-            </div>
-
-            <div class="chart-container">
                 <h2 id="distribucion-direccional">📊 Distribución Direccional - Todos los Palos</h2>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
                     Análisis de la distribución izquierda/centro/derecha de tus golpes por palo. Identifica patrones de sesgo para ajustar tu juego.
@@ -7852,48 +7771,12 @@
                 </div>
 
                 <!-- Directional Charts -->
-                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 15px;">
+                <div class="card-detail" style="padding: 25px;">
                     <canvas id="directionalChart" style="max-height: 600px;"></canvas>
                 </div>
 
                 <!-- Individual Club Details -->
                 <div id="directionalDetails" style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    <!-- Populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Percentiles Section -->
-            <div class="chart-container">
-                <h2 id="percentiles-distancia">📊 Percentiles de Distancia por Palo</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
-                    Distribución estadística de tus distancias (p10, p25, p50-mediana, p75, p90). La mediana (p50) representa tu distancia típica.
-                </p>
-
-                <!-- Main Percentiles Chart -->
-                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 15px; margin-bottom: 25px;">
-                    <canvas id="percentilesChart" style="max-height: 500px;"></canvas>
-                </div>
-
-                <!-- Percentiles Cards -->
-                <div id="percentilesCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                    <!-- Populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Trajectory Data Section -->
-            <div class="chart-container">
-                <h2 id="trajectory-data">🚀 Datos de Trayectoria por Palo</h2>
-                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
-                    Análisis de altura de vuelo, ángulo de lanzamiento y tiempo en el aire para cada palo.
-                </p>
-
-                <!-- Trajectory Chart -->
-                <div style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: 15px; margin-bottom: 25px;">
-                    <canvas id="trajectoryChart" style="max-height: 500px;"></canvas>
-                </div>
-
-                <!-- Trajectory Cards -->
-                <div id="trajectoryCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                     <!-- Populated by JavaScript -->
                 </div>
             </div>
@@ -8005,11 +7888,11 @@
                 </div>
                 
                 <!-- Summary Analysis -->
-                <div style="background: linear-gradient(135deg, rgba(74,159,216,0.1), rgba(90,191,143,0.1)); padding: 30px; border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
-                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">📊 Resumen del Análisis de Dispersión</h3>
+                <div class="card-detail accent-blue" style="padding: 30px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">Resumen del Análisis de Dispersión</h3>
                     <div id="cl-disp-summary" class="grid-3">
-                        <div style="padding: 20px; background: rgba(232,139,122,0.1); border-radius: 10px; border-left: 3px solid #E88B7A;">
-                            <h4 style="color: #E88B7A; margin-bottom: 12px;">🪵 Long Game</h4>
+                        <div class="inner-box inner-box--red">
+                            <h4 style="color: #E88B7A; margin-bottom: 12px;">Long Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Dispersión promedio:</strong> 20.2m lateral</li>
                                 <li><strong>Sesgo dominante:</strong> Pull/Hook severo</li>
@@ -8017,16 +7900,16 @@
                                 <li><strong>Peor palo:</strong> Driver (26.3m std)</li>
                             </ul>
                         </div>
-                        <div style="padding: 20px; background: rgba(212,181,90,0.1); border-radius: 10px; border-left: 3px solid #D4B55A;">
-                            <h4 style="color: #D4B55A; margin-bottom: 12px;">⛳ Mid Game</h4>
+                        <div class="inner-box inner-box--gold">
+                            <h4 style="color: #D4B55A; margin-bottom: 12px;">Mid Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Dispersión promedio:</strong> 4.9m lateral</li>
                                 <li><strong>Sesgo:</strong> Pull moderado</li>
                                 <li><strong>Mejor palo:</strong> 9i (3.9m std)</li>
                             </ul>
                         </div>
-                        <div style="padding: 20px; background: rgba(90,191,143,0.1); border-radius: 10px; border-left: 3px solid #5ABF8F;">
-                            <h4 style="color: #5ABF8F; margin-bottom: 12px;">🎯 Short Game</h4>
+                        <div class="inner-box inner-box--green">
+                            <h4 style="color: #5ABF8F; margin-bottom: 12px;">Short Game</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 1.8; font-size: 0.95em;">
                                 <li><strong>Dispersión promedio:</strong> 1.9m lateral</li>
                                 <li><strong>Sesgo:</strong> Casi neutral</li>
@@ -8035,8 +7918,8 @@
                         </div>
                     </div>
 
-                    <div id="cl-disp-conclusion" style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 10px;">
-                        <strong style="color: #4A9FD8; font-size: 1.1em;">💡 Conclusión Estratégica del Patrón de Dispersión:</strong>
+                    <div id="cl-disp-conclusion" class="inner-box" style="margin-top: 25px;">
+                        <strong style="color: #4A9FD8; font-size: 1.1em;">Conclusión Estratégica del Patrón de Dispersión:</strong>
                         <p style="margin-top: 12px; line-height: 1.8;">
                             Tu patrón de dispersión confirma el diagnóstico — dispersión significativamente menor en wedges vs driver.
                         </p>
@@ -8044,32 +7927,21 @@
                 </div>
             </div>
 
+            <!-- Trajectory Data Section -->
             <div class="chart-container">
-                <h2 id="analisis-burbujas">🔵 Análisis de Burbujas - Distancia vs Consistencia vs Ball Speed</h2>
+                <h2 id="trajectory-data">🚀 Datos de Trayectoria por Palo</h2>
                 <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
-                    Visualización multivariable: El tamaño de cada burbuja representa la velocidad de bola. Ubicación muestra relación distancia-consistencia.
+                    Análisis de altura de vuelo, ángulo de lanzamiento y tiempo en el aire para cada palo.
                 </p>
-                
-                <div style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; margin-bottom: 25px;">
-                    <canvas id="bubbleChart" style="max-height: 500px;"></canvas>
+
+                <!-- Trajectory Chart -->
+                <div class="card-detail" style="padding: 25px; margin-bottom: 25px;">
+                    <canvas id="trajectoryChart" style="max-height: 500px;"></canvas>
                 </div>
-                
-                <!-- Interpretación del Gráfico -->
-                <div style="background: linear-gradient(135deg, rgba(74,159,216,0.1), rgba(90,191,143,0.05)); padding: 30px; border-radius: 15px; border: 2px solid rgba(74,159,216,0.3);">
-                    <h3 style="color: #4A9FD8; margin-bottom: 25px; font-size: 1.4em;">📊 Interpretación del Análisis de Burbujas</h3>
 
-                    <div id="cl-bubble-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                        <!-- Dynamic: injected from bubble_analysis -->
-                        <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando análisis...</p>
-                    </div>
-
-                    <!-- Summary Box -->
-                    <div id="cl-bubble-strategy" style="margin-top: 30px; padding: 25px; background: rgba(212,181,90,0.1); border-radius: 12px; border: 2px solid rgba(212,181,90,0.4);">
-                        <h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">💡 Conclusión del Análisis</h4>
-                        <div style="line-height: 1.9; font-size: 1.05em;">
-                            <p>Cargando estrategia...</p>
-                        </div>
-                    </div>
+                <!-- Trajectory Cards -->
+                <div id="trajectoryCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Populated by JavaScript -->
                 </div>
             </div>
 
@@ -8081,21 +7953,13 @@
                 <canvas id="smashFactorChart"></canvas>
                 
                 <!-- NUEVO CONTENIDO: Interpretación del Smash Factor -->
-                <div style="background: linear-gradient(135deg, rgba(255,165,0,0.15), rgba(255,165,0,0.05)); 
-                            border: 2px solid rgba(255,165,0,0.4); 
-                            border-radius: 15px; 
-                            padding: 35px; 
-                            margin-top: 40px;">
+                <div class="card-detail accent-gold" style="margin-top: 40px;">
                     
-                    <h3 style="color: #D4B55A; margin-bottom: 25px; font-size: 1.5em;">📊 Interpretación del Smash Factor</h3>
+                    <h3 style="color: #D4B55A; margin-bottom: 25px; font-size: 1.5em;">Interpretación del Smash Factor</h3>
                     
                     <!-- Explicación -->
-                    <div style="background: rgba(100,149,237,0.1); 
-                                border-left: 4px solid #4A9FD8; 
-                                padding: 20px; 
-                                border-radius: 10px; 
-                                margin-bottom: 30px;">
-                        <h4 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">💡 ¿Qué es el Smash Factor?</h4>
+                    <div class="inner-box inner-box--blue" style="margin-bottom: 30px;">
+                        <h4 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">¿Qué es el Smash Factor?</h4>
                         <p style="line-height: 1.8; font-size: 1.05em;">
                             El <strong>Smash Factor</strong> mide la eficiencia de transferencia de energía del palo a la bola. 
                             Se calcula como: <strong>Ball Speed ÷ Club Speed</strong>. Un smash factor más alto indica mejor contacto 
@@ -8110,11 +7974,8 @@
                                 margin: 30px 0;">
                         
                         <!-- DRIVER -->
-                        <div style="background: linear-gradient(135deg, rgba(232,139,122,0.15), rgba(232,139,122,0.05)); 
-                                    border: 2px solid rgba(232,139,122,0.5); 
-                                    border-radius: 12px; 
-                                    padding: 25px;">
-                            <h4 style="color: #E88B7A; margin-bottom: 20px; font-size: 1.3em;">🏌️ Driver</h4>
+                        <div class="card-detail accent-red">
+                            <h4 style="color: #E88B7A; margin-bottom: 20px; font-size: 1.3em;">Driver</h4>
 
                             <div style="text-align: center; margin: 20px 0;">
                                 <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">Tu Smash Factor:</div>
@@ -8137,21 +7998,14 @@
                                 <li><strong>Pérdida estimada:</strong> 8-12 metros por golpe</li>
                             </ul>
                             
-                            <div style="background: rgba(232,139,122,0.15); 
-                                        padding: 15px; 
-                                        border-radius: 8px; 
-                                        border-left: 3px solid #E88B7A; 
-                                        margin-top: 15px;">
-                                <strong style="color: #E88B7A;">🎯 Causa principal:</strong> Contacto fuera del centro - strike inconsistente
+                            <div class="inner-box inner-box--red" style="margin-top: 15px;">
+                                <strong style="color: #E88B7A;">Causa principal:</strong> Contacto fuera del centro - strike inconsistente
                             </div>
                         </div>
                         
                         <!-- 3 WOOD -->
-                        <div style="background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); 
-                                    border: 2px solid rgba(90,191,143,0.5); 
-                                    border-radius: 12px; 
-                                    padding: 25px;">
-                            <h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.3em;">🪵 3 Wood</h4>
+                        <div class="card-detail accent-green">
+                            <h4 style="color: #5ABF8F; margin-bottom: 20px; font-size: 1.3em;">3 Wood</h4>
 
                             <div style="text-align: center; margin: 20px 0;">
                                 <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">Tu Smash Factor:</div>
@@ -8174,21 +8028,14 @@
                                 <li><strong>Resultado:</strong> Maximizas distancia potencial</li>
                             </ul>
                             
-                            <div style="background: rgba(90,191,143,0.15); 
-                                        padding: 15px; 
-                                        border-radius: 8px; 
-                                        border-left: 3px solid #5ABF8F; 
-                                        margin-top: 15px;">
-                                <strong style="color: #5ABF8F;">🎯 Acción:</strong> MANTENER técnica actual
+                            <div class="inner-box inner-box--green" style="margin-top: 15px;">
+                                <strong style="color: #5ABF8F;">Acción:</strong> MANTENER técnica actual
                             </div>
                         </div>
                         
                         <!-- HYBRID -->
-                        <div style="background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(74,159,216,0.05)); 
-                                    border: 2px solid rgba(74,159,216,0.5); 
-                                    border-radius: 12px; 
-                                    padding: 25px;">
-                            <h4 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">🔧 Hybrid</h4>
+                        <div class="card-detail accent-blue">
+                            <h4 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">Hybrid</h4>
 
                             <div style="text-align: center; margin: 20px 0;">
                                 <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">Tu Smash Factor:</div>
@@ -8211,21 +8058,14 @@
                                 <li><strong>Ganancia potencial:</strong> 3-5 metros mejorables</li>
                             </ul>
                             
-                            <div style="background: rgba(74,159,216,0.15); 
-                                        padding: 15px; 
-                                        border-radius: 8px; 
-                                        border-left: 3px solid #4A9FD8; 
-                                        margin-top: 15px;">
-                                <strong style="color: #4A9FD8;">🎯 Oportunidad:</strong> Refinar strike para cerrar brecha
+                            <div class="inner-box inner-box--blue" style="margin-top: 15px;">
+                                <strong style="color: #4A9FD8;">Oportunidad:</strong> Refinar strike para cerrar brecha
                             </div>
                         </div>
                         
                         <!-- IRONS -->
-                        <div style="background: linear-gradient(135deg, rgba(212,181,90,0.15), rgba(212,181,90,0.05)); 
-                                    border: 2px solid rgba(212,181,90,0.5); 
-                                    border-radius: 12px; 
-                                    padding: 25px;">
-                            <h4 style="color: #D4B55A; margin-bottom: 20px; font-size: 1.3em;">⛳ Irons (5-9)</h4>
+                        <div class="card-detail accent-gold">
+                            <h4 style="color: #D4B55A; margin-bottom: 20px; font-size: 1.3em;">Irons (5-9)</h4>
                             
                             <div style="text-align: center; margin: 20px 0;">
                                 <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">Tu Smash Factor Promedio:</div>
@@ -8248,21 +8088,14 @@
                                 <li><strong>Pérdida estimada:</strong> 5-8 yardas por hierro</li>
                             </ul>
                             
-                            <div style="background: rgba(212,181,90,0.15); 
-                                        padding: 15px; 
-                                        border-radius: 8px; 
-                                        border-left: 3px solid #D4B55A; 
-                                        margin-top: 15px;">
-                                <strong style="color: #D4B55A;">🎯 Prioridad:</strong> Strike quality + comprimir la bola
+                            <div class="inner-box inner-box--gold" style="margin-top: 15px;">
+                                <strong style="color: #D4B55A;">Prioridad:</strong> Strike quality + comprimir la bola
                             </div>
                         </div>
                         
                         <!-- WEDGES -->
-                        <div style="background: linear-gradient(135deg, rgba(45,62,80,0.15), rgba(45,62,80,0.05)); 
-                                    border: 2px solid rgba(45,62,80,0.5); 
-                                    border-radius: 12px; 
-                                    padding: 25px;">
-                            <h4 style="color: #3A8FC8; margin-bottom: 20px; font-size: 1.3em;">🎯 Wedges (PW/GW/SW)</h4>
+                        <div class="card-detail accent-blue">
+                            <h4 style="color: #3A8FC8; margin-bottom: 20px; font-size: 1.3em;">Wedges (PW/GW/SW)</h4>
                             
                             <div style="text-align: center; margin: 20px 0;">
                                 <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 8px;">Tu Smash Factor Promedio:</div>
@@ -8285,24 +8118,16 @@
                                 <li><strong>SW (1.28):</strong> Supera promedio tour</li>
                             </ul>
                             
-                            <div style="background: rgba(45,62,80,0.15); 
-                                        padding: 15px; 
-                                        border-radius: 8px; 
-                                        border-left: 3px solid #3A8FC8; 
-                                        margin-top: 15px;">
-                                <strong style="color: #3A8FC8;">🎯 Status:</strong> Elite tier - No tocar
+                            <div class="inner-box inner-box--blue" style="margin-top: 15px;">
+                                <strong style="color: #3A8FC8;">Status:</strong> Elite tier - No tocar
                             </div>
                         </div>
                         
                     </div>
                     
                     <!-- Conclusión -->
-                    <div style="background: rgba(212,181,90,0.15); 
-                                border: 2px solid rgba(212,181,90,0.4); 
-                                border-radius: 12px; 
-                                padding: 30px; 
-                                margin-top: 30px;">
-                        <h4 style="color: #D4B55A; margin-bottom: 20px; font-size: 1.3em;">💡 Conclusión del Análisis de Smash Factor</h4>
+                    <div class="card-detail accent-gold" style="margin-top: 30px;">
+                        <h4 style="color: #D4B55A; margin-bottom: 20px; font-size: 1.3em;">Conclusión del Análisis de Smash Factor</h4>
                         <p style="line-height: 1.9; font-size: 1.05em; margin-bottom: 20px;">
                             Tu perfil de smash factor confirma el patrón de <strong>"Short Game Specialist"</strong>: eficiencia tour-level 
                             en wedges (1.25) y 3-wood (1.48), pero problemas críticos en driver (1.43) e irons (1.11) que están costándote 
@@ -8321,12 +8146,7 @@
                             </ul>
                         </div>
                         
-                        <div style="background: linear-gradient(135deg, rgba(90,191,143,0.2), rgba(74,159,216,0.2)); 
-                                    padding: 20px; 
-                                    border-radius: 10px; 
-                                    border: 2px solid rgba(90,191,143,0.4); 
-                                    margin-top: 20px; 
-                                    text-align: center;">
+                        <div class="card-detail accent-green" style="margin-top: 20px; text-align: center;">
                             <strong style="color: #5ABF8F; font-size: 1.15em;">🎯 Ganancia potencial total:</strong>
                             <div style="font-size: 1.3em; margin-top: 10px; line-height: 1.6;">
                                 Mejorar driver a 1.48 (+10m) e irons a 1.30 (+6 yardas/palo) = 
@@ -8343,8 +8163,8 @@
             <div class="chart-container">
                 <h2 id="metricas-velocidad">⚡ Métricas de Velocidad y Potencia por Club</h2>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
-                    <div style="background: linear-gradient(135deg, rgba(232,139,122,0.15), rgba(232,139,122,0.05)); padding: 25px; border-radius: 12px; border-left: 4px solid #E88B7A;">
-                        <h3 style="color: #E88B7A; margin-bottom: 15px; font-size: 1.2em;">🏌️ Ball Speed (mph)</h3>
+                    <div class="inner-box inner-box--red" style="padding: 25px;">
+                        <h3 style="color: #E88B7A; margin-bottom: 15px; font-size: 1.2em;">Ball Speed (mph)</h3>
                         <div style="margin-bottom: 12px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span>Driver</span>
@@ -8377,8 +8197,8 @@
                         </p>
                     </div>
                     
-                    <div style="background: linear-gradient(135deg, rgba(74,159,216,0.15), rgba(74,159,216,0.05)); padding: 25px; border-radius: 12px; border-left: 4px solid #4A9FD8;">
-                        <h3 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">🚀 Club Speed (mph)</h3>
+                    <div class="inner-box inner-box--blue" style="padding: 25px;">
+                        <h3 style="color: #4A9FD8; margin-bottom: 15px; font-size: 1.2em;">Club Speed (mph)</h3>
                         <div style="margin-bottom: 12px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span>Driver</span>
@@ -8411,8 +8231,8 @@
                         </p>
                     </div>
                     
-                    <div style="background: linear-gradient(135deg, rgba(90,191,143,0.15), rgba(90,191,143,0.05)); padding: 25px; border-radius: 12px; border-left: 4px solid #5ABF8F;">
-                        <h3 style="color: #5ABF8F; margin-bottom: 15px; font-size: 1.2em;">⚡ Smash Factor</h3>
+                    <div class="inner-box inner-box--green" style="padding: 25px;">
+                        <h3 style="color: #5ABF8F; margin-bottom: 15px; font-size: 1.2em;">Smash Factor</h3>
                         <div style="margin-bottom: 12px;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                                 <span>Driver</span>
@@ -8447,6 +8267,40 @@
                 </div>
             </div>
             
+            <div class="chart-container">
+                <h2 id="analisis-burbujas">🔵 Análisis de Burbujas - Distancia vs Consistencia vs Ball Speed</h2>
+                <p style="margin-bottom: 25px; color: rgba(255,255,255,0.8); font-size: 1.05em;">
+                    Visualización multivariable: El tamaño de cada burbuja representa la velocidad de bola. Ubicación muestra relación distancia-consistencia.
+                </p>
+                
+                <div class="card-detail" style="padding: 25px; margin-bottom: 25px;">
+                    <canvas id="bubbleChart" style="max-height: 500px;"></canvas>
+                </div>
+                
+                <!-- Interpretación del Gráfico -->
+                <div class="card-detail accent-blue" style="padding: 30px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 25px; font-size: 1.4em;">Interpretación del Análisis de Burbujas</h3>
+
+                    <div id="cl-bubble-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <!-- Dynamic: injected from bubble_analysis -->
+                        <p style="text-align: center; color: rgba(255,255,255,0.5); grid-column: 1 / -1;">Cargando análisis...</p>
+                    </div>
+
+                    <!-- Summary Box -->
+                    <div id="cl-bubble-strategy" class="card-detail accent-gold" style="margin-top: 30px;">
+                        <h4 style="color: #D4B55A; margin-bottom: 15px; font-size: 1.2em;">Conclusión del Análisis</h4>
+                        <div style="line-height: 1.9; font-size: 1.05em;">
+                            <p>Cargando estrategia...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h2 id="performance-detallado">📋 Performance Detallado por Club</h2>
+                <div class="club-performance" id="clubPerformance"></div>
+            </div>
+
             <!-- SECCIÓN ADICIONAL: Dispersión Lateral -->
 
             <div class="chart-container">
@@ -8456,10 +8310,10 @@
                 </p>
                 
                 <!-- Performance Table -->
-                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; overflow-x: auto; margin-bottom: 30px;">
+                <div class="card-detail" style="padding: 30px; overflow-x: auto; margin-bottom: 30px;">
                     <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px;">
                         <thead>
-                            <tr style="background: linear-gradient(135deg, #003366, #004488);">
+                            <tr style="background: rgba(255,255,255,0.06);">
                                 <th style="padding: 18px 15px; text-align: left; color: #E8E8E8; font-size: 1.1em; font-weight: 700; border-top-left-radius: 10px;">Palo</th>
                                 <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Distancia (m)</th>
                                 <th style="padding: 18px 15px; text-align: center; color: #E8E8E8; font-weight: 700;">Desviación (m)</th>
@@ -8491,20 +8345,20 @@
                 </div>
                 
                 <!-- Pattern Summary -->
-                <div style="background: linear-gradient(135deg, rgba(74,159,216,0.12), rgba(90,191,143,0.08)); padding: 30px; border-radius: 15px; border: 2px solid rgba(74,159,216,0.4);">
-                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">🎯 Pattern: Excelencia en wedges (9.0+) pero debilidad crítica en driver (5.2)</h3>
+                <div class="card-detail accent-blue" style="padding: 30px;">
+                    <h3 style="color: #4A9FD8; margin-bottom: 20px; font-size: 1.3em;">Pattern: Excelencia en wedges (9.0+) pero debilidad crítica en driver (5.2)</h3>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                        <div style="background: rgba(90,191,143,0.15); padding: 25px; border-radius: 12px; border: 2px solid rgba(90,191,143,0.5);">
-                            <h4 style="color: #5ABF8F; margin-bottom: 15px;">🏆 Zona Élite (9.0+/10)</h4>
+                        <div class="card-detail accent-green">
+                            <h4 style="color: #5ABF8F; margin-bottom: 15px;">Zona Élite (9.0+/10)</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 2;"><li><strong>Wedges:</strong> 9.0-9.2/10 | Tour-level</li></ul>
                         </div>
-                        <div style="background: rgba(212,181,90,0.12); padding: 25px; border-radius: 12px; border: 2px solid rgba(212,181,90,0.4);">
-                            <h4 style="color: #D4B55A; margin-bottom: 15px;">✅ Zona Buena (7.0-8.5/10)</h4>
+                        <div class="card-detail accent-gold">
+                            <h4 style="color: #D4B55A; margin-bottom: 15px;">Zona Buena (7.0-8.5/10)</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 2;"><li><strong>Irons/3W/Hybrid:</strong> 6.8-8.1/10</li></ul>
                         </div>
-                        <div style="background: rgba(232,139,122,0.15); padding: 25px; border-radius: 12px; border: 2px solid rgba(232,139,122,0.5);">
-                            <h4 style="color: #E88B7A; margin-bottom: 15px;">❌ Zona Crítica (<6.0/10)</h4>
+                        <div class="card-detail accent-red">
+                            <h4 style="color: #E88B7A; margin-bottom: 15px;">Zona Crítica (<6.0/10)</h4>
                             <ul style="margin: 0; padding-left: 20px; line-height: 2;"><li><strong>Driver:</strong> 5.2/10 | Intervención inmediata</li></ul>
                         </div>
                     </div>
@@ -8971,7 +8825,7 @@
 
                 <!-- Canvas para heatmap -->
                 <div style="position: relative; background: linear-gradient(135deg, rgba(15,32,39,0.8), rgba(32,58,67,0.6)); border-radius: 15px; padding: 25px; overflow: hidden; border: 2px solid rgba(74,159,216,0.2); box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-                    <canvas id="shotZonesChart" width="1000" height="600" style="width: 100%; height: auto; max-height: 600px; display: block; border-radius: 8px;"></canvas>
+                    <canvas id="shotZonesChart" style="width: 100%; max-height: 600px; display: block; border-radius: 8px;"></canvas>
                 </div>
 
                 <!-- Leyenda de colores -->
@@ -11283,10 +11137,10 @@
                 </p>
                 
                 <!-- Heatmap Table -->
-                <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; overflow-x: auto; margin-bottom: 30px;">
+                <div class="card-detail" style="padding: 30px; overflow-x: auto; margin-bottom: 30px;">
                     <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px;">
                         <thead>
-                            <tr style="background: linear-gradient(135deg, #003366, #004488);">
+                            <tr style="background: rgba(255,255,255,0.06);">
                                 <th style="padding: 20px 15px; text-align: left; color: #E8E8E8; font-size: 1.1em; border-top-left-radius: 10px; min-width: 120px;">Acción</th>
                                 <th style="padding: 20px 15px; text-align: center; color: #E8E8E8; font-weight: 700; min-width: 140px;">Launch Angle</th>
                                 <th style="padding: 20px 15px; text-align: center; color: #E8E8E8; font-weight: 700; min-width: 140px;">Tempo Train</th>
@@ -12253,7 +12107,10 @@
         
         Chart.defaults.color = '#fff';
         Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
-        
+
+        // Fix blurry charts on HiDPI/Retina displays
+        Chart.defaults.devicePixelRatio = window.devicePixelRatio || 2;
+
         // Global responsive settings for all charts
         Chart.defaults.responsive = true;
         Chart.defaults.maintainAspectRatio = false;
@@ -14993,29 +14850,43 @@
             [28, 25, 22, 14, 13, 12, 12, 14, 10, 8];
 
         window.chartInstances.gapAnalysisChart = new Chart(gapAnalysisCtx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: gapLabels,
                 datasets: [{
                     label: 'Tus Gaps (m)',
                     data: gapYourGaps,
-                    backgroundColor: 'rgba(74, 159, 216,0.8)',
                     borderColor: '#4A9FD8',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(74, 159, 216, 0.15)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#4A9FD8',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
                 }, {
                     label: 'PGA Tour Ideal (m)',
                     data: gapPGATour,
-                    backgroundColor: 'rgba(212, 181, 90,0.6)',
                     borderColor: '#D4B55A',
+                    backgroundColor: 'rgba(212, 181, 90, 0.08)',
                     borderWidth: 2,
-                    borderDash: [5, 5]
+                    borderDash: [5, 5],
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#D4B55A'
                 }, {
                     label: 'Amateur HCP15 (m)',
                     data: gapHCP15,
-                    backgroundColor: 'rgba(90, 191, 143,0.4)',
                     borderColor: '#5ABF8F',
+                    backgroundColor: 'rgba(90, 191, 143, 0.08)',
                     borderWidth: 2,
-                    borderDash: [3, 3]
+                    borderDash: [3, 3],
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#5ABF8F'
                 }]
             },
             options: {
