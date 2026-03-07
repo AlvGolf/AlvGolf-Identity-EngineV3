@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.1.3 - Tab 2 Redesign + AI Conclusions + Quick Menu Audit
+**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -782,6 +782,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.2.0 | 2026-03-07 | Full Glassmorphism Redesign — Tab 5 (quick menu 2→4, reorder 14 sections, glassmorphism) + Tab 6 (quick menu 3→4, glassmorphism 9 sections, fix roi-plan-mejora ID) + Shot Zones KDE heatmap + club filter fix |
 | v3.1.3 | 2026-03-05 | Tab 2 Redesign — UXWriter 10→12 sections (quarterly_conclusion + volatility_conclusion), quick menu 9→13 items in correct order, minimalist style (no emojis), planning docs for Tab 3-6 |
 | v3.1.2 | 2026-03-04 | Glassmorphism Redesign Tab 1 — card-detail sutil + ADN al final |
 | v3.1.1 | 2026-03-04 | Tooltips enriquecidos + SVG→Chart.js radar + ejes Y corregidos + timeline fix |

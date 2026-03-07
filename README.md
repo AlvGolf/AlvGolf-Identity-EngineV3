@@ -1,8 +1,8 @@
 # AlvGolf - Multi-Agent Golf Analytics System
 
-**Version:** v3.0.9 - Radar Deduplication + Section Reorg
+**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
 **Estado:** Production Ready
-**Ultima actualizacion:** 2026-03-03
+**Ultima actualizacion:** 2026-03-07
 
 [![Dashboard](https://img.shields.io/badge/Dashboard-v5.3.0-blue)]()
 [![Backend](https://img.shields.io/badge/Backend-v5.3.0-green)]()
@@ -102,6 +102,23 @@ graph TB
 ---
 
 ## What's New
+
+### v3.2.0 - Full Glassmorphism Redesign Tabs 1-6 (2026-03-07)
+
+**Rediseno visual completo** de los 6 tabs con glassmorphism consistente, quick menus con sub-grupos logicos, y reorganizacion de secciones:
+
+- **Tab 5 (Analisis Profundo):** Quick menu 2→4 grupos (Metricas/Analisis/Comparativas/Estrategia), 14 secciones reordenadas por flujo logico, glassmorphism en ~60 elementos, 3 ghost items eliminados del menu
+- **Tab 6 (Estrategia & Accion):** Quick menu 3→4 grupos (Diagnostico/Estrategia/Plan/Conclusion), glassmorphism en 9 secciones (~80+ edits), fix `id="roi-plan-mejora"` movido de div a h2
+- **Shot Zones Heatmap:** Reescrito con KDE (Kernel Density Estimation) + interpolacion bilinear + DPI scaling + nueva paleta termica (azul→cyan→verde→amarillo→naranja→rojo), grid 40x50→200x250
+- **Shot Zones filtros:** Fix nombres clubs abreviados (Dr/3W/5i/Hyb/GW 52/SW 58) para LONG/MID GAME
+- **Tabs 1-4:** Glassmorphism ya aplicado en sesiones anteriores (v3.1.1-v3.1.3)
+
+### v3.1.3 - Tab 2 Redesign + AI Conclusions + Quick Menu Audit (2026-03-05)
+
+- Tab 2: Quick menu 9→13 items, glassmorphism, 2 AI conclusions (quarterly + volatility)
+- Tab 3: Glassmorphism completo (~87 CSS class uses, -109 lineas)
+- Tab 4: Quick menu + glassmorphism + chart DPI fix
+- CSS Paso 0: 8 clases utilitarias (.text-label, .kpi-card, .quick-nav-link, .ai-conclusion, .inner-box)
 
 ### v3.0.9 - Radar Deduplication + Section Reorg (2026-03-03)
 
@@ -419,7 +436,7 @@ AlvGolf/
 #### v5.0.0 - v5.1.1 (Feb 2026)
 - [x] 53 funciones backend
 - [x] 36 charts dinamizados (100%)
-- [x] Shot zones heatmap (40x50 grid)
+- [x] Shot zones heatmap (200x250 KDE + bilinear interpolation)
 - [x] Mobile optimization
 
 #### TIER 1 Agentic (2026-02-15)
@@ -473,12 +490,31 @@ AlvGolf/
 - [x] 62 JSON keys, 273 KB — dashboard 100% dinamico
 - [x] Tabs 1, 3, 4, 5, 6 enriquecidos con narrativas, diagnosticos, planes
 
+#### v3.2.0 - Full Glassmorphism Redesign (2026-03-07)
+- [x] Tab 5: Quick menu 2→4 grupos + glassmorphism 14 secciones + section reorder
+- [x] Tab 6: Quick menu 3→4 grupos + glassmorphism 9 secciones + fix roi-plan-mejora ID
+- [x] Shot Zones heatmap: KDE + bilinear interpolation + DPI scaling + paleta termica
+- [x] Shot Zones filtros: fix club name aliases (Dr, 3W, 5i, Hyb, GW 52, SW 58)
+- [x] Tabs 1-4 glassmorphism completado en v3.1.1-v3.1.3
+
 ### Pendiente
 - [ ] Multi-usuario (escalabilidad)
 
 ---
 
 ## Changelog
+
+### v3.2.0 (2026-03-07) - Full Glassmorphism Redesign Tabs 1-6
+- Tab 5: Quick menu redesign (2→4 sub-grupos), 14 secciones reordenadas, glassmorphism ~60 elementos
+- Tab 6: Quick menu redesign (3→4 sub-grupos), glassmorphism 9 secciones (~80+ edits), fix roi-plan-mejora ID
+- Shot Zones heatmap: KDE (200x250 grid) + bilinear interpolation + DPI scaling + paleta termica
+- Shot Zones filtros: aliases para nombres abreviados de clubs (Dr, 3W, 5i, Hyb, GW 52, SW 58)
+
+### v3.1.3 (2026-03-05) - Tab 2 Redesign + CSS Paso 0 + Tab 3-4 Glassmorphism
+- Tab 2: Quick menu 9→13, glassmorphism, AI conclusions (quarterly_conclusion + volatility_conclusion)
+- Tab 3: Glassmorphism completo (~87 CSS class uses)
+- Tab 4: Quick menu + glassmorphism + chart DPI fix
+- CSS Paso 0: 8 utility classes (.text-label, .kpi-card, .quick-nav-link, .ai-conclusion, .inner-box)
 
 ### v3.0.9 (2026-03-03) - Radar Deduplication + Section Reorg
 - Tab 1: Eliminado radar "Analisis 360° de tus 10 Dimensiones" — redundante con Golf Identity SVG
@@ -589,6 +625,6 @@ Proyecto personal - Todos los derechos reservados Alvaro Peralta 2026
 
 ---
 
-**Ultima actualizacion:** 3 de marzo de 2026
+**Ultima actualizacion:** 7 de marzo de 2026
 **Estado:** Production Ready
-**Version:** v3.0.9 - Radar Deduplication + Section Reorg
+**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
