@@ -127,8 +127,8 @@ END (Total: ~56,000 chars, ~3.6 min — was 5.3 min before v4.1)
 
 ### UXWriter Dashboard Integration (v3.0.3)
 
-AgentUXWriter generates **12 content sections** in Spanish inserted into the dashboard.
-(Originally 10 sections, reduced to 6 in v3.0.3, restored to 10 in v3.1.0, expanded to 12 in v3.1.3.)
+AgentUXWriter generates **19 content sections** in Spanish inserted into the dashboard.
+(Originally 10 sections, reduced to 6 in v3.0.3, restored to 10 in v3.1.0, expanded to 12 in v3.1.3, expanded to 19 in v3.2.1.)
 
 1. **hero_statement** (50-80 words) --> Tab 1: Mi Identidad
 2. **dna_profile** (30-50 words) --> Tab 1: Mi Identidad
@@ -142,11 +142,18 @@ AgentUXWriter generates **12 content sections** in Spanish inserted into the das
 10. **roi_cards** (array) --> Tab 6: Estrategia
 11. **quarterly_conclusion** (string, 40-80 words) --> Tab 2: Performance por Trimestre
 12. **volatility_conclusion** (string, 40-80 words) --> Tab 2: Volatilidad Mensual
+13. **identity_conclusion** (string, 40-80 words) --> Tab 1: Mi Identidad
+14. **course_strategy_conclusion** (string, 40-80 words) --> Tab 3: Campos
+15. **dispersion_conclusion** (string, 40-80 words) --> Tab 4: Palos
+16. **equipment_conclusion** (string, 40-80 words) --> Tab 4: Palos
+17. **strokes_gained_conclusion** (string, 40-80 words) --> Tab 5: Análisis Profundo
+18. **comfort_zones_conclusion** (string, 40-80 words) --> Tab 5: Análisis Profundo
+19. **dafo_conclusion** (string, 40-80 words) --> Tab 6: Estrategia
 
 **Frontend Integration Pattern (v3.0.4 - Static Only):**
 - `loadUXContent()` -- single source: `output/ai_content.json` (11 lines, zero fallbacks)
 - Priority 1 (only): `output/ai_content.json` (pre-generated, loads in <100ms, **instantaneo**)
-- `insertUXContent(content)` -- DOM manipulation for 12 content sections + sets `window.coachReportMd`
+- `insertUXContent(content)` -- DOM manipulation for 19 content sections + sets `window.coachReportMd`
 - Graceful degradation if file unavailable (dashboard works without AI content)
 - **CERO llamadas live a localhost:8000** — dashboard 100% estático, GitHub Pages native
 

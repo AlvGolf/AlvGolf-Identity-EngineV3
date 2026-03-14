@@ -481,6 +481,31 @@
                 }
             }
 
+            // 13-19. New AI Conclusions (7 sections)
+            const newConclusions = [
+                { key: 'identity_conclusion', anchor: 'ai-identity-conclusion', label: 'identity' },
+                { key: 'course_strategy_conclusion', anchor: 'ai-course-strategy-conclusion', label: 'course strategy' },
+                { key: 'dispersion_conclusion', anchor: 'ai-dispersion-conclusion', label: 'dispersion' },
+                { key: 'equipment_conclusion', anchor: 'ai-equipment-conclusion', label: 'equipment' },
+                { key: 'strokes_gained_conclusion', anchor: 'ai-strokes-gained-conclusion', label: 'strokes gained' },
+                { key: 'comfort_zones_conclusion', anchor: 'ai-comfort-zones-conclusion', label: 'comfort zones' },
+                { key: 'dafo_conclusion', anchor: 'ai-dafo-conclusion', label: 'DAFO' },
+            ];
+            newConclusions.forEach(({ key, anchor: anchorId, label }) => {
+                if (content[key]) {
+                    const el = document.getElementById(anchorId);
+                    if (el) {
+                        el.innerHTML = `
+                            <div class="ai-conclusion">
+                                <strong>Conclusión:</strong>
+                                <span> ${content[key]}</span>
+                            </div>
+                        `;
+                        console.log(`  ✓ Inserted ${label} conclusion`);
+                    }
+                }
+            });
+
             // 9. Course cards (tab campos, después del quick menu)
             if (content.course_cards && Array.isArray(content.course_cards) && content.course_cards.length > 0) {
                 const anchor = document.getElementById('ai-courses-anchor');
@@ -5992,6 +6017,9 @@
                 </div>
             </div>
 
+            <!-- AI Identity Conclusion -->
+            <div id="ai-identity-conclusion"></div>
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -7451,6 +7479,10 @@
                 </div>
             </div>
             
+
+            <!-- AI Course Strategy Conclusion -->
+            <div id="ai-course-strategy-conclusion"></div>
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -8420,6 +8452,13 @@
                 </div>
             </div>
             
+
+            <!-- AI Dispersion Conclusion -->
+            <div id="ai-dispersion-conclusion"></div>
+
+            <!-- AI Equipment Conclusion -->
+            <div id="ai-equipment-conclusion"></div>
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -8670,6 +8709,10 @@
                         Neto = -1.3 golpes vs HCP15. Si corriges driver (attack angle), proyección: <strong style="color: #5ABF8F;">+1.0 strokes gained</strong> vs HCP15 
                         (pasarías de HCP18-20 a HCP12-14 estimado).
                     </p>
+
+            <!-- AI Strokes Gained Conclusion -->
+            <div id="ai-strokes-gained-conclusion"></div>
+
                 </div>
             </div>
             
@@ -9593,6 +9636,10 @@
                 </div>
             </section>
 
+
+            <!-- AI Comfort Zones Conclusion -->
+            <div id="ai-comfort-zones-conclusion"></div>
+
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -9941,6 +9988,10 @@
                             <li><strong>Realismo:</strong> 9.0/10 alcanzable pero requiere trabajo</li>
                         </ul>
                     </div>
+
+            <!-- AI DAFO Conclusion -->
+            <div id="ai-dafo-conclusion"></div>
+
                 </div>
             </div>
             

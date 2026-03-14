@@ -23,7 +23,7 @@ llm = ChatAnthropic(
     model="claude-sonnet-4-6",
     anthropic_api_key=settings.anthropic_api_key,
     temperature=0.3,  # Slightly creative for engaging content
-    max_tokens=7000,  # Dashboard content: 10 secciones JSON
+    max_tokens=7000,  # Dashboard content: 19 secciones JSON
     # Enable prompt caching (critical for cost savings)
     default_headers={
         "anthropic-beta": "prompt-caching-2024-07-31"
@@ -405,7 +405,7 @@ Tiempo: [X semanas]
 
 ## OUTPUT STRUCTURE
 
-Your output MUST be a valid JSON object with EXACTLY these 12 sections (no more, no less):
+Your output MUST be a valid JSON object with EXACTLY these 19 sections (no more, no less):
 
 ```json
 {
@@ -439,7 +439,14 @@ Your output MUST be a valid JSON object with EXACTLY these 12 sections (no more,
     { "action": "Mejorar ángulo ataque driver", "content": "40-50 words" }
   ],
   "quarterly_conclusion": "40-80 words. Conclusión interpretativa de patrones trimestrales: mejor/peor trimestre, tendencia estacional, ritmo de mejora.",
-  "volatility_conclusion": "40-80 words. Conclusión interpretativa de volatilidad mensual: meses más/menos consistentes, tendencia de estabilización, relación con handicap."
+  "volatility_conclusion": "40-80 words. Conclusión interpretativa de volatilidad mensual: meses más/menos consistentes, tendencia de estabilización, relación con handicap.",
+  "identity_conclusion": "40-80 words. Síntesis del perfil golfístico: arquetipo, fortaleza dominante, área de mejora prioritaria, potencial de crecimiento.",
+  "course_strategy_conclusion": "40-80 words. Conclusión estratégica de campos: qué tipos de campo te favorecen, patrones por dificultad, recomendación de campos para practicar.",
+  "dispersion_conclusion": "40-80 words. Conclusión del patrón de dispersión: tendencia pull/hook/slice, palos más/menos consistentes, impacto en scoring.",
+  "equipment_conclusion": "40-80 words. Valoración general de la bolsa: gaps de distancia, palos infrautilizados, recomendación de fitting o cambios.",
+  "strokes_gained_conclusion": "40-80 words. Interpretación del Strokes Gained: categorías que más/menos aportan, comparación con benchmarks, prioridad de mejora.",
+  "comfort_zones_conclusion": "40-80 words. Conclusión de zonas de confort: distancias donde rindes mejor/peor, patrones de consistencia, áreas a consolidar.",
+  "dafo_conclusion": "40-80 words. Síntesis estratégica del DAFO: fortaleza clave a proteger, debilidad más costosa, oportunidad de mayor ROI, amenaza a vigilar."
 }
 ```
 
@@ -471,8 +478,8 @@ Your output MUST be a valid JSON object with EXACTLY these 12 sections (no more,
 
 ## YOUR TASK
 
-When provided with dashboard_data, extract key metrics and generate the EXACT 10 sections
-listed in OUTPUT STRUCTURE. All 10 keys must be present in the JSON output.
+When provided with dashboard_data, extract key metrics and generate the EXACT 19 sections
+listed in OUTPUT STRUCTURE. All 19 keys must be present in the JSON output.
 
 Transform technical data into motivational, clear, actionable Spanish content that helps
 golfers understand their game and improve with confidence.
@@ -560,7 +567,7 @@ Key Metrics (JSON):
 
 ---
 
-MANDATORY: Generate ALL 12 JSON sections — every single one must be present:
+MANDATORY: Generate ALL 19 JSON sections — every single one must be present:
 1. hero_statement (string)
 2. dna_profile (string)
 3. stat_cards (array of 3-4 objects with title/value/interpretation)
@@ -573,8 +580,15 @@ MANDATORY: Generate ALL 12 JSON sections — every single one must be present:
 10. roi_cards (array of 3-4 objects with action/content)
 11. quarterly_conclusion (string, 40-80 words)
 12. volatility_conclusion (string, 40-80 words)
+13. identity_conclusion (string, 40-80 words)
+14. course_strategy_conclusion (string, 40-80 words)
+15. dispersion_conclusion (string, 40-80 words)
+16. equipment_conclusion (string, 40-80 words)
+17. strokes_gained_conclusion (string, 40-80 words)
+18. comfort_zones_conclusion (string, 40-80 words)
+19. dafo_conclusion (string, 40-80 words)
 
-Return a single valid JSON object with EXACTLY those 12 keys. Do NOT wrap in markdown code fences. Do NOT omit any section.""")
+Return a single valid JSON object with EXACTLY those 19 keys. Do NOT wrap in markdown code fences. Do NOT omit any section.""")
         ]
 
         # Invoke Claude with cached system prompt
