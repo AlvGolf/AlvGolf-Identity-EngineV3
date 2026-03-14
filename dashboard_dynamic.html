@@ -265,11 +265,15 @@
                             footer.parentElement.insertBefore(dnaSection, footer);
                         }
                     }
+                    const identityConclusion = content.identity_conclusion
+                        ? `<div class="ai-conclusion" style="margin-top: 18px;"><strong>Conclusión:</strong> <span>${content.identity_conclusion}</span></div>`
+                        : '';
                     dnaSection.innerHTML = `
                         <h3 style="color: #5ABF8F; margin-bottom: 12px; font-size: 1.3em; font-weight: 800;">🧬 Tu ADN Golfístico</h3>
                         <p style="font-size: 1em; line-height: 1.7; color: #e0e2dc; margin: 0;">${content.dna_profile}</p>
+                        ${identityConclusion}
                     `;
-                    console.log('  ✓ DNA profile inserted (final section)');
+                    console.log('  ✓ DNA profile + identity conclusion inserted');
                 }
             }
 
@@ -483,24 +487,27 @@
 
             // 13-19. New AI Conclusions (7 sections)
             const newConclusions = [
-                { key: 'identity_conclusion', anchor: 'ai-identity-conclusion', label: 'identity' },
                 { key: 'course_strategy_conclusion', anchor: 'ai-course-strategy-conclusion', label: 'course strategy' },
                 { key: 'dispersion_conclusion', anchor: 'ai-dispersion-conclusion', label: 'dispersion' },
                 { key: 'equipment_conclusion', anchor: 'ai-equipment-conclusion', label: 'equipment' },
                 { key: 'strokes_gained_conclusion', anchor: 'ai-strokes-gained-conclusion', label: 'strokes gained' },
-                { key: 'comfort_zones_conclusion', anchor: 'ai-comfort-zones-conclusion', label: 'comfort zones' },
-                { key: 'dafo_conclusion', anchor: 'ai-dafo-conclusion', label: 'DAFO' },
+                { key: 'comfort_zones_conclusion', anchor: 'ai-comfort-zones-conclusion', label: 'comfort zones', noBox: true },
+                { key: 'dafo_conclusion', anchor: 'ai-dafo-conclusion', label: 'DAFO', noBox: true },
             ];
-            newConclusions.forEach(({ key, anchor: anchorId, label }) => {
+            newConclusions.forEach(({ key, anchor: anchorId, label, noBox }) => {
                 if (content[key]) {
                     const el = document.getElementById(anchorId);
                     if (el) {
-                        el.innerHTML = `
-                            <div class="ai-conclusion">
-                                <strong>Conclusión:</strong>
-                                <span> ${content[key]}</span>
-                            </div>
-                        `;
+                        if (noBox) {
+                            el.innerHTML = `<p style="color: rgba(255,255,255,0.85); line-height: 1.8; font-size: 0.95em;"><strong style="color: #4A9FD8;">Conclusión:</strong> ${content[key]}</p>`;
+                        } else {
+                            el.innerHTML = `
+                                <div class="ai-conclusion">
+                                    <strong>Conclusión:</strong>
+                                    <span> ${content[key]}</span>
+                                </div>
+                            `;
+                        }
                         console.log(`  ✓ Inserted ${label} conclusion`);
                     }
                 }
@@ -6017,9 +6024,6 @@
                 </div>
             </div>
 
-            <!-- AI Identity Conclusion -->
-            <div id="ai-identity-conclusion"></div>
-
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -6980,8 +6984,11 @@
                         <p class="kpi-sub" style="margin: 8px 0 0 0;">11 rondas totales</p>
                     </div>
                 </div>
+
+                <!-- AI Course Strategy Conclusion -->
+                <div id="ai-course-strategy-conclusion" style="margin-top: 20px;"></div>
             </div>
-            
+
             <!-- 4. Scoring Trends Trimestrales -->
             <div class="chart-container">
                 <h2 id="analisis-scoring">📊 Análisis de Scoring</h2>
@@ -7480,16 +7487,13 @@
             </div>
             
 
-            <!-- AI Course Strategy Conclusion -->
-            <div id="ai-course-strategy-conclusion"></div>
-
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
             </div>
-            
+
         </div>
-        
+
         <!-- TAB: PERFORMANCE POR PALO -->
         <div id="performance" class="tab-content">
             
@@ -7655,6 +7659,9 @@
                 <div id="percentilesCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                     <!-- Populated by JavaScript -->
                 </div>
+
+                <!-- AI Equipment Conclusion -->
+                <div id="ai-equipment-conclusion" style="margin-top: 20px;"></div>
             </div>
 
             <div class="chart-container">
@@ -8012,6 +8019,9 @@
                         </p>
                     </div>
                 </div>
+
+                <!-- AI Dispersion Conclusion -->
+                <div id="ai-dispersion-conclusion" style="margin-top: 20px;"></div>
             </div>
 
             <!-- Trajectory Data Section -->
@@ -8452,12 +8462,6 @@
                 </div>
             </div>
             
-
-            <!-- AI Dispersion Conclusion -->
-            <div id="ai-dispersion-conclusion"></div>
-
-            <!-- AI Equipment Conclusion -->
-            <div id="ai-equipment-conclusion"></div>
 
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
@@ -8937,6 +8941,9 @@
             <div class="chart-container">
                 <h2 id="zonas-confort">🗺️ Zonas de Confort - Heat Map de Distancias</h2>
                 <canvas id="comfortZonesChart"></canvas>
+                <!-- AI Comfort Zones Conclusion (inline, no box) -->
+                <div id="ai-comfort-zones-conclusion" style="margin-top: 20px;"></div>
+
                 <div style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.04); border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
                     <h4 style="color: #4A9FD8; margin-bottom: 15px;">📍 Guía de Course Management:</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 20px;">
@@ -9637,9 +9644,6 @@
             </section>
 
 
-            <!-- AI Comfort Zones Conclusion -->
-            <div id="ai-comfort-zones-conclusion"></div>
-
             <!-- Footer Logo -->
             <div class="tab-footer-logo">
                 <img src="AIvGolf_Identity_Performance_Enginev2.png" alt="AIvGolf - Golf Identity Performance Engine">
@@ -9989,12 +9993,12 @@
                         </ul>
                     </div>
 
-            <!-- AI DAFO Conclusion -->
-            <div id="ai-dafo-conclusion"></div>
-
                 </div>
             </div>
-            
+
+            <!-- AI DAFO Conclusion (full width, no box) -->
+            <div id="ai-dafo-conclusion" style="margin: 10px 0 20px 0;"></div>
+
             <div class="chart-container">
                 <h2 id="matriz-dafo">📊 Matriz DAFO - Visualización Estratégica Completa</h2>
                 <p style="margin-bottom: 20px; color: rgba(255,255,255,0.8);">
