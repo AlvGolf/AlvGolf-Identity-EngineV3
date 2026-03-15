@@ -6,7 +6,7 @@
 
 **Primary Language:** Spanish (es)
 **Type:** Multi-component system (Static HTML Dashboard + FastAPI Backend + Multi-Agent AI)
-**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
+**Version:** v3.3.0 - AI History + Selective Agents
 **Status:** Production Ready
 **Deployment:** Dashboard on GitHub Pages + Backend on localhost:8000
 
@@ -16,9 +16,10 @@
 AlvGolf/
 ├── app/                              # FastAPI Backend (Agentic Analytics Engine)
 │   ├── __init__.py
-│   ├── main.py                       # FastAPI app (5 endpoints)
+│   ├── main.py                       # FastAPI app (10 endpoints)
 │   ├── config.py                     # Settings management (.env)
-│   ├── models.py                     # Pydantic models (12 models)
+│   ├── models.py                     # Pydantic models (16 models)
+│   ├── history.py                    # AI analysis persistence & comparison
 │   ├── rag.py                        # RAG Core (Pinecone + Claude)
 │   └── agents/                       # Multi-Agent System
 │       ├── __init__.py
@@ -42,7 +43,10 @@ AlvGolf/
 │   └── temporal_analysis.py          # Sliding window identity analysis (~375 lines)
 │
 ├── output/
-│   └── dashboard_data.json           # Generated data (273 KB, 62 keys)
+│   ├── dashboard_data.json           # Generated data (273 KB, 62 keys)
+│   └── ai_history/                   # Timestamped AI analysis history
+│       ├── index.json                # History index with metadata
+│       └── {agent}_{timestamp}.json|md  # Individual analyses
 │
 ├── data/                             # Raw data sources
 │   ├── flightscope/                  # 493 shots, 11 clubs
@@ -162,7 +166,7 @@ AgentUXWriter generates **19 content sections** in Spanish inserted into the das
 - `/analyze` orchestrator also saves ai_content.json at end of full workflow
 - File committed to repo so GitHub Pages serves it statically with zero latency
 
-### API Endpoints
+### API Endpoints (10 endpoints — v3.3.0)
 
 | Method | Path | Purpose | Time |
 |--------|------|---------|------|
@@ -171,6 +175,11 @@ AgentUXWriter generates **19 content sections** in Spanish inserted into the das
 | POST | `/query` | RAG query | 10-15s |
 | POST | `/analyze` | Full multi-agent workflow (5 agents) | ~3.6 min |
 | POST | `/generate-content` | UXWriter content only | ~60-70s |
+| POST | `/generate-coach` | Coach report only | ~60-70s |
+| POST | `/generate-agent` | Selective single agent | ~40-70s |
+| GET | `/history` | List saved AI analyses | <100ms |
+| GET | `/history/{id}` | Load specific analysis | <100ms |
+| GET | `/history/compare/{id1}/{id2}` | Compare two analyses | <100ms |
 
 ### Cost Analysis
 
@@ -789,6 +798,7 @@ docs(readme): update with Sprint 13 completion status
 
 | Version | Date | Description |
 |---------|------|-------------|
+| v3.3.0 | 2026-03-15 | AI History + Selective Agents — app/history.py (persistence + comparison), POST /generate-agent (5 agents individually), GET /history + /history/{id} + /history/compare/{id1}/{id2}, auto-save on all generation endpoints, ai_content.json now includes coach_report (20 keys) |
 | v3.2.0 | 2026-03-07 | Full Glassmorphism Redesign — Tab 5 (quick menu 2→4, reorder 14 sections, glassmorphism) + Tab 6 (quick menu 3→4, glassmorphism 9 sections, fix roi-plan-mejora ID) + Shot Zones KDE heatmap + club filter fix |
 | v3.1.3 | 2026-03-05 | Tab 2 Redesign — UXWriter 10→12 sections (quarterly_conclusion + volatility_conclusion), quick menu 9→13 items in correct order, minimalist style (no emojis), planning docs for Tab 3-6 |
 | v3.1.2 | 2026-03-04 | Glassmorphism Redesign Tab 1 — card-detail sutil + ADN al final |

@@ -1,0 +1,117 @@
+[
+  {
+    "id": "analista_2026-03-15T00-14-05",
+    "agent_type": "analista",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:14:05.769814",
+    "filename": "analista_2026-03-15T00-14-05.md",
+    "size_chars": 10116,
+    "input_tokens": 107615,
+    "output_tokens": 4000,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 4154,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "full_2026-03-15T00-21-48",
+    "agent_type": "full",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:21:48.473603",
+    "filename": "full_2026-03-15T00-21-48.json",
+    "size_chars": 64896
+  },
+  {
+    "id": "full_2026-03-15T00-26-46",
+    "agent_type": "full",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:26:46.083293",
+    "filename": "full_2026-03-15T00-26-46.json",
+    "size_chars": 67305
+  },
+  {
+    "id": "full_2026-03-15T00-30-52",
+    "agent_type": "full",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:30:52.082846",
+    "filename": "full_2026-03-15T00-30-52.json",
+    "size_chars": 65576
+  },
+  {
+    "id": "tecnico_2026-03-15T00-32-42",
+    "agent_type": "tecnico",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:32:42.254950",
+    "filename": "tecnico_2026-03-15T00-32-42.md",
+    "size_chars": 11125,
+    "input_tokens": 107616,
+    "output_tokens": 3500,
+    "cache_read_tokens": 3627,
+    "cache_write_tokens": 0,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "estratega_2026-03-15T00-34-10",
+    "agent_type": "estratega",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:34:10.203347",
+    "filename": "estratega_2026-03-15T00-34-10.md",
+    "size_chars": 8394,
+    "input_tokens": 107619,
+    "output_tokens": 3500,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 3961,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "coach_2026-03-15T00-43-02",
+    "agent_type": "coach",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:43:02.140468",
+    "filename": "coach_2026-03-15T00-43-02.md",
+    "size_chars": 13611,
+    "input_tokens": 107615,
+    "output_tokens": 5000,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 4606,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "coach_2026-03-15T00-46-40",
+    "agent_type": "coach",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:46:40.599687",
+    "filename": "coach_2026-03-15T00-46-40.md",
+    "size_chars": 13866,
+    "input_tokens": 107615,
+    "output_tokens": 5000,
+    "cache_read_tokens": 4606,
+    "cache_write_tokens": 0,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "coach_2026-03-15T00-48-58",
+    "agent_type": "coach",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:48:58.490864",
+    "filename": "coach_2026-03-15T00-48-58.md",
+    "size_chars": 13634,
+    "input_tokens": 107615,
+    "output_tokens": 5000,
+    "cache_read_tokens": 4606,
+    "cache_write_tokens": 0,
+    "model": "claude-sonnet-4-6"
+  },
+  {
+    "id": "coach_2026-03-15T00-51-22",
+    "agent_type": "coach",
+    "user_id": "alvaro",
+    "timestamp": "2026-03-15T00:51:22.610992",
+    "filename": "coach_2026-03-15T00-51-22.md",
+    "size_chars": 14325,
+    "input_tokens": 107615,
+    "output_tokens": 5000,
+    "cache_read_tokens": 4606,
+    "cache_write_tokens": 0,
+    "model": "claude-sonnet-4-6"
+  }
+]

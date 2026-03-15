@@ -191,6 +191,50 @@ class CoachReportResponse(BaseModel):
     generated_at: datetime = Field(default_factory=datetime.now)
 
 
+# ============ Selective Agent Generation ============
+
+class AgentGenerateRequest(BaseModel):
+    """Request for POST /generate-agent endpoint"""
+    user_id: str = Field(..., description="User ID")
+    agent: Literal["analista", "tecnico", "estratega", "ux_writer", "coach"] = Field(
+        ..., description="Agent to run individually"
+    )
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "user_id": "alvaro",
+                "agent": "analista"
+            }
+        }
+
+
+class AgentGenerateResponse(BaseModel):
+    """Response for POST /generate-agent endpoint"""
+    agent: str = Field(..., description="Agent that was executed")
+    content: dict | str = Field(..., description="Agent output (dict for JSON, str for text)")
+    metadata: dict = Field(..., description="Generation metadata")
+    history_id: str = Field(..., description="ID in ai_history for future comparison")
+    generated_at: datetime = Field(default_factory=datetime.now)
+
+
+# ============ History ============
+
+class HistoryListResponse(BaseModel):
+    """Response for GET /history endpoint"""
+    analyses: list = Field(..., description="List of saved analyses (most recent first)")
+    total: int = Field(..., description="Total count")
+
+
+class HistoryCompareResponse(BaseModel):
+    """Response for GET /history/compare endpoint"""
+    entry_1: dict = Field(..., description="First analysis metadata")
+    entry_2: dict = Field(..., description="Second analysis metadata")
+    content_1: dict | str = Field(..., description="First analysis content")
+    content_2: dict | str = Field(..., description="Second analysis content")
+    diff: dict = Field(..., description="Semantic diff between analyses")
+
+
 # ============ Error ============
 
 class ErrorResponse(BaseModel):

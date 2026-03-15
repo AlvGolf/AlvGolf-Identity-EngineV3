@@ -1,11 +1,17 @@
 """
 AlvGolf Agentic Analytics Engine - FastAPI Application
 
-Main API server with 4 endpoints:
-- GET /              Health check
-- POST /ingest       Ingest shots to vector database
-- POST /query        Query RAG with question
-- POST /analyze      Full analysis with Multi-Agent System (TIER 2)
+Main API server with 8 endpoints:
+- GET /                            Health check
+- POST /ingest                     Ingest shots to vector database
+- POST /query                      Query RAG with question
+- POST /analyze                    Full analysis with Multi-Agent System (TIER 2)
+- POST /generate-content           UXWriter content only (~60-70s)
+- POST /generate-coach             Coach report only (~60-70s)
+- POST /generate-agent             Selective single agent execution
+- GET /history                     List saved AI analyses
+- GET /history/{id}                Load specific analysis
+- GET /history/compare/{id1}/{id2} Compare two analyses
 """
 
 from fastapi import FastAPI, HTTPException
@@ -22,6 +28,8 @@ from app.models import (
     AnalyzeRequest, AnalyzeResponse,
     ContentGenerateRequest, ContentGenerateResponse,  # Team 3
     CoachReportRequest, CoachReportResponse,           # Coach standalone
+    AgentGenerateRequest, AgentGenerateResponse,       # Selective agent
+    HistoryListResponse, HistoryCompareResponse,       # History
     ErrorResponse
 )
 from app.rag import ingest_shots, rag_answer
@@ -29,6 +37,10 @@ from app.agents.analytics_pro import analytics_agent
 from app.agents.orchestrator import run_multi_agent_analysis  # TIER 2
 from app.agents.ux_writer import AgentUXWriter  # Team 3
 from app.agents.coach import AgentCoach          # Coach standalone
+from app.agents.analista import AgentAnalista    # Selective
+from app.agents.tecnico import AgentTecnico      # Selective
+from app.agents.estratega import AgentEstratega  # Selective
+from app.history import save_analysis, list_analyses, load_analysis, compare_analyses
 
 
 # ============ Logging Configuration ============
@@ -297,6 +309,12 @@ async def generate_dashboard_content(request: ContentGenerateRequest):
         except Exception as e:
             logger.warning(f"[Team 3] Could not save ai_content.json: {e}")
 
+        # Save to history
+        try:
+            save_analysis("ux_writer", request.user_id, result["content"], result.get("metadata"))
+        except Exception as e:
+            logger.warning(f"[Team 3] Could not save to history: {e}")
+
         return ContentGenerateResponse(
             content=result["content"],
             metadata=result["metadata"],
@@ -361,6 +379,12 @@ async def generate_coach_report(request: CoachReportRequest):
 
         logger.success(f"[Coach] Report generated ({result['metadata']['report_length']} chars)")
 
+        # Save to history
+        try:
+            save_analysis("coach", request.user_id, result["report"], result.get("metadata"))
+        except Exception as e:
+            logger.warning(f"[Coach] Could not save to history: {e}")
+
         return CoachReportResponse(
             report=result["report"],
             metadata=result["metadata"],
@@ -374,6 +398,142 @@ async def generate_coach_report(request: CoachReportRequest):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============ Selective Agent Generation ============
+
+# Agent registry: class + method name + output key
+_AGENT_REGISTRY = {
+    "analista":   (AgentAnalista,  "analyze", "analysis"),
+    "tecnico":    (AgentTecnico,   "analyze", "analysis"),
+    "estratega":  (AgentEstratega, "design",  "program"),
+    "ux_writer":  (AgentUXWriter,  "write",   "content"),
+    "coach":      (AgentCoach,     "coach",   "report"),
+}
+
+
+@app.post("/generate-agent", response_model=AgentGenerateResponse)
+async def generate_agent(request: AgentGenerateRequest):
+    """
+    Run a single agent selectively.
+
+    Supports: analista, tecnico, estratega, ux_writer, coach.
+    Each agent receives the full dashboard_data.json and runs independently.
+
+    Args:
+        request: AgentGenerateRequest with user_id and agent name
+
+    Returns:
+        AgentGenerateResponse with content, metadata, and history_id
+    """
+    agent_name = request.agent
+    if agent_name not in _AGENT_REGISTRY:
+        raise HTTPException(status_code=400, detail=f"Unknown agent: {agent_name}")
+
+    try:
+        logger.info(f"[Selective] Running agent '{agent_name}' for user {request.user_id}")
+
+        # Load dashboard_data.json
+        from pathlib import Path
+        import json
+
+        json_path = Path(__file__).parent.parent / "output" / "dashboard_data.json"
+        if not json_path.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="dashboard_data.json not found. Run generate_dashboard_data.py first."
+            )
+
+        with open(json_path, 'r', encoding='utf-8') as f:
+            dashboard_data = json.load(f)
+
+        # Instantiate and run agent
+        agent_class, method_name, output_key = _AGENT_REGISTRY[agent_name]
+        agent = agent_class()
+
+        kwargs = {"dashboard_data": dashboard_data}
+        if agent_name == "coach":
+            kwargs["team2_analysis"] = {}  # Standalone: no Team 2 context
+
+        result = await getattr(agent, method_name)(request.user_id, **kwargs)
+
+        content = result.get(output_key, result)
+        metadata = result.get("metadata", {})
+
+        logger.success(f"[Selective] Agent '{agent_name}' completed")
+
+        # Save to history
+        history_entry = save_analysis(agent_name, request.user_id, content, metadata)
+
+        return AgentGenerateResponse(
+            agent=agent_name,
+            content=content,
+            metadata=metadata,
+            history_id=history_entry["id"],
+            generated_at=datetime.now()
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"[Selective] Agent '{agent_name}' error: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============ History Endpoints ============
+
+@app.get("/history", response_model=HistoryListResponse)
+async def get_history(
+    agent_type: str = None,
+    user_id: str = None,
+    limit: int = 50,
+):
+    """
+    List saved AI analyses, optionally filtered by agent_type and/or user_id.
+
+    Args:
+        agent_type: Filter by agent (analista, tecnico, estratega, ux_writer, coach, full)
+        user_id: Filter by user
+        limit: Max results (default 50)
+
+    Returns:
+        HistoryListResponse with list of analyses
+    """
+    analyses = list_analyses(agent_type=agent_type, user_id=user_id, limit=limit)
+    return HistoryListResponse(analyses=analyses, total=len(analyses))
+
+
+@app.get("/history/{entry_id}")
+async def get_history_entry(entry_id: str):
+    """
+    Load a specific analysis by its history ID.
+
+    Returns the full content + metadata of the saved analysis.
+    """
+    try:
+        result = load_analysis(entry_id)
+        return result
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@app.get("/history/compare/{id1}/{id2}", response_model=HistoryCompareResponse)
+async def compare_history(id1: str, id2: str):
+    """
+    Compare two saved analyses side by side.
+
+    Both analyses must be from the same agent type.
+    Returns both contents + a semantic diff (sections added/changed/removed).
+    """
+    try:
+        result = compare_analyses(id1, id2)
+        if "error" in result:
+            raise HTTPException(status_code=400, detail=result["error"])
+        return HistoryCompareResponse(**result)
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 # ============ Run Server ============

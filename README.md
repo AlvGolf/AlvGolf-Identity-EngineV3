@@ -1,8 +1,8 @@
 # AlvGolf - Multi-Agent Golf Analytics System
 
-**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
+**Version:** v3.3.0 - AI History + Selective Agents
 **Estado:** Production Ready
-**Ultima actualizacion:** 2026-03-07
+**Ultima actualizacion:** 2026-03-15
 
 [![Dashboard](https://img.shields.io/badge/Dashboard-v5.3.0-blue)]()
 [![Backend](https://img.shields.io/badge/Backend-v5.3.0-green)]()
@@ -102,6 +102,17 @@ graph TB
 ---
 
 ## What's New
+
+### v3.3.0 - AI History + Selective Agents (2026-03-15)
+
+**Persistencia, comparacion y regeneracion selectiva de analisis IA:**
+
+- **AI History System:** `app/history.py` guarda cada analisis con timestamp en `output/ai_history/` con index.json
+- **Regeneracion selectiva:** `POST /generate-agent` ejecuta cualquier agente individual (analista, tecnico, estratega, ux_writer, coach)
+- **Comparador de analisis:** `GET /history/compare/{id1}/{id2}` devuelve diff semantico (secciones anadidas/cambiadas/eliminadas)
+- **Auto-persistencia:** Todos los endpoints de generacion (`/generate-content`, `/generate-coach`, `/analyze`) guardan automaticamente en historial
+- **Coach report en ai_content.json:** 20 keys totales (19 UXWriter + coach_report)
+- **10 endpoints API** (5 nuevos: generate-coach, generate-agent, history, history/{id}, history/compare)
 
 ### v3.2.0 - Full Glassmorphism Redesign Tabs 1-6 (2026-03-07)
 
@@ -272,7 +283,7 @@ graph TB
 
 ---
 
-## API Endpoints (v3.0.5)
+## API Endpoints (v3.3.0 — 10 endpoints)
 
 | Metodo | Path | Proposito | Tiempo |
 |--------|------|-----------|--------|
@@ -281,6 +292,11 @@ graph TB
 | POST | `/query` | RAG query | 10-15s |
 | POST | `/analyze` | Workflow completo (5 agentes) | ~3.6 min |
 | POST | `/generate-content` | UXWriter content only | ~60-70s |
+| POST | `/generate-coach` | Coach report only | ~60-70s |
+| POST | `/generate-agent` | Agente individual selectivo | ~40-70s |
+| GET | `/history` | Listado analisis guardados | <100ms |
+| GET | `/history/{id}` | Cargar analisis especifico | <100ms |
+| GET | `/history/compare/{id1}/{id2}` | Comparar dos analisis | <100ms |
 
 ---
 
@@ -351,7 +367,8 @@ python -m http.server 8001
 AlvGolf/
 ├── app/                              # Backend Agentic Analytics Engine
 │   ├── __init__.py
-│   ├── main.py                       # FastAPI app (5 endpoints)
+│   ├── main.py                       # FastAPI app (10 endpoints)
+│   ├── history.py                    # AI analysis persistence & comparison
 │   ├── config.py                     # Settings management (.env)
 │   ├── models.py                     # Pydantic models (12 models)
 │   ├── rag.py                        # RAG Core (Pinecone + Claude)
@@ -376,8 +393,9 @@ AlvGolf/
 │   └── ingest_full_data.py           # Data ingestion (120 vectors)
 │
 ├── output/
-│   ├── dashboard_data.json           # Generated data (273 KB, 55 keys)
-│   └── ai_content.json              # Pre-generated AI content (6 sections)
+│   ├── dashboard_data.json           # Generated data (273 KB, 62 keys)
+│   ├── ai_content.json              # Pre-generated AI content (20 sections)
+│   └── ai_history/                  # Timestamped AI analysis history
 │
 ├── data/                             # Raw data
 │   ├── flightscope/                  # 497 shots, 11 clubs
@@ -497,12 +515,28 @@ AlvGolf/
 - [x] Shot Zones filtros: fix club name aliases (Dr, 3W, 5i, Hyb, GW 52, SW 58)
 - [x] Tabs 1-4 glassmorphism completado en v3.1.1-v3.1.3
 
+#### v3.3.0 - AI History + Selective Agents (2026-03-15)
+- [x] Persistencia de analisis: output/ai_history/ con index.json + timestamps
+- [x] Comparador de analisis: GET /history/compare/{id1}/{id2} con diff semantico
+- [x] Regeneracion selectiva por agente: POST /generate-agent (5 agentes)
+- [x] Coach report integrado en ai_content.json (20 keys)
+- [x] 10 endpoints API totales (5 nuevos)
+
 ### Pendiente
 - [ ] Multi-usuario (escalabilidad)
 
 ---
 
 ## Changelog
+
+### v3.3.0 (2026-03-15) - AI History + Selective Agents
+- `app/history.py`: save_analysis, list_analyses, load_analysis, compare_analyses
+- `POST /generate-agent`: ejecuta agentes individuales (analista/tecnico/estratega/ux_writer/coach)
+- `GET /history`: listado filtrable por agent_type y user_id
+- `GET /history/{id}`: carga analisis completo
+- `GET /history/compare/{id1}/{id2}`: diff semantico entre dos analisis
+- Auto-persistencia en /generate-content, /generate-coach, /analyze
+- ai_content.json: 20 keys (19 UXWriter + coach_report)
 
 ### v3.2.0 (2026-03-07) - Full Glassmorphism Redesign Tabs 1-6
 - Tab 5: Quick menu redesign (2→4 sub-grupos), 14 secciones reordenadas, glassmorphism ~60 elementos
@@ -625,6 +659,6 @@ Proyecto personal - Todos los derechos reservados Alvaro Peralta 2026
 
 ---
 
-**Ultima actualizacion:** 7 de marzo de 2026
+**Ultima actualizacion:** 15 de marzo de 2026
 **Estado:** Production Ready
-**Version:** v3.2.0 - Full Glassmorphism Redesign (Tabs 1-6)
+**Version:** v3.3.0 - AI History + Selective Agents

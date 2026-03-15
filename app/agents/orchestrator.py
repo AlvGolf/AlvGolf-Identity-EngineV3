@@ -581,6 +581,21 @@ async def run_multi_agent_analysis(user_id: str) -> dict:
             logger.info(f"   AgentUXWriter:  {len(json.dumps(final_state.get('ux_writer_output', {}).get('content', {})))} chars")
             logger.info(f"   AgentCoach:     {len(final_state.get('coach_output', {}).get('report', ''))} chars")
 
+        # ── Guardar análisis completo en historial ────────────────────────
+        try:
+            from app.history import save_analysis
+            full_output = {
+                "analista":  final_state.get("analista_output", {}).get("analysis", ""),
+                "tecnico":   final_state.get("tecnico_output", {}).get("analysis", ""),
+                "estratega": final_state.get("estratega_output", {}).get("program", ""),
+                "ux_writer": final_state.get("ux_writer_output", {}).get("content", {}),
+                "coach":     final_state.get("coach_output", {}).get("report", ""),
+                "motivational": final_state.get("motivational_sections", {}),
+            }
+            save_analysis("full", user_id, full_output)
+        except Exception as e:
+            logger.warning(f"[Orchestrator] Could not save to history: {e}")
+
         # ── Guardar contenido UXWriter en disco (caché estática) ────────────
         try:
             ux_content = final_state.get("ux_writer_output", {}).get("content", {})
